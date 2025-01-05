@@ -1,5 +1,4 @@
-   User-agent: *
-   Disallow:
+User-agent: *
+Disallow:
 
-   # Algolia DocSearch verification
-   # Verify for Algolia ID: IDY76XQOJH
+# Algolia-Crawler-Verif:: IDY76XQOJH
