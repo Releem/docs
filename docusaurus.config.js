@@ -41,7 +41,7 @@ const config = {
       algolia: {
         appId: 'IDY76XQOJH',
         apiKey: '0347af0f25e74089e29e937fad894d8e',
-        indexName: 'releem',
+        indexName: 'Releem Documentation',
         contextualSearch: true,
       },
       colorMode: {
