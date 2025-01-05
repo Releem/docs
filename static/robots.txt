@@ -1,4 +1,4 @@
-User-agent: *
-Disallow:
+# Algolia-Crawler-Verif: IDY76XQOJH
 
-# Algolia-Crawler-Verif:: IDY76XQOJH
+User-agent: *
+Allow: /
