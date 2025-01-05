@@ -111,6 +111,21 @@ const config = {
         darkTheme: prismThemes.dracula,
       },
     }),
+
+  scripts: [
+    {
+      src: 'https://plausible.io/js/script.outbound-links.tagged-events.js',
+      defer: true,
+      'data-domain': 'docs.releem.com',
+    },
+  ],
+  headTags: [
+    {
+      tagName: 'script',
+      innerHTML: 'window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }',
+      attributes: {},
+    },
+  ],
 };
 
 export default config;
