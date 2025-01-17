@@ -65,3 +65,5 @@ To check Releem Agent logs please open CloudWatch -> Log Groups and then select 
    - Enable Performance Insights and Enhanced monitoring for your RDS instance.
    - Check that SecurityGroup that you set for Releem Agent has a rule for All outbound traffic.
 
+6. Error 1142 (42000): SELECT command denied to user 'releem'@'[serverIP]' for table 'events_statements_history'
+   - Additional database permissions are required. Follow this guide to add them: [Additional Permissions](../../releem-agent/enable-sql-query-optimization#additional-database-permissions-required)

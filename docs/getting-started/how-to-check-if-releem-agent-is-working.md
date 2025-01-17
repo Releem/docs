@@ -58,6 +58,8 @@ If you're using CPanel, please ensure the options "Allow cPanel & WHM to determi
 ### AWS RDS
 Common issues for AWS RDS.
 
+
+
 ## Releem Agent Installation Errors
 ### Failed to determine service to restart. The automatic applying configuration will not work.
 **The root cause:** Agent couldn't determine the database service restart command.
