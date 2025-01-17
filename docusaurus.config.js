@@ -77,10 +77,14 @@ const config = {
         style: 'dark',
         links: [
           {
-            title: 'Docs',
+            title: 'Study',
             items: [
               {
-                label: 'Welcome',
+                label: 'Read our blog',
+                href: 'https://releem.com/blog',
+              },
+              {
+                label: 'Study the documentation',
                 to: '/',
               },
             ],
@@ -100,6 +104,10 @@ const config = {
                 href: 'https://www.linkedin.com/company/releem', // Replace with your LinkedIn URL
                 label: 'LinkedIn',
                 position: 'right',
+              },
+              {
+                label: 'Slack',
+                href: 'https://join.slack.com/t/releem-community/shared_invite/zt-1j3d0vosh-AJHbDiQrzVDvLat5eqQorQ',
               },
             ],
           },
