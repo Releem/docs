@@ -46,6 +46,7 @@ systemctl restart releem-agent
 
 Set the following MySQL variable in the Parameter Group to allow Releem to collect more queries for optimization:
 ```ini
+performance_schema = 1
 performance_schema_events_statements_history_size = 500
 ```
 
