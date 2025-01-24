@@ -42,7 +42,12 @@ systemctl restart releem-agent
 3. Select “Replace existing template”  
 4. Paste in “Amazon S3 URL” url https://releem.s3.amazonaws.com/test/releem-agent-cloudformation.yml and click “Next”  
 5. Change option “QueryOptimization” to true and click “Next”  
-6. Click “Next” and “Submit”  
+6. Click “Next” and “Submit”
+
+Set the following MySQL variable in the Parameter Group to allow Releem to collect more queries for optimization:
+```ini
+performance_schema_events_statements_history_size = 500
+```
 
 ### For DOCKER  
 1. Grant additional permissions to releem user. See section below Additional Permission Required  
