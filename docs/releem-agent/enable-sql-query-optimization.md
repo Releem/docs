@@ -37,18 +37,18 @@ systemctl restart releem-agent
 ```
 
 ### For AWS RDS  
-1. Update already installed Releem Agent  
-2. Select CloudFormation Stack - releem-agent, click button Update  
-3. Select “Replace existing template”  
-4. Paste in “Amazon S3 URL” url https://releem.s3.amazonaws.com/test/releem-agent-cloudformation.yml and click “Next”  
-5. Change option “QueryOptimization” to true and click “Next”  
-6. Click “Next” and “Submit”
-
-Set the following MySQL variable in the Parameter Group to allow Releem to collect more queries for optimization:
+1. Grant additional permissions to releem user. See section below Additional Permission Required
+2. Set the following MySQL variables in the Parameter Group to allow Releem to collect more queries for optimization:
 ```ini
 performance_schema = 1
 performance_schema_events_statements_history_size = 500
 ```
+3. Update already installed Releem Agent  
+   1. Select CloudFormation Stack - releem-agent, click button Update  
+   2. Select “Replace existing template”  
+   3. Paste in “Amazon S3 URL” url https://releem.s3.amazonaws.com/test/releem-agent-cloudformation.yml and click “Next”  
+   4. Change option “QueryOptimization” to true and click “Next”  
+   5. Click “Next” and “Submit”
 
 ### For DOCKER  
 1. Grant additional permissions to releem user. See section below Additional Permission Required  
