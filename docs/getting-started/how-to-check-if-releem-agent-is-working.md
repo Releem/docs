@@ -9,6 +9,8 @@ After you've installed Releem Agent, it's time to check if Releem is working.
 
 On the Releem Score block, you should see Agent Status - Connected / Monitoring, which indicates that Releem Platform receives metrics from Releem Agent.
 
+![Releem Score block](/img/dashboard-releem-score.png)
+
 ## How to troubleshoot Releem Agent
 If the Releem Agent is disconnected, please, take the following steps and check the most common issues.
 

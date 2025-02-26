@@ -22,17 +22,6 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Configuration Tuning',
-      items: [
-        'configuration-tuning/mysql-tuning-process',
-        'configuration-tuning/how-to-apply-configuration-using-portal',
-        'configuration-tuning/how-to-apply-configuration-using-agent',
-        'configuration-tuning/how-to-rollback-to-previous-configuration',
-        'configuration-tuning/example-of-configuration',
-      ],
-    },
-    {
-      type: 'category',
       label: 'Releem Agent',
       items: [
         'releem-agent/self-managed-servers-automatic-installation',
@@ -49,6 +38,17 @@ const sidebars = {
         'releem-agent/update-for-docker',
         'releem-agent/update-for-aws',
         'releem-agent/uninstallation',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Configuration Tuning',
+      items: [
+        'configuration-tuning/mysql-tuning-process',
+        'configuration-tuning/how-to-apply-configuration-using-portal',
+        'configuration-tuning/how-to-apply-configuration-using-agent',
+        'configuration-tuning/how-to-rollback-to-previous-configuration',
+        'configuration-tuning/example-of-configuration',
       ],
     },
     {
