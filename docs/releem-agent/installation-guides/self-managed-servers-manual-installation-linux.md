@@ -1,14 +1,14 @@
 ---
 id: "self-managed-servers-manual-installation-linux"
-title: "Self-Managed Servers Manual Installation (Linux)"
+title: "Linux (Manual)"
 ---
 
 # Self-Managed Servers Manual Installation
 
 
 Use this instruction to install Releem Agent manually on the database server. Releem Agent will automatically collect metrics and send them to the Releem Platform.
-1. Create read-only user "releem" in MySQL using the [instruction](../../releem-agent/mysql-permissions).
-   To enable Automatic SQL Query Optimization please add [Additional Permissions](../../releem-agent/enable-sql-query-optimization#additional-database-permissions-required).
+1. Create read-only user "releem" in MySQL using the [instruction](/releem-agent/mysql-permissions).
+   To enable Automatic SQL Query Optimization please add [Additional Permissions](/releem-agent/mysql-permissions#additional-database-permissions-required).
 2. Run Installation command as a root user on the server:
    ```ini
    RELEEM_MYSQL_PASSWORD='[Password]' RELEEM_MYSQL_LOGIN='releem' RELEEM_MYSQL_MEMORY_LIMIT=0 RELEEM_API_KEY=[Key] RELEEM_CRON_ENABLE=1 RELEEM_QUERY_OPTIMIZATION=true bash -c "$(curl -L https://releem.s3.amazonaws.com/v2/install.sh)"

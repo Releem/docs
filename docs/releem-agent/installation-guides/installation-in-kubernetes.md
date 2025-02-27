@@ -1,6 +1,6 @@
 ---
 id: "installation-in-kubernetes"
-title: "Installation in Kubernetes"
+title: "Kubernetes"
 ---
 
 # Installation of Releem Agent in Kubernetes

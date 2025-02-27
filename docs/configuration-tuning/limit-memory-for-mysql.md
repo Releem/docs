@@ -9,7 +9,8 @@ If your server has not only MySQL installed, but also other software like a web 
 
 To set the memory limit follow the steps below:
 1. Open the Dashboard->Recommended Configuration->Settings
-2. Set new Memory Limit
+![Releem Dashboard Recommended Configuration Settings](/img/dashboard-settings.png)
+2. Set new Memory Limit in Megabytes
 3. Click Save Changes button
 
 It takes up to 12 hours to update limit in the dashboard and up to 4 days to get first recommendations.

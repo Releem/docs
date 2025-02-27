@@ -58,8 +58,7 @@ Please exclude "releem" user from MySQLGovernor.
 If you're using CPanel, please ensure the options "Allow cPanel & WHM to determine the best value for your MySQL settings" are disabled in WHM >> Tweak Settings.
 
 ### AWS RDS
-Common issues for AWS RDS.
-
+[Common issues for AWS RDS](/releem-agent/installation-guides/cloud-managed-aws-rds-automatic-installation#common-issues-for-aws-rds)
 
 
 ## Releem Agent Installation Errors

@@ -1,6 +1,6 @@
 ---
 id: cloud-managed-aws-rds-automatic-installation
-title: Cloud-Managed AWS RDS Automatic Installation
+title: AWS RDS
 ---
 
 # Cloud-Managed AWS RDS Automatic Installation
@@ -23,7 +23,7 @@ The CloudFormation will deploy Releem Agent container using AWS Fargate service 
 - rds:ModifyDBParameterGroup
 
 To move forward just do the following steps:
-1. Create read-only user "releem" in MySQL using the [instruction](../../releem-agent/mysql-permissions). To enable Automatic SQL Query Optimization please add [Additional Permissions](../../releem-agent/enable-sql-query-optimization#additional-database-permissions-required).
+1. Create read-only user "releem" in MySQL using the [instruction](/releem-agent/mysql-permissions). To enable Automatic SQL Query Optimization please add [Additional Permissions](/releem-agent/mysql-permissions#additional-database-permissions-required).
 
 2. To configure automatic applying of recommended configuration please sign in to your AWS account and do the following steps:
    - In the Amazon RDS console, create a Parameter Group for the version of your database named “releem-agent".
@@ -52,7 +52,7 @@ To check Releem Agent logs please open CloudWatch -> Log Groups and then select 
    - Enable Performance Insights for your RDS instance.
 
 3. Error 1045 (28000): Access denied for user 'releem'@'' (using password: YES)
-   - Check password for Releem User that you created according to this [guide](../../releem-agent/mysql-permissions). And reinstall Releem Agent.
+   - Check password for Releem User that you created according to this [guide](/releem-agent/mysql-permissions). And reinstall Releem Agent.
    - To set new password please run in MySQL console the following command:
      ```
      ALTER USER 'releem'@'%' IDENTIFIED BY 'New-Password-Here';
@@ -66,4 +66,4 @@ To check Releem Agent logs please open CloudWatch -> Log Groups and then select 
    - Check that SecurityGroup that you set for Releem Agent has a rule for All outbound traffic.
 
 6. Error 1142 (42000): SELECT command denied to user 'releem'@'[serverIP]' for table 'events_statements_history'
-   - Additional database permissions are required. Follow this guide to add them: [Additional Permissions](../../releem-agent/enable-sql-query-optimization#additional-database-permissions-required)
+   - Additional database permissions are required. Follow this guide to add them: [Additional Permissions](/releem-agent/mysql-permissions#additional-database-permissions-required)

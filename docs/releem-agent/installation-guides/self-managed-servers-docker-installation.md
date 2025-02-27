@@ -1,6 +1,6 @@
 ---
 id: "self-managed-servers-docker-installation"
-title: "Self-Managed Servers Docker Installation"
+title: "Docker"
 ---
 
 # Installation in the Docker Container on Self-Managed Servers
@@ -8,7 +8,7 @@ title: "Self-Managed Servers Docker Installation"
 
 Use this instruction to install Releem Agent manually on the database server. Releem Agent will automatically collect metrics and recommend configuration.
 
-1. Create read-only user "releem" in MySQL using the [instruction](../../releem-agent/mysql-permissions).
+1. Create read-only user "releem" in MySQL using the [instruction](/releem-agent/mysql-permissions).
 
 2. Run the container using Docker or Docker Compose.
 

@@ -1,13 +1,13 @@
 ---
 id: "self-managed-servers-manual-installation-windows"
-title: "Self-Managed Servers Manual Installation (Windows)"
+title: "Windows"
 ---
 
 # Manual Installation for Self-Managed MySQL Servers (Windows)
 
 
-1. Create read-only MySQL user "releem" using this [guide](../../releem-agent/mysql-permissions).
-   To enable Automatic SQL Query Optimization please add [Additional Permissions](../../releem-agent/enable-sql-query-optimization#additional-database-permissions-required).
+1. Create read-only MySQL user "releem" using this [guide](/releem-agent/mysql-permissions).
+   To enable Automatic SQL Query Optimization please add [Additional Permissions](/releem-agent/mysql-permissions#additional-database-permissions-required).
 
 2. Create the following folders on the server:
    - `C:\ProgramData\ReleemAgent\`

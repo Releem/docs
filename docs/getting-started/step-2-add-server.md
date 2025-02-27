@@ -14,12 +14,12 @@ Click the “Add Server” button to start the setup process.
 ![Releem Add Server popup](/img/dashboard-add-server.png)
 
 Choose the type of MySQL server you are adding:
-- [MySQL on Linux Server: Automatic Agent Installation (Linux)](/releem-agent/self-managed-servers-automatic-installation) – Automatic installation for MySQL instances running on Linux-based servers.
-- [MySQL on Linux Server: Advanced Agent Installation](/releem-agent/self-managed-servers-manual-installation-linux) – Manual installation for MySQL instances running on Linux-based servers. Use this guide if you don't have a MySQL root user, or if MySQL is installed on a different IP address, or if you want to create a Releem user manually.
-- [MySQL on Linux Server: Manual Installation in Docker](/releem-agent/self-managed-servers-docker-installation) – Manual installation for MySQL instances running in Docker containers.
-- [Self-Managed Server (Windows)](/releem-agent/self-managed-servers-manual-installation-windows) – For MySQL instances running on Windows.
-- [MySQL on AWS RDS: CloudFormation installation](/releem-agent/cloud-managed-aws-rds-automatic-installation) – For managed MySQL databases hosted on AWS.
-- [MySQL in Kubernetes](/releem-agent/installation-in-kubernetes) – If your MySQL instance is deployed in a Kubernetes cluster.
+- [MySQL on Linux Server: Automatic Agent Installation (Linux)](/releem-agent/installation-guides/self-managed-servers-automatic-installation) – Automatic installation for MySQL instances running on Linux-based servers.
+- [MySQL on Linux Server: Advanced Agent Installation](/releem-agent/installation-guides/self-managed-servers-manual-installation-linux) – Manual installation for MySQL instances running on Linux-based servers. Use this guide if you don't have a MySQL root user, or if MySQL is installed on a different IP address, or if you want to create a Releem user manually.
+- [MySQL on Linux Server: Manual Installation in Docker](/releem-agent/installation-guides/self-managed-servers-docker-installation) – Manual installation for MySQL instances running in Docker containers.
+- [Self-Managed Server (Windows)](/releem-agent/installation-guides/self-managed-servers-manual-installation-windows) – For MySQL instances running on Windows.
+- [MySQL on AWS RDS: CloudFormation installation](/releem-agent/installation-guides/cloud-managed-aws-rds-automatic-installation) – For managed MySQL databases hosted on AWS.
+- [MySQL in Kubernetes](/releem-agent/installation-guides/installation-in-kubernetes) – If your MySQL instance is deployed in a Kubernetes cluster.
 
 
 Select the option that matches your setup to get the correct installation instructions.
