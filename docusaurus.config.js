@@ -57,18 +57,8 @@ const config = {
         },
         items: [
           {
-            href: 'https://releem.com',
-            label: 'Back to Releem',
-            position: 'right',
-          },
-          {
-            href: 'https://github.com/releem/releem-docs',
-            label: 'GitHub',
-            position: 'right',
-          },
-          {
-            href: 'https://www.linkedin.com/company/releem', // Replace with your LinkedIn URL
-            label: 'LinkedIn',
+            href: 'https://app.releem.com',
+            label: 'Free Trial',
             position: 'right',
           },
         ],
@@ -86,6 +76,10 @@ const config = {
               {
                 label: 'Study the documentation',
                 to: '/',
+              },
+              {
+                href: 'https://releem.com',
+                label: 'Back to Releem',
               },
             ],
           },
