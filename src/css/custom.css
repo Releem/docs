@@ -41,3 +41,40 @@
 .footer--dark {
   --ifm-footer-background-color: #242526;
 }
+
+.navbar-free-trial-button {
+  background-color: #0056d3;
+  color: white !important;
+  padding: 8px 16px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.navbar-free-trial-button:hover {
+  background-color: #004bb5;
+  color: white !important;
+}
+
+[data-theme='dark'] .navbar-free-trial-button {
+  background-color: #0056d3;
+  color: white;
+}
+
+[data-theme='dark'] .navbar-free-trial-button:hover {
+  background-color: #004bb5;
+}
+
+/* Hide the external link icon (or any SVG) inside the Free Trial button */
+.navbar-free-trial-button svg {
+  display: none;
+}
+
+.navbar__link svg {
+  display: none;
+}
+
+.dropdown__link svg {
+  display: none;
+}

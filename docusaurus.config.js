@@ -57,8 +57,77 @@ const config = {
         },
         items: [
           {
+            type: 'dropdown',
+            label: 'PRODUCT',
+            position: 'left',
+            items: [
+              {
+                label: 'MYSQL CONFIGURATION TUNING',
+                href: 'https://releem.com/mysql-configuration-tuning',
+              },
+              {
+                label: 'SQL QUERY ANALYTICS',
+                href: 'https://releem.com/query-analytics',
+              },
+              {
+                label: 'SQL QUERY OPTIMIZATION',
+                href: 'https://releem.com/blog/introducing-automatic-sql-query-optimization',
+              },
+              {
+                label: 'SCHEMA OPTIMIZATION',
+                href: 'https://releem.com/mysql-schema-optimization',
+              },
+              {
+                label: 'MYSQL MONITORING',
+                href: 'https://releem.com/mysql-monitoring',
+              },
+              {
+                label: 'HEALTH CHECKS FOR MYSQL',
+                href: 'https://releem.com/health-checks',
+              },
+              {
+                label: 'MYSQL MEMORY CALCULATOR',
+                href: 'https://releem.com/mysql-memory-calculator',
+              },
+              {
+                label: 'FAQ',
+                href: 'https://releem.com/faq',
+              },
+            ],
+          },
+          {
+            type: 'dropdown',
+            label: 'SOLUTIONS',
+            position: 'left',
+            items: [
+              {
+                label: 'FOR DEVELOPERS',
+                href: 'https://releem.com/for-developers',
+              },
+              {
+                label: 'FOR HOSTING PROVIDERS',
+                href: 'https://releem.com/for-hosting',
+              },
+              {
+                label: 'FOR AWS RDS',
+                href: 'https://releem.com/rds',
+              },
+            ],
+          },
+          {
+            label: 'PRICING',
+            href: 'https://releem.com/pricing',
+            position: 'left',
+          },
+          {
             href: 'https://app.releem.com',
             label: 'Free Trial',
+            position: 'right',
+            className: 'navbar-free-trial-button',
+            target: '_self',
+          },
+          {
+            type: 'search',
             position: 'right',
           },
         ],
