@@ -69,7 +69,6 @@ Create read-only database user "releem" which Releem Agent will use to collect d
         GRANT SELECT ON performance_schema.events_statements_summary_by_digest TO 'releem'@'%';
         GRANT SELECT ON performance_schema.table_io_waits_summary_by_index_usage TO 'releem'@'%';
         GRANT SELECT ON performance_schema.file_summary_by_instance TO 'releem'@'%';
-        GRANT SUPER ON *.* TO 'releem'@'%';
         ```
       </TabItem>
     </Tabs>
