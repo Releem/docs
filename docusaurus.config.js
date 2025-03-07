@@ -5,13 +5,13 @@ const config = {
   title: 'Releem Documentation',
   tagline: 'MySQL Performance Monitoring and Tuning',
   favicon: 'img/favicon.ico',
-  url: 'https://releem.com',
+  url: 'https://docs.releem.com',
   baseUrl: '/',
   organizationName: 'releem',
   projectName: 'docs',
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
-
+  trailingSlash: false,
   i18n: {
     defaultLocale: 'en',
     locales: ['en'],
@@ -87,7 +87,7 @@ const config = {
               },
               {
                 label: 'MYSQL MEMORY CALCULATOR',
-                href: 'https://releem.com/mysql-memory-calculator',
+                href: 'https://releem.com/tools/mysql-memory-calculator',
               },
               {
                 label: 'FAQ',
