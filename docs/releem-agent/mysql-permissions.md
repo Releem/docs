@@ -81,20 +81,20 @@ Create read-only database user "releem" which Releem Agent will use to collect d
     The SQL Query Optimization feature requires additional permissions for the Releem Agent user.
     To grant these privileges, run the following query in the MySQL console:
     ```sql
-      GRANT SELECT ON *.* TO releem@'%'
+    GRANT SELECT ON *.* TO releem@'%'
     ```
 
     With AWS RDS, performance schema consumers can't be enabled permanently in a configuration. Create the following procedure to give the Agent the ability to enable performance_schema.events_* consumers at runtime:
     ```sql
-      CREATE SCHEMA IF NOT EXISTS releem;
-      DELIMITER $$
-      CREATE PROCEDURE releem.enable_events_statements_consumers()
-          SQL SECURITY DEFINER
-      BEGIN
-          UPDATE performance_schema.setup_consumers SET enabled='YES' WHERE name LIKE 'events_statements_%';
-      END $$
-      DELIMITER ;
-      GRANT EXECUTE ON PROCEDURE releem.enable_events_statements_consumers TO releem@'%';
+    CREATE SCHEMA IF NOT EXISTS releem;
+    DELIMITER $$
+    CREATE PROCEDURE releem.enable_events_statements_consumers()
+        SQL SECURITY DEFINER
+    BEGIN
+        UPDATE performance_schema.setup_consumers SET enabled='YES' WHERE name LIKE 'events_statements_%';
+    END $$
+    DELIMITER ;
+    GRANT EXECUTE ON PROCEDURE releem.enable_events_statements_consumers TO releem@'%';
     ```
 
   </TabItem>
@@ -142,23 +142,23 @@ Create read-only database user "releem" which Releem Agent will use to collect d
       <TabItem value="mysql-8" label="MySQL >= 8.0" default>
         Change [Password] to your secret password
         ```SQL
-          CREATE USER 'releem'@'%' identified by '[Password]';
-          GRANT PROCESS, REPLICATION CLIENT, SHOW VIEW ON *.* TO 'releem'@'%';
-          GRANT SELECT ON performance_schema.events_statements_summary_by_digest TO 'releem'@'%';
-          GRANT SELECT ON performance_schema.table_io_waits_summary_by_index_usage TO 'releem'@'%';
-          GRANT SELECT ON performance_schema.file_summary_by_instance TO 'releem'@'%';
-          GRANT SYSTEM_VARIABLES_ADMIN ON *.* TO 'releem'@'%';
-          ```
+        CREATE USER 'releem'@'%' identified by '[Password]';
+        GRANT PROCESS, REPLICATION CLIENT, SHOW VIEW ON *.* TO 'releem'@'%';
+        GRANT SELECT ON performance_schema.events_statements_summary_by_digest TO 'releem'@'%';
+        GRANT SELECT ON performance_schema.table_io_waits_summary_by_index_usage TO 'releem'@'%';
+        GRANT SELECT ON performance_schema.file_summary_by_instance TO 'releem'@'%';
+        GRANT SYSTEM_VARIABLES_ADMIN ON *.* TO 'releem'@'%';
+        ```
       </TabItem>
       <TabItem value="mariadb-mysql-5" label="MariaDB and MySQL < 8.0">
         Change [Password] to your secret password
         ```SQL
-          CREATE USER 'releem'@'%' identified by '[Password]';
-          GRANT PROCESS, REPLICATION CLIENT, SHOW VIEW ON *.* TO 'releem'@'%';
-          GRANT SELECT ON performance_schema.events_statements_summary_by_digest TO 'releem'@'%';
-          GRANT SELECT ON performance_schema.table_io_waits_summary_by_index_usage TO 'releem'@'%';
-          GRANT SELECT ON performance_schema.file_summary_by_instance TO 'releem'@'%';
-          GRANT SUPER ON *.* TO 'releem'@'%';
+        CREATE USER 'releem'@'%' identified by '[Password]';
+        GRANT PROCESS, REPLICATION CLIENT, SHOW VIEW ON *.* TO 'releem'@'%';
+        GRANT SELECT ON performance_schema.events_statements_summary_by_digest TO 'releem'@'%';
+        GRANT SELECT ON performance_schema.table_io_waits_summary_by_index_usage TO 'releem'@'%';
+        GRANT SELECT ON performance_schema.file_summary_by_instance TO 'releem'@'%';
+        GRANT SUPER ON *.* TO 'releem'@'%';
         ```
       </TabItem>
     </Tabs>      
@@ -171,7 +171,7 @@ Create read-only database user "releem" which Releem Agent will use to collect d
     The SQL Query Optimization feature requires additional permissions for the Releem Agent user. 
     To grant these privileges, run the following query in the MySQL console:
     ```sql
-      SELECT Concat("GRANT SELECT ON *.* TO `",User,"`@`", Host,"`;") FROM mysql.user WHERE User='releem';
+    SELECT Concat("GRANT SELECT ON *.* TO `",User,"`@`", Host,"`;") FROM mysql.user WHERE User='releem';
     ```
   </TabItem>
 </Tabs>
