@@ -48,6 +48,7 @@ const sidebars = {
         'configuration-tuning/mysql-tuning-process',
         'configuration-tuning/how-to-apply-configuration-using-portal',
         'configuration-tuning/how-to-apply-configuration-using-agent',
+        'configuration-tuning/how-to-apply-configuration-using-cron',
         'configuration-tuning/how-to-rollback-to-previous-configuration',
         'configuration-tuning/limit-memory-for-mysql',
         'configuration-tuning/example-of-configuration',
