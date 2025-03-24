@@ -14,7 +14,7 @@ Releem supports MySQL/MariaDB/Percona clusters, but you should add "releem" user
 
 ### Step 1: Create MySQL User
 
-Follow the [MySQL Permissions for Releem Agent](/releem-agent/mysql-permissions) guide to create the required user on each node of your cluster. Make sure to set the same password across all nodes for consistency.
+Follow the [MySQL Permissions for Releem Agent](/releem-agent/mysql-permissions) guide to create the required user.
 
 For enabling Automatic SQL Query Optimization, add the [Additional Permissions](/releem-agent/mysql-permissions#additional-database-permissions-required) as well.
 
