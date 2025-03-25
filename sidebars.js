@@ -40,6 +40,7 @@ const sidebars = {
         'releem-agent/mysql-permissions',
         'releem-agent/update',
         'releem-agent/uninstallation',
+        'releem-agent/how-to-check-logs',
       ],
     },
     {

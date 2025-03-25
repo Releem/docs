@@ -24,25 +24,7 @@ If Releem Agent is not running to start it please run:
 ```
 systemctl start releem-agent
 ```
-If Releem Agent is running but Dashboard informs you that it is disconnected please check the logs
-Debian:
-```
-cat /var/log/syslog | grep releem-agent
-```
-
-Centos:
-```
-cat  /var/log/messages | grep releem-agent
-```
-
-AWS RDS:
-All logs are stored in Cloudwatch releem-agent log group.
-
-Docker:
-```
-docker logs [container name]
-```
-*by default [container name] is releem-agent*
+If Releem Agent is running but Dashboard informs you that it is disconnected please [check the logs](/releem-agent/how-to-check-logs)
 
 ## Releem Agent Common Issues
 
