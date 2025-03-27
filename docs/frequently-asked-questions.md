@@ -3,6 +3,13 @@ id: frequently-asked-questions
 title: Frequently Asked Questions
 ---
 
+import Head from '@docusaurus/Head';
+
+<Head>
+  <link rel="canonical" href="https://releem.com/faq" />
+</Head>
+
+
 # Frequently Asked Questions
 
 ## I've installed Releem Agent. How do I check if I've done it correctly?
