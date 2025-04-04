@@ -56,7 +56,7 @@ Use this instruction to install Releem Agent manually on the database server. Re
    - `DB_PASSWORD` - MySQL user password for data collection.
    - `DB_HOST` - MySQL host for data collection.
    - `DB_PORT` - MySQL port for data collection.
-   - `MEMORY_LIMIT` - RAM limit allocated for MySQL. Set to system RAM or limit for MySQL.
+   - `MEMORY_LIMIT` - RAM limit allocated for MySQL in MegaBytes. Set to system RAM or limit for MySQL.
 
    **Volumes:**
    - `/tmp/.mysqlconfigurer/`
