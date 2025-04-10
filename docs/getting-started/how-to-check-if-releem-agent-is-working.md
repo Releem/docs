@@ -57,7 +57,8 @@ If you're using CPanel, please ensure the options "Allow cPanel & WHM to determi
 ### No parameter specified in AwsRDSParameterGroup agent settings. The automatic applying configuration is disabled.
 **The root cause:** The CloudFormation stack for the agent has not been updated and/or the ParameterGroup has not been configured for automatic application.
 
-**How to fix:** update the CloudFormation stack and perform the customizations with ParameterGroup.
+**How to fix:** update the CloudFormation stack and set DBParameterGroup parameter to newly created Parameter group.
+You can specify “dummy” in the DBParameterGroup parameter if you do not plan to use automatic configuration applying.
 
 ### Error creating agent catalog for configurations
 **The root cause:** Incorrect installation
