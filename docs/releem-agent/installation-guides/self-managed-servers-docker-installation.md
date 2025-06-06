@@ -24,7 +24,8 @@ Use this instruction to install Releem Agent manually on the database server. Re
      -e DB_USER="releem" \
      -e RELEEM_API_KEY="[RELEEM_API_KEY]" \
      -e MEMORY_LIMIT=[MEMORY_LIMIT] \
-     releem/releem-agent:1.5.0.3
+     -e RELEEM_QUERY_OPTIMIZATION=true \
+     releem/releem-agent:[version]
    ```
    Please use the latest version of Releem Agent. You can find the latest version of Releem Agent by clicking on the [link](https://hub.docker.com/r/releem/releem-agent/tags).
 
@@ -57,6 +58,7 @@ Use this instruction to install Releem Agent manually on the database server. Re
    - `DB_HOST` - MySQL host for data collection.
    - `DB_PORT` - MySQL port for data collection.
    - `MEMORY_LIMIT` - RAM limit allocated for MySQL in MegaBytes. Set to system RAM or limit for MySQL.
+   - `RELEEM_QUERY_OPTIMIZATION` - set 'true' if Releem Agent should collect additional information for Automatic SQL Query Optimization.
 
    **Volumes:**
    - `/tmp/.mysqlconfigurer/`
