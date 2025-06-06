@@ -19,6 +19,8 @@ To configure automatic applying of recommended configuration please sign in to y
    - Modify the database by specifying in “DB parameter group” the Parameter group created in the previous step.
    - Reboot the database if required to apply the changes.
 
+You have the following options to install Releem Agent:
+
 <Tabs>
   <TabItem value="cloudformation" label="CloudFormation" default>
 
