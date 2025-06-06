@@ -38,6 +38,7 @@ const sidebars = {
           ],
         },
         'releem-agent/mysql-permissions',
+        'releem-agent/migration',
         'releem-agent/update',
         'releem-agent/uninstallation',
         'releem-agent/how-to-check-logs',
