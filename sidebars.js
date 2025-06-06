@@ -63,6 +63,7 @@ const sidebars = {
       items: [
         'query-optimization/enable-sql-query-optimization',
         'query-optimization/disable-sql-query-optimization',
+        'query-optimization/prepared-statements-issue',
       ],
     },
     {
