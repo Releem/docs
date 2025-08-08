@@ -20,6 +20,8 @@ title: "Windows"
    ```ini
    apikey="change to your API key"
    releem_cnf_dir="C:\\ProgramData\\ReleemAgent\\conf.d"
+   mysql_host="127.0.0.1"
+   mysql_port="3306"
    mysql_user="releem"
    mysql_password="change to your password"
    mysql_restart_service=""
