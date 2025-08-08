@@ -28,6 +28,9 @@ title: "Windows"
    interval_read_config_seconds=3600
    query_optimization=true
    ```
+
+   For a full list of configuration settings, please refer to the [Releem Agent Configuration Settings](/releem-agent/configuration).
+
    **Important:** Please set `mysql_password` as previously generated password on step 1, and `api_key` for your account which you could find on the Profile page in the Releem Dashboard.
 
 5. Please add the following variables to the MySQL configuration file and restart MySQL:

@@ -37,6 +37,7 @@ const sidebars = {
             'releem-agent/installation-guides/clusters',
           ],
         },
+        'releem-agent/configuration',
         'releem-agent/mysql-permissions',
         'releem-agent/migration',
         'releem-agent/update',
