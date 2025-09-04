@@ -119,27 +119,25 @@ You have the following options to install Releem Agent:
    3. Run Releem Agent container using the following command:
    ```bash
    docker run -d -ti --name 'releem-agent' \
-   -e RELEEM_HOSTNAME="[Hostname]" \
-   -e DB_HOST="[DB_HOST]" \
-   -e DB_PORT="[DB_PORT]" \
-   -e DB_PASSWORD="[RELEEM_MYSQL_PASSWORD]" \
-   -e DB_USER="releem" \
    -e RELEEM_API_KEY="[RELEEM_API_KEY]" \
-   -e MEMORY_LIMIT=[MEMORY_LIMIT] \
+   -e RELEEM_HOSTNAME="[RELEEM_HOSTNAME]" \
+   -e DB_USER="releem" \
+   -e DB_PASSWORD="[DB_PASSWORD]" \
    -e INSTANCE_TYPE="aws/rds" \
-   -e AWS_RDS_DB="[RDS_INSTANCE_NAME]" \
+   -e AWS_REGION="[AWS_REGION]" \
+   -e AWS_RDS_DB="[AWS_RDS_DB]" \
    -e AWS_RDS_PARAMETER_GROUP="releem-agent" \
    -e RELEEM_QUERY_OPTIMIZATION=true \
    releem/releem-agent:[version]
    ```
 
    Parameters:
+   - `RELEEM_API_KEY`: API Key. Get it from Profile page in Releem Customer Portal.   
+   - `RELEEM_HOSTNAME` - Server hostname, which should display in the Releem Dashboard.
    - `DB_USER`: MySQL User name to collect MySQL metrics
    - `DB_PASSWORD`: MySQL User password to collect MySQL metrics
-   - `RELEEM_API_KEY`: API Key. Get it from Profile page in Releem Customer Portal.
-   - `RELEEM_MYSQL_HOST`: Use this variable in case MySQL listens on a different interface or connection is available only through a socket.
-   - `AWS_RDS_DB`: RDS instance name.
    - `AWS_REGION`: AWS region name
+   - `AWS_RDS_DB`: RDS instance name.    
    - `AWS_RDS_PARAMETER_GROUP`: Parameter Group name which Releem will use to set recommendations for RDS instance. Default name is "releem-agent".
    - `RELEEM_QUERY_OPTIMIZATION` - set 'true' if Releem Agent should collect additional information for Automatic SQL Query Optimization.
 
