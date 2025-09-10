@@ -1,4 +1,4 @@
----
+732---
 id: cloud-managed-aws-rds-automatic-installation
 title: AWS RDS
 ---
@@ -10,14 +10,18 @@ import TabItem from '@theme/TabItem';
 
 Use this instruction to install Releem Agent automatically via CloudFormation to AWS Fargate, or manually on an EC2 instance. Releem Agent will run in a container on AWS Fargate or directly on the EC2 instance, depending on your choice.
 
-The requirements for RDS instance:
-- Enhanced monitoring to collect system performance metrics.
-- Performance Insights to collect MySQL performance metrics.
-
 To configure automatic applying of recommended configuration please sign in to your AWS account and do the following steps:
    - In the Amazon RDS console, create a Parameter Group for the version of your database named “releem-agent".
    - Modify the database by specifying in “DB parameter group” the Parameter group created in the previous step.
    - Reboot the database if required to apply the changes.
+     
+The requirements for RDS instance:
+- Enhanced monitoring to collect system performance metrics.
+- Performance Insights to collect MySQL performance metrics.
+- Enable Performance Schema. Please change the following variable in the Parameter Group and reboot the database instance:
+   ```ini
+   performance_schema=1
+   ```
 
 You have the following options to install Releem Agent:
 
