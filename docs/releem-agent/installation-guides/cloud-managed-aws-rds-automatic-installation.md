@@ -18,7 +18,7 @@ To configure automatic applying of recommended configuration please sign in to y
 The requirements for RDS instance:
 - Enhanced monitoring to collect system performance metrics.
 - Performance Insights to collect MySQL performance metrics.
-- Enable Performance Schema. Please change the following variable in the Parameter Group and reboot the database instance:
+- Performance Schema to collect MySQL performance metrics. Please change the following variable in the Parameter Group and reboot the database instance:
    ```ini
    performance_schema=1
    ```
@@ -159,7 +159,7 @@ To check Releem Agent logs please open CloudWatch -> Log Groups and then select 
    - Enable Enhanced monitoring for your RDS instance.
 
 2. No Latency graph on Releem Dashboard
-   - Enable Performance Insights for your RDS instance.
+   - Enable Performance Insights and Performance Schema for your RDS instance.
 
 3. Error 1045 (28000): Access denied for user 'releem'@'' (using password: YES)
    - Check password for Releem User that you created according to this [guide](/releem-agent/mysql-permissions). And reinstall Releem Agent.
