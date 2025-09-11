@@ -47,6 +47,10 @@ Create read-only database user "releem" which Releem Agent will use to collect d
     ```sql
       SELECT Concat("GRANT SELECT ON *.* TO `",User,"`@`", Host,"`;") FROM mysql.user WHERE User='releem';
     ```
+    Then execute the resulting GRANT statements in the MySQL console. For example:
+    ```sql
+      GRANT SELECT ON *.* TO `releem`@`%`;
+    ```    
 
   </TabItem>
   <TabItem value="aws-rds" label="AWS RDS">
@@ -134,6 +138,10 @@ Create read-only database user "releem" which Releem Agent will use to collect d
       ```sql
       SELECT Concat("GRANT SELECT ON *.* TO `",User,"`@`", Host,"`;") FROM mysql.user WHERE User='releem';
       ```
+      Then execute the resulting GRANT statements in the MySQL console. For example:
+      ```sql
+        GRANT SELECT ON *.* TO `releem`@`%`;
+      ```         
 
   </TabItem>
   <TabItem value="windows" label="Windows" default>
@@ -172,5 +180,9 @@ Create read-only database user "releem" which Releem Agent will use to collect d
     ```sql
     SELECT Concat("GRANT SELECT ON *.* TO `",User,"`@`", Host,"`;") FROM mysql.user WHERE User='releem';
     ```
+    Then execute the resulting GRANT statements in the MySQL console. For example:
+    ```sql
+      GRANT SELECT ON *.* TO `releem`@`%`;
+    ```    
   </TabItem>
 </Tabs>
