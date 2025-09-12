@@ -34,7 +34,7 @@ To enable the SQL Query Optimization feature, please select your installation ty
 
   If your server is already installed, please do the following steps:
 
-  1. Grant additional permissions to the releem user. See the section below for Additional Permissions Required.
+  1. Grant additional permissions to the releem user. The SQL Query Optimization feature requires [Additional Permissions](/releem-agent/mysql-permissions) for the Releem Agent user.
   2. Add `query_optimization=true` setting to the `/opt/releem/releem.conf`.
   3. Restart Releem Agent using the following command:
      ```bash
@@ -48,7 +48,7 @@ To enable the SQL Query Optimization feature, please select your installation ty
   </TabItem>
   <TabItem value="aws-rds" label="AWS RDS">
 
-  1. Grant additional permissions to the releem user. See the section below for Additional Permissions Required.
+  1. Grant additional permissions to the releem user. The SQL Query Optimization feature requires [Additional Permissions](/releem-agent/mysql-permissions) for the Releem Agent user.
   2. Set the following MySQL variables in the Parameter Group to allow Releem to collect more queries for optimization:
      ```ini
      performance_schema = 1
@@ -64,7 +64,7 @@ To enable the SQL Query Optimization feature, please select your installation ty
   </TabItem>
   <TabItem value="docker" label="Docker">
 
-  1. Grant additional permissions to the releem user. See the section below for Additional Permissions Required.
+  1. Grant additional permissions to the releem user. The SQL Query Optimization feature requires [Additional Permissions](/releem-agent/mysql-permissions) for the Releem Agent user.
   2. Re-install Releem Agent with `RELEEM_QUERY_OPTIMIZATION=true` environment variable enabled.
 
   Ensure that the `RELEEM_HOSTNAME` variable should be the same as the currently added server. If you don't configure automatic applying of configuration, then please add the following MySQL variables to the configuration:
@@ -78,7 +78,7 @@ To enable the SQL Query Optimization feature, please select your installation ty
   </TabItem>
   <TabItem value="windows" label="Windows" default>
 
-  1. Grant additional permissions to the releem user. See the section below for Additional Permissions Required.
+  1. Grant additional permissions to the releem user. The SQL Query Optimization feature requires [Additional Permissions](/releem-agent/mysql-permissions) for the Releem Agent user.
   2. Add `query_optimization=true` setting to the `C:\ProgramData\ReleemAgent\releem.conf`.
   3. Restart Releem Agent using the following command:
      ```bash
@@ -93,7 +93,7 @@ To enable the SQL Query Optimization feature, please select your installation ty
 
 ## Additional Database Permissions Required
 
-The SQL Query Optimization feature requires [Additional Permissions](/releem-agent/mysql-permissions#additional-database-permissions-required) for the Releem Agent user.
+The SQL Query Optimization feature requires [Additional Permissions](/releem-agent/mysql-permissions) for the Releem Agent user.
 
 ## Data Collection and Analysis
 
