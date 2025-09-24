@@ -68,4 +68,6 @@ You can specify “dummy” in the DBParameterGroup parameter if you do not plan
 ### Latency is not calculated
 **The root cause:** The Performance Schema is not enabled for manual installation or restart is not performed for automatic installation.
 
-**How to fix:** Run /opt/releem/mysqlconfigurer.sh -p command and agree to the database service restart
+**How to fix:** Run /opt/releem/mysqlconfigurer.sh -p command and agree to the database service restart.
+**How to fix for RDS:** Enable Performance Insights and Performance Schema for your RDS instance.
+
