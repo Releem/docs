@@ -120,7 +120,10 @@ You have the following options to install Releem Agent:
    }
    ```
 
-   3. Run Releem Agent container using the following command:
+   3. Run Releem Agent container using Docker or Docker Compose.
+
+   **Docker**
+
    ```bash
    docker run -d -ti --name 'releem-agent' \
    -e RELEEM_API_KEY="[RELEEM_API_KEY]" \
@@ -135,7 +138,47 @@ You have the following options to install Releem Agent:
    releem/releem-agent:[version]
    ```
 
-   Parameters:
+   **Docker Compose**
+
+   ```yaml
+   version: '3.7'
+
+   x-common-service: &common-service
+     image: releem/releem-agent:[version]
+     restart: unless-stopped
+
+   services:
+     releem-agent-1:
+       <<: *common-service
+       container_name: releem-agent-1
+       environment:
+         RELEEM_API_KEY: "[RELEEM_API_KEY]"
+         RELEEM_HOSTNAME: "[RELEEM_HOSTNAME]"
+         DB_USER: "releem"
+         DB_PASSWORD: "[DB_PASSWORD]"
+         INSTANCE_TYPE: "aws/rds"
+         AWS_REGION: "[AWS_REGION]"
+         AWS_RDS_DB: "[AWS_RDS_DB]"
+         AWS_RDS_PARAMETER_GROUP: "releem-agent"
+         RELEEM_QUERY_OPTIMIZATION: true
+
+     # You can duplicate docker compose services to launch multiple agents by changing the name, container_name, and environment.
+     releem-agent-2:
+       <<: *common-service
+       container_name: releem-agent-2
+       environment:
+         RELEEM_API_KEY: "[RELEEM_API_KEY]"
+         RELEEM_HOSTNAME: "[RELEEM_HOSTNAME]"
+         DB_USER: "releem"
+         DB_PASSWORD: "[DB_PASSWORD]"
+         INSTANCE_TYPE: "aws/rds"
+         AWS_REGION: "[AWS_REGION]"
+         AWS_RDS_DB: "[AWS_RDS_DB]"
+         AWS_RDS_PARAMETER_GROUP: "releem-agent"
+         RELEEM_QUERY_OPTIMIZATION: true
+   ```
+
+   ***Parameters:***
    - `RELEEM_API_KEY`: API Key. Get it from Profile page in Releem Customer Portal.   
    - `RELEEM_HOSTNAME` - Server hostname, which should display in the Releem Dashboard.
    - `DB_USER`: MySQL User name to collect MySQL metrics
