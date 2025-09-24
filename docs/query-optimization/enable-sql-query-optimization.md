@@ -52,7 +52,6 @@ To enable the SQL Query Optimization feature, please select your installation ty
   2. Set the following MySQL variables in the Parameter Group to allow Releem to collect more queries for optimization:
      ```ini
      performance_schema = 1
-     performance_schema_events_statements_history_size = 500
      ```
   3. Update the already installed Releem Agent:
      1. Select CloudFormation Stack - releem-agent, click the **Update** button.
@@ -72,7 +71,6 @@ To enable the SQL Query Optimization feature, please select your installation ty
   ```ini
   performance-schema-consumer-events-statements-history = ON
   performance-schema-consumer-events-statements-current = ON
-  performance_schema_events_statements_history_size = 500
   ```
 
   </TabItem>
