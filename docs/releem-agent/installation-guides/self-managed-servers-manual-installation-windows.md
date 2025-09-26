@@ -41,7 +41,6 @@ title: "Windows"
    slow_query_log=1
    performance-schema-consumer-events-statements-history=ON
    performance-schema-consumer-events-statements-current=ON
-   performance_schema_events_statements_history_size=500
    ```
 
 6. Run the following commands manually in Windows PowerShell as Administrator:
