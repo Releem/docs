@@ -1,4 +1,4 @@
----
+MariaDB an---
 id: cloud-managed-aws-rds-automatic-installation
 title: AWS RDS
 ---
@@ -78,20 +78,22 @@ You have the following options to install Releem Agent:
    ] 
    }
    ```
-   3. Follow the [Automatic Installation guide](/releem-agent/installation-guides/self-managed-servers-automatic-installation)
 
-   4. Add following lines to the /opt/releem/releem.conf:
-   Please change aws_region and aws_rds_db settings
-   ```
-   instance_type="aws/rds"
-   aws_region="[AWS_REGION]"
-   aws_rds_db="[RDS_INSTANCE_NAME]"
-   aws_rds_parameter_group="releem-agent"
-   ```
-   5. Restart Releem Agent using the following command:
-   ```
-   systemctl restart releem-agent
-   ```
+   3. Run Installation command as a root user on the server:
+      ```ini
+      RELEEM_INSTANCE_TYPE="aws/rds" RELEEM_AWS_REGION="[AwsRegion]" RELEEM_AWS_RDS_DB="[AwsRdsDBidentifier]" RELEEM_AWS_RDS_PARAMETER_GROUP="releem-agent" RELEEM_MYSQL_PASSWORD='[Password]' RELEEM_MYSQL_LOGIN='releem' RELEEM_MYSQL_MEMORY_LIMIT=0 RELEEM_API_KEY=[Key] RELEEM_CRON_ENABLE=1 RELEEM_QUERY_OPTIMIZATION=true bash -c "$(curl -L https://releem.s3.amazonaws.com/v2/install.sh)"
+      ```
+      
+      **Parameters:**
+      - `RELEEM_AWS_REGION` - AWS region name
+      - `RELEEM_AWS_RDS_DB` - RDS instance name.    
+      - `RELEEM_AWS_RDS_PARAMETER_GROUP` - Parameter Group name which Releem will use to set recommendations for RDS instance. Default name is "releem-agent".
+      - `RELEEM_MYSQL_LOGIN` - MySQL User name to collect MySQL metrics
+      - `RELEEM_MYSQL_PASSWORD` - MySQL User password to collect MySQL metrics
+      - `RELEEM_MYSQL_MEMORY_LIMIT` - Change parameter in case there are other software installed on the server. Default value is 0 means use all memory.
+      - `RELEEM_API_KEY` - API Key. Get it from Profile page in Releem Customer Portal.
+      - `RELEEM_QUERY_OPTIMIZATION` - set 'true' if Releem Agent should collect additional information for Automatic SQL Query Optimization.
+
 
   </TabItem>
   <TabItem value="docker" label="EC2 Docker">
