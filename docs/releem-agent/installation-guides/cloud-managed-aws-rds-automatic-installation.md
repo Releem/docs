@@ -60,24 +60,24 @@ You have the following options to install Releem Agent:
    1. Create read-only user "releem" in MySQL using the [instruction](/releem-agent/mysql-permissions). To enable Automatic SQL Query Optimization please add [Additional Permissions](/releem-agent/mysql-permissions#additional-database-permissions-required).
 
    2. Add IAM role releem-agent-role and apply it to the EC2 instance:
-   ```
-   { 
-   "Version": "2012-10-17", 
-   "Statement": [ 
+      ```
       { 
-         "Action": [ 
-         "rds:Describe*", 
-         "cloudwatch:Get*", 
-         "logs:Get*", 
-         "ec2:Describe*"
-         "rds:ModifyDBParameterGroup"
-         ], 
-         "Resource": "*", 
-         "Effect": "Allow" 
-      } 
-   ] 
-   }
-   ```
+      "Version": "2012-10-17", 
+      "Statement": [ 
+         { 
+            "Action": [ 
+            "rds:Describe*", 
+            "cloudwatch:Get*", 
+            "logs:Get*", 
+            "ec2:Describe*"
+            "rds:ModifyDBParameterGroup"
+            ], 
+            "Resource": "*", 
+            "Effect": "Allow" 
+         } 
+      ] 
+      }
+      ```
 
    3. Run Installation command as a root user on the server:
       ```ini
@@ -103,94 +103,94 @@ You have the following options to install Releem Agent:
    1. Create read-only user "releem" in MySQL using the [instruction](/releem-agent/mysql-permissions). To enable Automatic SQL Query Optimization please add [Additional Permissions](/releem-agent/mysql-permissions#additional-database-permissions-required).
 
    2. Add IAM role releem-agent-role and apply it to the EC2 instance:
-   ```
-   { 
-   "Version": "2012-10-17", 
-   "Statement": [ 
+      ```
       { 
-         "Action": [ 
-         "rds:Describe*", 
-         "cloudwatch:Get*", 
-         "logs:Get*", 
-         "ec2:Describe*"
-         "rds:ModifyDBParameterGroup"
-         ], 
-         "Resource": "*", 
-         "Effect": "Allow" 
-      } 
-   ] 
-   }
-   ```
+      "Version": "2012-10-17", 
+      "Statement": [ 
+         { 
+            "Action": [ 
+            "rds:Describe*", 
+            "cloudwatch:Get*", 
+            "logs:Get*", 
+            "ec2:Describe*"
+            "rds:ModifyDBParameterGroup"
+            ], 
+            "Resource": "*", 
+            "Effect": "Allow" 
+         } 
+      ] 
+      }
+      ```
 
    3. Run Releem Agent container using Docker or Docker Compose.
 
-   **Docker**
-
-   ```bash
-   docker run -d -ti --name 'releem-agent' \
-   -e RELEEM_API_KEY="[RELEEM_API_KEY]" \
-   -e RELEEM_HOSTNAME="[RELEEM_HOSTNAME]" \
-   -e DB_USER="releem" \
-   -e DB_PASSWORD="[DB_PASSWORD]" \
-   -e INSTANCE_TYPE="aws/rds" \
-   -e AWS_REGION="[AWS_REGION]" \
-   -e AWS_RDS_DB="[AWS_RDS_DB]" \
-   -e AWS_RDS_PARAMETER_GROUP="releem-agent" \
-   -e RELEEM_QUERY_OPTIMIZATION=true \
-   releem/releem-agent:[version]
-   ```
-
-   **Docker Compose**
-
-   ```yaml
-   version: '3.7'
-
-   x-common-service: &common-service
-     image: releem/releem-agent:[version]
-     restart: unless-stopped
-
-   services:
-     releem-agent-1:
-       <<: *common-service
-       container_name: releem-agent-1
-       environment:
-         RELEEM_API_KEY: "[RELEEM_API_KEY]"
-         RELEEM_HOSTNAME: "[RELEEM_HOSTNAME]"
-         DB_USER: "releem"
-         DB_PASSWORD: "[DB_PASSWORD]"
-         INSTANCE_TYPE: "aws/rds"
-         AWS_REGION: "[AWS_REGION]"
-         AWS_RDS_DB: "[AWS_RDS_DB]"
-         AWS_RDS_PARAMETER_GROUP: "releem-agent"
-         RELEEM_QUERY_OPTIMIZATION: true
-
-     # You can duplicate docker compose services to launch multiple agents by changing the name, container_name, and environment.
-     releem-agent-2:
-       <<: *common-service
-       container_name: releem-agent-2
-       environment:
-         RELEEM_API_KEY: "[RELEEM_API_KEY]"
-         RELEEM_HOSTNAME: "[RELEEM_HOSTNAME]"
-         DB_USER: "releem"
-         DB_PASSWORD: "[DB_PASSWORD]"
-         INSTANCE_TYPE: "aws/rds"
-         AWS_REGION: "[AWS_REGION]"
-         AWS_RDS_DB: "[AWS_RDS_DB]"
-         AWS_RDS_PARAMETER_GROUP: "releem-agent"
-         RELEEM_QUERY_OPTIMIZATION: true
-   ```
-
-   ***Parameters:***
-   - `RELEEM_API_KEY`: API Key. Get it from Profile page in Releem Customer Portal.   
-   - `RELEEM_HOSTNAME` - Server hostname, which should display in the Releem Dashboard.
-   - `DB_USER`: MySQL User name to collect MySQL metrics
-   - `DB_PASSWORD`: MySQL User password to collect MySQL metrics
-   - `AWS_REGION`: AWS region name
-   - `AWS_RDS_DB`: RDS instance name.    
-   - `AWS_RDS_PARAMETER_GROUP`: Parameter Group name which Releem will use to set recommendations for RDS instance. Default name is "releem-agent".
-   - `RELEEM_QUERY_OPTIMIZATION` - set 'true' if Releem Agent should collect additional information for Automatic SQL Query Optimization.
-
-   Please use the latest version of Releem Agent. You can find the latest version of Releem Agent by clicking on the [link](https://hub.docker.com/r/releem/releem-agent/tags).
+      **Docker**
+   
+      ```bash
+      docker run -d -ti --name 'releem-agent' \
+      -e RELEEM_API_KEY="[RELEEM_API_KEY]" \
+      -e RELEEM_HOSTNAME="[RELEEM_HOSTNAME]" \
+      -e DB_USER="releem" \
+      -e DB_PASSWORD="[DB_PASSWORD]" \
+      -e INSTANCE_TYPE="aws/rds" \
+      -e AWS_REGION="[AWS_REGION]" \
+      -e AWS_RDS_DB="[AWS_RDS_DB]" \
+      -e AWS_RDS_PARAMETER_GROUP="releem-agent" \
+      -e RELEEM_QUERY_OPTIMIZATION=true \
+      releem/releem-agent:[version]
+      ```
+   
+      **Docker Compose**
+   
+      ```yaml
+      version: '3.7'
+   
+      x-common-service: &common-service
+        image: releem/releem-agent:[version]
+        restart: unless-stopped
+   
+      services:
+        releem-agent-1:
+          <<: *common-service
+          container_name: releem-agent-1
+          environment:
+            RELEEM_API_KEY: "[RELEEM_API_KEY]"
+            RELEEM_HOSTNAME: "[RELEEM_HOSTNAME]"
+            DB_USER: "releem"
+            DB_PASSWORD: "[DB_PASSWORD]"
+            INSTANCE_TYPE: "aws/rds"
+            AWS_REGION: "[AWS_REGION]"
+            AWS_RDS_DB: "[AWS_RDS_DB]"
+            AWS_RDS_PARAMETER_GROUP: "releem-agent"
+            RELEEM_QUERY_OPTIMIZATION: true
+   
+        # You can duplicate docker compose services to launch multiple agents by changing the name, container_name, and environment.
+        releem-agent-2:
+          <<: *common-service
+          container_name: releem-agent-2
+          environment:
+            RELEEM_API_KEY: "[RELEEM_API_KEY]"
+            RELEEM_HOSTNAME: "[RELEEM_HOSTNAME]"
+            DB_USER: "releem"
+            DB_PASSWORD: "[DB_PASSWORD]"
+            INSTANCE_TYPE: "aws/rds"
+            AWS_REGION: "[AWS_REGION]"
+            AWS_RDS_DB: "[AWS_RDS_DB]"
+            AWS_RDS_PARAMETER_GROUP: "releem-agent"
+            RELEEM_QUERY_OPTIMIZATION: true
+      ```
+   
+      ***Parameters:***
+      - `RELEEM_API_KEY`: API Key. Get it from Profile page in Releem Customer Portal.   
+      - `RELEEM_HOSTNAME` - Server hostname, which should display in the Releem Dashboard.
+      - `DB_USER`: MySQL User name to collect MySQL metrics
+      - `DB_PASSWORD`: MySQL User password to collect MySQL metrics
+      - `AWS_REGION`: AWS region name
+      - `AWS_RDS_DB`: RDS instance name.    
+      - `AWS_RDS_PARAMETER_GROUP`: Parameter Group name which Releem will use to set recommendations for RDS instance. Default name is "releem-agent".
+      - `RELEEM_QUERY_OPTIMIZATION` - set 'true' if Releem Agent should collect additional information for Automatic SQL Query Optimization.
+   
+      Please use the latest version of Releem Agent. You can find the latest version of Releem Agent by clicking on the [link](https://hub.docker.com/r/releem/releem-agent/tags).
 
   </TabItem>
 </Tabs>
