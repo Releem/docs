@@ -1,4 +1,4 @@
-MariaDB an---
+---
 id: cloud-managed-aws-rds-automatic-installation
 title: AWS RDS
 ---
