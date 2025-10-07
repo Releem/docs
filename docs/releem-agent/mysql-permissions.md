@@ -102,6 +102,42 @@ Create read-only database user "releem" which Releem Agent will use to collect d
 
   </TabItem>
 
+  <TabItem value="gcp-cloudsql" label="GCP Cloud SQL">
+    <Tabs>
+      <TabItem value="mysql-8" label="MySQL >= 8.0" default>
+        Change [Password] to your secret password
+        ```SQL
+        CREATE USER 'releem'@'%' identified by '[Password]';
+        GRANT PROCESS, REPLICATION CLIENT, SHOW VIEW ON *.* TO 'releem'@'%';
+        GRANT SELECT ON performance_schema.events_statements_summary_by_digest TO 'releem'@'%';
+        GRANT SELECT ON performance_schema.table_io_waits_summary_by_index_usage TO 'releem'@'%';
+        GRANT SELECT ON performance_schema.file_summary_by_instance TO 'releem'@'%';
+        ```
+      </TabItem>
+      <TabItem value="mariadb-mysql-5" label="MariaDB and MySQL < 8.0">
+        Change [Password] to your secret password
+        ```SQL
+        CREATE USER 'releem'@'%' identified by '[Password]';
+        GRANT PROCESS, REPLICATION CLIENT, SHOW VIEW ON *.* TO 'releem'@'%';
+        GRANT SELECT ON performance_schema.events_statements_summary_by_digest TO 'releem'@'%';
+        GRANT SELECT ON performance_schema.table_io_waits_summary_by_index_usage TO 'releem'@'%';
+        GRANT SELECT ON performance_schema.file_summary_by_instance TO 'releem'@'%';
+        ```
+      </TabItem>
+    </Tabs>
+
+    ## Additional Database Permissions Required
+
+    To enable enable Automatic SQL Query Optimization please add Additional Permissions.
+
+    The SQL Query Optimization feature requires additional permissions for the Releem Agent user.
+    To grant these privileges, run the following query in the MySQL console:
+    ```sql
+    GRANT SELECT ON *.* TO releem@'%'
+    ```
+
+  </TabItem>
+
   <TabItem value="docker" label="Docker">
     <Tabs>
       <TabItem value="mysql-8" label="MySQL >= 8.0" default>
