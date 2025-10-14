@@ -223,6 +223,6 @@ To check Releem Agent logs please open CloudWatch -> Log Groups and then select 
 6. Error 1142 (42000): SELECT command denied to user 'releem'@'[serverIP]' for table 'events_statements_history'
    - Additional database permissions are required. Follow this guide to add them: [Additional Permissions](/releem-agent/mysql-permissions#additional-database-permissions-required)
 
-7. Performance_schema_ variables aren't being applied on AWS RDS?
+7. Performance_schema_ variables aren't being applied on AWS RDS
    - Amazon RDS only applies performance_schema_* variables when performance_schema is explicitly set to 1 in the Parameter Group. By default, it's set to 0, even though Performance Insights enables it automatically at the database level.
    - Solution: Set performance_schema from 0 to 1 in your Parameter Group, save the changes, and reboot your RDS instance.
