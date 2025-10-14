@@ -34,6 +34,7 @@ const sidebars = {
             'releem-agent/installation-guides/self-managed-servers-docker-installation',
             'releem-agent/installation-guides/installation-in-kubernetes',
             'releem-agent/installation-guides/cloud-managed-aws-rds-automatic-installation',
+            'releem-agent/installation-guides/cloud-managed-gcp-cloud-sql-automatic-installation',
             'releem-agent/installation-guides/clusters',
           ],
         },

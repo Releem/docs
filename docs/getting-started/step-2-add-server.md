@@ -19,6 +19,7 @@ Choose the type of MySQL server you are adding:
 - [MySQL on Linux Server: Manual Installation in Docker](/releem-agent/installation-guides/self-managed-servers-docker-installation) – Manual installation for MySQL instances running in Docker containers.
 - [Self-Managed Server (Windows)](/releem-agent/installation-guides/self-managed-servers-manual-installation-windows) – For MySQL instances running on Windows.
 - [MySQL on AWS RDS: CloudFormation installation](/releem-agent/installation-guides/cloud-managed-aws-rds-automatic-installation) – For managed MySQL databases hosted on AWS.
+- [MySQL on GCP Clod SQL: Manual installation](/releem-agent/installation-guides/cloud-managed-gcp-cloud-sql-automatic-installation) – For managed MySQL databases hosted on GCP.
 - [MySQL in Kubernetes](/releem-agent/installation-guides/installation-in-kubernetes) – If your MySQL instance is deployed in a Kubernetes cluster.
 
 

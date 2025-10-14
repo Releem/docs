@@ -70,5 +70,6 @@ You can specify “dummy” in the DBParameterGroup parameter if you do not plan
 
 **How to fix:** Run /opt/releem/mysqlconfigurer.sh -p command and agree to the database service restart.
 
-**How to fix for RDS:** Enable Performance Insights and Performance Schema for your RDS instance.
+**How to fix for AWS RDS:** Enable Performance Insights and Performance Schema for your RDS instance.
 
+**How to fix for GCP Cloud SQL:** Enable Performance Schema for your Cloud SQL instance.

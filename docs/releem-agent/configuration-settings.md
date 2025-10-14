@@ -18,7 +18,7 @@ apikey="<api_key>"
 # Hostname for the instance. This hostname will be displayed in the Releem Dashboard
 hostname=""
 
-# Type of instance "local" or "aws/rds'. Default:local
+# Type of instance "local", "gcp/cloudsql" or "aws/rds" . Default:local
 instance_type="aws/rds"
 
 # AWS region for the RDS instance
@@ -29,6 +29,15 @@ aws_rds_db="[RDS_INSTANCE_NAME]"
 
 # AWS RDS parameter group name
 aws_rds_parameter_group="releem-agent"
+
+#GCP project ID for Cloud SQL instance
+gcp_project_id="my-project-123"
+
+#GCP region for Cloud SQL instance
+gcp_region="us-central1"
+
+#Name of Cloud SQL instance
+gcp_cloudsql_instance="my-mysql-instance"
 
 
 # MySQL memory usage limit in MB (0 = use all available memory)
