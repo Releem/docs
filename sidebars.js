@@ -54,6 +54,16 @@ const sidebars = {
         'configuration-tuning/how-to-apply-configuration-using-portal',
         'configuration-tuning/how-to-apply-configuration-using-agent',
         'configuration-tuning/how-to-apply-configuration-using-cron',
+        {
+          type: 'category',
+          label: 'How to Apply Configuration Manually',
+          items: [
+            'configuration-tuning/how-to-apply-configuration-manually/linux',
+            'configuration-tuning/how-to-apply-configuration-manually/windows',
+            'configuration-tuning/how-to-apply-configuration-manually/docker',
+            'configuration-tuning/how-to-apply-configuration-manually/aws-rds',
+          ],
+        },
         'configuration-tuning/how-to-rollback-to-previous-configuration',
         'configuration-tuning/limit-memory-for-mysql',
         'configuration-tuning/example-of-configuration',
