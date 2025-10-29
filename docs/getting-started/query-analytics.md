@@ -1,13 +1,13 @@
 ---
-id: step-6-query-analytics-optimization
-title: Query Analytics & Optimization
+id: query-analytics
+title: Query Analytics
 ---
 
-# Query Analytics & Optimization
+# Query Analytics
 
 Releem's Query Analytics offers detailed insights into MySQL query performance, helping you identify slow and inefficient queries. Whether you are troubleshooting slow queries or fine-tuning for better performance, Releem's Query Analytics is an essential tool for maintaining and enhancing your database's efficiency.
 
-![Releem Query Analytics block](../../assets/images/releem-dashboard-query-analytics.png)
+<img src={require('../../assets/images/releem-dashboard-query-analytics.png').default} alt="Releem Query Analytics block" className="shadow-img" />
 
 The block includes the following columns:
 
@@ -19,12 +19,13 @@ The block includes the following columns:
 ### How to Show Slow Queries – Sort by Average Time
 To view slow queries, find the Query Analytics Block on the dashboard. Click the 'Avg. Execution Time' column heading. This will sort your top 100 queries in order, with the slowest-executing queries listed at the top.
 
-![Releem Query Analytics block](../../assets/images/releem-dashboard-query-analytics.gif)
+<img src={require('../../assets/images/releem-dashboard-query-analytics.gif').default} alt="Releem Query Analytics block" className="shadow-img" />
 
 ### How to Show Queries With Highest Performance Impact – Sort by Total Load Time
 To view queries that have the greatest impact on your server's performance, find the Query Analytics Block on the dashboard. Click the 'Load on Total Time' column heading. This will sort your top 100 queries in order, with the queries that are using the most resources overall listed at the top.
 
 ### How to Inspect Query Details and Optimize SQL Queries
 
-![Releem Query Analytics block](../../assets/images/releem-dashboard-query-analytics-inspection.png)
+<img src={require('../../assets/images/releem-dashboard-query-analytics-inspection.png').default} alt="Releem Query Analytics block" className="shadow-img" />
+
 Click on the query in the Query Analytics tab to view the full query statement. Click the Get Recommendations button to get suggestions on query performance optimization and missed indexes.

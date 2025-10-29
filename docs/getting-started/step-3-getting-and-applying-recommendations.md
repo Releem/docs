@@ -1,9 +1,9 @@
 ---
 id: step-3-getting-and-applying-recommendations
-title: Getting and Applying Recommendations
+title: Configuration Tuning
 ---
 
-# Getting and Applying Recommendations
+# Configuration Tuning
 
 The Recommended Configuration block displays the current state of the configuration tuning process as it works to identify performance improvements for your MySQL server. This block provides valuable insights into the optimization process, allowing you to monitor progress and take action as needed.
 
@@ -13,7 +13,7 @@ The Recommended Configuration block consists of several components:
 
 - **Progress Bar**: The progress bar shows the process state, which can be either: "Searching Opportunities" or "Preparing Configuration". The Releem platform uses AI to continuously search for opportunities to enhance MySQL performance. If Releem identifies a viable hypothesis, the expert system checks whether it can be safely applied. Once all checks are complete, Releem prepares the recommended configuration.
 - **Unapplied Recommendations Count**: Displays the number of recommendations that have not yet been applied to your server.
-- **Recommended Configuration Link**: Click this link to view the complete recommended configuration suggested by Releem.
+- **Recommended Configuration Link**: Click this link to view the complete [recommended configuration](/configuration-tuning/example-of-configuration) suggested by Releem.
 - **Apply button**: Click it and follow the instructions to implement the recommended configuration on your server.
 
 Releem automates the process of applying and rolling back recommended configurations for self-managed instances where the Releem Agent is installed without Docker. Learn more about how to use these features:

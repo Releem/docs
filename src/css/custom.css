@@ -78,3 +78,14 @@
 .dropdown__link svg {
   display: none;
 }
+
+/* Image with shadow effect */
+.shadow-img {
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  margin: 1.5rem 0;
+}
+
+[data-theme='dark'] .shadow-img {
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
