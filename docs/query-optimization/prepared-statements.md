@@ -35,6 +35,11 @@ This allows you to see all SQL queries executed by your application, providing b
 
 If you're using PHP, you can enable emulated prepared statements using PDO::ATTR_EMULATE_PREPARES during the database connection.
 
+#### For Laravel
+After making changes to the files in the **config/** directory, you need to run the following command in the application directory to update the configuration cache:
+```
+php artisan config:cache
+```
 ### For Java Applications
 
 For Java applications using MySQL JDBC, you can enable client-side prepared statements by configuring the JDBC URL with the `cachePrepStmts` and `useServerPrepStmts` parameters. This approach allows you to cache prepared statements on the client side, ensuring that the actual SQL queries are logged and analyzed effectively.
