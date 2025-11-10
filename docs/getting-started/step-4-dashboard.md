@@ -7,7 +7,7 @@ title: Dashboard
 
 The Releem Dashboard provides a comprehensive view of your server's performance, making it easy to monitor and optimize your MySQL instance. By regularly reviewing the dashboard, you can proactively address potential issues and maintain peak performance for your database.
 
-![Releem Dashboard](../../assets/images/releem_dashboard.png)
+<img src={require('../../assets/images/releem_dashboard.png').default} alt="Releem Dashboard" className="shadow-img" />
 
 The Releem Dashboard offers insights and recommendations for monitoring and improving MySQL performance. The dashboard consists of several blocks, each focusing on a specific aspect of your server's health and performance.
 

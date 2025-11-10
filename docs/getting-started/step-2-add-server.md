@@ -9,9 +9,9 @@ To start monitoring and optimizing your MySQL server with Releem, you need to in
 
 Visit the Releem Dashboard and log in to your account. If you don’t have an account yet, you can sign up here.
 
-Click the “Add Server” button to start the setup process.
+Click the "Add Server" button to start the setup process.
 
-![Releem Add Server popup](/img/dashboard-add-server.png)
+<img src={require('../../assets/images/dashboard-add-server.png').default} alt="Releem Add Server popup" className="shadow-img" />
 
 Choose the type of MySQL server you are adding:
 - [MySQL on Linux Server: Automatic Agent Installation (Linux)](/releem-agent/installation-guides/self-managed-servers-automatic-installation) – Automatic installation for MySQL instances running on Linux-based servers.

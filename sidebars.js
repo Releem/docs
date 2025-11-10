@@ -67,6 +67,7 @@ const sidebars = {
             'configuration-tuning/how-to-apply-configuration-manually/windows',
             'configuration-tuning/how-to-apply-configuration-manually/docker',
             'configuration-tuning/how-to-apply-configuration-manually/aws-rds',
+            'configuration-tuning/how-to-apply-configuration-manually/gcp-cloud-sql',
           ],
         },
         'configuration-tuning/how-to-rollback-to-previous-configuration',

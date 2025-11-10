@@ -14,4 +14,4 @@ Can't find what you're looking for? Please do contact us for assistance.
 
 Thanks and enjoy Releem!
 
-![Releem Dashboard](../assets/images/releem_dashboard.png)
+<img src={require('../assets/images/releem_dashboard.png').default} alt="Releem Dashboard" className="shadow-img" />
