@@ -125,3 +125,13 @@ For the role with which the agent works add permissions to rds:ModifyDBParameter
 Certain MySQL variables require a server restart to be applied.
 
 Sign in to the AWS Management Console and open the Amazon RDS console at https://console.aws.amazon.com/rds/. In the navigation pane, choose Databases, and then choose the DB instance that you want to reboot. For Actions, choose Reboot. The Reboot DB instance page appears.
+
+### **FOR GCP CloudSQL INSTANCES**
+
+#### 1. Compute Engine VM instance  lacks required permissions to apply.
+This issue occurs if there are not enough permissions to apply with restarting.
+Enable Full Api Access to Cloud SQL and Stackdriver Monitoring API for the Compute Engine VM instance on which Releem Agent will be running.
+
+#### 2. Other errors applying without restart
+Agent stopped unexpectedly during applying configuration and unable to send information about task to Releem Platform.
+User Action: send us please the [Releem Agent logs](https://docs.releem.com/releem-agent/how-to-check-logs) to hello@releem.com
