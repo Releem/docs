@@ -56,6 +56,7 @@ const sidebars = {
       label: 'Configuration Tuning',
       items: [
         'configuration-tuning/mysql-tuning-process',
+        'configuration-tuning/initial-mysql-configuration',
         'configuration-tuning/how-to-apply-configuration-using-portal',
         'configuration-tuning/how-to-apply-configuration-using-agent',
         'configuration-tuning/how-to-apply-configuration-using-cron',
