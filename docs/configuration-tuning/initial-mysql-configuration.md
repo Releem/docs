@@ -11,7 +11,7 @@ The Releem Agent includes a command that recommends a base MySQL configuration f
 
 This feature is for servers with default configuration. It provides a baseline configuration before workload-based recommendations become available.
 
-Baseline setup workflow:
+Database server setup workflow:
 1. Install a database server.
 2. Install the Releem Agent.
 3. Run the initial command to set up baseline configuration based on the server's hardware characteristics.
