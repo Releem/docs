@@ -69,7 +69,7 @@ You have the following options to install Releem Agent:
             "rds:Describe*", 
             "cloudwatch:Get*", 
             "logs:Get*", 
-            "ec2:Describe*"
+            "ec2:Describe*",
             "rds:ModifyDBParameterGroup"
             ], 
             "Resource": "*", 
@@ -112,7 +112,7 @@ You have the following options to install Releem Agent:
             "rds:Describe*", 
             "cloudwatch:Get*", 
             "logs:Get*", 
-            "ec2:Describe*"
+            "ec2:Describe*",
             "rds:ModifyDBParameterGroup"
             ], 
             "Resource": "*", 
