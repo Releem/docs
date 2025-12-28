@@ -27,6 +27,14 @@ const sidebars = {
     },
     {
       type: 'category',
+      label: 'Server Settings',
+      items: [
+        'server-settings/your-server-settings',
+        'server-settings/invite-users-and-assign-roles',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Releem Agent',
       items: [
         {
