@@ -104,14 +104,18 @@ To enable the SQL Query Optimization feature, please select your installation ty
 
   1. Grant additional permissions to the releem user. The SQL Query Optimization feature requires [Additional Permissions](/releem-agent/mysql-permissions) for the Releem Agent user.
   2. Add `query_optimization=true` setting to the `C:\ProgramData\ReleemAgent\releem.conf`.
-  3. Restart Releem Agent using the following command:
-     ```bash
-     systemctl restart releem-agent
-     ```
-  4. Run the following command:
-     ```bash
-     /opt/releem/mysqlconfigurer.sh -p
-     ```
+  3. Add the following MySQL variables to the configuration and restart DB service:
+
+  ```ini
+  performance-schema-consumer-events-statements-history = ON
+  performance-schema-consumer-events-statements-current = ON
+  ```
+  4. Restart Releem Agent using the following command:
+     
+   ```bash
+   systemctl restart releem-agent
+   ```
+
   </TabItem>
 </Tabs>
 
