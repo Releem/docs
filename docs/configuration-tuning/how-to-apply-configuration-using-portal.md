@@ -27,11 +27,13 @@ By following these steps, you can efficiently apply and manage your database con
 
 #### 1. The latest recommended configuration is partially applied
 Certain MySQL variables require a server restart to be applied.
+
 **User Action**: Click "Apply" followed by "Apply and Restart" in the Dashboard to apply all the recommended parameters and restart the database service.
 
 #### 2. MySQL 'releem' user lacks required permissions to apply without restarting
 This issue occurs if there are not enough permissions to apply without restarting.
-User Action: To grant these privileges, run the following query in the MySQL console, depending on your version:
+
+**User Action**: To grant these privileges, run the following query in the MySQL console, depending on your version:
 MariaDB and MySQL < 8:
 ```
 select Concat("GRANT SUPER on *.* to `",User,"`@`", Host,"`;") from mysql.user where User='releem';
@@ -49,43 +51,58 @@ After executing the generated queries, restart the agent by running the commands
 
 #### 3. Recommended MySQL Configuration Not Found
 This issue arises if the process of applying recommendations is initiated before the Releem platform has completed generating these
-User Action: Wait for approximately 12 hours to allow Releem to generate recommendations, or force the process by running:
+
+**User Action**: Wait for approximately 12 hours to allow Releem to generate recommendations, or force the process by running:
 ```
 /opt/releem/releem-agent -f
 ```
 
 #### 4. MySQL Version Lower Than 5.6.7
 Releem's automated features may not fully support MySQL versions lower than 5.6.7, especially if file replacement is required for an update.
-User Action: [Manual applying of MySQL configuration](https://releem.com/docs/getstarted#rec491011156) is recommended in this case.
+
+**User Action**: [Manual applying of MySQL configuration](https://releem.com/docs/getstarted#rec491011156) is recommended in this case.
 
 #### 5. MySQL Configuration Directory Not Found
 This occurs when the installation of the Releem Agent is incorrect, or if the MySQL configuration directory has been deleted by the user.
-User Action: The most straightforward solution is to reinstall the Releem Agent to ensure it's set up correctly.
+
+**User Action**: The most straightforward solution is to reinstall the Releem Agent to ensure it's set up correctly.
 
 #### 6. Command to Restart MySQL Service Not Found
 This typically indicates an incorrect installation, often seen in Docker environments, where the command to restart MySQL services isn't found or accessible by the Releem Agent.
-User Action: Reinstalling the agent is usually necessary to correct this issue. Also, please check mysql_restart_service setting in the /opt/releem/releem.conf
+
+**User Action**: Reinstalling the agent is usually necessary to correct this issue. Also, please check mysql_restart_service setting in the /opt/releem/releem.conf
 
 #### 7. No Confirmation to Restart Service Received
 This can occur in scenarios where the database is too large, leading to delays, or in the event of a crash.
-User Action: If the database is large, allow some time for it to restart automatically. If a crash is suspected, check the error logs for more details.
+
+**User Action**: If the database is large, allow some time for it to restart automatically. If a crash is suspected, check the error logs for more details.
 
 #### 8. MySQL Service Failed to Start in 1200 Seconds
 Indicates that the MySQL service did not restart within the expected timeframe, which can happen with large databases or due to a crash.
-User Action: Wait for the service to restart if you have a large database. In the case of a crash, consult the error logs.
+
+**User Action**: Wait for the service to restart if you have a large database. In the case of a crash, consult the error logs.
 
 #### 9. MySQL Service Failed to Start
 This is a more general indication of a crash or failure in starting the MySQL service.
-User Action: The primary recourse here is to check the MySQL error logs to diagnose the reason for the failure.
+
+**User Action**: The primary recourse here is to check the MySQL error logs to diagnose the reason for the failure.
 
 #### 10. Failed to finish applying the configuration
 Agent stopped unexpectedly during applying configuration and unable to send information about task to Releem Platform.
-User Action: send us please the output of the command "journalctl -u releem-agent" to hello@releem.com
+
+**User Action**: send us please the output of the command "journalctl -u releem-agent" to hello@releem.com
 
 #### 11. Unexpected Releem Agent error
 Releem Platform received unexpected error from Releem Agent.
-User Action: Please check that /opt/releem/mysqlconfigurer.sh is not empty and it has permissions to execute.
+
+**User Action**: Please check that /opt/releem/mysqlconfigurer.sh is not empty and it has permissions to execute.
 Send us please the output of the command "journalctl -u releem-agent" to hello@releem.com
+
+#### 12. The my.cnf file doesn't contain the “!includedir /etc/mysql/releem.conf.d”
+This occurs when the installation of the Releem Agent is incorrect, or if the MySQL configuration file has been changed by the user.
+
+**User Action**: Reinstalling the agent is usually necessary to correct this issue.
+
 
 ### **FOR AWS RDS INSTANCES**
 
@@ -126,6 +143,7 @@ Certain MySQL variables require a server restart to be applied.
 
 Sign in to the AWS Management Console and open the Amazon RDS console at https://console.aws.amazon.com/rds/. In the navigation pane, choose Databases, and then choose the DB instance that you want to reboot. For Actions, choose Reboot. The Reboot DB instance page appears.
 
+
 ### **FOR GCP CloudSQL INSTANCES**
 
 #### 1. Compute Engine VM instance  lacks required permissions to apply.
@@ -134,4 +152,5 @@ Enable Full Api Access to Cloud SQL and Stackdriver Monitoring API for the Compu
 
 #### 2. Other errors applying without restart
 Agent stopped unexpectedly during applying configuration and unable to send information about task to Releem Platform.
-User Action: send us please the [Releem Agent logs](https://docs.releem.com/releem-agent/how-to-check-logs) to hello@releem.com
+
+**User Action**: send us please the [Releem Agent logs](https://docs.releem.com/releem-agent/how-to-check-logs) to hello@releem.com
