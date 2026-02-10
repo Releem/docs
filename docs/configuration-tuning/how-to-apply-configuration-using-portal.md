@@ -98,7 +98,7 @@ Releem Platform received unexpected error from Releem Agent.
 **User Action**: Please check that /opt/releem/mysqlconfigurer.sh is not empty and it has permissions to execute.
 Send us please the output of the command "journalctl -u releem-agent" to hello@releem.com
 
-#### 12. The my.cnf file doesn't contain the “!includedir /etc/mysql/releem.conf.d”
+#### 12. The DB configuration file does not include the directory that contains Releem's option files
 This occurs when the installation of the Releem Agent is incorrect, or if the MySQL configuration file has been changed by the user.
 
 **User Action**: Reinstalling the agent is usually necessary to correct this issue.
