@@ -17,8 +17,13 @@ To remove Releem Agent from your server, choose your installation type and follo
     bash -c "$(curl -L https://releem.s3.amazonaws.com/v2/install.sh)" uninstall
     ```
   </TabItem>
+  <TabItem value="windows" label="Windows">
+    Run the following command in Windows PowerShell as Administrator:
+    ```powershell
+    $env:RELEEM_UNINSTALL_CONFIRM=1; iex "& { $(iwr -useb https://releem.s3.amazonaws.com/v2/install.ps1) } -Uninstall"
+    ```
+  </TabItem>
   <TabItem value="aws-rds" label="AWS RDS">
     To uninstall Releem Agent from the AWS RDS, please delete CloudFormation stack.    
   </TabItem>
 </Tabs>
-

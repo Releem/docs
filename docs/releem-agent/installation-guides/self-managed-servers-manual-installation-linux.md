@@ -18,7 +18,7 @@ Use this instruction to install Releem Agent manually on the database server. Re
    - `RELEEM_HOSTNAME` - Server hostname, which should display in the Releem Dashboard.
    - `RELEEM_MYSQL_LOGIN` - MySQL User name to collect MySQL metrics
    - `RELEEM_MYSQL_PASSWORD` - MySQL User password to collect MySQL metrics
-   - `RELEEM_MYSQL_MEMORY_LIMIT` - Change parameter in case there are other software installed on the server. Default value is 0 means use all memory.
+   - `RELEEM_MYSQL_MEMORY_LIMIT` - Change parameter in case there are other software installed on the server. Default value is 0 means use all memory. [Learn more](/configuration-tuning/limit-memory-for-mysql)
    - `RELEEM_API_KEY` - API Key. Get it from Profile page in Releem Customer Portal.
    - `RELEEM_MYSQL_HOST` - use this variable in case MySQL listens different interface or connection available only through socket.
    - `RELEEM_MYSQL_PORT` - use this variable in case MySQL listens different port
