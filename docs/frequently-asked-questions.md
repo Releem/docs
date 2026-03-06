@@ -30,7 +30,7 @@ Rest assured, Releem does not automatically implement any configurations without
 Additionally, for those who prefer, there's an option to automate the application of configurations during the maintenance window by setting up a dedicated cron job.
 
 ## How do I add my business details and the VAT number?
-You have the option to include your business address and VAT identification on the payment page while upgrading. Additionally, you can access any of your past invoices and select the Add Address & VAT Number link to accomplish this.
+You have the option to include your business address and VAT identification on the payment page. Additionally, you can access any of your past invoices and select the Add Address & VAT Number link to accomplish this.
 
 ## How do I get an invoice?
 Our payment service Paddle automatically emails you an invoice after each transaction. You can click on a link in this email to get your invoice.
