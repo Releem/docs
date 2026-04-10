@@ -7,6 +7,11 @@ title: "Linux (Manual)"
 
 
 Use this instruction to install Releem Agent manually on the database server. Releem Agent will automatically collect metrics and send them to the Releem Platform.
+
+:::note CloudLinux
+If you install Releem Agent on CloudLinux, review the [CloudLinux-specific steps](/getting-started/how-to-check-if-releem-agent-is-working#cloudlinux) for CageFS and MySQLGovernor after installation.
+:::
+
 1. Create read-only user "releem" in MySQL using the [instruction](/releem-agent/mysql-permissions).
    To enable Automatic SQL Query Optimization please add [Additional Permissions](/releem-agent/mysql-permissions#additional-database-permissions-required).
 2. Run Installation command as a root user on the server:
@@ -23,4 +28,3 @@ Use this instruction to install Releem Agent manually on the database server. Re
    - `RELEEM_MYSQL_HOST` - use this variable in case MySQL listens different interface or connection available only through socket.
    - `RELEEM_MYSQL_PORT` - use this variable in case MySQL listens different port
    - `RELEEM_QUERY_OPTIMIZATION` - set 'true' if Releem Agent should collect additional information for Automatic SQL Query Optimization.
-
