@@ -16,10 +16,11 @@ Click the "Add Server" button to start the setup process.
 Choose the type of MySQL server you are adding:
 - [MySQL on Linux Server: Automatic Agent Installation (Linux)](/releem-agent/installation-guides/self-managed-servers-automatic-installation) – Automatic installation for MySQL instances running on Linux-based servers.
 - [MySQL on Linux Server: Advanced Agent Installation](/releem-agent/installation-guides/self-managed-servers-manual-installation-linux) – Manual installation for MySQL instances running on Linux-based servers. Use this guide if you don't have a MySQL root user, or if MySQL is installed on a different IP address, or if you want to create a Releem user manually.
+- [WHM/cPanel](/releem-agent/installation-guides/whm-cpanel) – Recommended installation path for database servers managed through WHM/cPanel.
 - [MySQL on Linux Server: Manual Installation in Docker](/releem-agent/installation-guides/self-managed-servers-docker-installation) – Manual installation for MySQL instances running in Docker containers.
 - [Self-Managed Server (Windows)](/releem-agent/installation-guides/self-managed-servers-manual-installation-windows) – For MySQL instances running on Windows.
 - [MySQL on AWS RDS: CloudFormation installation](/releem-agent/installation-guides/cloud-managed-aws-rds-automatic-installation) – For managed MySQL databases hosted on AWS.
-- [MySQL on GCP Clod SQL: Manual installation](/releem-agent/installation-guides/cloud-managed-gcp-cloud-sql-automatic-installation) – For managed MySQL databases hosted on GCP.
+- [MySQL on GCP Cloud SQL: Manual installation](/releem-agent/installation-guides/cloud-managed-gcp-cloud-sql-automatic-installation) – For managed MySQL databases hosted on GCP.
 - [MySQL in Kubernetes](/releem-agent/installation-guides/installation-in-kubernetes) – If your MySQL instance is deployed in a Kubernetes cluster.
 
 
@@ -32,4 +33,3 @@ After you've installed the Releem Agent, you should see the server on the Releem
 On the Releem Score block, you should see Agent Status **Connected**, which indicates that the Releem Platform receives metrics from the Releem Agent.
 
 Have some issues with the integration? Take a look at [Troubleshooting Guide](/getting-started/how-to-check-if-releem-agent-is-working) or contact our support team.
-
