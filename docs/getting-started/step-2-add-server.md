@@ -5,7 +5,7 @@ title: Add Server
 
 # Add Server
 
-To start monitoring and optimizing your MySQL server with Releem, you need to install Releem Agent. Follow these steps to add your server and begin receiving optimization recommendations.
+To start monitoring and optimizing your database server with Releem, you need to install Releem Agent. Follow these steps to add your server and begin receiving optimization recommendations.
 
 Visit the Releem Dashboard and log in to your account. If you don’t have an account yet, you can sign up here.
 
@@ -13,9 +13,10 @@ Click the "Add Server" button to start the setup process.
 
 <img src={require('../../assets/images/dashboard-add-server.png').default} alt="Releem Add Server popup" className="shadow-img" />
 
-Choose the type of MySQL server you are adding:
+Choose the type of database server you are adding:
 - [MySQL on Linux Server: Automatic Agent Installation (Linux)](/releem-agent/installation-guides/self-managed-servers-automatic-installation) – Automatic installation for MySQL instances running on Linux-based servers.
 - [MySQL on Linux Server: Advanced Agent Installation](/releem-agent/installation-guides/self-managed-servers-manual-installation-linux) – Manual installation for MySQL instances running on Linux-based servers. Use this guide if you don't have a MySQL root user, or if MySQL is installed on a different IP address, or if you want to create a Releem user manually.
+- [PostgreSQL on Linux Server: Manual Agent Installation](/releem-agent/installation-guides/postgresql-manual-linux) – Manual installation for PostgreSQL instances running on Linux-based servers.
 - [WHM/cPanel](/releem-agent/installation-guides/whm-cpanel) – Recommended installation path for database servers managed through WHM/cPanel.
 - [MySQL on Linux Server: Manual Installation in Docker](/releem-agent/installation-guides/self-managed-servers-docker-installation) – Manual installation for MySQL instances running in Docker containers.
 - [Self-Managed Server (Windows)](/releem-agent/installation-guides/self-managed-servers-manual-installation-windows) – For MySQL instances running on Windows.
