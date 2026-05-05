@@ -37,6 +37,12 @@ docker compose down
 ```
 
   </TabItem>
+  <TabItem value="windows" label="Windows">
+    Run the following command in Windows PowerShell as Administrator:
+    ```powershell
+    $env:RELEEM_UNINSTALL_CONFIRM=1; iex "& { $(iwr -useb https://releem.s3.amazonaws.com/v2/install.ps1) } -Uninstall"
+    ```
+  </TabItem>
   <TabItem value="aws-rds" label="AWS RDS">
 
 If the agent was installed by CloudFormation, delete the `releem-agent` CloudFormation stack.

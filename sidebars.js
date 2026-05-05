@@ -43,6 +43,7 @@ const sidebars = {
           items: [
             'releem-agent/installation-guides/self-managed-servers-automatic-installation',
             'releem-agent/installation-guides/self-managed-servers-manual-installation-linux',
+            'releem-agent/installation-guides/postgresql-manual-linux',
             'releem-agent/installation-guides/self-managed-servers-manual-installation-windows',
             'releem-agent/installation-guides/self-managed-servers-docker-installation',
             'releem-agent/installation-guides/installation-in-kubernetes',
@@ -50,6 +51,7 @@ const sidebars = {
             'releem-agent/installation-guides/cloud-managed-gcp-cloud-sql-automatic-installation',
             'releem-agent/installation-guides/cloud-managed-azure-mysql-automatic-installation',
             'releem-agent/installation-guides/clusters',
+            'releem-agent/installation-guides/whm-cpanel',
           ],
         },
         'releem-agent/configuration',

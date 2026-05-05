@@ -28,3 +28,4 @@ pnpm-debug.log*
 .vscode/
 .devcontainer/
 CLAUDE.md
+AGENTS.md

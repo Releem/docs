@@ -30,14 +30,23 @@ If Releem Agent is running but Dashboard informs you that it is disconnected ple
 
 ### CloudLinux 
 
-In the MySQL log file: [Warning] Aborted connection 181 to db: 'mysql' user: 'releem' host: 'localhost' (Got timeout reading communication packets)
+If CageFS is enabled, add the Releem MySQL configuration directory to CageFS and force an update:
+
+```bash
+echo '[releem-directory]' > /etc/cagefs/conf.d/releem.cfg
+echo 'comment=Releem MySQL Directory' >> /etc/cagefs/conf.d/releem.cfg
+echo 'paths=/etc/mysql/releem.conf.d' >> /etc/cagefs/conf.d/releem.cfg
+cagefsctl --force-update
+```
+
+#### In the MySQL log file: [Warning] Aborted connection 181 to db: 'mysql' user: 'releem' host: 'localhost' (Got timeout reading communication packets)
 
 CloudLinux MySQLGovernor blocks MySQL "releem" user.
 Please exclude "releem" user from MySQLGovernor.
 
-### CPanel
+### cPanel/WHM
 
-If you're using CPanel, please ensure the options "Allow cPanel & WHM to determine the best value for your MySQL settings" are disabled in WHM >> Tweak Settings.
+If your server is managed through WHM/cPanel, use the [WHM/cPanel installation guide](/releem-agent/installation-guides/whm-cpanel) for setup-specific troubleshooting, including how to verify that cPanel MySQL auto-adjust settings are disabled.
 
 ### AWS RDS
 [Common issues for AWS RDS](/releem-agent/installation-guides/cloud-managed-aws-rds-automatic-installation#common-issues-for-aws-rds)

@@ -3,8 +3,34 @@ id: "self-managed-servers-manual-installation-windows"
 title: "Windows"
 ---
 
-# Manual Installation for Self-Managed MySQL Servers (Windows)
+# Installation for Self-Managed MySQL Servers (Windows)
 
+## Automatic Installation
+
+Run the following command in Windows PowerShell as Administrator:
+
+```powershell
+$env:RELEEM_MYSQL_MEMORY_LIMIT=0; $env:RELEEM_API_KEY="your_api_key"; $env:RELEEM_MYSQL_ROOT_PASSWORD="your_root_password"; $env:RELEEM_CRON_ENABLE=1; $env:RELEEM_QUERY_OPTIMIZATION="true"; iwr -useb https://releem.s3.amazonaws.com/v2/install.ps1 | iex
+```
+
+**Parameters:**
+
+- `RELEEM_HOSTNAME` - Server hostname, which should display in the Releem Dashboard
+- `RELEEM_API_KEY` - API Key. Get it from the Profile page in the Releem Dashboard
+- `RELEEM_MYSQL_HOST` - use this variable in case MySQL listens on a different interface. Default value is `127.0.0.1`
+- `RELEEM_MYSQL_PORT` - use this variable in case MySQL listens on a different port. Default value is `3306`
+- `RELEEM_MYSQL_LOGIN` - MySQL user name to collect MySQL metrics
+- `RELEEM_MYSQL_PASSWORD` - MySQL user password to collect MySQL metrics
+- `RELEEM_MYSQL_ROOT_PASSWORD` - MySQL `root` user password used during installation if the installer should create the `releem` user automatically
+- `RELEEM_MYSQL_MEMORY_LIMIT` - change this parameter in case there is other software installed on the server. Default value `0` means use all memory. [Learn more](/configuration-tuning/limit-memory-for-mysql)
+- `RELEEM_CRON_ENABLE` - set `1` to enable daily automatic updates or `0` to disable them
+- `RELEEM_QUERY_OPTIMIZATION` - set `true` if Releem Agent should collect additional information for Automatic SQL Query Optimization
+
+After installation, open the [Releem Dashboard](https://app.releem.com/). If the server does not appear immediately, refresh the page.
+
+## Manual Installation
+
+Use this method if you prefer to install and configure Releem Agent step by step.
 
 1. Create read-only MySQL user "releem" using this [guide](/releem-agent/mysql-permissions).
    To enable Automatic SQL Query Optimization please add [Additional Permissions](/releem-agent/mysql-permissions#additional-database-permissions-required).
