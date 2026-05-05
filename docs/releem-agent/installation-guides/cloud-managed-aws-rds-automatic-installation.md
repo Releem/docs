@@ -18,10 +18,21 @@ To configure automatic applying of recommended configuration please sign in to y
 The requirements for RDS instance:
 - Enhanced monitoring to collect system performance metrics.
 - Performance Insights to collect MySQL performance metrics.
-- Performance Schema to collect MySQL performance metrics. Please change the following variable in the Parameter Group and reboot the database instance:
+- Performance Schema, slow query log to collect MySQL performance metrics and query data. Please change the following variables in the Parameter Group and reboot the database instance:
    ```ini
-   performance_schema=1
+   performance_schema=ON
+   slow_query_log=ON
    ```
+
+After reboot, check the values from MySQL:
+
+```sql
+SHOW VARIABLES
+WHERE Variable_name IN (
+  'performance_schema',
+  'slow_query_log'
+);
+```
 
 You have the following options to install Releem Agent:
 

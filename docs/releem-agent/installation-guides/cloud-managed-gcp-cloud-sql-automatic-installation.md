@@ -14,9 +14,20 @@ Recommended Compute Engine VM instance configuration: 2 vCPU + 4 GB memory + 10 
 The requirements for Cloud SQL instance:
 - Full access to the Cloud SQL API and the Stackdriver Monitoring API for the Compute Engine VM instance on which Releem Agent will be running.
 - Shared network for Compute Engine VM instance and Cloud SQL instance.
-- Performance Schema enabled to collect MySQL performance metrics. Please set the following variable in the database flags and restart the instance:
+- Performance Schema, slow query log enabled to collect MySQL performance metrics and query data. Please set the following database flags and restart the instance:
 ```ini
-performance_schema=1
+performance_schema=ON
+slow_query_log=ON
+```
+
+After restart, check the values from MySQL:
+
+```sql
+SHOW VARIABLES
+WHERE Variable_name IN (
+  'performance_schema',
+  'slow_query_log'
+);
 ```
 
 You have the following options to install Releem Agent:
@@ -145,5 +156,4 @@ To check Releem Agent logs please open Cloud Logging and view logs for the Cloud
 
 3. Connect: connection timed out
    - If using private IP, ensure VPC/firewall rules allow egress from the Agent to the Cloud SQL private address. If using the Cloud SQL connector, ensure `roles/cloudsql.client` is granted and the connector is configured.
-
 
