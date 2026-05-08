@@ -38,7 +38,7 @@ Create the PostgreSQL monitoring user before running the Releem Agent installati
 
 2. After the PostgreSQL user is created, run the Releem Agent installation command as a root user on the server:
    ```bash
-   RELEEM_PG_PASSWORD='[Password]' RELEEM_PG_LOGIN='releem' RELEEM_DB_MEMORY_LIMIT=0 RELEEM_API_KEY=[Key] RELEEM_CRON_ENABLE=1 RELEEM_QUERY_OPTIMIZATION=true bash -c "$(curl -L https://releem.s3.amazonaws.com/v2/install.sh)"
+   RELEEM_PG_PASSWORD='[Password]' RELEEM_PG_LOGIN='releem' RELEEM_DB_MEMORY_LIMIT=0 RELEEM_API_KEY=[Key] RELEEM_CRON_ENABLE=1 bash -c "$(curl -L https://releem.s3.amazonaws.com/v2/install.sh)"
    ```
 
    **Parameters:**
