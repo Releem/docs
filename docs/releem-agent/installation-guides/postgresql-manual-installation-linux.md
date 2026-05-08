@@ -15,6 +15,8 @@ Create the PostgreSQL monitoring user before running the Releem Agent installati
    ```sql
    CREATE USER releem WITH PASSWORD '[Password]';
    GRANT pg_monitor TO releem;
+   GRANT SELECT ON pg_hba_file_rules TO  releem;
+   GRANT EXECUTE ON FUNCTION pg_hba_file_rules TO  releem;
    ```
 
    Enable `pg_stat_statements` for query performance metrics:
@@ -36,39 +38,21 @@ Create the PostgreSQL monitoring user before running the Releem Agent installati
 
 2. After the PostgreSQL user is created, run the Releem Agent installation command as a root user on the server:
    ```bash
-   RELEEM_API_KEY=[Key] RELEEM_CRON_ENABLE=1 bash -c "$(curl -L https://releem.s3.amazonaws.com/v2/install.sh)"
+   RELEEM_PG_PASSWORD='[Password]' RELEEM_PG_LOGIN='releem' RELEEM_DB_MEMORY_LIMIT=0 RELEEM_API_KEY=[Key] RELEEM_CRON_ENABLE=1 RELEEM_QUERY_OPTIMIZATION=true bash -c "$(curl -L https://releem.s3.amazonaws.com/v2/install.sh)"
    ```
-
-   Update `/opt/releem/releem.conf` with PostgreSQL connection settings:
-   ```ini
-   apikey="[Key]"
-   hostname=""
-   pg_user="releem"
-   pg_password="[Password]"
-   pg_host="127.0.0.1"
-   pg_port="5432"
-   pg_database="postgres"
-   pg_ssl_mode="disable"
-   interval_seconds=60
-   interval_read_config_seconds=3600
-   ```
-
-   For a full list of configuration settings, please refer to the [Releem Agent Configuration](/releem-agent/configuration).
 
    **Parameters:**
-   - `apikey` - API key. Get it from the Profile page in the Releem Dashboard.
-   - `hostname` - Server hostname, which should display in the Releem Dashboard.
-   - `pg_user` - PostgreSQL user name for collecting metrics.
-   - `pg_password` - PostgreSQL user password for collecting metrics.
-   - `pg_host` - PostgreSQL host for collecting metrics.
-   - `pg_port` - PostgreSQL port for collecting metrics.
-   - `pg_database` - PostgreSQL database name used for connection.
-   - `pg_ssl_mode` - SSL mode for PostgreSQL connections.
+   - `RELEEM_HOSTNAME` - Server hostname, which should display in the Releem Dashboard.
+   - `RELEEM_PG_LOGIN` - PostgreSQL user name for collecting metrics.
+   - `RELEEM_PG_PASSWORD` - PostgreSQL user password for collecting metrics.
+   - `RELEEM_DB_MEMORY_LIMIT` - Change parameter in case there are other software installed on the server. Default value is 0 means use all memory. 
+   - `RELEEM_API_KEY` - API Key. Get it from Profile page in Releem Customer Portal.
+   - `RELEEM_PG_HOST` - use this variable in case PostgreSQL listens different interface or connection available only through socket.
+   - `RELEEM_PG_PORT` - use this variable in case PostgreSQL listens different port
+   - `RELEEM_PG_SSL_MODE` - SSL mode for PostgreSQL connections.
+   - `RELEEM_QUERY_OPTIMIZATION` - set 'true' if Releem Agent should collect additional information for Automatic SQL Query Optimization.
 
-   Restart Releem Agent:
-   ```bash
-   sudo systemctl restart releem-agent
-   ```
+   For a full list of configuration settings, please refer to the [Releem Agent Configuration](/releem-agent/configuration).
 
 3. Open the [Releem Dashboard](https://app.releem.com/). If the server does not appear immediately, refresh the page.
 
