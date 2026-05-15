@@ -28,3 +28,30 @@ If you install Releem Agent on CloudLinux, review the [CloudLinux-specific steps
    - `RELEEM_MYSQL_HOST` - use this variable in case MySQL listens different interface or connection available only through socket.
    - `RELEEM_MYSQL_PORT` - use this variable in case MySQL listens different port
    - `RELEEM_QUERY_OPTIMIZATION` - set 'true' if Releem Agent should collect additional information for Automatic SQL Query Optimization.
+
+3. Check that required MySQL variables are enabled:
+   ```sql
+   SHOW VARIABLES
+   WHERE Variable_name IN (
+     'performance_schema',
+     'performance_schema_consumer_events_statements_current',
+     'performance_schema_consumer_events_statements_history',
+     'slow_query_log'
+   );
+   ```
+
+   Expected values:
+   ```ini
+   performance_schema=ON
+   performance_schema_consumer_events_statements_current=ON
+   performance_schema_consumer_events_statements_history=ON
+   slow_query_log=ON
+   ```
+
+   If any value is `OFF`, add these settings to MySQL configuration and restart MySQL:
+   ```ini
+   performance_schema=ON
+   performance_schema_consumer_events_statements_current=ON
+   performance_schema_consumer_events_statements_history=ON
+   slow_query_log=ON
+   ```

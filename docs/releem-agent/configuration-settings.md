@@ -18,8 +18,8 @@ apikey="<api_key>"
 # Hostname for the instance. This hostname will be displayed in the Releem Dashboard
 hostname=""
 
-# Type of instance "local", "gcp/cloudsql" or "aws/rds" . Default:local
-instance_type="aws/rds"
+# Type of instance: "local", "aws/rds", "gcp/cloudsql", or "azure/mysql". Default: "local"
+instance_type="local"
 
 # AWS region for the RDS instance
 aws_region="[AWS_REGION]"
@@ -39,6 +39,14 @@ gcp_region="us-central1"
 #Name of Cloud SQL instance
 gcp_cloudsql_instance="my-mysql-instance"
 
+# Azure subscription ID for Azure Database for MySQL Flexible Server
+azure_subscription_id="00000000-0000-0000-0000-000000000000"
+
+# Azure resource group for Azure Database for MySQL Flexible Server
+azure_resource_group="my-resource-group"
+
+# Azure Database for MySQL Flexible Server resource name
+azure_mysql_server="my-mysql-server"
 
 # Database memory usage limit in MB (0 = use all available memory)
 memory_limit=0
@@ -101,13 +109,13 @@ releem_region=""
 ## Important Notes
 
 - After modifying the configuration file, restart the Releem Agent service to apply changes
-- The `apikey` field must be set to your actual Releem API key.
-- For MySQL, the `mysql_password` field should contain the password for the user specified in `mysql_user`.
-- For PostgreSQL, the `pg_password` field should contain the password for the user specified in `pg_user`.
-- PostgreSQL monitoring is enabled when `pg_user` and `pg_password` are configured.
-- Set `query_optimization=true` to enable SQL query optimization features where supported.
-- Use `databases_query_optimization` to specify which databases to monitor for query optimization (leave empty for all databases).
-- The `releem_region` field can be set to `EU` for European data storage or left empty for default storage.
+- The `apikey` field must be set to your actual Releem API key
+- The `mysql_password` field should contain the password for the MySQL user specified in `mysql_user`
+- Set `query_optimization=true` to enable SQL query optimization features
+- Use `databases_query_optimization` to specify which databases to monitor for query optimization (leave empty for all databases)
+- The `releem_region` field can be set to "EU" for European data storage or left empty for default storage
+- For Azure Database for MySQL, set `instance_type="azure/mysql"` and use the Azure server resource name in `azure_mysql_server`, not the full hostname.
+
 
 ## Restarting the Agent
 
@@ -119,4 +127,4 @@ sudo systemctl restart releem-agent
 
 ## Support
 
-If you need assistance with configuration or have questions about specific settings, please contact our support team via the chat in the [Releem Dashboard](https://app.releem.com) or email us at hello@releem.com. 
+If you need assistance with configuration or have questions about specific settings, please contact our support team via the chat in the [Releem Dashboard](https://app.releem.com) or email us at hello@releem.com.
