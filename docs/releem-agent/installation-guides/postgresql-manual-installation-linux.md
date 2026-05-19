@@ -1,15 +1,52 @@
 ---
 id: "postgresql-manual-linux"
-title: "PostgreSQL (Manual)"
+title: "PostgreSQL"
 ---
 
-# Self-Managed PostgreSQL Servers Manual Installation
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Installing Releem Agent on Self-Managed PostgreSQL Servers
 
 Use this guide to configure Releem Agent for PostgreSQL metrics collection on a self-managed Linux server.
 
-Create the PostgreSQL monitoring user before running the Releem Agent installation command.
+## Prerequisites
+
+Before proceeding, ensure that the `postgresql-contrib` package is installed for your specific PostgreSQL version. This package provides extensions required for Releem Agent operation.
 
 ## Installation Steps
+
+Choose the installation flow that matches your setup:
+
+<Tabs>
+  <TabItem value="automatic-user-creation" label="Automatic User Creation" default>
+
+The Releem Agent installer can create the PostgreSQL monitoring user automatically.
+
+1. Run the Releem Agent installation command as a root user on the server:
+   ```bash
+   RELEEM_PG_ROOT_LOGIN='[PostgreSQLAdminUser]' RELEEM_PG_ROOT_PASSWORD='[PostgreSQLAdminPassword]' RELEEM_DB_MEMORY_LIMIT=0 RELEEM_API_KEY=[Key] RELEEM_CRON_ENABLE=1 bash -c "$(curl -L https://releem.s3.amazonaws.com/v2/install.sh)"
+   ```
+
+   **Parameters:**
+   - `RELEEM_HOSTNAME` - Server hostname, which should display in the Releem Dashboard.
+   - `RELEEM_PG_ROOT_LOGIN` - PostgreSQL admin user name used by the installer to create the monitoring user automatically.
+   - `RELEEM_PG_ROOT_PASSWORD` - PostgreSQL admin user password used by the installer to create the monitoring user automatically.
+   - `RELEEM_DB_MEMORY_LIMIT` - Change parameter in case there are other software installed on the server. Default value is 0 means use all memory.
+   - `RELEEM_API_KEY` - API Key. Get it from Profile page in Releem Customer Portal.
+   - `RELEEM_PG_HOST` - use this variable in case PostgreSQL listens different interface or connection available only through socket.
+   - `RELEEM_PG_PORT` - use this variable in case PostgreSQL listens different port.
+   - `RELEEM_PG_SSL_MODE` - SSL mode for PostgreSQL connections.
+   - `RELEEM_QUERY_OPTIMIZATION` - set 'true' if Releem Agent should collect additional information for Automatic SQL Query Optimization.
+
+   For a full list of configuration settings, please refer to the [Releem Agent Configuration](/releem-agent/configuration).
+
+2. Open the [Releem Dashboard](https://app.releem.com/). If the server does not appear immediately, refresh the page.
+
+  </TabItem>
+  <TabItem value="manual-user-creation" label="Manual User Creation">
+
+Create the PostgreSQL monitoring user before running the Releem Agent installation command.
 
 1. Create a PostgreSQL monitoring user:
    ```sql
@@ -55,6 +92,9 @@ Create the PostgreSQL monitoring user before running the Releem Agent installati
    For a full list of configuration settings, please refer to the [Releem Agent Configuration](/releem-agent/configuration).
 
 3. Open the [Releem Dashboard](https://app.releem.com/). If the server does not appear immediately, refresh the page.
+
+  </TabItem>
+</Tabs>
 
 ## Notes
 
