@@ -65,7 +65,7 @@ Create the PostgreSQL monitoring user before running the Releem Agent installati
 
    - Add the following line to `pg_hba.conf` for local agent connections:
    ```ini
-   host    all             releem          127.0.0.1/32            scram-sha-256
+   host    all             releem          127.0.0.1/32            md5
    ```
 
    - Add the following line to `pg_hba.conf` for remote agent connections:
