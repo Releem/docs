@@ -63,13 +63,19 @@ Create the PostgreSQL monitoring user before running the Releem Agent installati
    shared_preload_libraries = 'pg_stat_statements'
    ```
 
-   Add the following line to `pg_hba.conf`:
+   - Add the following line to `pg_hba.conf` for local agent connections:
+   ```ini
+   host    all             releem          127.0.0.1/32            scram-sha-256
+   ```
+
+   - Add the following line to `pg_hba.conf` for remote agent connections:
    ```ini
    host    all             releem          0.0.0.0/0               md5
    ```
 
-   Restart PostgreSQL, then create the extension:
+   Restart PostgreSQL, then create the extension in the database used by Releem Agent. The default database is `postgres`:
    ```sql
+   \c postgres
    CREATE EXTENSION IF NOT EXISTS pg_stat_statements;
    ```
 
