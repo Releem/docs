@@ -20,7 +20,7 @@ When a change fails, open the failed task in the Releem Dashboard and check:
 4. If the error says the payload is invalid or empty, contact Releem support with the task id.
 
 Automatic schema changes are intended for environments where the Releem Agent is allowed to make DDL changes. The Agent must have enough MySQL privileges, access to the configured backup tools, and `enable_exec_ddl = true` in `/opt/releem/releem.conf` when automatic DDL execution is enabled. 
-For configuration prerequisites, see [Automatic Schema Changes](releem-agent/automatic-schema-changes).
+For configuration prerequisites, see [Automatic Schema Changes](query-optimization/automatic-schema-changes).
 
 ---
 
