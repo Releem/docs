@@ -1,15 +1,30 @@
-# Schema change troubleshooting guide
+---
+id: schema-change-troubleshooting
+title: Schema Change Troubleshooting
+---
 
-This guide covers failure scenarios for **automatic schema changes** executed by the Releem Agent. When a change fails, check the task output in the Releem portal and match the **exit code** and message to the table below.
+# Schema Change Troubleshooting
 
-Exit codes are reported as `task_exit_code` on the task status sent back to Releem. A task with **status 4** failed; **status 1** with exit code **0** succeeded.
+This guide helps you troubleshoot failed **automatic schema changes** executed by the Releem Agent. Use it when Releem cannot apply an index or table change automatically and the Releem Dashboard shows a failed task.
 
-For configuration prerequisites, see [user-guide-task-automation.md](./user-guide-task-automation.md).
+When a change fails, open the failed task in the Releem Dashboard and check:
+
+- **Apply Index Error** - the detailed message, usually including `Statement N failed: ...`.
+- **Agent logs** - useful when the dashboard message is not enough. See [How to Check Releem Agent Logs](/releem-agent/how-to-check-logs).
+
+## Before you retry
+
+1. Read the exact output in the Releem Dashboard.
+2. Match the message to the table below.
+3. Fix the server-side issue first. Retrying without changing anything usually fails again.
+4. If the error says the payload is invalid or empty, contact Releem support with the task id.
+
+Automatic schema changes are intended for environments where the Releem Agent is allowed to make DDL changes. The Agent must have enough MySQL privileges, access to the configured backup tools, and `enable_exec_ddl = true` in `/opt/releem/releem.conf` when automatic DDL execution is enabled. 
+For configuration prerequisites, see [Automatic Schema Changes](releem-agent/automatic-schema-changes).
 
 ---
 
 ## Exit codes set before execution starts
-
 
 | Scenario                          | Exit code | Troubleshooting steps                                                                                                                                                                                                                                                                               |
 | --------------------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -24,7 +39,6 @@ For configuration prerequisites, see [user-guide-task-automation.md](./user-guid
 
 These stop the task before any DDL or backup runs on the server.
 
-
 | Scenario                                        | Exit code | Troubleshooting steps                                                                                                                                                                                                                                                                                       |
 | ----------------------------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | DDL failed syntax validation                    | **4**     | Fix the SQL in Releem (or cancel and recreate the change). The task output includes `syntax validation failed` and any `syntax_error` detail from analysis. Do not retry the same statement until the DDL is corrected.                                                                                     |
@@ -38,19 +52,19 @@ These stop the task before any DDL or backup runs on the server.
 
 All rows below use exit code **7**. The task output includes `Statement N failed:` followed by the underlying error. Enable `debug = true` in `releem.conf` and restart the agent for detailed command logs (passwords are masked).
 
-### Disk space and filesystem capacity
+Because exit code **7** has several possible causes, use the message text to choose the correct row below. For example, `online DDL preflight failed on test table` and `pt-online-schema-change dry-run failed` are different problems even though both return exit code **7**.
 
+### Disk space and filesystem capacity
 
 | Scenario                               | Exit code | Troubleshooting steps                                                                                                                                                                                                                                                                                                                                                                                            |
 | -------------------------------------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Insufficient space on MySQL datadir    | **7**     | Message contains `insufficient datadir free space` (must stay **above 10%** free) or `insufficient datadir capacity` (projected use after change must stay **at or below 90%**). Free space on the datadir filesystem, archive or drop unused data, or shrink large tables before retrying. Only for emergencies: set `disable_space_checks = true` in `releem.conf` if your team accepts skipping these checks. |
+| Insufficient space on MySQL datadir    | **7**     | Message contains `insufficient datadir free space` (must stay **above 10%** free) or `insufficient datadir capacity` (projected use after change must stay **at or below 90%**). Free space on the datadir filesystem, archive or drop unused data, or shrink large tables before retrying. Only for emergencies, set `disable_space_checks = true` in `releem.conf` if your team accepts skipping these checks. |
 | Insufficient space in backup directory | **7**     | Message contains `insufficient disk space: required` under `backup_dir`. Free space on the volume that holds `backup_dir` (default `/tmp/backups`), point `backup_dir` to a larger filesystem, or lower `backup_space_buffer` only if you accept less safety margin.                                                                                                                                             |
 | Cannot read datadir or table size      | **7**     | Messages such as `failed to resolve datadir`, `datadir is empty`, `failed to get table size`, or `failed to check datadir filesystem capacity`. Verify the agent MySQL user can run `SHOW VARIABLES LIKE 'datadir'` and query `information_schema.TABLES` for the target schema and table.                                                                                                                       |
 | Cannot check backup directory          | **7**     | `failed to check disk space` or `failed to create backup directory`. Ensure `backup_dir` exists, is writable by the agent process, and is on a filesystem the host can stat.                                                                                                                                                                                                                                     |
 
 
 ### Pre-change backup
-
 
 | Scenario                            | Exit code | Troubleshooting steps                                                                                                                                                                                                                                                                                  |
 | ----------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -61,7 +75,6 @@ All rows below use exit code **7**. The task output includes `Statement N failed
 
 
 ### Online DDL (including dry-run on test table)
-
 
 | Scenario                                | Exit code | Troubleshooting steps                                                                                                                                                                                                                                                                                                                                                                                 |
 | --------------------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -74,10 +87,9 @@ All rows below use exit code **7**. The task output includes `Statement N failed
 
 ### pt-online-schema-change
 
-
 | Scenario                     | Exit code | Troubleshooting steps                                                                                                                                                                                                                                                                                                                                                                                 |
 | ---------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| pt-osc dry-run failed        | **7**     | Message contains `pt-online-schema-change dry-run failed`. Install [Percona Toolkit](https://docs.percona.com/percona-toolkit/pt-online-schema-change.html), set `ptosc_path`, grant privileges in the user guide (`SELECT`, `INSERT`, `DROP`, `RELOAD`, `SUPER`, `SHOW VIEW`, `TRIGGER` on `*.`* when required). Run `pt-online-schema-change --dry-run` manually with the same connection settings. |
+| pt-osc dry-run failed        | **7**     | Message contains `pt-online-schema-change dry-run failed`. Install [Percona Toolkit](https://docs.percona.com/percona-toolkit/pt-online-schema-change.html), set `ptosc_path`, and grant the required permissions for the target table. Depending on your MySQL version and topology, pt-osc may require privileges such as `SELECT`, `INSERT`, `DROP`, `RELOAD`, `SUPER`, `SHOW VIEW`, `TRIGGER`. Run `pt-online-schema-change --dry-run` manually with the same connection settings. |
 | pt-osc execute failed        | **7**     | Dry-run passed but `pt-online-schema-change failed` on execute. Check pt-osc output in logs (triggers, replicas, disk, permissions). Resolve replica lag or tool errors before retrying.                                                                                                                                                                                                              |
 | pt-osc configuration missing | **7**     | `mysql_host is required for pt-online-schema-change` or `config is required for pt-online-schema-change`. Complete MySQL settings in `releem.conf`.                                                                                                                                                                                                                                                   |
 
@@ -134,8 +146,7 @@ All rows below use exit code **7**. The task output includes `Statement N failed
 
 ## Where to look next
 
-1. Task output in the Releem portal for the exact `Statement N failed:` line.
-2. Agent logs with `debug = true` (commands, preflight SQL, tool stderr).
+1. The output in the Releem portal for the exact `Statement N failed:` line.
+2. Agent logs with `debug = true` in `/opt/releem/releem.conf` (commands, preflight SQL, tool stderr).
 3. MySQL server error log for the time of the failure.
-4. [task-type-6-schema-changes.md](./task-type-6-schema-changes.md) for technical behavior and safety limits.
-
+4. Releem support, if the payload is invalid, the message does not match any row above, or the same task keeps failing after the server-side issue is fixed.

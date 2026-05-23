@@ -93,6 +93,7 @@ const sidebars = {
         'query-optimization/enable-sql-query-optimization',
         'query-optimization/disable-sql-query-optimization',
         'query-optimization/prepared-statements-issue',
+        'query-optimization/schema-change-troubleshooting',        
       ],
     },
     {

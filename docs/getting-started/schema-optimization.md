@@ -26,6 +26,8 @@ Schema optimization helps you detect and fix:
 4. Test changes in a development environment first
 5. Execute the SQL on your production database during low-traffic periods
 
+If an automatic schema change fails in Releem, use the [Schema Change Troubleshooting](/releem-agent/schema-change-troubleshooting) guide to match the error to the next action.
+
 For detailed information about each type of schema check and comprehensive best practices, see the [MySQL Database Schema Checks](https://releem.com/blog/mysql-database-schema-checks) article.
 
 Schema optimization is essential for maintaining long-term database health and performance as your application grows.
