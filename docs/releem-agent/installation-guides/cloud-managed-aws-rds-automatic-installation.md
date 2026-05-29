@@ -20,7 +20,8 @@ The requirements for RDS instance:
 - Performance Insights to collect MySQL performance metrics.
 - Performance Schema to collect MySQL performance metrics. Please change the following variable in the Parameter Group and reboot the database instance:
    ```ini
-   performance_schema=1
+   performance_schema=ON
+   slow_query_log=ON
    ```
 
 You have the following options to install Releem Agent:

@@ -77,10 +77,11 @@ Use this instruction to install Releem Agent manually on the database server. Re
 
    **Note:** If you don't configure automatic applying of configuration, then please add the following MySQL variables to the configuration:
    ```ini
-   performance_schema = 1
-   slow_query_log = 1
+   performance_schema=ON
+   performance-schema-consumer-events-statements-current=ON
+   performance-schema-consumer-events-statements-history=ON
+   slow_query_log=ON
    ```
-
 
 
 
