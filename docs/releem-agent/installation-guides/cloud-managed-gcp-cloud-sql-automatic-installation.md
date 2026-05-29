@@ -16,7 +16,8 @@ The requirements for Cloud SQL instance:
 - Shared network for Compute Engine VM instance and Cloud SQL instance.
 - Performance Schema enabled to collect MySQL performance metrics. Please set the following variable in the database flags and restart the instance:
 ```ini
-performance_schema=1
+performance_schema=ON
+slow_query_log=ON
 ```
 
 You have the following options to install Releem Agent:
@@ -145,5 +146,4 @@ To check Releem Agent logs please open Cloud Logging and view logs for the Cloud
 
 3. Connect: connection timed out
    - If using private IP, ensure VPC/firewall rules allow egress from the Agent to the Cloud SQL private address. If using the Cloud SQL connector, ensure `roles/cloudsql.client` is granted and the connector is configured.
-
 
