@@ -24,9 +24,10 @@ Automatic schema changes require:
 
 - an installed and running Releem Agent;
 - [SQL Query Optimization](/query-optimization/enable-sql-query-optimization) enabled for the server;
+- MySQL or MariaDB configuration that allows Releem to validate the schema change and create a backup when needed;
 - a MySQL user used by the agent with permissions to apply the approved schema changes;
 - enough free disk space in the MySQL data directory and in the backup directory;
-- point-in-time recovery when Releem requires a pre-change backup;
+- binary logs with at least 2 days of retention when Releem requires a pre-change backup;
 - additional tools installed on the same host as the agent when they are needed.
 
 For Linux servers, the default agent configuration file is:
@@ -92,7 +93,122 @@ sudo yum install MariaDB-backup
 
 Package names can differ by operating system and repository. Use the official installation instructions linked at the end of this page for production servers.
 
-### 2. Configure the Releem Agent
+### 2. Configure MySQL for Automatic Schema Changes
+
+Releem uses MySQL metadata collected by the agent to decide whether a schema change can run automatically. Configure MySQL before enabling DDL execution in the agent.
+
+#### Enable point-in-time recovery for pre-change backups
+
+When Releem marks a schema change as requiring a pre-change backup, the change runs only if point-in-time recovery is available. Releem considers point-in-time recovery available when:
+
+- `log_bin` is `ON`;
+- binary log retention is at least 2 days.
+
+If these values are not available, the Releem Agent skips the schema change instead of applying it without the required recovery option.
+
+Add the settings to the MySQL or MariaDB server configuration file. Common locations are:
+
+- `/etc/mysql/mysql.conf.d/mysqld.cnf` for MySQL on Debian or Ubuntu;
+- `/etc/mysql/mariadb.conf.d/50-server.cnf` for MariaDB on Debian or Ubuntu;
+- `/etc/my.cnf` or a file under `/etc/my.cnf.d/` for RHEL-based distributions.
+
+For MySQL 8.0 and newer, set binary log retention in seconds:
+
+```ini
+[mysqld]
+log_bin=mysql-bin
+binlog_expire_logs_seconds=172800
+binlog_format=ROW
+```
+
+For MySQL 5.7 and MariaDB 10.5 or earlier, use `expire_logs_days`:
+
+```ini
+[mysqld]
+log_bin=mysql-bin
+expire_logs_days=2
+binlog_format=ROW
+```
+
+For MariaDB 10.6 and newer, either retention variable can be used. Releem reads `binlog_expire_logs_seconds` when it is available:
+
+```ini
+[mariadb]
+log_bin
+binlog_expire_logs_seconds=172800
+binlog_format=ROW
+```
+
+If binary logging is already enabled, keep your existing binary log basename and only adjust retention if it is lower than 2 days. After changing MySQL configuration, restart MySQL or MariaDB.
+
+Use the command that matches your service name:
+
+```bash
+sudo systemctl restart mysql
+sudo systemctl restart mysqld
+sudo systemctl restart mariadb
+```
+
+For managed database services, configure the equivalent database parameter or backup/binlog retention setting in the provider console. Releem must see `log_bin = ON` and retention of at least 2 days in the variables collected by the agent.
+
+Verify the effective values:
+
+```sql
+SHOW VARIABLES
+WHERE Variable_name IN (
+  'log_bin',
+  'binlog_expire_logs_seconds',
+  'expire_logs_days',
+  'binlog_format',
+  'datadir'
+);
+```
+
+After changing MySQL settings, let the Releem Agent collect the next snapshot or run:
+
+```bash
+sudo /opt/releem/releem-agent -f
+```
+
+#### Check table and execution requirements
+
+Releem checks each approved statement before sending it to the agent:
+
+- native Online DDL is allowed for InnoDB tables on MySQL 5.7+ or MariaDB 10+ when the statement is valid;
+- `pt-online-schema-change` is allowed only for InnoDB tables with a primary key, without triggers, and without referencing foreign keys;
+- online physical backup is selected only for InnoDB tables;
+- if neither native Online DDL nor `pt-online-schema-change` is safe, Releem does not run the change automatically.
+
+You can check the target table before approving a change:
+
+```sql
+SELECT ENGINE
+FROM information_schema.TABLES
+WHERE TABLE_SCHEMA = 'your_database'
+  AND TABLE_NAME = 'your_table';
+
+SHOW INDEX FROM `your_database`.`your_table` WHERE Key_name = 'PRIMARY';
+
+SHOW TRIGGERS FROM `your_database` LIKE 'your_table';
+
+SELECT TABLE_SCHEMA, TABLE_NAME, CONSTRAINT_NAME
+FROM information_schema.KEY_COLUMN_USAGE
+WHERE REFERENCED_TABLE_SCHEMA = 'your_database'
+  AND REFERENCED_TABLE_NAME = 'your_table';
+```
+
+#### Check disk-space requirements
+
+The agent checks disk capacity before execution:
+
+- the MySQL data directory must keep more than 10% free space;
+- projected MySQL data directory usage after the schema change must stay at or below 90%;
+- when a backup is required, `backup_dir` must have enough free space for the estimated backup size plus `backup_space_buffer`;
+- logical backups use `mysqldump`; physical backups use `xtrabackup` or `mariabackup`.
+
+Keep `disable_space_checks = false` for production use. Disable it only temporarily and only when you already have another capacity check in place.
+
+### 3. Configure the Releem Agent
 
 Open the agent configuration file:
 
@@ -128,7 +244,7 @@ For MariaDB Backup, set:
 xtrabackup_path = "mariabackup"
 ```
 
-### 3. Prepare the Backup Directory
+### 4. Prepare the Backup Directory
 
 Create the backup directory and make sure the Releem Agent process can write to it:
 
@@ -137,7 +253,7 @@ sudo mkdir -p /tmp/backups
 ```
 
 
-### 4. Grant Database Permissions
+### 5. Grant Database Permissions
 
 Connect to MySQL or MariaDB as an administrator and grant the required permissions to the same database user that the Releem Agent already uses.
 
@@ -170,7 +286,7 @@ On MySQL 8 and newer, use the equivalent dynamic privileges required by your sec
 
 Replace `releem` and `127.0.0.1` with the user and host from your agent configuration if they are different.
 
-### 5. Restart the Releem Agent
+### 6. Restart the Releem Agent
 
 Restart the agent so it reads the new configuration:
 
@@ -184,7 +300,7 @@ If your server uses the legacy service command:
 sudo service releem-agent restart
 ```
 
-### 6. Approve the Schema Change in Releem
+### 7. Approve the Schema Change in Releem
 
 Open the Releem Dashboard, review the query recommendation, and approve the change only when you are ready for the agent to apply it.
 
@@ -231,4 +347,7 @@ Use the returned paths in `releem.conf` if needed.
 - [MariaDB Backup documentation](https://mariadb.com/docs/server/server-usage/backup-and-restore/mariadb-backup/mariadb-backup-overview)
 - [MySQL APT Repository guide](https://dev.mysql.com/doc/mysql-apt-repo-quick-guide/en/)
 - [MySQL Yum Repository guide](https://dev.mysql.com/doc/mysql-yum-repo-quick-guide/en/)
+- [MySQL binary logging options](https://dev.mysql.com/doc/refman/8.4/en/replication-options-binary-log.html)
+- [MariaDB binary log activation](https://mariadb.com/docs/server/server-management/server-monitoring-logs/binary-log/activating-the-binary-log)
+- [MariaDB binary log variables](https://mariadb.com/docs/server/ha-and-performance/standard-replication/replication-and-binary-log-system-variables)
 - [mysqldump documentation](https://dev.mysql.com/doc/refman/8.4/en/mysqldump.html)
