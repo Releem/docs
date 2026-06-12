@@ -44,21 +44,20 @@ Install the tools that match your database type and backup strategy.
 
 Some packages may not be available in the default operating system repositories. If your package manager cannot find a package, add the vendor repository first and then run the installation command again:
 
-- For Percona Toolkit and Percona XtraBackup, follow [Install percona-release](https://docs.percona.com/percona-software-repositories/installing.html).
+- For `pt-online-schema-change` and Percona XtraBackup, follow [Install percona-release](https://docs.percona.com/percona-software-repositories/installing.html).
 - For MariaDB Backup, follow [MariaDB Package Repository Setup and Usage](https://mariadb.com/docs/server/server-management/install-and-upgrade-mariadb/installing-mariadb/binary-packages/mariadb-package-repository-setup-and-usage).
-- For MySQL client packages, follow the MySQL repository guide for your platform: [MySQL APT Repository](https://dev.mysql.com/doc/mysql-apt-repo-quick-guide/en/) or [MySQL Yum Repository](https://dev.mysql.com/doc/mysql-yum-repo-quick-guide/en/).
 
 For Debian or Ubuntu:
 
 ```bash
 sudo apt-get update
-sudo apt-get install default-mysql-client percona-toolkit
+sudo apt-get install pt-online-schema-change
 ```
 
 For RHEL, CentOS, Rocky Linux, or AlmaLinux:
 
 ```bash
-sudo yum install mysql percona-toolkit
+sudo yum install pt-online-schema-change
 ```
 
 On newer releases such as Rocky Linux 8+ or AlmaLinux 8+, use `dnf` instead of `yum`.
@@ -149,7 +148,7 @@ sudo systemctl restart mysqld
 sudo systemctl restart mariadb
 ```
 
-For managed database services, configure the equivalent database parameter or backup/binlog retention setting in the provider console. Releem must see `log_bin = ON` and retention of at least 2 days in the variables collected by the agent.
+For managed database services, configure the equivalent database parameter or backup/binlog retention setting in the provider console. Releem must see `log_bin=ON` and retention of at least 2 days in the variables collected by the agent.
 
 Verify the effective values:
 
@@ -162,12 +161,6 @@ WHERE Variable_name IN (
   'binlog_format',
   'datadir'
 );
-```
-
-After changing MySQL settings, let the Releem Agent collect the next snapshot or run:
-
-```bash
-sudo /opt/releem/releem-agent -f
 ```
 
 #### Check table and execution requirements
@@ -184,17 +177,17 @@ You can check the target table before approving a change:
 ```sql
 SELECT ENGINE
 FROM information_schema.TABLES
-WHERE TABLE_SCHEMA = 'your_database'
-  AND TABLE_NAME = 'your_table';
+WHERE TABLE_SCHEMA='your_database'
+  AND TABLE_NAME='your_table';
 
-SHOW INDEX FROM `your_database`.`your_table` WHERE Key_name = 'PRIMARY';
+SHOW INDEX FROM `your_database`.`your_table` WHERE Key_name='PRIMARY';
 
 SHOW TRIGGERS FROM `your_database` LIKE 'your_table';
 
 SELECT TABLE_SCHEMA, TABLE_NAME, CONSTRAINT_NAME
 FROM information_schema.KEY_COLUMN_USAGE
-WHERE REFERENCED_TABLE_SCHEMA = 'your_database'
-  AND REFERENCED_TABLE_NAME = 'your_table';
+WHERE REFERENCED_TABLE_SCHEMA='your_database'
+  AND REFERENCED_TABLE_NAME='your_table';
 ```
 
 #### Check disk-space requirements
@@ -206,7 +199,7 @@ The agent checks disk capacity before execution:
 - when a backup is required, `backup_dir` must have enough free space for the estimated backup size plus `backup_space_buffer`;
 - logical backups use `mysqldump`; physical backups use `xtrabackup` or `mariabackup`.
 
-Keep `disable_space_checks = false` for production use. Disable it only temporarily and only when you already have another capacity check in place.
+Keep `disable_space_checks=false` for production use. Disable it only temporarily and only when you already have another capacity check in place.
 
 ### 3. Configure the Releem Agent
 
@@ -219,29 +212,29 @@ sudo nano /opt/releem/releem.conf
 Enable DDL execution and review the paths used by the agent:
 
 ```
-enable_exec_ddl = true
+enable_exec_ddl=true
 
-backup_dir = "/tmp/backups"
-ptosc_path = "pt-online-schema-change"
-mysqldump_path = "mysqldump"
-xtrabackup_path = "xtrabackup"
-backup_space_buffer = 20.0
-online_ddl_test_schema = "releem_online_ddl_test"
-disable_space_checks = false
+backup_dir="/tmp/backups"
+ptosc_path="pt-online-schema-change"
+mysqldump_path="mysqldump"
+xtrabackup_path="xtrabackup"
+backup_space_buffer=20.0
+online_ddl_test_schema="releem_online_ddl_test"
+disable_space_checks=false
 ```
 
 Use full paths when a tool is not available on the agent process `PATH`. For example:
 
 ```
-ptosc_path = "/usr/bin/pt-online-schema-change"
-mysqldump_path = "/usr/bin/mysqldump"
-xtrabackup_path = "/usr/bin/xtrabackup"
+ptosc_path="/usr/bin/pt-online-schema-change"
+mysqldump_path="/usr/bin/mysqldump"
+xtrabackup_path="/usr/bin/xtrabackup"
 ```
 
 For MariaDB Backup, set:
 
 ```
-xtrabackup_path = "mariabackup"
+xtrabackup_path="mariabackup"
 ```
 
 ### 4. Prepare the Backup Directory
@@ -300,7 +293,15 @@ If your server uses the legacy service command:
 sudo service releem-agent restart
 ```
 
-### 7. Approve the Schema Change in Releem
+### 7. Collect the Next Snapshot the Releem Agent
+
+After changing MySQL and Releem Agent settings, let the Releem Agent collect the next snapshot or run:
+
+```bash
+sudo /opt/releem/releem-agent -f
+```
+
+### 8. Approve the Schema Change in Releem
 
 Open the Releem Dashboard, review the query recommendation, and approve the change only when you are ready for the agent to apply it.
 
@@ -312,7 +313,7 @@ After the task starts, Releem shows the result in the dashboard. If the task fai
 | --- | --- | --- |
 | `enable_exec_ddl` | `false` | Enables automatic execution of approved schema changes. Keep it `false` when you want Releem to recommend changes only. |
 | `backup_dir` | `/tmp/backups` | Directory where the agent stores logical and physical backups before a schema change. |
-| `ptosc_path` | `pt-online-schema-change` | Path to `pt-online-schema-change` from Percona Toolkit. Used when Releem selects that method. |
+| `ptosc_path` | `pt-online-schema-change` | Path to the `pt-online-schema-change` binary. Used when Releem selects that method. |
 | `mysqldump_path` | `mysqldump` | Path to `mysqldump`. Used for logical table backups. |
 | `xtrabackup_path` | `xtrabackup` | Path to `xtrabackup` or `mariabackup`. Used for physical backups when Releem selects that method. |
 | `backup_space_buffer` | `20.0` | Extra free-space percentage required above the estimated backup size. |
@@ -321,8 +322,8 @@ After the task starts, Releem shows the result in the dashboard. If the task fai
 
 ## Additional Tool Installation Notes
 
-- `mysqldump` is usually included in MySQL client packages.
-- `pt-online-schema-change` is included in Percona Toolkit.
+- `mysqldump` is needed only when Releem selects logical backup. Check that it already exists on the server or set `mysqldump_path` to the installed binary.
+- `pt-online-schema-change` is required only when Releem selects this execution method.
 - `xtrabackup` is installed from Percona XtraBackup packages.
 - `mariabackup` is installed from MariaDB Backup packages and should be used for MariaDB servers.
 
@@ -339,14 +340,11 @@ Use the returned paths in `releem.conf` if needed.
 
 ## Documentation Links
 
-- [Percona Toolkit installation](https://docs.percona.com/percona-toolkit/installation.html)
 - [Percona repository setup](https://docs.percona.com/percona-software-repositories/installing.html)
 - [pt-online-schema-change documentation](https://docs.percona.com/percona-toolkit/pt-online-schema-change.html)
 - [Percona XtraBackup installation](https://docs.percona.com/percona-xtrabackup/8.0/installation.html)
 - [MariaDB repository setup](https://mariadb.com/docs/server/server-management/install-and-upgrade-mariadb/installing-mariadb/binary-packages/mariadb-package-repository-setup-and-usage)
 - [MariaDB Backup documentation](https://mariadb.com/docs/server/server-usage/backup-and-restore/mariadb-backup/mariadb-backup-overview)
-- [MySQL APT Repository guide](https://dev.mysql.com/doc/mysql-apt-repo-quick-guide/en/)
-- [MySQL Yum Repository guide](https://dev.mysql.com/doc/mysql-yum-repo-quick-guide/en/)
 - [MySQL binary logging options](https://dev.mysql.com/doc/refman/8.4/en/replication-options-binary-log.html)
 - [MariaDB binary log activation](https://mariadb.com/docs/server/server-management/server-monitoring-logs/binary-log/activating-the-binary-log)
 - [MariaDB binary log variables](https://mariadb.com/docs/server/ha-and-performance/standard-replication/replication-and-binary-log-system-variables)

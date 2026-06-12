@@ -23,7 +23,7 @@ These errors happen before the agent runs a backup or DDL statement.
 
 | Error name | Error text contains | What to do |
 | --- | --- | --- |
-| Automatic schema changes are disabled | `schema change execution is disabled by config` | Set `enable_exec_ddl = true` in `/opt/releem/releem.conf`, restart the Releem Agent, and retry the task from Releem. |
+| Automatic schema changes are disabled | `schema change execution is disabled by config` | Set `enable_exec_ddl=true` in `/opt/releem/releem.conf`, restart the Releem Agent, and retry the task from Releem. |
 | Task data is invalid | `taskdetails JSON`, `schema_name is required`, `ddl_statement is required`, `analysis_results.schema_name is required`, or `analysis_results.table_name is required` | Contact Releem support with the task id. The task payload sent to the agent is incomplete or malformed and cannot be fixed only on the database server. |
 | No schema change was sent | `Invalid task_details: empty schema change list` | Retry from Releem. If the recommendation should contain a change, contact Releem support with the task id. |
 | SQL statement is invalid | `Statement N skipped: syntax validation failed` | Do not retry the same task. Fix or recreate the schema recommendation so the DDL is valid for the target MySQL or MariaDB version. |
@@ -52,7 +52,7 @@ Use the text after `Statement N failed:` or after the dashboard prefix to identi
 | Agent cannot read the MySQL data directory | `failed to resolve datadir`, `datadir is empty`, `failed to check datadir filesystem capacity`, or `invalid datadir filesystem size` | Check that MySQL returns `SHOW VARIABLES LIKE 'datadir'`, that the path exists on the host where the agent runs, and that the agent can read filesystem capacity for that path. |
 | Agent cannot estimate the target table size | `failed to get table size` | Check that the table still exists and that the agent MySQL user can read `information_schema.TABLES` for the target schema and table. |
 
-Do not disable space checks for normal production use. Use `disable_space_checks = true` only temporarily and only when another capacity check is already in place.
+Do not disable space checks for normal production use. Use `disable_space_checks=true` only temporarily and only when another capacity check is already in place.
 
 ### Backup Directory Checks
 
@@ -69,7 +69,7 @@ Do not disable space checks for normal production use. Use `disable_space_checks
 | --- | --- | --- |
 | Backup connection settings are incomplete | `backup failed: mysql_host is required for backup` or `backup failed: config is required for backup` | Check the MySQL connection settings in `releem.conf`: `mysql_host`, `mysql_port`, `mysql_user`, and `mysql_password`. Restart the agent after changing the file. |
 | Logical backup with mysqldump failed | `backup failed: mysqldump failed` | Install `mysqldump`, set `mysqldump_path` if the binary is not on `PATH`, and confirm that the agent MySQL user can dump the target table. |
-| Physical backup with xtrabackup failed | `backup failed: xtrabackup backup failed` | Install a compatible Percona XtraBackup for MySQL, or use `mariabackup` for MariaDB by setting `xtrabackup_path = "mariabackup"`. Check the tool output in the agent logs. |
+| Physical backup with xtrabackup failed | `backup failed: xtrabackup backup failed` | Install a compatible Percona XtraBackup for MySQL, or use `mariabackup` for MariaDB by setting `xtrabackup_path="mariabackup"`. Check the tool output in the agent logs. |
 | Physical backup prepare step failed | `backup failed: xtrabackup prepare failed` | Check that the backup tool version matches the server type and version. Review the detailed tool output in the agent logs, fix the backup tool issue, and retry. |
 | Unsupported backup method was selected | `backup failed: unsupported backup method` | Contact Releem support with the task id and agent logs. This indicates an internal task or agent mismatch. |
 
@@ -79,7 +79,7 @@ These errors are usually shown as `Schema changes execution failed: schema chang
 
 | Error name | Error text contains | What to do |
 | --- | --- | --- |
-| Online DDL test schema is not configured | `test schema is required for online DDL preflight` | Set `online_ddl_test_schema = "releem_online_ddl_test"` or another schema name in `releem.conf`, grant the agent user access to it, restart the agent, and retry. |
+| Online DDL test schema is not configured | `test schema is required for online DDL preflight` | Set `online_ddl_test_schema="releem_online_ddl_test"` or another schema name in `releem.conf`, grant the agent user access to it, restart the agent, and retry. |
 | Online DDL test schema cannot be created | `failed to create test schema` | Grant the agent MySQL user permission to create the configured test schema, or create the schema manually and grant access. |
 | Online DDL test table cannot be created | `failed to create test table` | Grant the agent user permission to create tables in `online_ddl_test_schema`. Also check that the source table still exists. |
 | Online DDL preflight failed | `online DDL preflight failed on test table` | The agent tested the DDL on an empty copy of the table and MySQL rejected it. Check the MySQL error after this message. Fix unsupported DDL, incompatible clauses, or missing privileges before retrying. |
@@ -95,7 +95,7 @@ These errors are usually shown as `Schema changes execution failed: pt-online-sc
 | --- | --- | --- |
 | pt-online-schema-change connection settings are incomplete | `mysql_host is required for pt-online-schema-change` or `config is required for pt-online-schema-change` | Check `mysql_host`, `mysql_port`, `mysql_user`, and `mysql_password` in `releem.conf`. Restart the agent after changing the file. |
 | pt-online-schema-change cannot parse the table name | `pt-online-schema-change execution failed: failed to parse table name` | Confirm that `analysis_results.schema_name` and `analysis_results.table_name` match an existing table and use a valid `schema.table` form. |
-| pt-online-schema-change dry run failed | `pt-online-schema-change dry-run failed` | Install or update Percona Toolkit, set `ptosc_path` if needed, and grant the permissions required by `pt-online-schema-change`. Run a manual dry run with the same connection settings if you need the full tool output. |
+| pt-online-schema-change dry run failed | `pt-online-schema-change dry-run failed` | Install or update `pt-online-schema-change`, set `ptosc_path` if needed, and grant the permissions required by `pt-online-schema-change`. Run a manual dry run with the same connection settings if you need the full tool output. |
 | pt-online-schema-change execution failed | `pt-online-schema-change failed` | The dry run passed, but the actual execution failed. Check the tool output in agent logs. Common causes include missing privileges, replica lag, triggers, foreign key restrictions, disk limits, or table changes after the recommendation was generated. |
 
 `pt-online-schema-change` may require privileges such as `SELECT`, `INSERT`, `DROP`, `RELOAD`, `SUPER`, `SHOW VIEW`, and `TRIGGER`, depending on the server version and topology.
