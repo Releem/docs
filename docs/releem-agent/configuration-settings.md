@@ -94,6 +94,30 @@ query_optimization=false
 # List of databases for query optimization (comma-separated)
 databases_query_optimization=""
 
+# Enable automatic execution of approved schema changes
+enable_exec_ddl=false
+
+# Directory for schema-change backups
+backup_dir="/tmp/backups"
+
+# Path to pt-online-schema-change binary
+ptosc_path="pt-online-schema-change"
+
+# Path to mysqldump binary
+mysqldump_path="mysqldump"
+
+# Path to xtrabackup or mariabackup binary
+xtrabackup_path="xtrabackup"
+
+# Extra free-space buffer percentage for backups
+backup_space_buffer=20.0
+
+# Scratch schema used for Online DDL preflight checks
+online_ddl_test_schema="releem_online_ddl_test"
+
+# Disable disk space checks for schema-change execution
+disable_space_checks=false
+
 # Server data storage region - EU or empty
 releem_region=""
 ```
@@ -107,6 +131,8 @@ releem_region=""
 - PostgreSQL monitoring is enabled when `pg_user` and `pg_password` are configured.
 - Set `query_optimization=true` to enable SQL query optimization features where supported.
 - Use `databases_query_optimization` to specify which databases to monitor for query optimization (leave empty for all databases).
+- Set `enable_exec_ddl=true` only when the Releem Agent is allowed to apply approved schema changes automatically.
+- Keep `disable_space_checks=false` for production use unless you have a separate capacity check in place.
 - The `releem_region` field can be set to `EU` for European data storage or left empty for default storage.
 
 ## Restarting the Agent

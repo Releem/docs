@@ -3,106 +3,232 @@ id: automatic-schema-changes
 title: Automatic Schema Changes
 ---
 
-# Automatic schema changes in the Releem Agent
+# Automatic Schema Changes
 
-If the **Releem Agent** is already installed and running, you can allow it to execute approved schema changes on the server. Automatic schema changes also include the option of running a pre-change backup, in case a rollback is required.
+Releem can apply approved schema recommendations, such as creating indexes, directly from the Releem Dashboard. This is useful when you want Releem to complete the optimization workflow after you review and approve a change.
 
-Both automatic schema changes and backups were implemented with availability in mind, so they will only run if:
-* There is enough disk space to perform both, the backup and the schema change
-* The backup won't block the affected tables
-* Point-in-time restore is possible on the server
-* The schema change won't block the affected tables
+Automatic schema changes are disabled by default. Enable them only on servers where the Releem Agent is allowed to run DDL statements and where you have checked the backup and disk-space requirements.
 
-The following steps explain how to configure the agent and the database user to handle this new functionality.
+Before applying a change, the Releem Agent checks that the operation can be completed safely. Depending on the recommendation and the server, the agent may:
 
----
+- test the change on a temporary table before touching the production table;
+- use native online DDL when MySQL or MariaDB can run the change without blocking the table;
+- use `pt-online-schema-change` when the server cannot run the change online by itself;
+- create a backup before the change when the recommendation requires it.
 
-## 1. Locate the configuration file
+If these checks fail, Releem does not apply the change automatically. See [Schema Change Troubleshooting](/query-optimization/schema-change-troubleshooting) for the next steps.
 
-To enable automatic schema changes, we need to include a few new parameters in the agent configuration file. Below is the default location for Linux servers. Open the file with your favorite editor to add the new parameters.
+## Before You Start
 
-| Platform | Default path |
-|----------|----------------|
-| Linux | `/opt/releem/releem.conf` |
+Automatic schema changes require:
 
----
-## 2. Enable automatic schema (DDL) execution
+- an installed and running Releem Agent;
+- [SQL Query Optimization](/query-optimization/enable-sql-query-optimization) enabled for the server;
+- a MySQL user used by the agent with permissions to apply the approved schema changes;
+- enough free disk space in the MySQL data directory and in the backup directory;
+- point-in-time recovery when Releem requires a pre-change backup;
+- additional tools installed on the same host as the agent when they are needed.
 
-By default the agent **does not** run schema changes from Releem, even when you approve them in the product. For schema changes to be executed on your database server, activate this feature explicitly by setting `enable_exec_ddl` to `true`.
+For Linux servers, the default agent configuration file is:
 
-Before running the schema change against the real table, the agent will perform a dry-run of the change against an empty table with the same structure. This is to guarantee that the operation can run successfully with the intenteded strategy.
-
-There are some schema changes that the database server can't execute on its own, without blocking the table. An alternative it to use an external tool called [pt-online-schema-change](https://docs.percona.com/percona-toolkit/pt-online-schema-change.html). This tool creates a copy of the table with the intended changes, copies all data to this new table, and swaps it with the existing one, with minimum impact.
-
-[pt-online-schema-change](https://docs.percona.com/percona-toolkit/pt-online-schema-change.html) needs to be available on the server and the location of the tool can be specified in the configuration.
-
-| Setting | Values | What it does |
-|---------|--------|----------------|
-| `enable_exec_ddl` | `false` (default) or `true` | When `true`, the agent may execute **schema changes** that Releem sends after analysis. When `false`, those changes are not run; the agent reports that execution is disabled. |
-| `ptosc_path` | `pt-online-schema-change` | Percona Toolkit is not on `PATH` or you use a non-standard binary location. |
-| `online_ddl_test_schema` | `releem_online_ddl_test` (default) or any valid database/schema name | **Optional:** Database/schema name where the agent will test the schema change before executing it against the real table|
-
-
----
-## 3. Configure your backup settings
-
-When a pre-change backup is requested, the agent needs tools and extra disk space available on the **same host that runs the agent**. As mentioned before, the Releem agent will look for the best alternative to backup the affected tables before the schema change is executed.
-
-* If the server and the table supports it, the agent will create a physical backup of the table using `xtrabackup` or `mariabackup` 
-* If online physical backup is not an option, the agent will use mysqldump to create a logical backup of the data (a `.sql` file with necessary statements to re-create the table and the data)
-
-Releem only proceeds with the backup when **point-in-time recovery** is available for the instance as Releem detects it. If not, the change that required the backup will not run.
-
-
-| Setting | Values | What it does |
-|---------|--------|----------------|
-| `backup_dir` | `/tmp/backups` (default) | Directory for backup output. Must exist or be creatable and have enough free space. |
-| `mysqldump_path` | `mysqldump` (default) | Full path or name on `PATH` for `mysqldump` (logical backup). |
-| `xtrabackup_path` | `xtrabackup` (default) | Full path or name on `PATH` for `xtrabackup` (physical backup when Releem selects that method). |
-| `backup_space_buffer` | `20.0` (default) | Extra free space (as a percentage) the agent requires above its estimated backup size before starting a backup. |
-
-
----
-## 4. Extend database user permissions
-
-The same **MySQL user** the agent already uses for monitoring must have permission to run the approved ALTER statements. Connect to the target database server and run the he GRANT statements below:
-
-```sql
--- To allow table ALTERs and New indexes on **any** database
-GRANT CREATE, REFERENCES, INDEX, ALTER ON *.* TO `releem`@`127.0.0.1`
+```bash
+/opt/releem/releem.conf
 ```
 
-```sql
--- Alternative: grant ALTER permissions *only* on a specific database
-GRANT CREATE, REFERENCES, INDEX, ALTER ON `airportdb`.* TO `releem`@`127.0.0.1`
+## Enable Automatic Schema Changes
+
+### 1. Install the Tools Used by the Agent
+
+Install the tools that match your database type and backup strategy.
+
+Some packages may not be available in the default operating system repositories. If your package manager cannot find a package, add the vendor repository first and then run the installation command again:
+
+- For Percona Toolkit and Percona XtraBackup, follow [Install percona-release](https://docs.percona.com/percona-software-repositories/installing.html).
+- For MariaDB Backup, follow [MariaDB Package Repository Setup and Usage](https://mariadb.com/docs/server/server-management/install-and-upgrade-mariadb/installing-mariadb/binary-packages/mariadb-package-repository-setup-and-usage).
+- For MySQL client packages, follow the MySQL repository guide for your platform: [MySQL APT Repository](https://dev.mysql.com/doc/mysql-apt-repo-quick-guide/en/) or [MySQL Yum Repository](https://dev.mysql.com/doc/mysql-yum-repo-quick-guide/en/).
+
+For Debian or Ubuntu:
+
+```bash
+sudo apt-get update
+sudo apt-get install default-mysql-client percona-toolkit
 ```
 
-```sql
--- Needed for schema changes dry-runs (note this only affects the test database)
-GRANT CREATE, DROP, INDEX, ALTER ON `releem_online_ddl_test`.* TO `releem`@`127.0.0.1`
+For RHEL, CentOS, Rocky Linux, or AlmaLinux:
+
+```bash
+sudo yum install mysql percona-toolkit
 ```
 
-#### Optional - To use pt-online-schema-change as an alternative method when the operation can't be executed online by the server
-```sql
-GRANT SELECT, INSERT, DROP, RELOAD, SUPER, SHOW VIEW, TRIGGER ON *.* TO `releem`@`127.0.0.1`
+On newer releases such as Rocky Linux 8+ or AlmaLinux 8+, use `dnf` instead of `yum`.
+
+For physical backups on MySQL, install Percona XtraBackup. The Percona repository is usually required first. Example:
+
+Debian or Ubuntu:
+
+```bash
+sudo apt-get install percona-xtrabackup-80
 ```
 
----
+RHEL, CentOS, Rocky Linux, or AlmaLinux:
+
+```bash
+sudo yum install percona-xtrabackup-80
+```
+
+For MariaDB servers, install MariaDB Backup and point `xtrabackup_path` to `mariabackup`:
+
+Debian or Ubuntu:
+
+```bash
+sudo apt-get install mariadb-backup
+```
+
+RHEL, CentOS, Rocky Linux, or AlmaLinux:
+
+```bash
+sudo yum install MariaDB-backup
+```
+
+Package names can differ by operating system and repository. Use the official installation instructions linked at the end of this page for production servers.
+
+### 2. Configure the Releem Agent
+
+Open the agent configuration file:
+
+```bash
+sudo nano /opt/releem/releem.conf
+```
+
+Enable DDL execution and review the paths used by the agent:
+
+```
+enable_exec_ddl = true
+
+backup_dir = "/tmp/backups"
+ptosc_path = "pt-online-schema-change"
+mysqldump_path = "mysqldump"
+xtrabackup_path = "xtrabackup"
+backup_space_buffer = 20.0
+online_ddl_test_schema = "releem_online_ddl_test"
+disable_space_checks = false
+```
+
+Use full paths when a tool is not available on the agent process `PATH`. For example:
+
+```
+ptosc_path = "/usr/bin/pt-online-schema-change"
+mysqldump_path = "/usr/bin/mysqldump"
+xtrabackup_path = "/usr/bin/xtrabackup"
+```
+
+For MariaDB Backup, set:
+
+```
+xtrabackup_path = "mariabackup"
+```
+
+### 3. Prepare the Backup Directory
+
+Create the backup directory and make sure the Releem Agent process can write to it:
+
+```bash
+sudo mkdir -p /tmp/backups
+```
 
 
+### 4. Grant Database Permissions
 
-## 5. Restart the agent
+Connect to MySQL or MariaDB as an administrator and grant the required permissions to the same database user that the Releem Agent already uses.
 
+For schema changes on all databases:
 
-After editing, **restart the Releem Agent** so changes take effect.
+```sql
+GRANT CREATE, REFERENCES, INDEX, ALTER ON *.* TO `releem`@`127.0.0.1`;
+```
 
----
+Or grant permissions only for one database:
 
-## External tools
+```sql
+GRANT CREATE, REFERENCES, INDEX, ALTER ON `your_database`.* TO `releem`@`127.0.0.1`;
+```
 
-Install **mysqldump**, **XtraBackup**, **mariabackup** and **pt-online-schema-change**as appropriate for your Database server and OS flavor. For more information about how to install these tools, please refer to:
+For the test schema used by the online DDL preflight:
 
-* [pt-online-schema-change](https://docs.percona.com/percona-toolkit/pt-online-schema-change.html)
-* [xtrabackup](https://docs.percona.com/percona-xtrabackup/2.4/index.html)
-* [mariabackup](https://mariadb.com/docs/server/server-usage/backup-and-restore/mariadb-backup/mariadb-backup-overview#installing-mariadb-backup)
-* [mysqldump](https://dev.mysql.com/doc/refman/9.7/en/mysqldump.html)
+```sql
+CREATE DATABASE IF NOT EXISTS `releem_online_ddl_test`;
+GRANT CREATE, DROP, INDEX, ALTER ON `releem_online_ddl_test`.* TO `releem`@`127.0.0.1`;
+```
+
+If Releem may use `pt-online-schema-change`, grant the extra permissions needed by that tool:
+
+```sql
+GRANT SELECT, INSERT, DROP, RELOAD, SUPER, SHOW VIEW, TRIGGER ON *.* TO `releem`@`127.0.0.1`;
+```
+
+On MySQL 8 and newer, use the equivalent dynamic privileges required by your security policy when `SUPER` is not allowed.
+
+Replace `releem` and `127.0.0.1` with the user and host from your agent configuration if they are different.
+
+### 5. Restart the Releem Agent
+
+Restart the agent so it reads the new configuration:
+
+```bash
+sudo systemctl restart releem-agent
+```
+
+If your server uses the legacy service command:
+
+```bash
+sudo service releem-agent restart
+```
+
+### 6. Approve the Schema Change in Releem
+
+Open the Releem Dashboard, review the query recommendation, and approve the change only when you are ready for the agent to apply it.
+
+After the task starts, Releem shows the result in the dashboard. If the task fails, open the failed task and use [Schema Change Troubleshooting](/query-optimization/schema-change-troubleshooting).
+
+## Agent Configuration Reference
+
+| Setting | Default | Description |
+| --- | --- | --- |
+| `enable_exec_ddl` | `false` | Enables automatic execution of approved schema changes. Keep it `false` when you want Releem to recommend changes only. |
+| `backup_dir` | `/tmp/backups` | Directory where the agent stores logical and physical backups before a schema change. |
+| `ptosc_path` | `pt-online-schema-change` | Path to `pt-online-schema-change` from Percona Toolkit. Used when Releem selects that method. |
+| `mysqldump_path` | `mysqldump` | Path to `mysqldump`. Used for logical table backups. |
+| `xtrabackup_path` | `xtrabackup` | Path to `xtrabackup` or `mariabackup`. Used for physical backups when Releem selects that method. |
+| `backup_space_buffer` | `20.0` | Extra free-space percentage required above the estimated backup size. |
+| `online_ddl_test_schema` | `releem_online_ddl_test` | Schema where the agent creates temporary tables to test online DDL before applying it to the production table. |
+| `disable_space_checks` | `false` | Disables disk-space checks when set to `true`. Use only temporarily and only when you have another capacity check in place. |
+
+## Additional Tool Installation Notes
+
+- `mysqldump` is usually included in MySQL client packages.
+- `pt-online-schema-change` is included in Percona Toolkit.
+- `xtrabackup` is installed from Percona XtraBackup packages.
+- `mariabackup` is installed from MariaDB Backup packages and should be used for MariaDB servers.
+
+After installing tools, check that the agent can find them:
+
+```bash
+which mysqldump
+which pt-online-schema-change
+which xtrabackup
+which mariabackup
+```
+
+Use the returned paths in `releem.conf` if needed.
+
+## Documentation Links
+
+- [Percona Toolkit installation](https://docs.percona.com/percona-toolkit/installation.html)
+- [Percona repository setup](https://docs.percona.com/percona-software-repositories/installing.html)
+- [pt-online-schema-change documentation](https://docs.percona.com/percona-toolkit/pt-online-schema-change.html)
+- [Percona XtraBackup installation](https://docs.percona.com/percona-xtrabackup/8.0/installation.html)
+- [MariaDB repository setup](https://mariadb.com/docs/server/server-management/install-and-upgrade-mariadb/installing-mariadb/binary-packages/mariadb-package-repository-setup-and-usage)
+- [MariaDB Backup documentation](https://mariadb.com/docs/server/server-usage/backup-and-restore/mariadb-backup/mariadb-backup-overview)
+- [MySQL APT Repository guide](https://dev.mysql.com/doc/mysql-apt-repo-quick-guide/en/)
+- [MySQL Yum Repository guide](https://dev.mysql.com/doc/mysql-yum-repo-quick-guide/en/)
+- [mysqldump documentation](https://dev.mysql.com/doc/refman/8.4/en/mysqldump.html)

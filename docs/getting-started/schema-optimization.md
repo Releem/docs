@@ -5,7 +5,7 @@ title: Schema Optimization
 
 # Schema Optimization
 
-Releem's Schema Optimization feature automatically examines your database structure to identify schema issues that can impact performance, storage efficiency, and data integrity. It is like the schema watchdog that  detects problems before they become serious and provides ready-to-use SQL recommendations.
+Releem's Schema Optimization feature automatically examines your database structure to identify schema issues that can impact performance, storage efficiency, and data integrity. It is like the schema watchdog that detects problems before they become serious and provides ready-to-use SQL recommendations.
 
 ![Releem Schema Optimization](../../assets/images/releem-schema-optimization.png)
 
@@ -26,7 +26,9 @@ Schema optimization helps you detect and fix:
 4. Test changes in a development environment first
 5. Execute the SQL on your production database during low-traffic periods
 
-If an automatic schema change fails in Releem, use the [Schema Change Troubleshooting](/releem-agent/schema-change-troubleshooting) guide to match the error to the next action.
+To let Releem apply approved schema changes for you instead of running SQL manually, follow [Automatic Schema Changes](/query-optimization/automatic-schema-changes).
+
+If an automatic schema change fails in Releem, use the [Schema Change Troubleshooting](/query-optimization/schema-change-troubleshooting) guide to match the error to the next action.
 
 For detailed information about each type of schema check and comprehensive best practices, see the [MySQL Database Schema Checks](https://releem.com/blog/mysql-database-schema-checks) article.
 
