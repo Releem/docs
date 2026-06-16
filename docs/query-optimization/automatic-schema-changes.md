@@ -253,29 +253,27 @@ Connect to MySQL or MariaDB as an administrator and grant the required permissio
 For schema changes on all databases:
 
 ```sql
-GRANT CREATE, REFERENCES, INDEX, ALTER ON *.* TO `releem`@`127.0.0.1`;
+GRANT ALTER, INDEX, REFERENCES, TRIGGER ON *.* TO `releem`@`127.0.0.1`;
 ```
 
 Or grant permissions only for one database:
 
 ```sql
-GRANT CREATE, REFERENCES, INDEX, ALTER ON `your_database`.* TO `releem`@`127.0.0.1`;
+GRANT ALTER, INDEX, REFERENCES, TRIGGER ON `your_database`.* TO `releem`@`127.0.0.1`;
 ```
 
 For the test schema used by the online DDL preflight:
 
 ```sql
 CREATE DATABASE IF NOT EXISTS `releem_online_ddl_test`;
-GRANT CREATE, DROP, INDEX, ALTER ON `releem_online_ddl_test`.* TO `releem`@`127.0.0.1`;
+GRANT ALTER, CREATE, DROP, INDEX, REFERENCES, TRIGGER ON `releem_online_ddl_test`.* TO `releem`@`127.0.0.1`;
 ```
 
 If Releem may use `pt-online-schema-change`, grant the extra permissions needed by that tool:
 
 ```sql
-GRANT SELECT, INSERT, DROP, RELOAD, SUPER, SHOW VIEW, TRIGGER ON *.* TO `releem`@`127.0.0.1`;
+GRANT RELOAD ON *.* TO `releem`@`127.0.0.1`;
 ```
-
-On MySQL 8 and newer, use the equivalent dynamic privileges required by your security policy when `SUPER` is not allowed.
 
 Replace `releem` and `127.0.0.1` with the user and host from your agent configuration if they are different.
 
