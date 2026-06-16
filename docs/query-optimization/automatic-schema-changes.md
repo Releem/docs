@@ -51,30 +51,34 @@ For Debian or Ubuntu:
 
 ```bash
 sudo apt-get update
-sudo apt-get install pt-online-schema-change
+sudo apt-get install percona-toolkit
 ```
 
 For RHEL, CentOS, Rocky Linux, or AlmaLinux:
 
 ```bash
-sudo yum install pt-online-schema-change
+sudo yum install percona-toolkit
 ```
 
 On newer releases such as Rocky Linux 8+ or AlmaLinux 8+, use `dnf` instead of `yum`.
+See [Percona Toolkit installation](https://docs.percona.com/percona-toolkit/installation.html) for more details.
+
 
 For physical backups on MySQL, install Percona XtraBackup. The Percona repository is usually required first. Example:
 
 Debian or Ubuntu:
 
 ```bash
-sudo apt-get install percona-xtrabackup-80
+sudo apt-get install percona-xtrabackup-84
 ```
 
 RHEL, CentOS, Rocky Linux, or AlmaLinux:
 
 ```bash
-sudo yum install percona-xtrabackup-80
+sudo yum install percona-xtrabackup-84
 ```
+See [Percona XtraBackup installation](https://docs.percona.com/percona-xtrabackup/8.4/installation.html) for more details.
+
 
 For MariaDB servers, install MariaDB Backup and point `xtrabackup_path` to `mariabackup`:
 
@@ -89,8 +93,10 @@ RHEL, CentOS, Rocky Linux, or AlmaLinux:
 ```bash
 sudo yum install MariaDB-backup
 ```
+See [MariaDB Backup installation](https://mariadb.com/docs/server/server-usage/backup-and-restore/mariadb-backup/mariadb-backup-overview) for more details.
 
 Package names can differ by operating system and repository. Use the official installation instructions linked at the end of this page for production servers.
+
 
 ### 2. Configure MySQL for Automatic Schema Changes
 
@@ -269,11 +275,30 @@ CREATE DATABASE IF NOT EXISTS `releem_online_ddl_test`;
 GRANT ALTER, CREATE, DROP, INDEX, REFERENCES, TRIGGER ON `releem_online_ddl_test`.* TO `releem`@`127.0.0.1`;
 ```
 
-If Releem may use `pt-online-schema-change`, grant the extra permissions needed by that tool:
+For logical backups, grant the `RELOAD` privilege:
 
 ```sql
 GRANT RELOAD ON *.* TO `releem`@`127.0.0.1`;
 ```
+
+#### Grant permissions for `pt-online-schema-change`
+
+If Releem may use `pt-online-schema-change`, grant the extra permissions needed by that tool:
+
+```sql
+GRANT SUPER, PROCESS, REPLICATION CLIENT ON *.* TO `releem`@`127.0.0.1`;
+```
+On MySQL 8 and newer, use the equivalent dynamic privileges required by your security policy when `SUPER` is not allowed.
+
+```sql
+GRANT SELECT, INSERT, CREATE, DROP, ALTER, TRIGGER, SHOW VIEW ON *.* TO `releem`@`127.0.0.1`;
+```
+Or grant permissions only for one database:
+
+```sql
+GRANT SELECT, INSERT, CREATE, DROP, ALTER, TRIGGER, SHOW VIEW ON `your_database`.* TO `releem`@`127.0.0.1`;
+```
+
 
 Replace `releem` and `127.0.0.1` with the user and host from your agent configuration if they are different.
 
@@ -340,7 +365,7 @@ Use the returned paths in `releem.conf` if needed.
 
 - [Percona repository setup](https://docs.percona.com/percona-software-repositories/installing.html)
 - [pt-online-schema-change documentation](https://docs.percona.com/percona-toolkit/pt-online-schema-change.html)
-- [Percona XtraBackup installation](https://docs.percona.com/percona-xtrabackup/8.0/installation.html)
+- [Percona XtraBackup installation](https://docs.percona.com/percona-xtrabackup/8.4/installation.html)
 - [MariaDB repository setup](https://mariadb.com/docs/server/server-management/install-and-upgrade-mariadb/installing-mariadb/binary-packages/mariadb-package-repository-setup-and-usage)
 - [MariaDB Backup documentation](https://mariadb.com/docs/server/server-usage/backup-and-restore/mariadb-backup/mariadb-backup-overview)
 - [MySQL binary logging options](https://dev.mysql.com/doc/refman/8.4/en/replication-options-binary-log.html)
