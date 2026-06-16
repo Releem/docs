@@ -21,21 +21,21 @@ For setup requirements, see [Automatic Schema Changes](/query-optimization/autom
 
 These errors happen before the agent runs a backup or DDL statement.
 
-| Error name | Error text contains | What to do |
-| --- | --- | --- |
-| Automatic schema changes are disabled | `schema change execution is disabled by config` | Set `enable_exec_ddl=true` in `/opt/releem/releem.conf`, restart the Releem Agent, and retry the task from Releem. |
-| Task data is invalid | `taskdetails JSON`, `schema_name is required`, `ddl_statement is required`, `analysis_results.schema_name is required`, or `analysis_results.table_name is required` | Contact Releem support with the task id. The task payload sent to the agent is incomplete or malformed and cannot be fixed only on the database server. |
-| No schema change was sent | `Invalid task_details: empty schema change list` | Retry from Releem. If the recommendation should contain a change, contact Releem support with the task id. |
-| SQL statement is invalid | `Statement N skipped: syntax validation failed` | Do not retry the same task. Fix or recreate the schema recommendation so the DDL is valid for the target MySQL or MariaDB version. |
+| Error name | What to do |
+| --- | --- |
+| Automatic schema changes are disabled | Set `enable_exec_ddl=true` in `/opt/releem/releem.conf`, restart the Releem Agent, and retry the task from Releem. |
+| Task data is invalid | Contact Releem support with the agent logs. The task payload sent to the agent is incomplete or malformed and cannot be fixed only on the database server. |
+| No schema change was sent | Retry from Releem. If the recommendation should contain a change, contact Releem support with the agent logs. |
+| SQL statement is invalid | Do not retry the same task. Fix or recreate the schema recommendation so the DDL is valid for the target MySQL or MariaDB version. |
 
 ## Releem Did Not Find a Safe Automatic Method
 
 These errors happen during per-statement validation. The agent stops before running DDL.
 
-| Error name | Error text contains | What to do |
-| --- | --- | --- |
-| Releem cannot run this change online | `Statement N skipped: cannot be executed without blocking the table` | Apply the change manually during a maintenance window, or ask Releem support to review the recommendation. Releem did not allow native Online DDL or `pt-online-schema-change` for this statement. |
-| Point-in-time recovery is not ready | `Point-in-time recovery is not possible` | Enable binary logging and keep at least 2 days of binary log retention, then let the agent collect a fresh snapshot and retry. If this is a managed database, enable the provider's equivalent PITR/binlog retention setting. |
+| Error name | What to do |
+| --- | --- |
+| Releem cannot run this change online | Apply the change manually during a maintenance window, or ask Releem support to review the recommendation. Releem did not allow native Online DDL or `pt-online-schema-change` for this statement. |
+| Point-in-time recovery is not ready | Enable binary logging and keep at least 2 days of binary log retention, then let the agent collect a fresh snapshot and retry. If this is a managed database, enable the provider's equivalent PITR/binlog retention setting. |
 
 ## Backup or Execution Failed
 
@@ -71,11 +71,11 @@ Do not disable space checks for normal production use. Use `disable_space_checks
 | Logical backup with mysqldump failed | `backup failed: mysqldump failed` | Install `mysqldump`, set `mysqldump_path` if the binary is not on `PATH`, and confirm that the agent MySQL user can dump the target table. |
 | Physical backup with xtrabackup failed | `backup failed: xtrabackup backup failed` | Install a compatible Percona XtraBackup for MySQL, or use `mariabackup` for MariaDB by setting `xtrabackup_path="mariabackup"`. Check the tool output in the agent logs. |
 | Physical backup prepare step failed | `backup failed: xtrabackup prepare failed` | Check that the backup tool version matches the server type and version. Review the detailed tool output in the agent logs, fix the backup tool issue, and retry. |
-| Unsupported backup method was selected | `backup failed: unsupported backup method` | Contact Releem support with the task id and agent logs. This indicates an internal task or agent mismatch. |
+| Unsupported backup method was selected | `backup failed: unsupported backup method` | Contact Releem support with agent logs. This indicates an internal task or agent mismatch. |
 
 ### Native Online DDL
 
-These errors are usually shown as `Schema changes execution failed: schema change execution failed: ...`.
+These errors are usually shown as `schema change execution failed: ...`.
 
 | Error name | Error text contains | What to do |
 | --- | --- | --- |
@@ -89,7 +89,7 @@ These errors are usually shown as `Schema changes execution failed: schema chang
 
 ### pt-online-schema-change
 
-These errors are usually shown as `Schema changes execution failed: pt-online-schema-change execution failed: ...`.
+These errors are usually shown as `pt-online-schema-change execution failed: ...`.
 
 | Error name | Error text contains | What to do |
 | --- | --- | --- |
@@ -104,12 +104,12 @@ These errors are usually shown as `Schema changes execution failed: pt-online-sc
 
 | Error name | Error text contains | What to do |
 | --- | --- | --- |
-| Target table is missing from the task | `table name is required for schema change execution` | Contact Releem support with the task id. The task reached the agent without the analyzed table name. |
+| Target table is missing from the task | `table name is required for schema change execution` | Contact Releem support with the agent logs. The task reached the agent without the analyzed table name. |
 | Target table name cannot be parsed | `failed to parse table name` | Check that the recommendation still points to an existing `schema.table`. If the table was renamed or dropped after the recommendation was generated, recreate the recommendation. |
-| No execution method was available during execution | `schema change could not be executed` | Contact Releem support with the task id and agent logs. This should normally be caught earlier by validation. |
+| No execution method was available during execution | `schema change could not be executed` | Contact Releem support with the agent logs. This should normally be caught earlier by validation. |
 
 ## No Statement Was Applied
 
-| Error name | Error text contains | What to do |
-| --- | --- | --- |
-| Task finished without applying a change | `No schema changes were executed` | Review the full task output and agent logs. Retry from Releem if the recommendation is still valid, or contact support if the task should have applied a change. |
+| Error name | What to do |
+| --- | --- |
+| Task finished without applying a change | Review the full task output and agent logs. Retry from Releem if the recommendation is still valid, or contact support if the task should have applied a change. |
