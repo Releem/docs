@@ -21,6 +21,7 @@ $env:RELEEM_MYSQL_MEMORY_LIMIT=0; $env:RELEEM_API_KEY="your_api_key"; $env:RELEE
 - `RELEEM_MYSQL_PORT` - use this variable in case MySQL listens on a different port. Default value is `3306`
 - `RELEEM_MYSQL_LOGIN` - MySQL user name to collect MySQL metrics
 - `RELEEM_MYSQL_PASSWORD` - MySQL user password to collect MySQL metrics
+- `RELEEM_MYSQL_ROOT_LOGIN` - MySQL administrative user used during automatic `releem` user creation. Default value is `root`
 - `RELEEM_MYSQL_ROOT_PASSWORD` - MySQL `root` user password used during installation if the installer should create the `releem` user automatically
 - `RELEEM_MYSQL_MEMORY_LIMIT` - change this parameter in case there is other software installed on the server. Default value `0` means use all memory. [Learn more](/configuration-tuning/limit-memory-for-mysql)
 - `RELEEM_CRON_ENABLE` - set `1` to enable daily automatic updates or `0` to disable them

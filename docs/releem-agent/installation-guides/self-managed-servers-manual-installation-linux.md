@@ -25,6 +25,11 @@ If you install Releem Agent on CloudLinux, review the [CloudLinux-specific steps
    - `RELEEM_MYSQL_PASSWORD` - MySQL User password to collect MySQL metrics
    - `RELEEM_MYSQL_MEMORY_LIMIT` - Change parameter in case there are other software installed on the server. Default value is 0 means use all memory. [Learn more](/configuration-tuning/limit-memory-for-mysql)
    - `RELEEM_API_KEY` - API Key. Get it from Profile page in Releem Customer Portal.
+   - `RELEEM_MYSQL_TYPE` - set to `1` to explicitly select the MySQL installation path.
    - `RELEEM_MYSQL_HOST` - use this variable in case MySQL listens different interface or connection available only through socket.
    - `RELEEM_MYSQL_PORT` - use this variable in case MySQL listens different port
+   - `RELEEM_MYSQL_ROOT_LOGIN` - MySQL administrative user used during automatic `releem` user creation. Default value is `root`.
+   - `RELEEM_MYSQL_ROOT_PASSWORD` - password for the MySQL administrative user. If omitted, the installer first tries to connect without a password and then asks for the password in the console.
    - `RELEEM_QUERY_OPTIMIZATION` - set 'true' if Releem Agent should collect additional information for Automatic SQL Query Optimization.
+
+   Setting any `RELEEM_MYSQL_*` variable makes the installer use the MySQL installation path.
