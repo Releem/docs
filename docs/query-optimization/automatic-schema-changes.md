@@ -47,6 +47,24 @@ Some packages may not be available in the default operating system repositories.
 - For `pt-online-schema-change` and Percona XtraBackup, follow [Install percona-release](https://docs.percona.com/percona-software-repositories/installing.html).
 - For MariaDB Backup, follow [MariaDB Package Repository Setup and Usage](https://mariadb.com/docs/server/server-management/install-and-upgrade-mariadb/installing-mariadb/binary-packages/mariadb-package-repository-setup-and-usage).
 
+For MariaDB servers, install MariaDB Backup and point `xtrabackup_path` to `mariabackup`:
+
+Debian or Ubuntu:
+
+```bash
+sudo apt-get install mariadb-backup
+```
+
+RHEL, CentOS, Rocky Linux, or AlmaLinux:
+
+```bash
+sudo yum install MariaDB-backup
+```
+See [MariaDB Backup installation](https://mariadb.com/docs/server/server-usage/backup-and-restore/mariadb-backup/mariadb-backup-overview) for more details.
+
+
+For physical backups on MySQL, install Percona XtraBackup. The Percona repository is usually required first. Example:
+
 For Debian or Ubuntu:
 
 ```bash
@@ -59,12 +77,8 @@ For RHEL, CentOS, Rocky Linux, or AlmaLinux:
 ```bash
 sudo yum install percona-toolkit
 ```
-
 On newer releases such as Rocky Linux 8+ or AlmaLinux 8+, use `dnf` instead of `yum`.
 See [Percona Toolkit installation](https://docs.percona.com/percona-toolkit/installation.html) for more details.
-
-
-For physical backups on MySQL, install Percona XtraBackup. The Percona repository is usually required first. Example:
 
 Debian or Ubuntu:
 
@@ -80,20 +94,6 @@ sudo yum install percona-xtrabackup-84
 See [Percona XtraBackup installation](https://docs.percona.com/percona-xtrabackup/8.4/installation.html) for more details.
 
 
-For MariaDB servers, install MariaDB Backup and point `xtrabackup_path` to `mariabackup`:
-
-Debian or Ubuntu:
-
-```bash
-sudo apt-get install mariadb-backup
-```
-
-RHEL, CentOS, Rocky Linux, or AlmaLinux:
-
-```bash
-sudo yum install MariaDB-backup
-```
-See [MariaDB Backup installation](https://mariadb.com/docs/server/server-usage/backup-and-restore/mariadb-backup/mariadb-backup-overview) for more details.
 
 Package names can differ by operating system and repository. Use the official installation instructions linked at the end of this page for production servers.
 
@@ -256,7 +256,7 @@ sudo mkdir -p /tmp/backups
 
 Connect to MySQL or MariaDB as an administrator and grant the required permissions to the same database user that the Releem Agent already uses.
 
-For schema changes on all databases:
+- For schema/index changes on all databases:
 
 ```sql
 GRANT ALTER, INDEX, REFERENCES, TRIGGER ON *.* TO `releem`@`127.0.0.1`;
@@ -268,14 +268,14 @@ Or grant permissions only for one database:
 GRANT ALTER, INDEX, REFERENCES, TRIGGER ON `your_database`.* TO `releem`@`127.0.0.1`;
 ```
 
-For the test schema used by the online DDL preflight:
+- For the test schema used by the online DDL preflight:
 
 ```sql
 CREATE DATABASE IF NOT EXISTS `releem_online_ddl_test`;
 GRANT ALTER, CREATE, DROP, INDEX, REFERENCES, TRIGGER ON `releem_online_ddl_test`.* TO `releem`@`127.0.0.1`;
 ```
 
-For logical backups, grant the `RELOAD` privilege:
+- For logical backups, grant the `RELOAD` privilege:
 
 ```sql
 GRANT RELOAD ON *.* TO `releem`@`127.0.0.1`;
@@ -284,12 +284,13 @@ GRANT RELOAD ON *.* TO `releem`@`127.0.0.1`;
 #### Grant permissions for `pt-online-schema-change`
 
 If Releem may use `pt-online-schema-change`, grant the extra permissions needed by that tool:
-
+1) 
 ```sql
 GRANT SUPER, PROCESS, REPLICATION CLIENT ON *.* TO `releem`@`127.0.0.1`;
 ```
 On MySQL 8 and newer, use the equivalent dynamic privileges required by your security policy when `SUPER` is not allowed.
 
+2) 
 ```sql
 GRANT SELECT, INSERT, CREATE, DROP, ALTER, TRIGGER, SHOW VIEW ON *.* TO `releem`@`127.0.0.1`;
 ```
@@ -316,7 +317,7 @@ If your server uses the legacy service command:
 sudo service releem-agent restart
 ```
 
-### 7. Collect the Next Snapshot the Releem Agent
+### 7. Collect the Next Snapshot from the Releem Agent
 
 After changing MySQL and Releem Agent settings, let the Releem Agent collect the next snapshot or run:
 
@@ -326,7 +327,7 @@ sudo /opt/releem/releem-agent -f
 
 ### 8. Approve the Schema Change in Releem
 
-Open the Releem Dashboard, review the query recommendation, and approve the change only when you are ready for the agent to apply it.
+Open the Releem Dashboard, review the schema/index recommendation, and approve the change only when you are ready for the agent to apply it.
 
 After the task starts, Releem shows the result in the dashboard. If the task fails, open the failed task and use [Schema Change Troubleshooting](/query-optimization/schema-change-troubleshooting).
 
