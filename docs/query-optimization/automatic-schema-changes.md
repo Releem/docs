@@ -60,25 +60,11 @@ RHEL, CentOS, Rocky Linux, or AlmaLinux:
 ```bash
 sudo yum install MariaDB-backup
 ```
+
 See [MariaDB Backup installation](https://mariadb.com/docs/server/server-usage/backup-and-restore/mariadb-backup/mariadb-backup-overview) for more details.
 
 
 For physical backups on MySQL, install Percona XtraBackup. The Percona repository is usually required first. Example:
-
-For Debian or Ubuntu:
-
-```bash
-sudo apt-get update
-sudo apt-get install percona-toolkit
-```
-
-For RHEL, CentOS, Rocky Linux, or AlmaLinux:
-
-```bash
-sudo yum install percona-toolkit
-```
-On newer releases such as Rocky Linux 8+ or AlmaLinux 8+, use `dnf` instead of `yum`.
-See [Percona Toolkit installation](https://docs.percona.com/percona-toolkit/installation.html) for more details.
 
 Debian or Ubuntu:
 
@@ -91,9 +77,26 @@ RHEL, CentOS, Rocky Linux, or AlmaLinux:
 ```bash
 sudo yum install percona-xtrabackup-84
 ```
+
 See [Percona XtraBackup installation](https://docs.percona.com/percona-xtrabackup/8.4/installation.html) for more details.
 
+Optionally, install `pt-online-schema-change` from Percona Toolkit. Releem uses it as a fallback when native Online DDL is not possible for the approved change.
 
+Debian or Ubuntu:
+
+```bash
+sudo apt-get update
+sudo apt-get install percona-toolkit
+```
+
+RHEL, CentOS, Rocky Linux, or AlmaLinux:
+
+```bash
+sudo yum install percona-toolkit
+```
+
+On newer releases such as Rocky Linux 8+ or AlmaLinux 8+, use `dnf` instead of `yum`.
+See [Percona Toolkit installation](https://docs.percona.com/percona-toolkit/installation.html) for more details.
 
 Package names can differ by operating system and repository. Use the official installation instructions linked at the end of this page for production servers.
 
