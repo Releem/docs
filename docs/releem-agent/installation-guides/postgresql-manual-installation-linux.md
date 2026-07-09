@@ -37,13 +37,13 @@ The Releem Agent installer can create the PostgreSQL monitoring user automatical
   - `RELEEM_API_KEY` - API Key. Get it from Profile page in Releem Customer Portal.
   - `RELEEM_PG_TYPE` - set to `1` to explicitly select the PostgreSQL installation path.
   - `RELEEM_PG_HOST` - use this variable in case PostgreSQL listens different interface or connection available only through socket.
-  - `RELEEM_PG_PORT` - use this variable in case PostgreSQL listens different port
+  - `RELEEM_PG_PORT` - use this variable in case PostgreSQL listens different port.
   - `RELEEM_PG_SSL_MODE` - SSL mode for PostgreSQL connections.
   - `RELEEM_PG_ROOT_LOGIN` - PostgreSQL superuser used during automatic `releem` user creation. Default value is `postgres`.
   - `RELEEM_PG_ROOT_PASSWORD` - password for the PostgreSQL superuser. If omitted, the installer first tries peer/passwordless access and then prompts for the password in the console.
   - `RELEEM_QUERY_OPTIMIZATION` - set 'true' if Releem Agent should collect additional information for Automatic SQL Query Optimization.
 
-  Setting any `RELEEM_PG_*` variable makes the installer use the PostgreSQL installation path.
+  Setting `RELEEM_PG_TYPE`, `RELEEM_PG_HOST`, `RELEEM_PG_LOGIN`, `RELEEM_PG_PASSWORD`, `RELEEM_PG_ROOT_LOGIN`, `RELEEM_PG_ROOT_PASSWORD` variables makes the installer use the PostgreSQL installation path.
 
   For a full list of configuration settings, please refer to the [Releem Agent Configuration](/releem-agent/configuration).
 

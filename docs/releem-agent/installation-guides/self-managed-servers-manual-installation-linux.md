@@ -32,4 +32,4 @@ If you install Releem Agent on CloudLinux, review the [CloudLinux-specific steps
    - `RELEEM_MYSQL_ROOT_PASSWORD` - password for the MySQL administrative user. If omitted, the installer first tries to connect without a password and then asks for the password in the console.
    - `RELEEM_QUERY_OPTIMIZATION` - set 'true' if Releem Agent should collect additional information for Automatic SQL Query Optimization.
 
-   Setting any `RELEEM_MYSQL_*` variable makes the installer use the MySQL installation path.
+   Setting `RELEEM_MYSQL_TYPE`, `RELEEM_MYSQL_HOST`, `RELEEM_MYSQL_LOGIN`, `RELEEM_MYSQL_PASSWORD`, `RELEEM_MYSQL_ROOT_LOGIN`, `RELEEM_MYSQL_ROOT_PASSWORD` variables makes the installer use the MySQL installation path.
