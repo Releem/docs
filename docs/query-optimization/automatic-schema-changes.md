@@ -259,6 +259,15 @@ sudo mkdir -p /tmp/backups
 
 Connect to MySQL or MariaDB as an administrator and grant the required permissions to the same database user that the Releem Agent already uses.
 
+First find the existing Releem MySQL account:
+
+```sql
+SELECT User, Host FROM mysql.user WHERE User = 'releem';
+```
+
+Typical installs use `releem`@`127.0.0.1`. If your result shows a different host or user, such as `localhost` or `%`, use that exact `User`@`Host` pair in the GRANT statements below.
+Replace `releem` and `127.0.0.1` with the user and host from your agent configuration if they are different.
+
 - For schema/index changes on all databases:
 
 ```sql
@@ -287,24 +296,27 @@ GRANT RELOAD ON *.* TO `releem`@`127.0.0.1`;
 #### Grant permissions for `pt-online-schema-change`
 
 If Releem may use `pt-online-schema-change`, grant the extra permissions needed by that tool:
-1) 
+
+1)
+
 ```sql
-GRANT SUPER, PROCESS, REPLICATION CLIENT ON *.* TO `releem`@`127.0.0.1`;
+GRANT SUPER, PROCESS, REPLICATION CLIENT, REPLICATION SLAVE ON *.* TO `releem`@`127.0.0.1`;
 ```
+
 On MySQL 8 and newer, use the equivalent dynamic privileges required by your security policy when `SUPER` is not allowed.
 
-2) 
+2)
+
 ```sql
-GRANT SELECT, INSERT, CREATE, DROP, ALTER, TRIGGER, SHOW VIEW ON *.* TO `releem`@`127.0.0.1`;
+GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, ALTER, TRIGGER, SHOW VIEW ON *.* TO `releem`@`127.0.0.1`;
 ```
+
 Or grant permissions only for one database:
 
 ```sql
-GRANT SELECT, INSERT, CREATE, DROP, ALTER, TRIGGER, SHOW VIEW ON `your_database`.* TO `releem`@`127.0.0.1`;
+GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, ALTER, TRIGGER, SHOW VIEW ON `your_database`.* TO `releem`@`127.0.0.1`;
 ```
 
-
-Replace `releem` and `127.0.0.1` with the user and host from your agent configuration if they are different.
 
 ### 6. Restart the Releem Agent
 
