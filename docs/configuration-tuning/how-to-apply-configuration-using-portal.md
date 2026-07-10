@@ -154,3 +154,40 @@ Enable Full Api Access to Cloud SQL and Stackdriver Monitoring API for the Compu
 Agent stopped unexpectedly during applying configuration and unable to send information about task to Releem Platform.
 
 **User Action**: send us please the [Releem Agent logs](https://docs.releem.com/releem-agent/how-to-check-logs) to hello@releem.com
+
+
+### **FOR AZURE DATABASE FOR MYSQL INSTANCES**
+
+#### 1. Azure identity lacks permissions to read the server
+This issue occurs when the identity used by Releem Agent does not have permission to call `Microsoft.DBforMySQL/flexibleServers/read`.
+
+Grant `Reader` on the Azure MySQL server or its resource group:
+
+```bash
+az role assignment create \
+  --assignee-object-id "[OBJECT_ID]" \
+  --assignee-principal-type ServicePrincipal \
+  --role Reader \
+  --scope "/subscriptions/[SUBSCRIPTION_ID]/resourceGroups/[RESOURCE_GROUP]/providers/Microsoft.DBforMySQL/flexibleServers/[MYSQL_SERVER]"
+```
+
+Restart Releem Agent after granting access.
+
+#### 2. Azure identity lacks permissions to apply configuration
+This issue occurs when the identity can read the server but cannot update Flexible Server configurations or restart the server.
+
+Grant `Contributor` on the Azure MySQL server or use a custom role that allows configuration update and restart actions:
+
+```bash
+az role assignment create \
+  --assignee-object-id "[OBJECT_ID]" \
+  --assignee-principal-type ServicePrincipal \
+  --role Contributor \
+  --scope "/subscriptions/[SUBSCRIPTION_ID]/resourceGroups/[RESOURCE_GROUP]/providers/Microsoft.DBforMySQL/flexibleServers/[MYSQL_SERVER]"
+```
+
+#### 3. The latest recommended configuration is partially applied
+Some Azure MySQL parameters require a restart. Click **Apply** and then **Apply and Restart** in the Releem Portal to finish applying the configuration.
+
+#### 4. Azure MySQL server is not Ready
+Check the Azure MySQL Flexible Server status in the Azure Portal. Wait until the server state is `Ready`, then apply the configuration again.

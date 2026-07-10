@@ -63,10 +63,10 @@ Use this method if you prefer to install and configure Releem Agent step by step
 
 5. Please add the following variables to the MySQL configuration file and restart MySQL:
    ```ini
-   performance_schema=1
-   slow_query_log=1
-   performance-schema-consumer-events-statements-history=ON
+   performance_schema=ON
    performance-schema-consumer-events-statements-current=ON
+   performance-schema-consumer-events-statements-history=ON
+   slow_query_log=ON
    ```
 
 6. Run the following commands manually in Windows PowerShell as Administrator:
