@@ -295,17 +295,7 @@ GRANT RELOAD ON *.* TO `releem`@`127.0.0.1`;
 
 #### Grant permissions for `pt-online-schema-change`
 
-If Releem may use `pt-online-schema-change`, grant the extra permissions needed by that tool:
-
-1)
-
-```sql
-GRANT SUPER, PROCESS, REPLICATION CLIENT, REPLICATION SLAVE ON *.* TO `releem`@`127.0.0.1`;
-```
-
-On MySQL 8 and newer, use the equivalent dynamic privileges required by your security policy when `SUPER` is not allowed.
-
-2)
+If Releem may use `pt-online-schema-change`, first grant the permissions the tool needs to create and populate its temporary table, create triggers, and swap the tables. Grant them only on databases where Releem may apply schema changes:
 
 ```sql
 GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, ALTER, TRIGGER, SHOW VIEW ON *.* TO `releem`@`127.0.0.1`;
@@ -316,6 +306,53 @@ Or grant permissions only for one database:
 ```sql
 GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, ALTER, TRIGGER, SHOW VIEW ON `your_database`.* TO `releem`@`127.0.0.1`;
 ```
+
+
+The required global replication privileges depend on the database server and version. Check the server before choosing a GRANT statement:
+
+```sql
+SELECT VERSION();
+```
+
+Percona Toolkit's generic requirements also list `SUPER`. Releem's automated installer may still grant it by default for historical compatibility, but Releem's normal `pt-online-schema-change` path does not need `SUPER`: the tool is not used to change global variables, disable binary logging, or administer replication. Grant `SUPER` only if the installed Toolkit version fails with an error that explicitly requires it.
+
+By default, `pt-online-schema-change` discovers and monitors replicas. The same database account must exist on every replica that the tool connects to; use the account host that matches the Agent's connection to that replica.
+
+
+##### MySQL/Percona Server 5.7 and newer:
+
+```sql
+GRANT PROCESS, REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO `releem`@`127.0.0.1`;
+```
+
+##### MariaDB 10.5.1 and earlier
+
+```sql
+GRANT PROCESS, REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO `releem`@`127.0.0.1`;
+```
+
+##### MariaDB 10.5.2 through 10.5.7
+
+Starting with MariaDB 10.5.2, `SHOW SLAVE HOSTS` and its `SHOW REPLICA HOSTS` alias require `REPLICATION MASTER ADMIN`.
+`pt-online-schema-change` uses this statement to discover replicas, including when no replicas are currently registered.
+On these versions, replica lag checks via `SHOW REPLICA STATUS` also need `REPLICATION SLAVE ADMIN` (or `SUPER`).
+
+```sql
+GRANT PROCESS, REPLICATION SLAVE, REPLICATION CLIENT, REPLICATION MASTER ADMIN, REPLICATION SLAVE ADMIN ON *.* TO `releem`@`127.0.0.1`;
+```
+
+##### MariaDB 10.5.8 and newer
+
+From MariaDB 10.5.8, use `REPLICA MONITOR` instead of `REPLICATION SLAVE ADMIN` for replica status checks.
+
+```sql
+GRANT PROCESS, REPLICATION SLAVE, REPLICATION CLIENT, REPLICATION MASTER ADMIN, REPLICA MONITOR ON *.* TO `releem`@`127.0.0.1`;
+```
+
+See the [Percona Toolkit privilege requirements](https://docs.percona.com/percona-toolkit/pt-online-schema-change.html),
+[MySQL privilege reference](https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html),
+[MariaDB `SHOW REPLICA HOSTS` privileges](https://mariadb.com/docs/server/reference/sql-statements/administrative-sql-statements/show/show-replica-hosts),
+and [MariaDB replication privilege history](https://mariadb.com/docs/server/reference/sql-statements/account-management-sql-statements/grant).
 
 
 ### 6. Restart the Releem Agent

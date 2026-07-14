@@ -98,7 +98,7 @@ These errors are usually shown as `pt-online-schema-change execution failed: ...
 | pt-online-schema-change dry run failed | `pt-online-schema-change dry-run failed` | Install or update `pt-online-schema-change`, set `ptosc_path` if needed, and grant the permissions required by `pt-online-schema-change`. Run a manual dry run with the same connection settings if you need the full tool output. |
 | pt-online-schema-change execution failed | `pt-online-schema-change failed` | The dry run passed, but the actual execution failed. Check the tool output in agent logs. Common causes include missing privileges, replica lag, triggers, foreign key restrictions, disk limits, or table changes after the recommendation was generated. |
 
-`pt-online-schema-change` may require privileges such as `SELECT`, `INSERT`, `DROP`, `RELOAD`, `SUPER`, `SHOW VIEW`, and `TRIGGER`, depending on the server version and topology.
+`pt-online-schema-change` usually needs privileges such as `SELECT`, `INSERT`, `DROP`, `RELOAD`, `SHOW VIEW`, and `TRIGGER`, plus the version-specific replication privileges documented in [Automatic Schema Changes](/query-optimization/automatic-schema-changes#grant-permissions-for-pt-online-schema-change). Grant `SUPER` only if the tool fails with an error that explicitly requires it.
 
 ### Other Execution Errors
 
