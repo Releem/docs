@@ -293,7 +293,7 @@ GRANT ALTER, CREATE, DROP, INDEX, REFERENCES, TRIGGER ON `releem_online_ddl_test
 GRANT RELOAD ON *.* TO `releem`@`127.0.0.1`;
 ```
 
-#### Grant permissions for `pt-online-schema-change`
+### Grant permissions for `pt-online-schema-change`
 
 If Releem may use `pt-online-schema-change`, first grant the permissions the tool needs to create and populate its temporary table, create triggers, and swap the tables. Grant them only on databases where Releem may apply schema changes:
 
