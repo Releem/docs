@@ -42,7 +42,7 @@ You have the following options to install Releem Agent:
    To move forward just do the following steps:
    1. Create read-only user "releem" in MySQL using the [instruction](/releem-agent/mysql-permissions). To enable Automatic SQL Query Optimization please add [Additional Permissions](/releem-agent/mysql-permissions#additional-database-permissions-required).
 
-   2. Open the [CloudFormation Quick Create page](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateUrl=https://releem.s3.amazonaws.com/test/releem-agent-cloudformation.yml&stackName=releem-agent) in your browser, check that the correct region is selected, and fill in the following fields:
+   2. Open the [CloudFormation Quick Create page](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateUrl=https://releem.s3.amazonaws.com/v2/releem-agent-cloudformation.yml&stackName=releem-agent) in your browser, check that the correct region is selected, and fill in the following fields:
       - Image: Releem Agent Docker image in the `releem/releem-agent:[version]` format. Use the latest version available on [Docker Hub](https://hub.docker.com/r/releem/releem-agent/tags).
       - APIKey: Releem API Key from the [Profile page](https://app.releem.com/profile?menu=profile) in the Releem Customer Portal.
       - DBID: RDS DB Instance ID. If you're using a cluster, please set the instance name you would like to tune.
