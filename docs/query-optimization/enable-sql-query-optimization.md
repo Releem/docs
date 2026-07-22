@@ -101,7 +101,7 @@ RELEEM_QUERY_OPTIMIZATION=true
   If the agent is managed by CloudFormation, update the `releem-agent` stack and set `QueryOptimization` to `true`.
      1. Select CloudFormation Stack - releem-agent, click the **Update** button.
      2. Select "Replace existing template".
-     3. Paste in "Amazon S3 URL" the URL `https://releem.s3.amazonaws.com/test/releem-agent-cloudformation.yml` and click **Next**.
+     3. Paste in "Amazon S3 URL" the URL `https://releem.s3.amazonaws.com/v2/releem-agent-cloudformation.yml` and click **Next**.
      4. Change the option "QueryOptimization" to true and click **Next**.
      5. Click **Next** and **Submit**.
 

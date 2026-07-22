@@ -101,6 +101,8 @@ docker run -d --name releem-agent \
   releem/releem-agent:[version]
 ```
 
+Use the latest Releem Agent version available on [Docker Hub](https://hub.docker.com/r/releem/releem-agent/tags).
+
 When using a service principal in Docker, pass Azure credential environment variables supported by `DefaultAzureCredential`, for example `AZURE_TENANT_ID`, `AZURE_CLIENT_ID`, and `AZURE_CLIENT_SECRET`.
 
   </TabItem>

@@ -114,7 +114,7 @@ Check the status of the DB instance parameter group in the aws console https://c
 
 #### 3. DB instance parameter group is not specified in the agent settings, or is not found in the database configuration
 In the aws console, create Parameter groups for your version of the db instance named “releem-agent”. Perform DB parameter group change for your db instance, reboot it if necessary.
-Then update CloudFormation stack “releem-agent” with the new template https://releem.s3.amazonaws.com/test/releem-agent-cloudformation.yml and in the DBParametrGroup field specify the name of the created Parameter group.
+Then update CloudFormation stack “releem-agent” with the new template https://releem.s3.amazonaws.com/v2/releem-agent-cloudformation.yml and in the DBParametrGroup field specify the name of the created Parameter group.
 
 If CloudFormation is not used to start the agent, then in the agent settings add
 ``` 
