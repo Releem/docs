@@ -57,8 +57,16 @@ To enable the SQL Query Optimization feature, please select your installation ty
 
   1. Grant additional permissions to the `releem` user as a PostgreSQL superuser:
      ```sql
+     -- PostgreSQL 14+
      GRANT pg_read_all_data TO releem;
+
+     -- PostgreSQL 12/13
+     GRANT CONNECT ON DATABASE "<database_name>" TO releem;
+     GRANT USAGE ON SCHEMA "<schema_name>" TO releem;
+     GRANT SELECT ON ALL TABLES IN SCHEMA "<schema_name>" TO releem;
+     GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA "<schema_name>" TO releem;
      ```
+     Replace `<database_name>` and `<schema_name>` with all monitored databases/schemas. For most self-managed deployments with a default database set, start with `postgres` and `public`.
   2. Add `query_optimization=true` setting to the `/opt/releem/releem.conf`.
   3. Restart Releem Agent using the following command:
      ```bash
@@ -205,10 +213,19 @@ performance-schema-consumer-events-statements-current = ON
 
 For MySQL/MariaDB/Percona, the SQL Query Optimization feature requires [Additional Permissions](/releem-agent/mysql-permissions#additional-database-permissions-required) for the Releem Agent user.
 
-For PostgreSQL, grant the `pg_read_all_data` role to the Releem Agent user:
+For PostgreSQL, grant optimization read access to the Releem Agent user:
 
 ```sql
 GRANT pg_read_all_data TO releem;
+```
+
+For PostgreSQL 12/13, use schema-level permissions instead:
+
+```sql
+GRANT CONNECT ON DATABASE "<database_name>" TO releem;
+GRANT USAGE ON SCHEMA "<schema_name>" TO releem;
+GRANT SELECT ON ALL TABLES IN SCHEMA "<schema_name>" TO releem;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA "<schema_name>" TO releem;
 ```
 
 ## Data Collection and Analysis

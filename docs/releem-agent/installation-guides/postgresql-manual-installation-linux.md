@@ -38,7 +38,7 @@ The Releem Agent installer can create the PostgreSQL monitoring user automatical
   - `RELEEM_PG_TYPE` - set to `1` to explicitly select the PostgreSQL installation path.
   - `RELEEM_PG_HOST` - use this variable in case PostgreSQL listens different interface or connection available only through socket.
   - `RELEEM_PG_PORT` - use this variable in case PostgreSQL listens different port.
-  - `RELEEM_PG_SSL_MODE` - SSL mode for PostgreSQL connections.
+  - `RELEEM_PG_SSL_MODE` - PostgreSQL SSL mode for collector: `true` for SSL (`sslmode=require`), `false` (or omitted) for `sslmode=disable`.
   - `RELEEM_PG_ROOT_LOGIN` - PostgreSQL superuser used during automatic `releem` user creation. Default value is `postgres`.
   - `RELEEM_PG_ROOT_PASSWORD` - password for the PostgreSQL superuser. If omitted, the installer first tries peer/passwordless access and then prompts for the password in the console.
   - `RELEEM_QUERY_OPTIMIZATION` - set 'true' if Releem Agent should collect additional information for Automatic SQL Query Optimization.
@@ -98,7 +98,7 @@ Create the PostgreSQL monitoring user before running the Releem Agent installati
    - `RELEEM_API_KEY` - API Key. Get it from Profile page in Releem Customer Portal.
    - `RELEEM_PG_HOST` - use this variable in case PostgreSQL listens different interface or connection available only through socket.
    - `RELEEM_PG_PORT` - use this variable in case PostgreSQL listens different port
-   - `RELEEM_PG_SSL_MODE` - SSL mode for PostgreSQL connections.
+   - `RELEEM_PG_SSL_MODE` - PostgreSQL SSL mode for collector: `true` for SSL (`sslmode=require`), `false` (or omitted) for `sslmode=disable`.
    - `RELEEM_QUERY_OPTIMIZATION` - set 'true' if Releem Agent should collect additional information for Automatic SQL Query Optimization.
 
    For a full list of configuration settings, please refer to the [Releem Agent Configuration](/releem-agent/configuration).
@@ -112,4 +112,4 @@ Create the PostgreSQL monitoring user before running the Releem Agent installati
 
 - PostgreSQL support is enabled when `pg_user` and `pg_password` are set in the agent configuration.
 - `pg_stat_statements` is recommended for query performance visibility.
-- Use `pg_ssl_mode` that matches your PostgreSQL server configuration.
+- `pg_ssl_mode` in `releem.conf` is a boolean: `true` means `sslmode=require`, omitted/false means `sslmode=disable`.
