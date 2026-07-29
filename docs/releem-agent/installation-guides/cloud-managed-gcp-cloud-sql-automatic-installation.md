@@ -33,7 +33,7 @@ You have the following options to install Releem Agent:
 
    3. Run installation command as a root user on the server:
       ```ini
-      RELEEM_INSTANCE_TYPE="gcp/cloudsql" RELEEM_GCP_PROJECT_ID="[RELEEM_GCP_PROJECT_ID]" RELEEM_GCP_REGION="[RELEEM_GCP_REGION]" RELEEM_GCP_CLOUDSQL_INSTANCE="[RELEEM_GCP_CLOUDSQL_INSTANCE]" RELEEM_MYSQL_PASSWORD='[Password]' RELEEM_MYSQL_LOGIN='releem' RELEEM_MYSQL_MEMORY_LIMIT=0 RELEEM_API_KEY=[Key] RELEEM_CRON_ENABLE=1 RELEEM_QUERY_OPTIMIZATION=true bash -c "$(curl -L https://releem.s3.amazonaws.com/v2/install.sh)"
+      RELEEM_INSTANCE_TYPE="gcp/cloudsql" RELEEM_GCP_PROJECT_ID="[RELEEM_GCP_PROJECT_ID]" RELEEM_GCP_REGION="[RELEEM_GCP_REGION]" RELEEM_GCP_CLOUDSQL_INSTANCE="[RELEEM_GCP_CLOUDSQL_INSTANCE]" RELEEM_MYSQL_PASSWORD='[Password]' RELEEM_MYSQL_LOGIN='releem' RELEEM_DB_MEMORY_LIMIT=0 RELEEM_API_KEY=[Key] RELEEM_CRON_ENABLE=1 RELEEM_QUERY_OPTIMIZATION=true bash -c "$(curl -L https://releem.s3.amazonaws.com/v2/install.sh)"
       ```
       
       **Parameters:**
@@ -42,7 +42,7 @@ You have the following options to install Releem Agent:
       - `RELEEM_GCP_CLOUDSQL_INSTANCE` - Cloud SQL instance id or connection name
       - `RELEEM_MYSQL_LOGIN` - MySQL user name to collect MySQL metrics
       - `RELEEM_MYSQL_PASSWORD` - MySQL user password to collect MySQL metrics
-      - `RELEEM_MYSQL_MEMORY_LIMIT` - Change parameter in case there are other software installed on the server. Default value is 0 means use all memory.
+      - `RELEEM_DB_MEMORY_LIMIT` - Change parameter in case there are other software installed on the server. Default value is 0 means use all memory.
       - `RELEEM_API_KEY` - API Key. Get it from Profile page in Releem Customer Portal.
       - `RELEEM_QUERY_OPTIMIZATION` - set 'true' if Releem Agent should collect additional information for Automatic SQL Query Optimization.
 

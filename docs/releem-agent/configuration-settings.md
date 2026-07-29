@@ -75,11 +75,8 @@ pg_host="127.0.0.1"
 # PostgreSQL port for collecting metrics
 pg_port="5432"
 
-# PostgreSQL database name for collecting metrics
-pg_database="postgres"
-
-# PostgreSQL SSL mode: disable, require, verify-ca, verify-full
-pg_ssl_mode="disable"
+# PostgreSQL SSL mode: false = disable, true = require
+pg_ssl_mode=false
 
 # Command to restart MySQL service
 mysql_restart_service="/bin/systemctl restart mysql"

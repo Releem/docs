@@ -20,27 +20,59 @@ To enable the SQL Query Optimization feature, please select your installation ty
 
   Note: If your server is already installed, you can use automatic installation, as it won't add a new server if it has the same hostname.
 
-Run the helper mode from the installer:
+  Run the helper mode from the installer:
 
-```bash
-RELEEM_MYSQL_ROOT_PASSWORD='[MySQL root password]' \
-bash -c "$(curl -L https://releem.s3.amazonaws.com/v2/install.sh)" enable_query_optimization
-```
+  For MySQL/MariaDB/Percona Servers:
+  ```bash
+  RELEEM_MYSQL_TYPE=1 bash -c "$(curl -L https://releem.s3.amazonaws.com/v2/install.sh)" enable_query_optimization
+  ```
 
-This command updates `/opt/releem/releem.conf`, enables query optimization, and prepares the required MySQL settings.
+  For PostgreSQL Servers:
+  ```bash
+  RELEEM_PG_TYPE=1 bash -c "$(curl -L https://releem.s3.amazonaws.com/v2/install.sh)" enable_query_optimization
+  ```
+
+  Use `RELEEM_PG_TYPE=1` to explicitly select the PostgreSQL path, or `RELEEM_MYSQL_TYPE=1` to explicitly select the MySQL path. Set `RELEEM_PG_ROOT_LOGIN` and `RELEEM_PG_ROOT_PASSWORD` when the PostgreSQL superuser is not available through peer/passwordless authentication. Set `RELEEM_MYSQL_ROOT_LOGIN` and `RELEEM_MYSQL_ROOT_PASSWORD` when the MySQL root user requires a password. If the password is omitted, the installer first tries passwordless access and then prompts for it in the console.
+
+  This command updates `/opt/releem/releem.conf`, enables query optimization, and prepares the required database permissions.
 
   ### Manual Installation
 
+  If you prefer to update the agent manually:
 
-If you prefer to update the agent manually:
+  #### MySQL/MariaDB/Percona Servers
 
-  1. Grant additional permissions to the releem user. The SQL Query Optimization feature requires [Additional Permissions](/releem-agent/mysql-permissions) for the Releem Agent user.
+  1. Grant additional permissions to the `releem` user. The SQL Query Optimization feature requires [Additional Permissions](/releem-agent/mysql-permissions#additional-database-permissions-required) for the Releem Agent user.
   2. Add `query_optimization=true` setting to the `/opt/releem/releem.conf`.
   3. Restart Releem Agent using the following command:
      ```bash
      systemctl restart releem-agent
      ```
   4. Run the following command:
+     ```bash
+     /opt/releem/mysqlconfigurer.sh -p
+     ```
+
+  #### PostgreSQL Servers
+
+  1. Grant additional permissions to the `releem` user as a PostgreSQL superuser:
+     ```sql
+     -- PostgreSQL 14+
+     GRANT pg_read_all_data TO releem;
+
+     -- PostgreSQL 12/13
+     GRANT CONNECT ON DATABASE "<database_name>" TO releem;
+     GRANT USAGE ON SCHEMA "<schema_name>" TO releem;
+     GRANT SELECT ON ALL TABLES IN SCHEMA "<schema_name>" TO releem;
+     GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA "<schema_name>" TO releem;
+     ```
+     Replace `<database_name>` and `<schema_name>` with all monitored databases/schemas. For most self-managed deployments with a default database set, start with `postgres` and `public`.
+  2. Add `query_optimization=true` setting to the `/opt/releem/releem.conf`.
+  3. Restart Releem Agent using the following command:
+     ```bash
+     systemctl restart releem-agent
+     ```
+  4. Run the following command to enable `pg_stat_statements` settings:
      ```bash
      /opt/releem/mysqlconfigurer.sh -p
      ```
@@ -179,7 +211,22 @@ performance-schema-consumer-events-statements-current = ON
 
 ## Additional Database Permissions Required
 
-The SQL Query Optimization feature requires [Additional Permissions](/releem-agent/mysql-permissions) for the Releem Agent user.
+For MySQL/MariaDB/Percona, the SQL Query Optimization feature requires [Additional Permissions](/releem-agent/mysql-permissions#additional-database-permissions-required) for the Releem Agent user.
+
+For PostgreSQL, grant optimization read access to the Releem Agent user:
+
+```sql
+GRANT pg_read_all_data TO releem;
+```
+
+For PostgreSQL 12/13, use schema-level permissions instead:
+
+```sql
+GRANT CONNECT ON DATABASE "<database_name>" TO releem;
+GRANT USAGE ON SCHEMA "<schema_name>" TO releem;
+GRANT SELECT ON ALL TABLES IN SCHEMA "<schema_name>" TO releem;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA "<schema_name>" TO releem;
+```
 
 ## Data Collection and Analysis
 

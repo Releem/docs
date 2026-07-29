@@ -16,15 +16,20 @@ If you install Releem Agent on CloudLinux, review the [CloudLinux-specific steps
    To enable Automatic SQL Query Optimization please add [Additional Permissions](/releem-agent/mysql-permissions#additional-database-permissions-required).
 2. Run Installation command as a root user on the server:
    ```ini
-   RELEEM_MYSQL_PASSWORD='[Password]' RELEEM_MYSQL_LOGIN='releem' RELEEM_MYSQL_MEMORY_LIMIT=0 RELEEM_API_KEY=[Key] RELEEM_CRON_ENABLE=1 RELEEM_QUERY_OPTIMIZATION=true bash -c "$(curl -L https://releem.s3.amazonaws.com/v2/install.sh)"
+   RELEEM_MYSQL_PASSWORD='[Password]' RELEEM_MYSQL_LOGIN='releem' RELEEM_DB_MEMORY_LIMIT=0 RELEEM_API_KEY=[Key] RELEEM_CRON_ENABLE=1 RELEEM_QUERY_OPTIMIZATION=true bash -c "$(curl -L https://releem.s3.amazonaws.com/v2/install.sh)"
    ```
 
    **Parameters:**
    - `RELEEM_HOSTNAME` - Server hostname, which should display in the Releem Dashboard.
    - `RELEEM_MYSQL_LOGIN` - MySQL User name to collect MySQL metrics
    - `RELEEM_MYSQL_PASSWORD` - MySQL User password to collect MySQL metrics
-   - `RELEEM_MYSQL_MEMORY_LIMIT` - Change parameter in case there are other software installed on the server. Default value is 0 means use all memory. [Learn more](/configuration-tuning/limit-memory-for-mysql)
+   - `RELEEM_DB_MEMORY_LIMIT` - Change parameter in case there are other software installed on the server. Default value is 0 means use all memory. [Learn more](/configuration-tuning/limit-memory-for-mysql)
    - `RELEEM_API_KEY` - API Key. Get it from Profile page in Releem Customer Portal.
+   - `RELEEM_MYSQL_TYPE` - set to `1` to explicitly select the MySQL installation path.
    - `RELEEM_MYSQL_HOST` - use this variable in case MySQL listens different interface or connection available only through socket.
    - `RELEEM_MYSQL_PORT` - use this variable in case MySQL listens different port
+   - `RELEEM_MYSQL_ROOT_LOGIN` - MySQL administrative user used during automatic `releem` user creation. Default value is `root`.
+   - `RELEEM_MYSQL_ROOT_PASSWORD` - password for the MySQL administrative user. If omitted, the installer first tries to connect without a password and then asks for the password in the console.
    - `RELEEM_QUERY_OPTIMIZATION` - set 'true' if Releem Agent should collect additional information for Automatic SQL Query Optimization.
+
+   Setting `RELEEM_MYSQL_TYPE`, `RELEEM_MYSQL_HOST`, `RELEEM_MYSQL_LOGIN`, `RELEEM_MYSQL_PASSWORD`, `RELEEM_MYSQL_ROOT_LOGIN`, `RELEEM_MYSQL_ROOT_PASSWORD` variables makes the installer use the MySQL installation path.

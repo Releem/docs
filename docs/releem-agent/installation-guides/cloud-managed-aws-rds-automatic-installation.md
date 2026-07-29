@@ -84,7 +84,7 @@ You have the following options to install Releem Agent:
 
    3. Run Installation command as a root user on the server:
       ```ini
-      RELEEM_INSTANCE_TYPE="aws/rds" RELEEM_AWS_REGION="[AwsRegion]" RELEEM_AWS_RDS_DB="[AwsRdsDBidentifier]" RELEEM_AWS_RDS_PARAMETER_GROUP="releem-agent" RELEEM_MYSQL_PASSWORD='[Password]' RELEEM_MYSQL_LOGIN='releem' RELEEM_MYSQL_MEMORY_LIMIT=0 RELEEM_API_KEY=[Key] RELEEM_CRON_ENABLE=1 RELEEM_QUERY_OPTIMIZATION=true bash -c "$(curl -L https://releem.s3.amazonaws.com/v2/install.sh)"
+      RELEEM_INSTANCE_TYPE="aws/rds" RELEEM_AWS_REGION="[AwsRegion]" RELEEM_AWS_RDS_DB="[AwsRdsDBidentifier]" RELEEM_AWS_RDS_PARAMETER_GROUP="releem-agent" RELEEM_MYSQL_PASSWORD='[Password]' RELEEM_MYSQL_LOGIN='releem' RELEEM_DB_MEMORY_LIMIT=0 RELEEM_API_KEY=[Key] RELEEM_CRON_ENABLE=1 RELEEM_QUERY_OPTIMIZATION=true bash -c "$(curl -L https://releem.s3.amazonaws.com/v2/install.sh)"
       ```
       
       **Parameters:**
@@ -93,7 +93,7 @@ You have the following options to install Releem Agent:
       - `RELEEM_AWS_RDS_PARAMETER_GROUP` - Parameter Group name which Releem will use to set recommendations for RDS instance. Default name is "releem-agent".
       - `RELEEM_MYSQL_LOGIN` - MySQL User name to collect MySQL metrics
       - `RELEEM_MYSQL_PASSWORD` - MySQL User password to collect MySQL metrics
-      - `RELEEM_MYSQL_MEMORY_LIMIT` - Change parameter in case there are other software installed on the server. Default value is 0 means use all memory.
+      - `RELEEM_DB_MEMORY_LIMIT` - Change parameter in case there are other software installed on the server. Default value is 0 means use all memory.
       - `RELEEM_API_KEY` - API Key. Get it from Profile page in Releem Customer Portal.
       - `RELEEM_QUERY_OPTIMIZATION` - set 'true' if Releem Agent should collect additional information for Automatic SQL Query Optimization.
 

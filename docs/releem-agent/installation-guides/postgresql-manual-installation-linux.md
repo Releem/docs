@@ -24,22 +24,28 @@ Choose the installation flow that matches your setup:
 The Releem Agent installer can create the PostgreSQL monitoring user automatically.
 
 1. Run the Releem Agent installation command as a root user on the server:
-   ```bash
-   RELEEM_PG_ROOT_LOGIN='[PostgreSQLAdminUser]' RELEEM_PG_ROOT_PASSWORD='[PostgreSQLAdminPassword]' RELEEM_DB_MEMORY_LIMIT=0 RELEEM_API_KEY=[Key] RELEEM_CRON_ENABLE=1 bash -c "$(curl -L https://releem.s3.amazonaws.com/v2/install.sh)"
-   ```
+  ```bash
+  RELEEM_PG_TYPE=1 RELEEM_DB_MEMORY_LIMIT=0 RELEEM_API_KEY=[Key] RELEEM_CRON_ENABLE=1 bash -c "$(curl -L https://releem.s3.amazonaws.com/v2/install.sh)"
+  ```
+  Set `RELEEM_PG_ROOT_LOGIN` and `RELEEM_PG_ROOT_PASSWORD` when the PostgreSQL superuser is not available through peer/passwordless authentication. If the password is omitted, the installer first tries peer/passwordless access and then prompts for it in the console.
 
-   **Parameters:**
-   - `RELEEM_HOSTNAME` - Server hostname, which should display in the Releem Dashboard.
-   - `RELEEM_PG_ROOT_LOGIN` - PostgreSQL admin user name used by the installer to create the monitoring user automatically.
-   - `RELEEM_PG_ROOT_PASSWORD` - PostgreSQL admin user password used by the installer to create the monitoring user automatically.
-   - `RELEEM_DB_MEMORY_LIMIT` - Change parameter in case there are other software installed on the server. Default value is 0 means use all memory.
-   - `RELEEM_API_KEY` - API Key. Get it from Profile page in Releem Customer Portal.
-   - `RELEEM_PG_HOST` - use this variable in case PostgreSQL listens different interface or connection available only through socket.
-   - `RELEEM_PG_PORT` - use this variable in case PostgreSQL listens different port.
-   - `RELEEM_PG_SSL_MODE` - SSL mode for PostgreSQL connections.
-   - `RELEEM_QUERY_OPTIMIZATION` - set 'true' if Releem Agent should collect additional information for Automatic SQL Query Optimization.
+  **Parameters:**
+  - `RELEEM_HOSTNAME` - Server hostname, which should display in the Releem Dashboard.
+  - `RELEEM_PG_LOGIN` - PostgreSQL user name for collecting metrics.
+  - `RELEEM_PG_PASSWORD` - PostgreSQL user password for collecting metrics.
+  - `RELEEM_DB_MEMORY_LIMIT` - Change parameter in case there are other software installed on the server. Default value is 0 means use all memory.
+  - `RELEEM_API_KEY` - API Key. Get it from Profile page in Releem Customer Portal.
+  - `RELEEM_PG_TYPE` - set to `1` to explicitly select the PostgreSQL installation path.
+  - `RELEEM_PG_HOST` - use this variable in case PostgreSQL listens different interface or connection available only through socket.
+  - `RELEEM_PG_PORT` - use this variable in case PostgreSQL listens different port.
+  - `RELEEM_PG_SSL_MODE` - PostgreSQL SSL mode for collector: `true` for SSL (`sslmode=require`), `false` (or omitted) for `sslmode=disable`.
+  - `RELEEM_PG_ROOT_LOGIN` - PostgreSQL superuser used during automatic `releem` user creation. Default value is `postgres`.
+  - `RELEEM_PG_ROOT_PASSWORD` - password for the PostgreSQL superuser. If omitted, the installer first tries peer/passwordless access and then prompts for the password in the console.
+  - `RELEEM_QUERY_OPTIMIZATION` - set 'true' if Releem Agent should collect additional information for Automatic SQL Query Optimization.
 
-   For a full list of configuration settings, please refer to the [Releem Agent Configuration](/releem-agent/configuration).
+  Setting `RELEEM_PG_TYPE`, `RELEEM_PG_HOST`, `RELEEM_PG_LOGIN`, `RELEEM_PG_PASSWORD`, `RELEEM_PG_ROOT_LOGIN`, `RELEEM_PG_ROOT_PASSWORD` variables makes the installer use the PostgreSQL installation path.
+
+  For a full list of configuration settings, please refer to the [Releem Agent Configuration](/releem-agent/configuration).
 
 2. Open the [Releem Dashboard](https://app.releem.com/). If the server does not appear immediately, refresh the page.
 
@@ -92,7 +98,7 @@ Create the PostgreSQL monitoring user before running the Releem Agent installati
    - `RELEEM_API_KEY` - API Key. Get it from Profile page in Releem Customer Portal.
    - `RELEEM_PG_HOST` - use this variable in case PostgreSQL listens different interface or connection available only through socket.
    - `RELEEM_PG_PORT` - use this variable in case PostgreSQL listens different port
-   - `RELEEM_PG_SSL_MODE` - SSL mode for PostgreSQL connections.
+   - `RELEEM_PG_SSL_MODE` - PostgreSQL SSL mode for collector: `true` for SSL (`sslmode=require`), `false` (or omitted) for `sslmode=disable`.
    - `RELEEM_QUERY_OPTIMIZATION` - set 'true' if Releem Agent should collect additional information for Automatic SQL Query Optimization.
 
    For a full list of configuration settings, please refer to the [Releem Agent Configuration](/releem-agent/configuration).
@@ -106,4 +112,4 @@ Create the PostgreSQL monitoring user before running the Releem Agent installati
 
 - PostgreSQL support is enabled when `pg_user` and `pg_password` are set in the agent configuration.
 - `pg_stat_statements` is recommended for query performance visibility.
-- Use `pg_ssl_mode` that matches your PostgreSQL server configuration.
+- `pg_ssl_mode` in `releem.conf` is a boolean: `true` means `sslmode=require`, omitted/false means `sslmode=disable`.
