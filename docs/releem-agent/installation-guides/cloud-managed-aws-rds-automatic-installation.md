@@ -70,12 +70,12 @@ You have the following options to install Releem Agent:
       - DBParameterGroup: Custom DB parameter group attached to the instance. Required for RDS and Aurora instance parameters.
       - DBClusterParameterGroup: Custom DB cluster parameter group attached to Aurora. Required for Aurora. Leave empty only for non-Aurora RDS.
 
-   `DatabaseType` defaults to `mysql` and exposes MySQL (`DB_*`) credentials to the container. Select `postgresql` only for Aurora PostgreSQL; see [PostgreSQL RDS](/releem-agent/installation-guides/postgresql-aws-rds).
+   `DatabaseType` defaults to `mysql` and exposes MySQL (`DB_*`) credentials to the container. Select `postgresql` only for Aurora PostgreSQL; see [PostgreSQL](/releem-agent/installation-guides/postgresql-manual-linux).
 
    3. Next, click "Create Stack".
 
-  </TabItem>
-  <TabItem value="ec2" label="EC2">
+</TabItem>
+<TabItem value="ec2" label="EC2">
 
    Use this instruction to install Releem Agent manually on the EC2 instance to tune AWS RDS. Releem Agent will automatically collect metrics and recommend configuration.
    To move forward just do the following steps:
@@ -128,8 +128,8 @@ You have the following options to install Releem Agent:
       - `RELEEM_QUERY_OPTIMIZATION` - set 'true' if Releem Agent should collect additional information for Automatic SQL Query Optimization.
 
 
-  </TabItem>
-  <TabItem value="docker" label="EC2 Docker">
+</TabItem>
+<TabItem value="docker" label="EC2 Docker">
    Use this instruction to install Releem Agent manually on the EC2 instance in Docker container to tune AWS RDS. Releem Agent will automatically collect metrics and recommend configuration.
    
    To move forward just do the following steps:
@@ -233,7 +233,7 @@ You have the following options to install Releem Agent:
    
       Please use the latest version of Releem Agent. You can find the latest version of Releem Agent by clicking on the [link](https://hub.docker.com/r/releem/releem-agent/tags).
 
-  </TabItem>
+</TabItem>
 </Tabs>
 
 

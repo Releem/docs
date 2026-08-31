@@ -51,7 +51,7 @@ If your server is managed through WHM/cPanel, use the [WHM/cPanel installation g
 ### AWS RDS
 [Common issues for AWS RDS MySQL and Aurora MySQL](/releem-agent/installation-guides/cloud-managed-aws-rds-automatic-installation#common-issues-for-aws-rds)
 
-[Common issues for AWS RDS PostgreSQL and Aurora PostgreSQL](/releem-agent/installation-guides/postgresql-aws-rds#common-issues-for-aws-rds-and-aurora-postgresql)
+[Common issues for AWS RDS PostgreSQL and Aurora PostgreSQL](/releem-agent/installation-guides/postgresql-manual-linux#common-issues-for-aws-rds-and-aurora-postgresql)
 
 
 ## Releem Agent Installation Errors

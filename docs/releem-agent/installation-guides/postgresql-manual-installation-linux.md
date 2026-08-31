@@ -12,7 +12,7 @@ import TabItem from '@theme/TabItem';
 Choose the installation flow that matches your setup:
 
 <Tabs>
-  <TabItem value="automatic-user-creation" label="Automatic User Creation" default>
+<TabItem value="automatic-user-creation" label="Automatic User Creation" default>
 
 # Automatic Installation for Self-Managed PostgreSQL Servers
 
@@ -61,8 +61,8 @@ For a full list of configuration settings, see [Releem Agent Configuration](/rel
 - `pg_ssl_mode` in `releem.conf` is a boolean: `true` means `sslmode=require`, omitted/false means `sslmode=disable`.
 - If you prefer to create the monitoring user yourself, use the [Manual](/releem-agent/installation-guides/postgresql-manual-linux) installation.
 
-  </TabItem>
-  <TabItem value="manual-user-creation" label="Manual User Creation">
+</TabItem>
+<TabItem value="manual-user-creation" label="Manual User Creation">
 
 # Manual Installation for Self-Managed PostgreSQL Servers
 
@@ -149,8 +149,8 @@ For a full list of configuration settings, see [Releem Agent Configuration](/rel
 
 3. Open the [Releem Dashboard](https://app.releem.com/). If the server does not appear immediately, refresh the page.
 
-  </TabItem>
-  <TabItem value="docker" label="Docker">
+</TabItem>
+<TabItem value="docker" label="Docker">
 
 # Installation in a Docker Container on Self-Managed PostgreSQL Servers
 
@@ -239,8 +239,8 @@ include_dir = 'conf.d'
 
 **Note:** If you do not configure automatic applying of configuration, add `pg_stat_statements` to `shared_preload_libraries` and create the extension in the monitored database.
 
-  </TabItem>
-  <TabItem value="aws-rds" label="AWS RDS">
+</TabItem>
+<TabItem value="aws-rds" label="AWS RDS">
 
 # Cloud-Managed AWS RDS and Aurora PostgreSQL Installation
 
@@ -276,7 +276,7 @@ shared_preload_libraries=pg_stat_statements
 You have the following options to install Releem Agent:
 
 <Tabs>
-  <TabItem value="cloudformation" label="CloudFormation" default>
+<TabItem value="cloudformation" label="CloudFormation" default>
 
    CloudFormation deploys the Releem Agent container with AWS Fargate. The template creates roles with the following permissions:
    - logs:Get*
@@ -323,8 +323,8 @@ You have the following options to install Releem Agent:
 
    3. Click **Create Stack**.
 
-  </TabItem>
-  <TabItem value="ec2" label="EC2">
+</TabItem>
+<TabItem value="ec2" label="EC2">
 
    Use this instruction to install Releem Agent on an EC2 instance to monitor AWS RDS or Aurora PostgreSQL.
 
@@ -385,8 +385,8 @@ You have the following options to install Releem Agent:
       - `RELEEM_API_KEY` - API Key. Get it from the Profile page in Releem Customer Portal.
       - `RELEEM_QUERY_OPTIMIZATION` - set `true` if Releem Agent should collect additional information for Automatic SQL Query Optimization.
 
-  </TabItem>
-  <TabItem value="docker" label="EC2 Docker">
+</TabItem>
+<TabItem value="docker" label="EC2 Docker">
 
    Use this instruction to run Releem Agent in a Docker container on EC2 against AWS RDS or Aurora PostgreSQL.
 
@@ -458,7 +458,7 @@ You have the following options to install Releem Agent:
 
       Use the latest version of Releem Agent from [Docker Hub](https://hub.docker.com/r/releem/releem-agent/tags).
 
-  </TabItem>
+</TabItem>
 </Tabs>
 
 ## Common Issues for AWS RDS and Aurora PostgreSQL
@@ -489,7 +489,7 @@ To check Releem Agent logs, open CloudWatch → Log Groups and select the Releem
 7. Cluster parameters are not applied on a reader
    - Only the Agent targeting the writer modifies cluster parameters. Keep an Agent on the writer instance.
 
-  </TabItem>
+</TabItem>
 </Tabs>
 
 ## Notes
@@ -497,4 +497,4 @@ To check Releem Agent logs, open CloudWatch → Log Groups and select the Releem
 - PostgreSQL support is enabled when `pg_user` and `pg_password` are set in the agent configuration.
 - `pg_stat_statements` is recommended for query performance visibility.
 - `pg_ssl_mode` in `releem.conf` is a boolean: `true` means `sslmode=require`, omitted/false means `sslmode=disable`.
-- On Amazon RDS and Aurora PostgreSQL, `pg_hba_file_rules` is owned by `rdsadmin` and cannot be granted to a customer monitoring role. Skip those grants and use the [RDS](/releem-agent/installation-guides/postgresql-aws-rds) guide instead.
+- On Amazon RDS and Aurora PostgreSQL, `pg_hba_file_rules` is owned by `rdsadmin` and cannot be granted to a customer monitoring role. Skip those grants and use the AWS RDS tab above.
