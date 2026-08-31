@@ -27,5 +27,6 @@ pnpm-debug.log*
 .idea/
 .vscode/
 .devcontainer/
+.worktrees/
 CLAUDE.md
 AGENTS.md
