@@ -262,14 +262,14 @@ export const redirects = [
 - developer
 - technical-writer
 
-- [ ] Record `git status --short` and verify that none of the 54 current sources overlaps an unrelated user change. Preserve the existing `yarn.lock` modification and the two existing `.agent/` deletions.
-- [ ] Create the migration-map JSON from the normative table with exactly 54 records containing `currentSource`, `finalSource`, `currentId`, `finalId`, `currentRoute`, `finalRoute`, original whole-file/front-matter/body hashes, allowed front-matter keys, allowed internal-link replacements, and allowed relative-asset replacements.
-- [ ] Reject duplicate current or final sources, IDs, or routes; reject a route that appears as both a final target and a retired source; reject paths outside `docs/`; and require exactly the seven approved top-level final directories plus `docs/faq.md`.
-- [ ] Add `tests/docs-directory-mirror.test.mjs` using `node:test` and `node:assert/strict`. Make it assert the 54-row map, exact final tree, exact seven-section ownership, explicit final `id` and `slug` values, no new page, no individual Security/Schema hierarchy, unchanged asset hashes, and body equivalence after reversing only the declared URL/import replacements.
-- [ ] Add redirect-contract tests that require exactly 54 direct one-to-one rules, require `/` to map to `/get-started`, forbid chains/loops/duplicates, require every target in the final route set, and require no repository-owned link to use a retired route in the final state.
-- [ ] Change `docs:check` to run both `tests/docs-structure.test.mjs` and `tests/docs-directory-mirror.test.mjs`; preserve every agent-loop npm script.
-- [ ] Run `node --test tests/docs-directory-mirror.test.mjs`; expect failure because the mirrored tree and redirect module do not yet exist.
-- [ ] Run `npm run agent:check`; expect the existing 34 coordinator tests to pass.
+- [x] Record `git status --short` and verify that none of the 54 current sources overlaps an unrelated user change. Preserve the existing `yarn.lock` modification and the two existing `.agent/` deletions.
+- [x] Create the migration-map JSON from the normative table with exactly 54 records containing `currentSource`, `finalSource`, `currentId`, `finalId`, `currentRoute`, `finalRoute`, original whole-file/front-matter/body hashes, allowed front-matter keys, allowed internal-link replacements, and allowed relative-asset replacements.
+- [x] Reject duplicate current or final sources, IDs, or routes; reject a route that appears as both a final target and a retired source; reject paths outside `docs/`; and require exactly the seven approved top-level final directories plus `docs/faq.md`.
+- [x] Add `tests/docs-directory-mirror.test.mjs` using `node:test` and `node:assert/strict`. Make it assert the 54-row map, exact final tree, exact seven-section ownership, explicit final `id` and `slug` values, no new page, no individual Security/Schema hierarchy, unchanged asset hashes, and body equivalence after reversing only the declared URL/import replacements.
+- [x] Add redirect-contract tests that require exactly 54 direct one-to-one rules, require `/` to map to `/get-started`, forbid chains/loops/duplicates, require every target in the final route set, and require no repository-owned link to use a retired route in the final state.
+- [x] Change `docs:check` to run both `tests/docs-structure.test.mjs` and `tests/docs-directory-mirror.test.mjs`; preserve every agent-loop npm script.
+- [x] Run `node --test tests/docs-directory-mirror.test.mjs`; expect failure because the mirrored tree and redirect module do not yet exist.
+- [x] Run `npm run agent:check`; expect the existing 34 coordinator tests to pass.
 
 ## Task 2: Move all 54 pages and update only migration tokens
 
@@ -393,16 +393,16 @@ export const redirects = [
 - technical-writer
 - releem-user
 
-- [ ] Verify every current-source whole-file hash against the migration map immediately before moving it. Stop on a mismatch or unclear dirty-file ownership.
-- [ ] Move exactly the 54 source/target pairs in the normative table. Do not use a directory-wide wildcard or delete a directory recursively.
-- [ ] Set explicit final `id` and absolute `slug` values from the migration map. Preserve `title`, `sidebar_label`, and every other front-matter field exactly.
-- [ ] Replace every repository-owned link route with the corresponding final route while retaining its anchor. Do not alter link text, surrounding prose, external URLs, or code blocks.
-- [ ] Adjust only these known depth-changing asset tokens: Releem Overview `../assets/` to `../../assets/`; Configuration Example and Apply Using Portal `../../assets/` to `../../../assets/`; Users and Roles `../../assets/` to `../../../assets/`. Let the asset test reject any missed or extra change.
-- [ ] Rewrite `sidebars.js` so its seven top-level sections, nested category labels, item ordering, and document links resolve only to final mirrored IDs. Count category-link documents and item documents together and require all 54 IDs exactly once.
-- [ ] Change the navbar logo `href` and footer documentation `to` to `/get-started`. Do not change external navbar/footer destinations or unrelated Docusaurus configuration.
-- [ ] Adapt the existing preservation tests to use the new migration map: require 54 target pages, preserved non-migration front matter, reversible body-token equivalence, unchanged asset hashes, and no remaining source path.
-- [ ] Run `node --test --test-name-pattern='mirrored source tree|preserved content|sidebar ownership|internal links|assets' tests/docs-directory-mirror.test.mjs tests/docs-structure.test.mjs`; require all selected tests to pass.
-- [ ] Run `npm run docs:check`, `npm run typecheck`, and `git diff --check`; require exit 0. Do not run the Docusaurus build until the retired routes no longer collide with the redirect pages added in Task 3.
+- [x] Verify every current-source whole-file hash against the migration map immediately before moving it. Stop on a mismatch or unclear dirty-file ownership.
+- [x] Move exactly the 54 source/target pairs in the normative table. Do not use a directory-wide wildcard or delete a directory recursively.
+- [x] Set explicit final `id` and absolute `slug` values from the migration map. Preserve `title`, `sidebar_label`, and every other front-matter field exactly.
+- [x] Replace every repository-owned link route with the corresponding final route while retaining its anchor. Do not alter link text, surrounding prose, external URLs, or code blocks.
+- [x] Adjust only these known depth-changing asset tokens: Releem Overview `../assets/` to `../../assets/`; Configuration Example, Apply Using Portal, and Query Optimization Overview `../../assets/` to `../../../assets/`; Users and Roles `../../assets/` to `../../../assets/`. Let the asset test reject any missed or extra change.
+- [x] Rewrite `sidebars.js` so its seven top-level sections, nested category labels, item ordering, and document links resolve only to final mirrored IDs. Count category-link documents and item documents together and require all 54 IDs exactly once.
+- [x] Change the navbar logo `href` and footer documentation `to` to `/get-started`. Do not change external navbar/footer destinations or unrelated Docusaurus configuration.
+- [x] Adapt the existing preservation tests to use the new migration map: require 54 target pages, preserved non-migration front matter, reversible body-token equivalence, unchanged asset hashes, and no remaining source path.
+- [x] Run `node --test --test-name-pattern='mirrored source tree|preserved content|sidebar ownership|internal links|assets' tests/docs-directory-mirror.test.mjs tests/docs-structure.test.mjs`; require all selected tests to pass.
+- [x] Run `npm run docs:check`, `npm run typecheck`, and `git diff --check`; require exit 0. Do not run the Docusaurus build until the retired routes no longer collide with the redirect pages added in Task 3.
 
 ## Task 3: Install and validate the Docusaurus redirect layer
 
@@ -418,14 +418,14 @@ export const redirects = [
 - developer
 - technical-writer
 
-- [ ] Add exact `3.9.2` for `@docusaurus/plugin-client-redirects` to `dependencies`; extend the package/lockfile test to require it alongside the existing five direct Docusaurus packages.
-- [ ] Run `npm install --package-lock-only --ignore-scripts`; require the root lock entry and resolved plugin entry to be exactly 3.9.2 without changing unrelated direct dependency ranges.
-- [ ] Create `redirects.mjs` with the exact 54-rule module shown above. Do not use `createRedirects`, extension rewriting, pattern matching, or an inferred fallback.
-- [ ] Import `redirects` in `docusaurus.config.js` and configure `['@docusaurus/plugin-client-redirects', {redirects}]` in `plugins`. Do not call the redirects HTTP 301s in code comments or operator documentation.
-- [ ] Extend tests to require exact equality among the migration-map route pairs, `redirects.mjs`, and the built canonical route set. Reject a redirect whose source is still a canonical page or whose target is another redirect source.
-- [ ] Run `npm ci`; require a clean dependency installation and `npm ls @docusaurus/plugin-client-redirects --depth=0` to report 3.9.2.
-- [ ] Run `npm run agent:check`, `npm run docs:check`, `npm run typecheck`, `npm run build`, and `git diff --check`; require exit 0 and no new Docusaurus broken-link, duplicate-route, missing-asset, MDX, or routing warning.
-- [ ] Inspect every generated redirect artifact in `build/`. Require one artifact per retired route, a reference to its exact final target, and no generated redirect artifact at a final canonical route.
+- [x] Add exact `3.9.2` for `@docusaurus/plugin-client-redirects` to `dependencies`; extend the package/lockfile test to require it alongside the existing five direct Docusaurus packages.
+- [x] Run `npm install --package-lock-only --ignore-scripts`; require the root lock entry and resolved plugin entry to be exactly 3.9.2 without changing unrelated direct dependency ranges.
+- [x] Create `redirects.mjs` with the exact 54-rule module shown above. Do not use `createRedirects`, extension rewriting, pattern matching, or an inferred fallback.
+- [x] Import `redirects` in `docusaurus.config.js` and configure `['@docusaurus/plugin-client-redirects', {redirects}]` in `plugins`. Do not call the redirects HTTP 301s in code comments or operator documentation.
+- [x] Extend tests to require exact equality among the migration-map route pairs, `redirects.mjs`, and the built canonical route set. Reject a redirect whose source is still a canonical page or whose target is another redirect source.
+- [x] Run `npm ci`; require a clean dependency installation and `npm ls @docusaurus/plugin-client-redirects --depth=0` to report 3.9.2.
+- [x] Run `npm run agent:check`, `npm run docs:check`, `npm run typecheck`, `npm run build`, and `git diff --check`; require exit 0 and no new Docusaurus broken-link, duplicate-route, missing-asset, MDX, or routing warning.
+- [x] Inspect every generated redirect artifact in `build/`. Require one artifact per retired route, a reference to its exact final target, and no generated redirect artifact at a final canonical route.
 
 ## Task 4: Run canonical-route, redirect, and rendered-user QA
 
@@ -444,17 +444,17 @@ export const redirects = [
 - technical-writer
 - releem-user
 
-- [ ] Start the already-built production output with `npm run serve -- --host 127.0.0.1 --port 3000`. Confirm the redirect plugin is active in this production preview rather than relying on `npm run start`.
-- [ ] Request every one of the 54 canonical routes and require a rendered documentation page with the expected H1 and no redirect.
-- [ ] Open every one of the 54 retired routes in a browser context that executes JavaScript; require exactly one transition to the mapped canonical route, with fragments retained where applicable and no loop or intermediate route.
-- [ ] Repeat the ten target-user journeys: supported database guidance, installation choice, database permissions, agent status/logs, Security Checks, Schema Checks, Configuration Tuning, Query Analytics, Query Optimization, and configuration reversal.
-- [ ] Inspect 1280, 1024, 768, and 375 pixel widths. Verify seven-section order, nested folder-equivalent labels, category links, pointer and keyboard navigation, breadcrumbs, previous/next links, current images, and absence of horizontal overflow or browser errors.
-- [ ] Confirm old source-folder names are absent from the final sidebar and repository-owned links. Confirm the only Security/Schema pages remain the two aggregate pages.
-- [ ] Write the private review with the final path/route count, redirect count, exact verification results, warning baseline, browser evidence, and any content recommendations whose paths changed. Keep the earlier content review as historical evidence rather than silently rewriting it.
-- [ ] Obtain independent read-only `developer`, `technical-writer`, and `releem-user` verdicts. Correct every material finding within scope, rerun affected checks, and repeat the reviewer that raised it.
-- [ ] Stop the local server and confirm no listener remains on port 3000.
-- [ ] Run a final `npm run agent:check`, `npm run docs:check`, `npm run typecheck`, `npm run build`, `git diff --check`, `git status --short`, `git diff --name-status`, and `git diff --name-only --cached`. Require all checks to pass, nothing staged, and unrelated user changes untouched.
-- [ ] Record `DIRECTORY MIRROR: PASS`, `REDIRECTS: PASS`, and `CONTENT: MOVED, NOT REWRITTEN` only after all automated, rendered, and reviewer gates pass.
+- [x] Start the already-built production output with `npm run serve -- --host 127.0.0.1 --port 3000`. Confirm the redirect plugin is active in this production preview rather than relying on `npm run start`.
+- [x] Request every one of the 54 canonical routes and require a rendered documentation page with the expected H1 and no redirect.
+- [x] Open every one of the 54 retired routes in a browser context that executes JavaScript; require exactly one transition to the mapped canonical route, with fragments retained where applicable and no loop or intermediate route.
+- [x] Repeat the ten target-user journeys: supported database guidance, installation choice, database permissions, agent status/logs, Security Checks, Schema Checks, Configuration Tuning, Query Analytics, Query Optimization, and configuration reversal.
+- [x] Inspect 1280, 1024, 768, and 375 pixel widths. Verify seven-section order, nested folder-equivalent labels, category links, pointer and keyboard navigation, breadcrumbs, previous/next links, current images, and absence of horizontal overflow or browser errors.
+- [x] Confirm old source-folder names are absent from the final sidebar and repository-owned links. Confirm the only Security/Schema pages remain the two aggregate pages.
+- [x] Write the private review with the final path/route count, redirect count, exact verification results, warning baseline, browser evidence, and any content recommendations whose paths changed. Keep the earlier content review as historical evidence rather than silently rewriting it.
+- [x] Obtain independent read-only `developer`, `technical-writer`, and `releem-user` verdicts. Correct every material finding within scope, rerun affected checks, and repeat the reviewer that raised it.
+- [x] Stop the local server and confirm no listener remains on port 3000.
+- [x] Run a final `npm run agent:check`, `npm run docs:check`, `npm run typecheck`, `npm run build`, `git diff --check`, `git status --short`, `git diff --name-status`, and `git diff --name-only --cached`. Require all checks to pass, nothing staged, and unrelated user changes untouched.
+- [x] Record `DIRECTORY MIRROR: PASS`, `REDIRECTS: PASS`, and `CONTENT: MOVED, NOT REWRITTEN` only after all automated, rendered, and reviewer gates pass.
 
 ## Acceptance criteria
 

@@ -17,10 +17,15 @@ import {fileURLToPath, pathToFileURL} from 'node:url';
 import GithubSlugger from 'github-slugger';
 
 const projectRoot = fileURLToPath(new URL('../', import.meta.url));
-const manifestPath = path.join(
+const baselineManifestPath = path.join(
   projectRoot,
   '.agent/analysis/2026-09-01-releem-docs-structure-baseline.json',
 );
+const migrationMapPath = path.join(
+  projectRoot,
+  '.agent/analysis/2026-09-02-releem-docs-directory-mirror-map.json',
+);
+const redirectsPath = path.join(projectRoot, 'redirects.mjs');
 
 const approvedRenames = {
   'docs/getting-started/schema-optimization.md':
@@ -45,25 +50,23 @@ const baselineSourceByFinalPath = new Map(
 );
 const baselineSourcePathFor = (sourcePath) =>
   baselineSourceByFinalPath.get(sourcePath) ?? sourcePath;
-const finalSourcePathFor = (sourcePath) =>
-  approvedRenames[sourcePath] ?? sourcePath;
 
 const expectedFinalSidebar = {
   docs: [
     {
       type: 'category',
       label: 'Get Started',
-      link: {type: 'doc', id: 'releem-overview'},
+      link: {type: 'doc', id: 'get-started/releem-overview'},
       items: [
-        'getting-started/step-1-register-for-an-account',
+        'get-started/register-for-an-account',
         {
           type: 'doc',
-          id: 'getting-started/step-2-add-server',
+          id: 'get-started/connect-your-database-server',
           label: 'Connect Your Database Server',
         },
         {
           type: 'doc',
-          id: 'getting-started/how-to-check-if-releem-agent-is-working',
+          id: 'get-started/troubleshoot-releem-agent',
           label: 'Troubleshoot the Releem Agent',
         },
       ],
@@ -71,9 +74,9 @@ const expectedFinalSidebar = {
     {
       type: 'category',
       label: 'Supported Databases',
-      link: {type: 'doc', id: 'releem-agent/mysql-permissions'},
+      link: {type: 'doc', id: 'supported-databases/mysql/required-permissions'},
       items: [
-        'releem-agent/installation-guides/postgresql-manual-linux',
+        'supported-databases/postgresql/install-on-linux',
       ],
     },
     {
@@ -81,33 +84,33 @@ const expectedFinalSidebar = {
       label: 'Installation',
       link: {
         type: 'doc',
-        id: 'releem-agent/installation-guides/self-managed-servers-automatic-installation',
+        id: 'installation/linux-automatic',
       },
       items: [
         {
           type: 'category',
           label: 'Installation Methods',
           items: [
-            'releem-agent/installation-guides/self-managed-servers-manual-installation-linux',
-            'releem-agent/installation-guides/self-managed-servers-manual-installation-windows',
-            'releem-agent/installation-guides/self-managed-servers-docker-installation',
-            'releem-agent/installation-guides/installation-in-kubernetes',
-            'releem-agent/installation-guides/cloud-managed-aws-rds-automatic-installation',
-            'releem-agent/installation-guides/cloud-managed-gcp-cloud-sql-automatic-installation',
-            'releem-agent/installation-guides/cloud-managed-azure-mysql-automatic-installation',
-            'releem-agent/installation-guides/clusters',
-            'releem-agent/installation-guides/whm-cpanel',
+            'installation/installation-methods/linux-manual',
+            'installation/installation-methods/windows',
+            'installation/installation-methods/docker',
+            'installation/installation-methods/kubernetes',
+            'installation/installation-methods/aws-rds',
+            'installation/installation-methods/gcp-cloud-sql',
+            'installation/installation-methods/azure-database-for-mysql',
+            'installation/installation-methods/clusters',
+            'installation/installation-methods/whm-cpanel',
           ],
         },
         {
           type: 'category',
           label: 'Manage the Releem Agent',
           items: [
-            'releem-agent/configuration',
-            'releem-agent/how-to-check-logs',
-            'releem-agent/migration',
-            'releem-agent/update',
-            'releem-agent/uninstallation',
+            'installation/manage-the-releem-agent/configuration',
+            'installation/manage-the-releem-agent/logs',
+            'installation/manage-the-releem-agent/migrate',
+            'installation/manage-the-releem-agent/update',
+            'installation/manage-the-releem-agent/uninstall',
           ],
         },
       ],
@@ -115,21 +118,21 @@ const expectedFinalSidebar = {
     {
       type: 'category',
       label: 'Dashboard',
-      link: {type: 'doc', id: 'getting-started/step-4-dashboard'},
+      link: {type: 'doc', id: 'dashboard/overview'},
       items: [
-        'getting-started/query-analytics',
+        'dashboard/query-analytics',
         {
           type: 'doc',
-          id: 'getting-started/schema-optimization',
+          id: 'dashboard/schema-checks',
           label: 'Schema Checks',
         },
-        'getting-started/deadlock-monitoring',
-        'getting-started/step-5-health-checks',
-        'getting-started/security-checks',
-        'getting-started/process-list',
+        'dashboard/deadlocks',
+        'dashboard/health-checks',
+        'dashboard/security-checks',
+        'dashboard/process-list',
         {
           type: 'doc',
-          id: 'getting-started/step-7-weekly-reports',
+          id: 'dashboard/reports',
           label: 'Reports',
         },
       ],
@@ -139,26 +142,26 @@ const expectedFinalSidebar = {
       label: 'Recommendations',
       link: {
         type: 'doc',
-        id: 'getting-started/step-3-getting-and-applying-recommendations',
+        id: 'recommendations/overview',
       },
       items: [
         {
           type: 'category',
           label: 'Configuration Tuning',
           items: [
-            'configuration-tuning/mysql-tuning-process',
-            'configuration-tuning/initial-mysql-configuration',
-            'configuration-tuning/how-to-apply-configuration-using-portal',
-            'configuration-tuning/how-to-apply-configuration-using-agent',
-            'configuration-tuning/how-to-apply-configuration-using-cron',
-            'configuration-tuning/how-to-apply-configuration-manually/linux',
-            'configuration-tuning/how-to-apply-configuration-manually/windows',
-            'configuration-tuning/how-to-apply-configuration-manually/docker',
-            'configuration-tuning/how-to-apply-configuration-manually/aws-rds',
-            'configuration-tuning/how-to-apply-configuration-manually/gcp-cloud-sql',
-            'configuration-tuning/how-to-rollback-to-previous-configuration',
-            'configuration-tuning/limit-memory-for-mysql',
-            'configuration-tuning/example-of-configuration',
+            'recommendations/configuration-tuning/mysql-tuning-process',
+            'recommendations/configuration-tuning/initial-mysql-configuration',
+            'recommendations/configuration-tuning/apply-using-portal',
+            'recommendations/configuration-tuning/apply-using-agent',
+            'recommendations/configuration-tuning/apply-using-cron',
+            'recommendations/configuration-tuning/apply-manually/linux',
+            'recommendations/configuration-tuning/apply-manually/windows',
+            'recommendations/configuration-tuning/apply-manually/docker',
+            'recommendations/configuration-tuning/apply-manually/aws-rds',
+            'recommendations/configuration-tuning/apply-manually/gcp-cloud-sql',
+            'recommendations/configuration-tuning/rollback',
+            'recommendations/configuration-tuning/limit-mysql-memory',
+            'recommendations/configuration-tuning/configuration-example',
           ],
         },
         {
@@ -166,14 +169,14 @@ const expectedFinalSidebar = {
           label: 'Query Optimization',
           link: {
             type: 'doc',
-            id: 'getting-started/query-optimization',
+            id: 'recommendations/query-optimization/overview',
           },
           items: [
-            'query-optimization/enable-sql-query-optimization',
-            'query-optimization/disable-sql-query-optimization',
-            'query-optimization/prepared-statements-issue',
-            'query-optimization/automatic-schema-changes',
-            'query-optimization/schema-change-troubleshooting',
+            'recommendations/query-optimization/enable',
+            'recommendations/query-optimization/disable',
+            'recommendations/query-optimization/prepared-statements',
+            'recommendations/query-optimization/automatic-schema-changes',
+            'recommendations/query-optimization/schema-change-troubleshooting',
           ],
         },
       ],
@@ -181,26 +184,26 @@ const expectedFinalSidebar = {
     {
       type: 'category',
       label: 'Account',
-      link: {type: 'doc', id: 'server-settings/your-server-settings'},
+      link: {type: 'doc', id: 'account/overview'},
       items: [
         {
           type: 'category',
           label: 'Access',
-          items: ['server-settings/invite-users-and-assign-roles'],
+          items: ['account/access/users-and-roles'],
         },
         {
           type: 'category',
           label: 'Billing',
           items: [
-            'billing/update-payment-information',
-            'billing/cancellation',
+            'account/billing/payment-information',
+            'account/billing/cancel-subscription',
           ],
         },
       ],
     },
     {
       type: 'doc',
-      id: 'frequently-asked-questions',
+      id: 'faq',
       label: 'FAQ',
     },
   ],
@@ -706,6 +709,9 @@ async function loadDocusaurusConfig() {
   const executableConfigSource = configSource.replace(
     prismImportPattern,
     JSON.stringify(prismModuleUrl),
+  ).replace(
+    /(['"])\.\/redirects\.mjs\1/g,
+    JSON.stringify(pathToFileURL(redirectsPath).href),
   );
   const configModuleUrl = `data:text/javascript;base64,${Buffer.from(
     executableConfigSource,
@@ -805,9 +811,53 @@ function parseDocument(sourcePath, contents) {
   return {
     normalizedFrontMatter,
     normalizedBody,
+    explicitId: idMatch ? unquoteYamlScalar(idMatch[1]) : null,
+    explicitSlug,
     effectiveId,
     route: route === '/' ? route : route.replace(/\/$/, ''),
   };
+}
+
+function stripMigrationFrontMatter(frontMatter) {
+  return frontMatter
+    .split('\n')
+    .filter((line) => !/^(?:id|slug):/u.test(line))
+    .join('\n');
+}
+
+function reverseDeclaredBodyChanges(body, record) {
+  const replacements = [
+    ...record.allowedInternalLinkReplacements,
+    ...record.allowedRelativeAssetReplacements,
+  ].sort((left, right) => right.to.length - left.to.length);
+  const placeholders = [];
+  let reversed = body;
+
+  replacements.forEach((replacement, index) => {
+    const placeholder = `\u0000RELEEM_STRUCTURE_TOKEN_${index}\u0000`;
+    assert.equal(reversed.includes(placeholder), false);
+    const occurrences = reversed.split(replacement.to).length - 1;
+    assert.equal(
+      occurrences,
+      replacement.occurrences,
+      `Unexpected occurrence count for migration token ${replacement.to}`,
+    );
+    reversed = reversed.split(replacement.to).join(placeholder);
+    placeholders.push({placeholder, from: replacement.from});
+  });
+
+  for (const {placeholder, from} of placeholders) {
+    reversed = reversed.split(placeholder).join(from);
+  }
+  return reversed;
+}
+
+function reverseMigratedDocument(contents, record) {
+  const text = contents.toString('utf8');
+  const match = text.match(/^---\r?\n[\s\S]*?\r?\n---(?:\r?\n|$)/u);
+  assert.ok(match, `${record.finalSource} must have front matter`);
+  const body = reverseDeclaredBodyChanges(text.slice(match[0].length), record);
+  return `---\n${record.originalFrontMatter}\n---\n${body}`;
 }
 
 function referencedImagePaths(sourcePath, contents) {
@@ -849,6 +899,10 @@ function referencedImagePaths(sourcePath, contents) {
 }
 
 async function currentDocuments() {
+  const migrationMap = await migrationMapPromise;
+  const migrationByFinalSource = new Map(
+    migrationMap.records.map((record) => [record.finalSource, record]),
+  );
   const markdownFiles = await listFiles(
     path.join(projectRoot, 'docs'),
     (filePath) => /\.mdx?$/.test(filePath),
@@ -857,7 +911,11 @@ async function currentDocuments() {
   return Promise.all(
     markdownFiles.map(async (absolutePath) => {
       const sourcePath = toRepoPath(absolutePath);
-      const baselineSourcePath = baselineSourcePathFor(sourcePath);
+      const migrationRecord = migrationByFinalSource.get(sourcePath);
+      assert.ok(migrationRecord, `Migration map is missing ${sourcePath}`);
+      const baselineSourcePath = baselineSourcePathFor(
+        migrationRecord.currentSource,
+      );
       const contents = await readFile(absolutePath);
       const parsed = parseDocument(sourcePath, contents);
       const images = await Promise.all(
@@ -878,10 +936,21 @@ async function currentDocuments() {
       return {
         sourcePath,
         baselineSourcePath,
-        renamedPath: approvedRenames[baselineSourcePath] ?? null,
+        migrationRecord,
         sha256: sha256(contents),
         frontMatterSha256: sha256(parsed.normalizedFrontMatter),
         bodySha256: sha256(parsed.normalizedBody),
+        nonMigrationFrontMatter: stripMigrationFrontMatter(
+          parsed.normalizedFrontMatter,
+        ),
+        reversedBodySha256: sha256(
+          reverseDeclaredBodyChanges(parsed.normalizedBody, migrationRecord),
+        ),
+        restoredWholeFileSha256: sha256(
+          reverseMigratedDocument(contents, migrationRecord),
+        ),
+        explicitId: parsed.explicitId,
+        explicitSlug: parsed.explicitSlug,
         effectiveId: parsed.effectiveId,
         route: parsed.route,
         images,
@@ -907,7 +976,8 @@ async function currentAssets() {
   );
 }
 
-const manifestPromise = readFile(manifestPath, 'utf8').then(JSON.parse);
+const manifestPromise = readFile(baselineManifestPath, 'utf8').then(JSON.parse);
+const migrationMapPromise = readFile(migrationMapPath, 'utf8').then(JSON.parse);
 
 const packageJson = JSON.parse(
   await readFile(path.join(projectRoot, 'package.json'), 'utf8'),
@@ -919,6 +989,7 @@ const packageLock = JSON.parse(
 test('package and lockfile pin the same Docusaurus 3.9.2 family', () => {
   const productionPackages = [
     '@docusaurus/core',
+    '@docusaurus/plugin-client-redirects',
     '@docusaurus/preset-classic',
     '@docusaurus/theme-search-algolia',
   ];
@@ -1029,57 +1100,69 @@ test('baseline manifest records exactly 54 unique documents, routes, IDs, and ap
   }
 });
 
-test('approved renames and final routes preserve the corpus and establish the seven-section sidebar', async () => {
-  const [manifest, documents, sidebars] = await Promise.all([
+test('approved directory mirror preserves the corpus and establishes the seven-section sidebar', async () => {
+  const [manifest, migrationMap, documents, sidebars] = await Promise.all([
     manifestPromise,
+    migrationMapPromise,
     currentDocuments(),
     loadSidebars(),
   ]);
-  const finalPathFor = (sourcePath) =>
-    approvedRenames[sourcePath] ?? sourcePath;
-  const expectedFinalPaths = manifest.documents
-    .map(({sourcePath}) => finalPathFor(sourcePath))
+  const expectedFinalPaths = migrationMap.records
+    .map(({finalSource}) => finalSource)
     .sort(compare);
   const finalByPath = new Map(
     documents.map((document) => [document.sourcePath, document]),
   );
+  const baselineByPostRestructurePath = new Map(
+    manifest.documents.map((document) => [
+      document.renamedPath ?? document.sourcePath,
+      document,
+    ]),
+  );
 
-  assert.equal(Object.keys(approvedRenames).length, 7);
+  assert.equal(migrationMap.records.length, 54);
   assert.deepEqual(
     documents.map(({sourcePath}) => sourcePath),
     expectedFinalPaths,
-    'Only the seven approved source paths may change, and every approved destination is required',
+    'Every approved mirrored destination is required',
   );
-  for (const baseline of manifest.documents) {
-    const finalPath = finalPathFor(baseline.sourcePath);
-    const document = finalByPath.get(finalPath);
-    assert.ok(document, `${finalPath} must exist in the final corpus`);
+  for (const record of migrationMap.records) {
+    const document = finalByPath.get(record.finalSource);
+    const baseline = baselineByPostRestructurePath.get(record.currentSource);
+    assert.ok(document, `${record.finalSource} must exist in the final corpus`);
+    assert.ok(baseline, `${record.currentSource} must exist in the baseline`);
     assert.equal(
-      document.sha256,
+      document.restoredWholeFileSha256,
+      record.originalWholeFileSha256,
+      `${record.finalSource} must reverse to the original complete-file hash`,
+    );
+    assert.equal(
+      record.originalWholeFileSha256,
       baseline.sha256,
-      `${finalPath} complete-file SHA-256 must match ${baseline.sourcePath}`,
+      `${record.currentSource} migration hash must match the immutable baseline`,
     );
     assert.equal(
-      document.frontMatterSha256,
-      baseline.frontMatterSha256,
-      `${finalPath} front-matter SHA-256 must match ${baseline.sourcePath}`,
+      document.nonMigrationFrontMatter,
+      stripMigrationFrontMatter(record.originalFrontMatter),
+      `${record.finalSource} changed non-migration front matter`,
     );
     assert.equal(
-      document.bodySha256,
-      baseline.bodySha256,
-      `${finalPath} body SHA-256 must match ${baseline.sourcePath}`,
+      document.reversedBodySha256,
+      record.originalBodySha256,
+      `${record.finalSource} changed body content beyond declared tokens`,
     );
+    assert.equal(document.explicitId, record.finalExplicitId);
+    assert.equal(document.explicitSlug, record.finalSlug);
+    assert.equal(document.effectiveId, record.finalId);
     assert.equal(
       document.route,
-      baseline.route,
-      `${finalPath} must preserve the public route from ${baseline.sourcePath}`,
+      record.finalRoute,
+      `${record.finalSource} must use its approved canonical route`,
     );
   }
 
-  const expectedFinalIds = manifest.documents
-    .map(({effectiveId}) =>
-      effectiveId === 'welcome' ? 'releem-overview' : effectiveId,
-    )
+  const expectedFinalIds = migrationMap.records
+    .map(({finalId}) => finalId)
     .sort(compare);
   const actualFinalIds = documents
     .map(({effectiveId}) => effectiveId)
@@ -1087,7 +1170,7 @@ test('approved renames and final routes preserve the corpus and establish the se
   assert.deepEqual(actualFinalIds, expectedFinalIds);
   assert.deepEqual(
     documents.map(({route}) => route).sort(compare),
-    manifest.routes,
+    migrationMap.records.map(({finalRoute}) => finalRoute).sort(compare),
   );
 
   assert.deepEqual(sidebars, expectedFinalSidebar);
@@ -1098,62 +1181,56 @@ test('approved renames and final routes preserve the corpus and establish the se
   assert.deepEqual([...ownedIds].sort(compare), expectedFinalIds);
 });
 
-test('approved final source paths and complete byte hashes match the immutable baseline', async () => {
-  const [manifest, documents] = await Promise.all([
-    manifestPromise,
+test('approved final source paths reverse to complete immutable byte hashes', async () => {
+  const [migrationMap, documents] = await Promise.all([
+    migrationMapPromise,
     currentDocuments(),
   ]);
   assert.equal(documents.length, 54);
   assert.deepEqual(
-    documents.map(({baselineSourcePath}) => baselineSourcePath).sort(compare),
-    manifest.documents.map(({sourcePath}) => sourcePath),
-    'Final Markdown paths must canonicalize to exactly the immutable baseline',
-  );
-  assert.deepEqual(
     documents.map(({sourcePath}) => sourcePath),
-    manifest.documents
-      .map(({sourcePath}) => finalSourcePathFor(sourcePath))
-      .sort(compare),
-    'Only the seven approved Markdown path changes are allowed',
+    migrationMap.records.map(({finalSource}) => finalSource).sort(compare),
+    'Only the 54 approved mirrored Markdown destinations are allowed',
   );
-  const baselineByPath = new Map(
-    manifest.documents.map((document) => [document.sourcePath, document]),
+  const recordByFinalPath = new Map(
+    migrationMap.records.map((record) => [record.finalSource, record]),
   );
   for (const document of documents) {
     assert.equal(
-      document.sha256,
-      baselineByPath.get(document.baselineSourcePath).sha256,
-      `${document.sourcePath} complete-file SHA-256 must match ${document.baselineSourcePath}`,
+      document.restoredWholeFileSha256,
+      recordByFinalPath.get(document.sourcePath).originalWholeFileSha256,
+      `${document.sourcePath} must reverse to its complete original byte hash`,
     );
   }
 });
 
-test('front matter and bodies match their normalized immutable hashes', async () => {
-  const [manifest, documents] = await Promise.all([
-    manifestPromise,
+test('non-migration front matter and reversed bodies match immutable hashes', async () => {
+  const [migrationMap, documents] = await Promise.all([
+    migrationMapPromise,
     currentDocuments(),
   ]);
-  const baselineByPath = new Map(
-    manifest.documents.map((document) => [document.sourcePath, document]),
+  const recordByFinalPath = new Map(
+    migrationMap.records.map((record) => [record.finalSource, record]),
   );
   for (const document of documents) {
-    const baseline = baselineByPath.get(document.baselineSourcePath);
+    const record = recordByFinalPath.get(document.sourcePath);
     assert.equal(
-      document.frontMatterSha256,
-      baseline.frontMatterSha256,
-      `${document.sourcePath} normalized front-matter SHA-256 must match ${document.baselineSourcePath}`,
+      document.nonMigrationFrontMatter,
+      stripMigrationFrontMatter(record.originalFrontMatter),
+      `${document.sourcePath} changed non-migration front matter`,
     );
     assert.equal(
-      document.bodySha256,
-      baseline.bodySha256,
-      `${document.sourcePath} normalized body SHA-256 must match ${document.baselineSourcePath}`,
+      document.reversedBodySha256,
+      record.originalBodySha256,
+      `${document.sourcePath} body must match after reversing declared migration tokens`,
     );
   }
 });
 
-test('current effective IDs and complete 54-route set match the baseline', async () => {
-  const [manifest, documents, docusaurusConfig] = await Promise.all([
+test('current effective IDs and complete 54-route set match the migration map', async () => {
+  const [manifest, migrationMap, documents, docusaurusConfig] = await Promise.all([
     manifestPromise,
+    migrationMapPromise,
     currentDocuments(),
     loadDocusaurusConfig(),
   ]);
@@ -1163,29 +1240,22 @@ test('current effective IDs and complete 54-route set match the baseline', async
   );
   assert.equal(new Set(documents.map(({effectiveId}) => effectiveId)).size, 54);
   assert.equal(new Set(documents.map(({route}) => route)).size, 54);
-  const baselineByPath = new Map(
-    manifest.documents.map((document) => [document.sourcePath, document]),
-  );
   for (const document of documents) {
-    const baseline = baselineByPath.get(document.baselineSourcePath);
-    const expectedEffectiveId =
-      baseline.effectiveId === 'welcome'
-        ? 'releem-overview'
-        : baseline.effectiveId;
+    const record = document.migrationRecord;
     assert.equal(
       document.effectiveId,
-      expectedEffectiveId,
-      `${document.sourcePath} effective document ID may only apply the approved welcome-to-releem-overview substitution`,
+      record.finalId,
+      `${document.sourcePath} effective document ID must match the migration map`,
     );
     assert.equal(
       document.route,
-      baseline.route,
-      `${document.sourcePath} public route must match the baseline`,
+      record.finalRoute,
+      `${document.sourcePath} public route must match the migration map`,
     );
   }
   assert.deepEqual(
     [...new Set(documents.map(({route}) => route))].sort(compare),
-    manifest.routes,
+    migrationMap.records.map(({finalRoute}) => finalRoute).sort(compare),
   );
 });
 
@@ -1572,15 +1642,13 @@ test('local image extraction ignores metadata, comments, and code but preserves 
 });
 
 test('all 54 final documents have one top-level owner and no cross-section ownership', async () => {
-  const [manifest, documents, sidebars] = await Promise.all([
-    manifestPromise,
+  const [migrationMap, documents, sidebars] = await Promise.all([
+    migrationMapPromise,
     currentDocuments(),
     loadSidebars(),
   ]);
-  const expectedFinalIds = manifest.documents
-    .map(({effectiveId}) =>
-      effectiveId === 'welcome' ? 'releem-overview' : effectiveId,
-    )
+  const expectedFinalIds = migrationMap.records
+    .map(({finalId}) => finalId)
     .sort(compare);
   const currentIds = documents.map(({effectiveId}) => effectiveId).sort(compare);
   const ownership = topLevelDocumentOwnership(sidebars);
@@ -1606,9 +1674,9 @@ test('all 54 final documents have one top-level owner and no cross-section owner
   );
 });
 
-test('every internal Markdown and MDX link resolves directly to an immutable route or current source file', async () => {
-  const [manifest, documents] = await Promise.all([
-    manifestPromise,
+test('every internal Markdown and MDX link resolves directly to a canonical route or current source file', async () => {
+  const [migrationMap, documents] = await Promise.all([
+    migrationMapPromise,
     currentDocuments(),
   ]);
   const documentsWithContents = await Promise.all(
@@ -1623,8 +1691,8 @@ test('every internal Markdown and MDX link resolves directly to an immutable rou
 
   assert.deepEqual(
     [...inventory.byRoute.keys()].sort(compare),
-    manifest.routes,
-    'Internal public links must resolve against the immutable route baseline',
+    migrationMap.records.map(({finalRoute}) => finalRoute).sort(compare),
+    'Internal public links must resolve against the canonical migration routes',
   );
   for (const document of documentsWithContents) {
     for (const reference of markdownLinkReferences(document.contents)) {
@@ -1651,9 +1719,10 @@ test('every internal Markdown and MDX link resolves directly to an immutable rou
   );
 });
 
-test('renamed documents resolve every image from the final source location without path or hash drift', async () => {
-  const [manifest, documents] = await Promise.all([
+test('mirrored documents resolve every image from the final source location without path or hash drift', async () => {
+  const [manifest, migrationMap, documents] = await Promise.all([
     manifestPromise,
+    migrationMapPromise,
     currentDocuments(),
   ]);
   const baselineByPath = new Map(
@@ -1663,7 +1732,9 @@ test('renamed documents resolve every image from the final source location witho
     documents.map((document) => [document.sourcePath, document]),
   );
 
-  for (const [baselinePath, finalPath] of Object.entries(approvedRenames)) {
+  for (const record of migrationMap.records) {
+    const baselinePath = baselineSourcePathFor(record.currentSource);
+    const finalPath = record.finalSource;
     assert.deepEqual(
       finalByPath.get(finalPath)?.images,
       baselineByPath.get(baselinePath)?.images,

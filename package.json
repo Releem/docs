@@ -13,7 +13,7 @@
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
     "typecheck": "tsc",
-    "docs:check": "node --test tests/docs-structure.test.mjs",
+    "docs:check": "node --test tests/docs-structure.test.mjs tests/docs-directory-mirror.test.mjs",
     "agent:check": "node --check scripts/agent-loop.mjs && node --test tests/agent-loop.test.mjs",
     "agent:status": "node scripts/agent-loop.mjs --status",
     "agent:next": "node scripts/agent-loop.mjs --manual",
@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@docusaurus/core": "3.9.2",
+    "@docusaurus/plugin-client-redirects": "3.9.2",
     "@docusaurus/preset-classic": "3.9.2",
     "@docusaurus/theme-search-algolia": "3.9.2",
     "@mdx-js/react": "^3.0.0",
