@@ -2,16 +2,25 @@
 id: releem-overview
 slug: /get-started
 title: Welcome to Releem
-sidebar_label: Welcome
+sidebar_label: Releem Overview
 ---
 
-# Welcome to Releem
-[Releem](https://releem.com) is a database advisor for MySQL, MariaDB and PostgreSQL that provides automatic metrics analysis, actionable insights, and safe automation. It helps detect issues quickly, optimize performance continuously, and reduce manual work at scale. 
+# Releem Overview
 
-This is the Releem documentation. Our documentation is a great place to find most answers and make sure that your experience using Releem is a great one. Please use the search box in the top right or the navigation menu on the left-hand side to explore what Releem can do for you and find the answers you're looking for.
+[Releem](https://releem.com) is a database advisor for MySQL, MariaDB, and PostgreSQL.
 
-Can't find what you're looking for? Please do contact us for assistance.
+It automatically analyzes database metrics, highlights issues, and gives you actionable recommendations.
 
-Thanks and enjoy Releem!
+Use this documentation to connect a server, verify data collection, understand the Dashboard, and work with Releem's recommendations.
+
+## Start here
+
+1. [Register for an account](/get-started/register-for-an-account).
+2. [Connect your database server](/get-started/connect-your-database-server).
+3. [Troubleshoot the Releem Agent](/get-started/troubleshoot-releem-agent) if collection does not work as expected.
+
+After your server is connected, use the [Dashboard](/dashboard) to review what Releem observes. Go to [Recommendations](/recommendations) when you are ready to review a proposed action.
+
+Use the search box or the navigation menu to find detailed installation, Agent-management, account, and database-optimization guidance.
 
 <img src={require('../../assets/images/releem_dashboard.png').default} alt="Releem Dashboard" className="shadow-img" />
