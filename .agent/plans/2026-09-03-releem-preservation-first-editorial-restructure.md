@@ -33,11 +33,11 @@
 **Reviewers:**
 - technical-writer
 
-- [ ] Enumerate the committed `docs/**/*.md` corpus and record one row per page with its source path, front matter, ID, slug, public route, H1, ordered headings, body SHA-256, internal links, code-fence language/content SHA-256/line number, image reference/alt text/line number, and procedure/recovery headings.
-- [ ] Record the current 31 tracked assets, including every image reference and every page that uses it. Mark screenshot visual freshness as `review-required`, not as a reason to remove it.
-- [ ] Add a preservation test that fails when a baseline page disappears, route/ID/slug changes without an explicit route exception, a code fence is removed or changed without a matching safety-exception record, an image placement disappears, or a specialist page loses sidebar ownership.
-- [ ] Add `docs:preservation:check` to `package.json` and include the new test in `docs:check`.
-- [ ] Run `npm run docs:preservation:check` and `npm run docs:check`; both must pass against the committed baseline before any content edit begins.
+- [x] Enumerate the committed `docs/**/*.md` corpus and record one row per page with its source path, front matter, ID, slug, public route, H1, ordered headings, body SHA-256, internal links, code-fence language/content SHA-256/line number, image reference/alt text/line number, and procedure/recovery headings.
+- [x] Record the current 31 tracked assets, including every image reference and every page that uses it. Mark screenshot visual freshness as `review-required`, not as a reason to remove it.
+- [x] Add a preservation test that fails when a baseline page disappears, route/ID/slug changes without an explicit route exception, a code fence is removed or changed without a matching safety-exception record, an image placement disappears, or a specialist page loses sidebar ownership.
+- [x] Add `docs:preservation:check` to `package.json` and include the new test in `docs:check`.
+- [x] Run `npm run docs:preservation:check` and `npm run docs:check`; both must pass against the committed baseline before any content edit begins.
 
 ## Task 2: Inventory only the permitted editorial changes
 

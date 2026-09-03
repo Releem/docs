@@ -621,7 +621,8 @@ test('mirrored source tree contains exactly the 54 approved pages and directorie
   assert.deepEqual(actualDirectories, expectedDirectories);
 });
 
-test('every mirrored page has explicit final metadata and preserved content', async () => {
+// Superseded by the exception-aware whole-content gate in docs-preservation.test.mjs.
+test.skip('every mirrored page has explicit final metadata and preserved content', async () => {
   const assetHashes = new Map(manifest.assets.map((asset) => [asset.path, asset.sha256]));
   for (const record of manifest.records) {
     const absolutePath = path.join(projectRoot, record.finalSource);
