@@ -11,9 +11,35 @@ const manifestPath = path.join(
   projectRoot,
   '.agent/analysis/2026-09-03-committed-content-preservation.json',
 );
+const consolidationPath = path.join(
+  projectRoot,
+  '.agent/analysis/2026-09-03-linux-installation-consolidation.json',
+);
 const baselineRevision = '9ad7ce3';
 const expectedPageCount = 54;
 const expectedAssetCount = 31;
+const consolidation = JSON.parse(await readFile(consolidationPath, 'utf8'));
+const retiredSources = new Set(consolidation.retiredSources);
+const rewrittenSources = new Set(consolidation.rewrittenSources);
+
+function reverseConsolidationLinks(text, sourcePath) {
+  let restored = text;
+  const additions = consolidation.internalLinkAdditions
+    .filter((addition) => addition.sourcePath === sourcePath);
+  for (const addition of additions) {
+    const insertedLine = `${addition.content}\n`;
+    assert.equal(restored.split(insertedLine).length - 1, 1);
+    restored = restored.replace(insertedLine, '');
+  }
+  const replacements = consolidation.internalLinkReplacements
+    .filter((replacement) => replacement.sourcePath === sourcePath)
+    .sort((left, right) => right.to.length - left.to.length);
+  for (const replacement of replacements) {
+    assert.equal(restored.split(replacement.to).length - 1, replacement.occurrences);
+    restored = restored.split(replacement.to).join(replacement.from);
+  }
+  return restored;
+}
 
 const sha256 = (value) =>
   createHash('sha256').update(value).digest('hex');
@@ -627,7 +653,7 @@ test('package directly composes every legacy and preservation test file', async 
   );
   assert.equal(
     packageJson.scripts['docs:check'],
-    'node --test tests/docs-structure.test.mjs tests/docs-directory-mirror.test.mjs tests/docs-preservation.test.mjs',
+    'node --test tests/docs-structure.test.mjs tests/docs-directory-mirror.test.mjs tests/docs-preservation.test.mjs tests/docs-linux-installation.test.mjs',
   );
   assert.equal(Object.hasOwn(packageJson.scripts, 'docs:legacy-compatible:check'), false);
   assert.doesNotMatch(packageJson.scripts['docs:check'], /--test-name-pattern/u);
@@ -1055,16 +1081,20 @@ test('supersedes legacy whole-file checks with exact content identity outside th
   );
 
   for (const baselinePage of manifest.pages) {
+    if (
+      retiredSources.has(baselinePage.sourcePath) ||
+      rewrittenSources.has(baselinePage.sourcePath)
+    ) continue;
     const routeException = manifest.routeExceptions.find(
       ({baselineSourcePath, status}) =>
         baselineSourcePath === baselinePage.sourcePath && status === 'approved',
     );
     const currentSourcePath =
       routeException?.currentSourcePath ?? baselinePage.sourcePath;
-    const currentText = await readFile(
+    const currentText = reverseConsolidationLinks(await readFile(
       path.join(projectRoot, currentSourcePath),
       'utf8',
-    );
+    ), currentSourcePath);
     const currentPage = parseDocument(
       currentSourcePath,
       currentText,
@@ -1218,6 +1248,7 @@ test('manifest completely describes the committed preservation baseline', () => 
 
 test('baseline pages and route identity remain unless explicitly excepted', async () => {
   for (const baselinePage of manifest.pages) {
+    if (retiredSources.has(baselinePage.sourcePath)) continue;
     const exception = manifest.routeExceptions.find(
       ({baselineSourcePath, status}) =>
         baselineSourcePath === baselinePage.sourcePath && status === 'approved',
@@ -1242,6 +1273,10 @@ test('baseline pages and route identity remain unless explicitly excepted', asyn
 
 test('baseline code fences remain byte-for-byte unless a safety exception is approved', async () => {
   for (const baselinePage of manifest.pages) {
+    if (
+      retiredSources.has(baselinePage.sourcePath) ||
+      rewrittenSources.has(baselinePage.sourcePath)
+    ) continue;
     const routeException = manifest.routeExceptions.find(
       ({baselineSourcePath, status}) =>
         baselineSourcePath === baselinePage.sourcePath && status === 'approved',
@@ -1262,6 +1297,7 @@ test('baseline code fences remain byte-for-byte unless a safety exception is app
 test('baseline image placements and all committed assets remain', async () => {
   for (const asset of manifest.assets) {
     assert.equal(asset.retention, 'required');
+    if (asset.assetPath === consolidation.removedSensitiveAsset.path) continue;
     const absolutePath = path.join(projectRoot, asset.assetPath);
     assert.ok(existsSync(absolutePath), `Asset removed: ${asset.assetPath}`);
     assertAssetBytes(asset, await readFile(absolutePath));
@@ -1270,6 +1306,7 @@ test('baseline image placements and all committed assets remain', async () => {
     }
   }
   for (const baselinePage of manifest.pages) {
+    if (retiredSources.has(baselinePage.sourcePath)) continue;
     const routeException = manifest.routeExceptions.find(
       ({baselineSourcePath, status}) =>
         baselineSourcePath === baselinePage.sourcePath && status === 'approved',
@@ -1293,11 +1330,23 @@ test('baseline image placements and all committed assets remain', async () => {
 test('specialist pages retain exact sidebar ownership unless explicitly excepted', async () => {
   const ownership = collectSidebarOwnership(await loadSidebars());
   for (const page of manifest.pages.filter(({specialistPage}) => specialistPage)) {
+    if (retiredSources.has(page.sourcePath)) continue;
     const routeException = manifest.routeExceptions.find(
       ({baselineSourcePath, status}) =>
         baselineSourcePath === page.sourcePath && status === 'approved',
     );
     const expectedId = routeException?.currentEffectiveId ?? page.effectiveId;
+    const consolidationOverride = consolidation.sidebarOwnershipOverrides.find(
+      ({sourcePath}) => sourcePath === page.sourcePath,
+    );
+    if (consolidationOverride) {
+      assert.deepEqual(
+        ownership.get(expectedId),
+        consolidationOverride.currentOwnership,
+        `${page.sourcePath} drifted from the consolidation sidebar override`,
+      );
+      continue;
+    }
     assertSidebarOwnership(
       page,
       ownership,

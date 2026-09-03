@@ -15,9 +15,12 @@ Click the "Add Server" button to start the setup process.
 <img src={require('../../assets/images/dashboard-add-server.png').default} alt="Releem Add Server popup" className="shadow-img" />
 
 Choose the type of database server you are adding:
-- [MySQL on Linux Server: Automatic Agent Installation (Linux)](/installation) – Automatic installation for MySQL instances running on Linux-based servers.
-- [MySQL on Linux Server: Advanced Agent Installation](/installation/installation-methods/linux-manual) – Manual installation for MySQL instances running on Linux-based servers. Use this guide if you don't have a MySQL root user, or if MySQL is installed on a different IP address, or if you want to create a Releem user manually.
-- [PostgreSQL on Linux Server: Manual Agent Installation](/supported-databases/postgresql/install-on-linux) – Manual installation for PostgreSQL instances running on Linux-based servers.
+- [MySQL on Linux Server: Automatic Agent Installation (Linux)](/installation/linux?database=mysql#mysql-automatic-installation) – Automatic installation for MySQL instances running on Linux-based servers.
+- [MySQL on Linux Server: Advanced Agent Installation](/installation/linux?database=mysql#mysql-manual-installation) – Manual installation for MySQL instances running on Linux-based servers. Use this guide if you don't have a MySQL root user, or if MySQL is installed on a different IP address, or if you want to create a Releem user manually.
+- [MariaDB on Linux Server: Automatic Agent Installation](/installation/linux?database=mariadb#mariadb-automatic-installation) – Automatic installation for MariaDB instances running on Linux-based servers.
+- [MariaDB on Linux Server: Manual Agent Installation](/installation/linux?database=mariadb#mariadb-manual-installation) – Manual installation for MariaDB instances when a DBA creates the monitoring account.
+- [PostgreSQL on Linux Server: Automatic Agent Installation](/installation/linux?database=postgresql#postgresql-automatic-installation) – Automatic database-user creation for PostgreSQL instances running on Linux-based servers.
+- [PostgreSQL on Linux Server: Manual Agent Installation](/installation/linux?database=postgresql#postgresql-manual-installation) – Manual installation for PostgreSQL instances running on Linux-based servers.
 - [WHM/cPanel](/installation/installation-methods/whm-cpanel) – Recommended installation path for database servers managed through WHM/cPanel.
 - [MySQL on Linux Server: Manual Installation in Docker](/installation/installation-methods/docker) – Manual installation for MySQL instances running in Docker containers.
 - [Self-Managed Server (Windows)](/installation/installation-methods/windows) – For MySQL instances running on Windows.

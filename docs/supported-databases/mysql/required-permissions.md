@@ -4,222 +4,89 @@ slug: /supported-databases/mysql/required-permissions
 title: "MySQL Permissions for Releem Agent"
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # MySQL Permissions for Releem Agent
 
-Create read-only database user "releem" which Releem Agent will use to collect database metrics. Select your environment and database version, copy SQL statements and run in the MySQL console.
+Use this page to create and review the database account that the Releem Agent uses with MySQL 5.5–8.0. The examples separate the grant families used by the current installer according to what they allow; they are not a universal least-privilege policy. Have a DBA select and review only the enabled capabilities for the target MySQL version and hosting environment.
 
-<Tabs>
-  <TabItem value="linux" label="Linux" default>
-    <Tabs>
-      <TabItem value="mysql-8" label="MySQL >= 8.0" default>
-        Change [Password] to your secret password
-        ```SQL
-        CREATE USER 'releem'@'%' identified by '[Password]';
-        GRANT PROCESS, REPLICATION CLIENT, SHOW VIEW ON *.* TO 'releem'@'%';
-        GRANT SELECT ON performance_schema.events_statements_summary_by_digest TO 'releem'@'%';
-        GRANT SELECT ON performance_schema.table_io_waits_summary_by_index_usage TO 'releem'@'%';
-        GRANT SELECT ON performance_schema.file_summary_by_instance TO 'releem'@'%';
-        GRANT SYSTEM_VARIABLES_ADMIN ON *.* TO 'releem'@'%';
-        ```
-      </TabItem>
-      <TabItem value="mariadb-mysql-5" label="MariaDB and MySQL < 8.0">
-        Change [Password] to your secret password
-        ```SQL
-        CREATE USER 'releem'@'%' identified by '[Password]';
-        GRANT PROCESS, REPLICATION CLIENT, SHOW VIEW ON *.* TO 'releem'@'%';
-        GRANT SELECT ON performance_schema.events_statements_summary_by_digest TO 'releem'@'%';
-        GRANT SELECT ON performance_schema.table_io_waits_summary_by_index_usage TO 'releem'@'%';
-        GRANT SELECT ON performance_schema.file_summary_by_instance TO 'releem'@'%';
-        GRANT SUPER ON *.* TO 'releem'@'%';
-        ```
-      </TabItem>
-    </Tabs>
+Replace `AGENT_SOURCE_HOST` with the exact host from which the Agent connects, such as `127.0.0.1` when the Agent uses a local TCP connection. Replace `<PASSWORD>` through your approved credential-management process. Do not use a wildcard host as the default.
 
+Performance Schema coverage and administrative privileges vary by MySQL version and managed service. Validate every statement against the actual version and deployment before applying it.
 
-    ## Additional Database Permissions Required
+For a remote MySQL connection, the current automatic installer creates a wildcard account host when `RELEEM_MYSQL_HOST` is not `127.0.0.1` or a local socket. If you require an exact-source account, use a DBA-created account and the manual installation configuration instead. That avoids wildcard account creation, but it does not remove the installer's separately documented child-process argument and log-upload risks.
 
-    To enable enable Automatic SQL Query Optimization please add Additional Permissions.
+## Monitoring and query visibility
 
-    The SQL Query Optimization feature requires additional permissions for the Releem Agent user. These permissions will be granted during the automatic installation process.
-    To grant these privileges, run the following query in the MySQL console:
-    ```sql
-      SELECT Concat("GRANT SELECT ON *.* TO `",User,"`@`", Host,"`;") FROM mysql.user WHERE User='releem';
-    ```
-    Then execute the resulting GRANT statements in the MySQL console. For example:
-    ```sql
-      GRANT SELECT ON *.* TO `releem`@`%`;
-    ```    
+Create the monitoring account with an exact Agent source host:
 
-  </TabItem>
-  <TabItem value="aws-rds" label="AWS RDS">
-    <Tabs>
-      <TabItem value="mysql-8" label="MySQL >= 8.0" default>
-        Change [Password] to your secret password
-        ```SQL
-        CREATE USER 'releem'@'%' identified by '[Password]';
-        GRANT PROCESS, REPLICATION CLIENT, SHOW VIEW ON *.* TO 'releem'@'%';
-        GRANT SELECT ON performance_schema.events_statements_summary_by_digest TO 'releem'@'%';
-        GRANT SELECT ON performance_schema.table_io_waits_summary_by_index_usage TO 'releem'@'%';
-        GRANT SELECT ON performance_schema.file_summary_by_instance TO 'releem'@'%';
-        ```
-      </TabItem>
-      <TabItem value="mariadb-mysql-5" label="MariaDB and MySQL < 8.0">
-        Change [Password] to your secret password
-        ```SQL
-        CREATE USER 'releem'@'%' identified by '[Password]';
-        GRANT PROCESS, REPLICATION CLIENT, SHOW VIEW ON *.* TO 'releem'@'%';
-        GRANT SELECT ON performance_schema.events_statements_summary_by_digest TO 'releem'@'%';
-        GRANT SELECT ON performance_schema.table_io_waits_summary_by_index_usage TO 'releem'@'%';
-        GRANT SELECT ON performance_schema.file_summary_by_instance TO 'releem'@'%';
-        ```
-      </TabItem>
-    </Tabs>
+```sql
+CREATE USER 'releem'@'AGENT_SOURCE_HOST' IDENTIFIED BY '<PASSWORD>';
+GRANT PROCESS, REPLICATION CLIENT, SHOW VIEW ON *.* TO 'releem'@'AGENT_SOURCE_HOST';
+GRANT SELECT ON performance_schema.events_statements_summary_by_digest TO 'releem'@'AGENT_SOURCE_HOST';
+GRANT SELECT ON performance_schema.table_io_waits_summary_by_index_usage TO 'releem'@'AGENT_SOURCE_HOST';
+GRANT SELECT ON performance_schema.file_summary_by_instance TO 'releem'@'AGENT_SOURCE_HOST';
+GRANT SELECT ON mysql.* TO 'releem'@'AGENT_SOURCE_HOST';
+```
 
-    ## Additional Database Permissions Required
+These are the current installer's core monitoring grant families. The `mysql.*` grant exposes system-schema data, including account and privilege metadata, to the monitoring account. Confirm that each named Performance Schema table exists and is populated on the target MySQL version. Managed services can expose a different subset.
 
-    To enable enable Automatic SQL Query Optimization please add Additional Permissions.
+Query visibility can require broader read access than baseline metrics. The current installer can grant global `SELECT` when query optimization is enabled:
 
-    The SQL Query Optimization feature requires additional permissions for the Releem Agent user.
-    To grant these privileges, run the following query in the MySQL console:
-    ```sql
-    GRANT SELECT ON *.* TO releem@'%'
-    ```
+```sql
+GRANT SELECT ON *.* TO 'releem'@'AGENT_SOURCE_HOST';
+```
 
-    With AWS RDS, performance schema consumers can't be enabled permanently in a configuration. Create the following procedure to give the Agent the ability to enable performance_schema.events_* consumers at runtime:
-    ```sql
-    CREATE SCHEMA IF NOT EXISTS releem;
-    DELIMITER $$
-    CREATE PROCEDURE releem.enable_events_statements_consumers()
-        SQL SECURITY DEFINER
-    BEGIN
-        UPDATE performance_schema.setup_consumers SET enabled='YES' WHERE name LIKE 'events_statements_%';
-    END $$
-    DELIMITER ;
-    GRANT EXECUTE ON PROCEDURE releem.enable_events_statements_consumers TO releem@'%';
-    ```
+Global `SELECT` exposes data across every database. A DBA must decide whether that scope is acceptable or whether an engine- and feature-specific scope can be used before enabling query collection.
 
-  </TabItem>
+On AWS RDS for MySQL, Performance Schema consumers cannot always be enabled persistently through configuration. If runtime enablement is required, an administrator can create a narrowly owned definer procedure and grant only its execution to the exact Agent account:
 
-  <TabItem value="gcp-cloudsql" label="GCP Cloud SQL">
-    <Tabs>
-      <TabItem value="mysql-8" label="MySQL >= 8.0" default>
-        Change [Password] to your secret password
-        ```SQL
-        CREATE USER 'releem'@'%' identified by '[Password]';
-        GRANT PROCESS, REPLICATION CLIENT, SHOW VIEW ON *.* TO 'releem'@'%';
-        GRANT SELECT ON performance_schema.events_statements_summary_by_digest TO 'releem'@'%';
-        GRANT SELECT ON performance_schema.table_io_waits_summary_by_index_usage TO 'releem'@'%';
-        GRANT SELECT ON performance_schema.file_summary_by_instance TO 'releem'@'%';
-        ```
-      </TabItem>
-      <TabItem value="mariadb-mysql-5" label="MariaDB and MySQL < 8.0">
-        Change [Password] to your secret password
-        ```SQL
-        CREATE USER 'releem'@'%' identified by '[Password]';
-        GRANT PROCESS, REPLICATION CLIENT, SHOW VIEW ON *.* TO 'releem'@'%';
-        GRANT SELECT ON performance_schema.events_statements_summary_by_digest TO 'releem'@'%';
-        GRANT SELECT ON performance_schema.table_io_waits_summary_by_index_usage TO 'releem'@'%';
-        GRANT SELECT ON performance_schema.file_summary_by_instance TO 'releem'@'%';
-        ```
-      </TabItem>
-    </Tabs>
+```sql
+CREATE SCHEMA IF NOT EXISTS releem;
+DELIMITER $$
+CREATE PROCEDURE releem.enable_events_statements_consumers()
+    SQL SECURITY DEFINER
+BEGIN
+    UPDATE performance_schema.setup_consumers
+    SET enabled = 'YES'
+    WHERE name LIKE 'events_statements_%';
+END $$
+DELIMITER ;
+GRANT EXECUTE ON PROCEDURE releem.enable_events_statements_consumers
+  TO 'releem'@'AGENT_SOURCE_HOST';
+```
 
-    ## Additional Database Permissions Required
+Review the procedure owner, definition, and managed-service support before using this optional capability.
 
-    To enable enable Automatic SQL Query Optimization please add Additional Permissions.
+## Configuration application
 
-    The SQL Query Optimization feature requires additional permissions for the Releem Agent user.
-    To grant these privileges, run the following query in the MySQL console:
-    ```sql
-    GRANT SELECT ON *.* TO releem@'%'
-    ```
+Applying database configuration is state-changing and must not be bundled into a monitoring-only account by default.
 
-  </TabItem>
+For MySQL 8.0, `SYSTEM_VARIABLES_ADMIN` allows the account to change global system variables. This is a state-changing capability:
 
-  <TabItem value="docker" label="Docker">
-    <Tabs>
-      <TabItem value="mysql-8" label="MySQL >= 8.0" default>
-        Change [Password] to your secret password
-        ```SQL
-        CREATE USER 'releem'@'%' identified by '[Password]';
-        GRANT PROCESS, REPLICATION CLIENT, SHOW VIEW ON *.* TO 'releem'@'%';
-        GRANT SELECT ON performance_schema.events_statements_summary_by_digest TO 'releem'@'%';
-        GRANT SELECT ON performance_schema.table_io_waits_summary_by_index_usage TO 'releem'@'%';
-        GRANT SELECT ON performance_schema.file_summary_by_instance TO 'releem'@'%';
-        GRANT SYSTEM_VARIABLES_ADMIN ON *.* TO 'releem'@'%';
-        ```
-      </TabItem>
-      <TabItem value="mariadb-mysql-5" label="MariaDB and MySQL < 8.0">
-        Change [Password] to your secret password
-        ```SQL
-        CREATE USER 'releem'@'%' identified by '[Password]';
-        GRANT PROCESS, REPLICATION CLIENT, SHOW VIEW ON *.* TO 'releem'@'%';
-        GRANT SELECT ON performance_schema.events_statements_summary_by_digest TO 'releem'@'%';
-        GRANT SELECT ON performance_schema.table_io_waits_summary_by_index_usage TO 'releem'@'%';
-        GRANT SELECT ON performance_schema.file_summary_by_instance TO 'releem'@'%';
-        GRANT SUPER ON *.* TO 'releem'@'%';
-        ```
-      </TabItem>
-    </Tabs>
+```sql
+GRANT SYSTEM_VARIABLES_ADMIN ON *.* TO 'releem'@'AGENT_SOURCE_HOST';
+```
 
+For MySQL 5.5–5.7, the current installer uses `SUPER`. `SUPER` is broader than `SYSTEM_VARIABLES_ADMIN` and grants state-changing administrative powers unrelated to metrics collection:
 
-      ## Additional Database Permissions Required
+```sql
+GRANT SUPER ON *.* TO 'releem'@'AGENT_SOURCE_HOST';
+```
 
-      To enable enable Automatic SQL Query Optimization please add Additional Permissions.
+Grant the version-appropriate privilege only if the Agent is authorized to apply configuration. Some managed database services do not permit either grant and require provider-specific parameter-management workflows.
 
-      The SQL Query Optimization feature requires additional permissions for the Releem Agent user. 
-      To grant these privileges, run the following query in the MySQL console:
-      ```sql
-      SELECT Concat("GRANT SELECT ON *.* TO `",User,"`@`", Host,"`;") FROM mysql.user WHERE User='releem';
-      ```
-      Then execute the resulting GRANT statements in the MySQL console. For example:
-      ```sql
-        GRANT SELECT ON *.* TO `releem`@`%`;
-      ```         
+## Query and schema application {#additional-database-permissions-required}
 
-  </TabItem>
-  <TabItem value="windows" label="Windows" default>
-    <Tabs>
-      <TabItem value="mysql-8" label="MySQL >= 8.0" default>
-        Change [Password] to your secret password
-        ```SQL
-        CREATE USER 'releem'@'%' identified by '[Password]';
-        GRANT PROCESS, REPLICATION CLIENT, SHOW VIEW ON *.* TO 'releem'@'%';
-        GRANT SELECT ON performance_schema.events_statements_summary_by_digest TO 'releem'@'%';
-        GRANT SELECT ON performance_schema.table_io_waits_summary_by_index_usage TO 'releem'@'%';
-        GRANT SELECT ON performance_schema.file_summary_by_instance TO 'releem'@'%';
-        GRANT SYSTEM_VARIABLES_ADMIN ON *.* TO 'releem'@'%';
-        ```
-      </TabItem>
-      <TabItem value="mariadb-mysql-5" label="MariaDB and MySQL < 8.0">
-        Change [Password] to your secret password
-        ```SQL
-        CREATE USER 'releem'@'%' identified by '[Password]';
-        GRANT PROCESS, REPLICATION CLIENT, SHOW VIEW ON *.* TO 'releem'@'%';
-        GRANT SELECT ON performance_schema.events_statements_summary_by_digest TO 'releem'@'%';
-        GRANT SELECT ON performance_schema.table_io_waits_summary_by_index_usage TO 'releem'@'%';
-        GRANT SELECT ON performance_schema.file_summary_by_instance TO 'releem'@'%';
-        GRANT SUPER ON *.* TO 'releem'@'%';
-        ```
-      </TabItem>
-    </Tabs>      
+Collecting query text and applying query or schema changes are different capabilities. The global `SELECT` grant above supports query visibility but does not authorize schema changes.
 
+Automatic schema changes are state-changing and can require DDL, DML, trigger, and replication-related privileges. Do not infer or add those privileges from this monitoring template. If the feature is explicitly approved, review the documented workflow and its current grants in [Automatic Schema Changes](/recommendations/query-optimization/automatic-schema-changes#grant-permissions-for-pt-online-schema-change), then scope the account to the approved databases and exact Agent source.
 
-    ## Additional Database Permissions Required
+## Verify the effective account
 
-    To enable enable Automatic SQL Query Optimization please add Additional Permissions.
+Confirm the host-specific account and inspect its complete effective grants before starting the Agent:
 
-    The SQL Query Optimization feature requires additional permissions for the Releem Agent user. 
-    To grant these privileges, run the following query in the MySQL console:
-    ```sql
-    SELECT Concat("GRANT SELECT ON *.* TO `",User,"`@`", Host,"`;") FROM mysql.user WHERE User='releem';
-    ```
-    Then execute the resulting GRANT statements in the MySQL console. For example:
-    ```sql
-      GRANT SELECT ON *.* TO `releem`@`%`;
-    ```    
-  </TabItem>
-</Tabs>
+```sql
+SELECT User, Host FROM mysql.user WHERE User = 'releem';
+SHOW GRANTS FOR 'releem'@'AGENT_SOURCE_HOST';
+```
+
+Record the approved capabilities, verify that no unintended host variant exists, and retest the grants whenever the Agent features, database version, or hosting model changes.

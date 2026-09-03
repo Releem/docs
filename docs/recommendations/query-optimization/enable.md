@@ -43,7 +43,7 @@ To enable the SQL Query Optimization feature, please select your installation ty
 
   #### MySQL/MariaDB/Percona Servers
 
-  1. Grant additional permissions to the `releem` user. The SQL Query Optimization feature requires [Additional Permissions](/supported-databases/mysql/required-permissions#additional-database-permissions-required) for the Releem Agent user.
+  1. Grant additional permissions to the `releem` user. Use the [MySQL or Percona permissions](/supported-databases/mysql/required-permissions#additional-database-permissions-required) or the [MariaDB permissions](/supported-databases/mariadb/required-permissions#additional-database-permissions-required) for the target engine.
   2. Add `query_optimization=true` setting to the `/opt/releem/releem.conf`.
   3. Restart Releem Agent using the following command:
      ```bash
@@ -212,7 +212,7 @@ performance-schema-consumer-events-statements-current = ON
 
 ## Additional Database Permissions Required
 
-For MySQL/MariaDB/Percona, the SQL Query Optimization feature requires [Additional Permissions](/supported-databases/mysql/required-permissions#additional-database-permissions-required) for the Releem Agent user.
+For MySQL or Percona, review the [MySQL additional permissions](/supported-databases/mysql/required-permissions#additional-database-permissions-required). For MariaDB, review the [MariaDB additional permissions](/supported-databases/mariadb/required-permissions#additional-database-permissions-required).
 
 For PostgreSQL, grant optimization read access to the Releem Agent user:
 

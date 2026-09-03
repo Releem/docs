@@ -26,6 +26,10 @@ const migrationMapPath = path.join(
   '.agent/analysis/2026-09-02-releem-docs-directory-mirror-map.json',
 );
 const redirectsPath = path.join(projectRoot, 'redirects.mjs');
+const consolidationPath = path.join(
+  projectRoot,
+  '.agent/analysis/2026-09-03-linux-installation-consolidation.json',
+);
 
 const approvedRenames = {
   'docs/getting-started/schema-optimization.md':
@@ -467,7 +471,10 @@ function documentAnchorIds(contents) {
     anchors.add(match[2]);
   }
   for (const match of prose.matchAll(/^\s*#{1,6}[\t ]+(.+?)\s*#*\s*$/gmu)) {
+    const explicitId = match[1].match(/\s+\{#([^}]+)\}\s*$/u)?.[1];
+    if (explicitId) anchors.add(explicitId);
     const headingText = match[1]
+      .replace(/\s+\{#[^}]+\}\s*$/u, '')
       .replace(/!\[([^\]]*)\]\([^)]*\)/g, '$1')
       .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
       .replace(/<[^>]+>/g, '')
@@ -852,6 +859,25 @@ function reverseDeclaredBodyChanges(body, record) {
   return reversed;
 }
 
+function reverseConsolidationLinks(text, sourcePath, consolidation) {
+  let restored = text;
+  const additions = consolidation.internalLinkAdditions
+    .filter((addition) => addition.sourcePath === sourcePath);
+  for (const addition of additions) {
+    const insertedLine = `${addition.content}\n`;
+    assert.equal(restored.split(insertedLine).length - 1, 1);
+    restored = restored.replace(insertedLine, '');
+  }
+  const replacements = consolidation.internalLinkReplacements
+    .filter((replacement) => replacement.sourcePath === sourcePath)
+    .sort((left, right) => right.to.length - left.to.length);
+  for (const replacement of replacements) {
+    assert.equal(restored.split(replacement.to).length - 1, replacement.occurrences);
+    restored = restored.split(replacement.to).join(replacement.from);
+  }
+  return restored;
+}
+
 function reverseMigratedDocument(contents, record) {
   const text = contents.toString('utf8');
   const match = text.match(/^---\r?\n[\s\S]*?\r?\n---(?:\r?\n|$)/u);
@@ -900,6 +926,7 @@ function referencedImagePaths(sourcePath, contents) {
 
 async function currentDocuments() {
   const migrationMap = await migrationMapPromise;
+  const consolidation = await consolidationPromise;
   const migrationByFinalSource = new Map(
     migrationMap.records.map((record) => [record.finalSource, record]),
   );
@@ -912,12 +939,26 @@ async function currentDocuments() {
     markdownFiles.map(async (absolutePath) => {
       const sourcePath = toRepoPath(absolutePath);
       const migrationRecord = migrationByFinalSource.get(sourcePath);
-      assert.ok(migrationRecord, `Migration map is missing ${sourcePath}`);
-      const baselineSourcePath = baselineSourcePathFor(
-        migrationRecord.currentSource,
+      const isRewritten = consolidation.rewrittenSources.includes(sourcePath);
+      assert.ok(
+        migrationRecord || consolidation.addedSources.includes(sourcePath),
+        `Consolidation overlay is missing ${sourcePath}`,
       );
+      const baselineSourcePath = migrationRecord
+        ? baselineSourcePathFor(migrationRecord.currentSource)
+        : sourcePath;
       const contents = await readFile(absolutePath);
       const parsed = parseDocument(sourcePath, contents);
+      const restoredBody = reverseConsolidationLinks(
+        parsed.normalizedBody,
+        sourcePath,
+        consolidation,
+      );
+      const restoredContents = reverseConsolidationLinks(
+        contents.toString('utf8'),
+        sourcePath,
+        consolidation,
+      );
       const images = await Promise.all(
         referencedImagePaths(sourcePath, contents).map(async (imagePath) => {
           const absoluteImagePath = path.join(projectRoot, imagePath);
@@ -943,12 +984,12 @@ async function currentDocuments() {
         nonMigrationFrontMatter: stripMigrationFrontMatter(
           parsed.normalizedFrontMatter,
         ),
-        reversedBodySha256: sha256(
-          reverseDeclaredBodyChanges(parsed.normalizedBody, migrationRecord),
-        ),
-        restoredWholeFileSha256: sha256(
-          reverseMigratedDocument(contents, migrationRecord),
-        ),
+        reversedBodySha256: migrationRecord && !isRewritten
+          ? sha256(reverseDeclaredBodyChanges(restoredBody, migrationRecord))
+          : null,
+        restoredWholeFileSha256: migrationRecord && !isRewritten
+          ? sha256(reverseMigratedDocument(restoredContents, migrationRecord))
+          : null,
         explicitId: parsed.explicitId,
         explicitSlug: parsed.explicitSlug,
         effectiveId: parsed.effectiveId,
@@ -978,6 +1019,7 @@ async function currentAssets() {
 
 const manifestPromise = readFile(baselineManifestPath, 'utf8').then(JSON.parse);
 const migrationMapPromise = readFile(migrationMapPath, 'utf8').then(JSON.parse);
+const consolidationPromise = readFile(consolidationPath, 'utf8').then(JSON.parse);
 
 const packageJson = JSON.parse(
   await readFile(path.join(projectRoot, 'package.json'), 'utf8'),
@@ -1230,10 +1272,11 @@ test.skip('non-migration front matter and reversed bodies match immutable hashes
   }
 });
 
-test('current effective IDs and complete 54-route set match the migration map', async () => {
-  const [manifest, migrationMap, documents, docusaurusConfig] = await Promise.all([
+test('current effective IDs and complete 54-route set apply the Linux consolidation overlay', async () => {
+  const [manifest, migrationMap, consolidation, documents, docusaurusConfig] = await Promise.all([
     manifestPromise,
     migrationMapPromise,
+    consolidationPromise,
     currentDocuments(),
     loadDocusaurusConfig(),
   ]);
@@ -1241,10 +1284,20 @@ test('current effective IDs and complete 54-route set match the migration map', 
     routingFromDocusaurusConfig(docusaurusConfig),
     manifest.routing,
   );
+  assert.equal(documents.length, consolidation.currentPageCount);
   assert.equal(new Set(documents.map(({effectiveId}) => effectiveId)).size, 54);
   assert.equal(new Set(documents.map(({route}) => route)).size, 54);
+  const addedRoutes = new Map([
+    ['docs/installation/linux.md', '/installation/linux'],
+    ['docs/supported-databases/mariadb/required-permissions.md', '/supported-databases/mariadb/required-permissions'],
+    ['docs/supported-databases/postgresql/required-permissions.md', '/supported-databases/postgresql/required-permissions'],
+  ]);
   for (const document of documents) {
     const record = document.migrationRecord;
+    if (!record) {
+      assert.equal(document.route, addedRoutes.get(document.sourcePath));
+      continue;
+    }
     assert.equal(
       document.effectiveId,
       record.finalId,
@@ -1256,10 +1309,14 @@ test('current effective IDs and complete 54-route set match the migration map', 
       `${document.sourcePath} public route must match the migration map`,
     );
   }
-  assert.deepEqual(
-    [...new Set(documents.map(({route}) => route))].sort(compare),
-    migrationMap.records.map(({finalRoute}) => finalRoute).sort(compare),
-  );
+  const retiredSources = new Set(consolidation.retiredSources);
+  const expectedRoutes = [
+    ...migrationMap.records
+      .filter(({finalSource}) => !retiredSources.has(finalSource))
+      .map(({finalRoute}) => finalRoute),
+    ...addedRoutes.values(),
+  ].sort(compare);
+  assert.deepEqual(documents.map(({route}) => route).sort(compare), expectedRoutes);
 });
 
 test('every referenced local image exists and matches the page baseline', async () => {
@@ -1271,6 +1328,10 @@ test('every referenced local image exists and matches the page baseline', async 
     manifest.documents.map((document) => [document.sourcePath, document]),
   );
   for (const document of documents) {
+    if (!document.migrationRecord) {
+      assert.deepEqual(document.images, []);
+      continue;
+    }
     assert.deepEqual(
       document.images,
       baselineByPath.get(document.baselineSourcePath).images,
@@ -1284,13 +1345,17 @@ test('all existing image and static paths and byte hashes exactly match the base
     manifestPromise,
     currentAssets(),
   ]);
+  const consolidation = await consolidationPromise;
+  const expectedAssets = manifest.assets.filter(
+    ({path: assetPath}) => assetPath !== consolidation.removedSensitiveAsset.path,
+  );
   assert.deepEqual(
     assets.map(({path: assetPath}) => assetPath),
-    manifest.assets.map(({path: assetPath}) => assetPath),
-    'All assets/images and static/img paths must exactly match the baseline',
+    expectedAssets.map(({path: assetPath}) => assetPath),
+    'All assets/images and static/img paths must match the baseline minus the approved redaction',
   );
   const baselineByPath = new Map(
-    manifest.assets.map((asset) => [asset.path, asset]),
+    expectedAssets.map((asset) => [asset.path, asset]),
   );
   for (const asset of assets) {
     assert.equal(
@@ -1644,15 +1709,12 @@ test('local image extraction ignores metadata, comments, and code but preserves 
   );
 });
 
-test('all 54 final documents have one top-level owner and no cross-section ownership', async () => {
-  const [migrationMap, documents, sidebars] = await Promise.all([
-    migrationMapPromise,
+test('all 54 current documents have one top-level owner and no cross-section ownership', async () => {
+  const [documents, sidebars] = await Promise.all([
     currentDocuments(),
     loadSidebars(),
   ]);
-  const expectedFinalIds = migrationMap.records
-    .map(({finalId}) => finalId)
-    .sort(compare);
+  const expectedFinalIds = documents.map(({effectiveId}) => effectiveId).sort(compare);
   const currentIds = documents.map(({effectiveId}) => effectiveId).sort(compare);
   const ownership = topLevelDocumentOwnership(sidebars);
   const duplicateOwnership = [...ownership]
@@ -1694,8 +1756,8 @@ test('every internal Markdown and MDX link resolves directly to a canonical rout
 
   assert.deepEqual(
     [...inventory.byRoute.keys()].sort(compare),
-    migrationMap.records.map(({finalRoute}) => finalRoute).sort(compare),
-    'Internal public links must resolve against the canonical migration routes',
+    documents.map(({route}) => route).sort(compare),
+    'Internal public links must resolve against the current canonical routes',
   );
   for (const document of documentsWithContents) {
     for (const reference of markdownLinkReferences(document.contents)) {
@@ -1723,9 +1785,10 @@ test('every internal Markdown and MDX link resolves directly to a canonical rout
 });
 
 test('mirrored documents resolve every image from the final source location without path or hash drift', async () => {
-  const [manifest, migrationMap, documents] = await Promise.all([
+  const [manifest, migrationMap, consolidation, documents] = await Promise.all([
     manifestPromise,
     migrationMapPromise,
+    consolidationPromise,
     currentDocuments(),
   ]);
   const baselineByPath = new Map(
@@ -1736,6 +1799,7 @@ test('mirrored documents resolve every image from the final source location with
   );
 
   for (const record of migrationMap.records) {
+    if (consolidation.retiredSources.includes(record.finalSource)) continue;
     const baselinePath = baselineSourcePathFor(record.currentSource);
     const finalPath = record.finalSource;
     assert.deepEqual(

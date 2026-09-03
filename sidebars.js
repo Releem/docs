@@ -24,32 +24,41 @@ const sidebars = {
       label: 'Supported Databases',
       link: {type: 'doc', id: 'supported-databases/mysql/required-permissions'},
       items: [
-        'supported-databases/postgresql/install-on-linux',
+        {
+          type: 'doc',
+          id: 'supported-databases/mariadb/required-permissions',
+          label: 'MariaDB Permissions',
+        },
+        {
+          type: 'doc',
+          id: 'supported-databases/postgresql/required-permissions',
+          label: 'PostgreSQL Permissions',
+        },
       ],
     },
     {
       type: 'category',
       label: 'Installation',
-      link: {
-        type: 'doc',
-        id: 'installation/linux-automatic',
-      },
       items: [
         {
+          type: 'doc',
+          id: 'installation/linux',
+          label: 'Linux',
+        },
+        'installation/installation-methods/windows',
+        'installation/installation-methods/docker',
+        'installation/installation-methods/kubernetes',
+        {
           type: 'category',
-          label: 'Installation Methods',
+          label: 'Managed databases',
           items: [
-            'installation/installation-methods/linux-manual',
-            'installation/installation-methods/windows',
-            'installation/installation-methods/docker',
-            'installation/installation-methods/kubernetes',
             'installation/installation-methods/aws-rds',
             'installation/installation-methods/gcp-cloud-sql',
             'installation/installation-methods/azure-database-for-mysql',
-            'installation/installation-methods/clusters',
-            'installation/installation-methods/whm-cpanel',
           ],
         },
+        'installation/installation-methods/clusters',
+        'installation/installation-methods/whm-cpanel',
         {
           type: 'category',
           label: 'Manage the Releem Agent',

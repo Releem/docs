@@ -20,6 +20,10 @@ const planPath = path.join(
   '.agent/plans/2026-09-02-releem-docs-directory-mirror-and-redirects.md',
 );
 const redirectsPath = path.join(projectRoot, 'redirects.mjs');
+const consolidationPath = path.join(
+  projectRoot,
+  '.agent/analysis/2026-09-03-linux-installation-consolidation.json',
+);
 const approvedTopLevelDirectories = [
   'get-started',
   'supported-databases',
@@ -55,28 +59,38 @@ const expectedFinalSidebar = {
         type: 'doc',
         id: 'supported-databases/mysql/required-permissions',
       },
-      items: ['supported-databases/postgresql/install-on-linux'],
+      items: [
+        {
+          type: 'doc',
+          id: 'supported-databases/mariadb/required-permissions',
+          label: 'MariaDB Permissions',
+        },
+        {
+          type: 'doc',
+          id: 'supported-databases/postgresql/required-permissions',
+          label: 'PostgreSQL Permissions',
+        },
+      ],
     },
     {
       type: 'category',
       label: 'Installation',
-      link: {type: 'doc', id: 'installation/linux-automatic'},
       items: [
+        {type: 'doc', id: 'installation/linux', label: 'Linux'},
+        'installation/installation-methods/windows',
+        'installation/installation-methods/docker',
+        'installation/installation-methods/kubernetes',
         {
           type: 'category',
-          label: 'Installation Methods',
+          label: 'Managed databases',
           items: [
-            'installation/installation-methods/linux-manual',
-            'installation/installation-methods/windows',
-            'installation/installation-methods/docker',
-            'installation/installation-methods/kubernetes',
             'installation/installation-methods/aws-rds',
             'installation/installation-methods/gcp-cloud-sql',
             'installation/installation-methods/azure-database-for-mysql',
-            'installation/installation-methods/clusters',
-            'installation/installation-methods/whm-cpanel',
           ],
         },
+        'installation/installation-methods/clusters',
+        'installation/installation-methods/whm-cpanel',
         {
           type: 'category',
           label: 'Manage the Releem Agent',
@@ -478,6 +492,28 @@ function resolvedImagePath(sourcePath, reference) {
 const manifest = JSON.parse(await readFile(manifestPath, 'utf8'));
 const baseline = JSON.parse(await readFile(baselinePath, 'utf8'));
 const planRows = parsePlanRows(await readFile(planPath, 'utf8'));
+const consolidation = JSON.parse(await readFile(consolidationPath, 'utf8'));
+const retiredSources = new Set(consolidation.retiredSources);
+const currentSourcePaths = [
+  ...manifest.records
+    .map(({finalSource}) => finalSource)
+    .filter((sourcePath) => !retiredSources.has(sourcePath)),
+  ...consolidation.addedSources,
+].sort(compare);
+const currentIds = currentSourcePaths.map((sourcePath) =>
+  sourcePath.slice('docs/'.length, -'.md'.length),
+);
+const redirectOverrides = new Map(
+  consolidation.redirects.map((redirect) => [redirect.from, redirect]),
+);
+const expectedCurrentRedirects = [
+  ...manifest.records.map(({currentRoute: from, finalRoute: to}) =>
+    redirectOverrides.get(from) ?? {from, to},
+  ),
+  ...consolidation.redirects.filter(({from}) =>
+    !manifest.records.some(({currentRoute}) => currentRoute === from),
+  ),
+];
 
 test('migration map freezes the exact 54-row path, ID, route, hash, and token contract', async () => {
   assert.equal(manifest.schemaVersion, 1);
@@ -588,16 +624,21 @@ test('all image and static assets retain their paths and hashes', async () => {
       sha256: sha256(await readFile(absolutePath)),
     })),
   );
-  assert.deepEqual(actual, manifest.assets);
+  assert.deepEqual(
+    actual,
+    manifest.assets.filter(({path: assetPath}) =>
+      assetPath !== consolidation.removedSensitiveAsset.path,
+    ),
+  );
 });
 
-test('mirrored source tree contains exactly the 54 approved pages and directories', async () => {
+test('current source tree applies the approved Linux consolidation over the 54-page baseline', async () => {
   const markdownFiles = await listFiles(
     path.join(projectRoot, 'docs'),
     (absolutePath) => /\.mdx?$/u.test(absolutePath),
   );
   const actualFiles = markdownFiles.map(toRepoPath);
-  const expectedFiles = manifest.records.map(({finalSource}) => finalSource).sort(compare);
+  const expectedFiles = currentSourcePaths;
   assert.deepEqual(
     actualFiles,
     expectedFiles,
@@ -671,7 +712,7 @@ test('seven-section sidebar ownership covers every mirrored document exactly onc
   const ownedIds = [...ownership.values()].flat();
   assert.equal(ownedIds.length, 54);
   assertUnique(ownedIds, 'sidebar document IDs');
-  assert.deepEqual(ownedIds, manifest.records.map(({finalId}) => finalId));
+  assert.deepEqual([...ownedIds].sort(compare), [...currentIds].sort(compare));
 });
 
 test('Docusaurus navbar logo links directly to the canonical Get Started route', async () => {
@@ -714,33 +755,26 @@ test('Security Checks and Schema Checks remain aggregate pages only', () => {
   );
 });
 
-test('runtime redirect module exactly matches all 54 canonical migration pairs', async () => {
-  const expectedRedirects = manifest.records.map(
-    ({currentRoute: from, finalRoute: to}) => ({from, to}),
-  );
+test('runtime redirect module applies the exact 60-rule consolidation overlay', async () => {
+  const expectedRedirects = expectedCurrentRedirects;
   const redirectModule = await loadRedirectsModule();
   assert.deepEqual(Object.keys(redirectModule), ['redirects']);
   assert.deepEqual(redirectModule.redirects, expectedRedirects);
 
   const redirects = redirectModule.redirects;
-  assert.equal(redirects.length, 54);
+  assert.equal(redirects.length, 60);
   assertUnique(redirects.map(({from}) => from), 'redirect sources');
-  assertUnique(redirects.map(({to}) => to), 'redirect targets');
   assert.deepEqual(redirects[0], {from: '/', to: '/get-started'});
   const sources = new Set(redirects.map(({from}) => from));
-  const finalRoutes = new Set(manifest.records.map(({finalRoute}) => finalRoute));
   for (const {from, to} of redirects) {
+    const targetPath = new URL(to, 'https://docs.releem.com').pathname;
     assert.equal(from === to, false, `Redirect loop: ${from}`);
-    assert.equal(sources.has(to), false, `Redirect chain: ${from} -> ${to}`);
-    assert.equal(finalRoutes.has(from), false, `Redirect source is still canonical: ${from}`);
-    assert.equal(finalRoutes.has(to), true, `Redirect target is not canonical: ${to}`);
+    assert.equal(sources.has(targetPath), false, `Redirect chain: ${from} -> ${to}`);
   }
 });
 
 test('Docusaurus config registers only the exact runtime client redirects', async () => {
-  const expectedRedirects = manifest.records.map(
-    ({currentRoute: from, finalRoute: to}) => ({from, to}),
-  );
+  const expectedRedirects = expectedCurrentRedirects;
   const {redirects} = await loadRedirectsModule();
   const config = await loadDocusaurusConfig();
 
@@ -751,7 +785,7 @@ test('Docusaurus config registers only the exact runtime client redirects', asyn
 });
 
 if (process.env.RELEEM_VERIFY_REDIRECT_BUILD === '1') {
-  test('built redirect artifacts exactly match the retired and canonical route sets', async () => {
+  test('built redirect artifacts preserve every exact consolidation query and hash', async () => {
     const buildDirectory = path.join(projectRoot, 'build');
     assert.equal(
       existsSync(buildDirectory),
@@ -767,11 +801,11 @@ if (process.env.RELEEM_VERIFY_REDIRECT_BUILD === '1') {
       route === '/'
         ? path.join(buildDirectory, 'index.html')
         : path.join(buildDirectory, `${route.slice(1)}.html`);
-    const expectedRedirectArtifacts = manifest.records.map(({currentRoute}) =>
-      redirectArtifactPath(currentRoute),
+    const expectedRedirectArtifacts = expectedCurrentRedirects.map(({from}) =>
+      redirectArtifactPath(from),
     );
-    const expectedCanonicalArtifacts = manifest.records.map(({finalRoute}) =>
-      canonicalArtifactPath(finalRoute),
+    const expectedCanonicalArtifacts = expectedCurrentRedirects.map(({to}) =>
+      canonicalArtifactPath(new URL(to, 'https://docs.releem.com').pathname),
     );
     const htmlFiles = await listFiles(
       buildDirectory,
@@ -789,17 +823,12 @@ if (process.env.RELEEM_VERIFY_REDIRECT_BUILD === '1') {
     assert.deepEqual(
       redirectArtifacts,
       expectedRedirectArtifacts.sort((left, right) => compare(toRepoPath(left), toRepoPath(right))),
-      'Built redirect HTML artifacts must be exactly the 54 retired-route artifacts',
+      'Built redirect HTML artifacts must be exactly the 60 retired-route artifacts',
     );
     assert.equal(
       new Set(expectedRedirectArtifacts).size,
-      54,
-      'Retired routes must produce 54 distinct redirect artifacts',
-    );
-    assert.equal(
-      new Set(expectedCanonicalArtifacts).size,
-      54,
-      'Canonical routes must produce 54 distinct artifacts',
+      60,
+      'Retired routes must produce 60 distinct redirect artifacts',
     );
     assert.deepEqual(
       expectedRedirectArtifacts.filter((absolutePath) =>
@@ -809,34 +838,38 @@ if (process.env.RELEEM_VERIFY_REDIRECT_BUILD === '1') {
       'Retired and canonical route artifacts must not overlap',
     );
 
-    for (const {currentRoute, finalRoute} of manifest.records) {
-      const redirectArtifact = redirectArtifactPath(currentRoute);
+    for (const {from, to} of expectedCurrentRedirects) {
+      const redirectArtifact = redirectArtifactPath(from);
       assert.equal(
         existsSync(redirectArtifact),
         true,
-        `Missing redirect artifact for ${currentRoute}`,
+        `Missing redirect artifact for ${from}`,
       );
       const redirectHtml = await readFile(redirectArtifact, 'utf8');
       assert.ok(
-        redirectHtml.includes(`<meta http-equiv="refresh" content="0; url=${finalRoute}">`),
-        `${toRepoPath(redirectArtifact)} must reference ${finalRoute} in its refresh target`,
+        redirectHtml.includes(`<meta http-equiv="refresh" content="0; url=${to}">`),
+        `${toRepoPath(redirectArtifact)} must reference ${to} in its refresh target`,
       );
       assert.ok(
-        redirectHtml.includes(`<link rel="canonical" href="${finalRoute}" />`),
-        `${toRepoPath(redirectArtifact)} must reference ${finalRoute} in its canonical target`,
+        redirectHtml.includes(`<link rel="canonical" href="${to}" />`),
+        `${toRepoPath(redirectArtifact)} must reference ${to} in its canonical target`,
       );
       assert.ok(
         redirectHtml.includes(
-          `window.location.href = '${finalRoute}' + window.location.search + window.location.hash;`,
+          /[?#]/u.test(to)
+            ? `window.location.href = '${to}';`
+            : `window.location.href = '${to}' + window.location.search + window.location.hash;`,
         ),
-        `${toRepoPath(redirectArtifact)} must reference ${finalRoute} in its JavaScript target`,
+        `${toRepoPath(redirectArtifact)} must reference ${to} in its JavaScript target`,
       );
 
-      const canonicalArtifact = canonicalArtifactPath(finalRoute);
+      const canonicalArtifact = canonicalArtifactPath(
+        new URL(to, 'https://docs.releem.com').pathname,
+      );
       assert.equal(
         existsSync(canonicalArtifact),
         true,
-        `Missing canonical artifact for ${finalRoute}`,
+        `Missing canonical artifact for ${to}`,
       );
       const canonicalHtml = await readFile(canonicalArtifact, 'utf8');
       assert.equal(
@@ -851,9 +884,9 @@ if (process.env.RELEEM_VERIFY_REDIRECT_BUILD === '1') {
 test('internal links use canonical routes instead of retired routes', async () => {
   const retiredRoutes = new Set(manifest.records.map(({currentRoute}) => currentRoute));
   const currentSources = new Set(manifest.records.map(({currentSource}) => currentSource));
-  for (const record of manifest.records) {
-    const absolutePath = path.join(projectRoot, record.finalSource);
-    assert.equal(existsSync(absolutePath), true, `Mirrored page is absent: ${record.finalSource}`);
+  for (const sourcePath of currentSourcePaths) {
+    const absolutePath = path.join(projectRoot, sourcePath);
+    assert.equal(existsSync(absolutePath), true, `Current page is absent: ${sourcePath}`);
     const contents = await readFile(absolutePath, 'utf8');
     for (const target of markdownLinkTargets(contents)) {
       let parsed;
@@ -872,7 +905,7 @@ test('internal links use canonical routes instead of retired routes', async () =
         retiredRoutes.has(pathname) ||
         retiredRoutes.has(pathname.replace(/\.md$/u, '')) ||
         currentSources.has(sourceCandidate);
-      assert.equal(retired, false, `${record.finalSource} links to retired target ${target}`);
+      assert.equal(retired, false, `${sourcePath} links to retired target ${target}`);
     }
   }
 });
