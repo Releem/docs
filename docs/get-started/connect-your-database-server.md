@@ -4,13 +4,17 @@ slug: /get-started/connect-your-database-server
 title: Add Server
 ---
 
-# Add Server
+# Connect Your Database Server
 
-To start monitoring and optimizing your database server with Releem, you need to install Releem Agent. Follow these steps to add your server and begin receiving optimization recommendations.
+Install the Releem Agent to connect your database server. Choose the exact database and deployment path below instead of copying installation commands from this overview.
 
-Visit the Releem Dashboard and log in to your account. If you don’t have an account yet, you can sign up here.
+1. [Register for an account](/get-started/register-for-an-account) if you do not already have one.
+2. Sign in to the Releem Dashboard.
+3. Select **Add Server**.
+4. Choose the database and deployment that match your server.
+5. Follow the linked installation guide.
 
-Click the "Add Server" button to start the setup process.
+The **Add Server** workflow provides the settings required by the selected installation method.
 
 <img src={require('../../assets/images/dashboard-add-server.png').default} alt="Releem Add Server popup" className="shadow-img" />
 
@@ -26,15 +30,17 @@ Choose the type of database server you are adding:
 - [Self-Managed Server (Windows)](/installation/installation-methods/windows) – For MySQL instances running on Windows.
 - [MySQL on AWS RDS: CloudFormation installation](/installation/installation-methods/aws-rds) – For managed MySQL databases hosted on AWS.
 - [MySQL on GCP Cloud SQL: Manual installation](/installation/installation-methods/gcp-cloud-sql) – For managed MySQL databases hosted on GCP.
+- [Azure Database for MySQL](/installation/installation-methods/azure-database-for-mysql) – For managed MySQL databases hosted on Azure.
 - [MySQL in Kubernetes](/installation/installation-methods/kubernetes) – If your MySQL instance is deployed in a Kubernetes cluster.
 
 
 Select the option that matches your setup to get the correct installation instructions.
 
-## How to verify if the Releem Agent is installed on your server
+## Verify the connection and current data
 
-After you've installed the Releem Agent, you should see the server on the Releem Dashboard and can verify that the integration is working.
+After installation, verify each stage separately:
 
-On the Releem Score block, you should see Agent Status **Connected**, which indicates that the Releem Platform receives metrics from the Releem Agent.
+- **Agent Status: Connected** confirms that the Releem Agent has connected to the platform.
+- A current data timestamp or recently updated metrics confirms that current database data has arrived.
 
-Have some issues with the integration? Take a look at [Troubleshooting Guide](/get-started/troubleshoot-releem-agent) or contact our support team.
+If the Agent is disconnected or current data does not appear, use [Troubleshoot the Releem Agent](/get-started/troubleshoot-releem-agent). If you still need help, open chat in the [Releem Dashboard](https://app.releem.com). After verification, open the [Dashboard](/dashboard) to review observed state and [Recommendations](/recommendations) to review proposed actions.

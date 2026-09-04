@@ -98,6 +98,966 @@
         "recoveryHeadings": [],
         "sourceSha256": "f3cbb987497feb9b5eea269d8a5c71f17653715290c65f8bd568ba7f2cfb5da4"
       }
+    },
+    {
+      "sourcePath": "docs/get-started/register-for-an-account.md",
+      "status": "approved",
+      "approvedBy": "user",
+      "approvedOn": "2026-09-04",
+      "approvalEvidence": "The user authorized implementation of the next approved plan task with subagents on 2026-09-04; the bounded Task 4 packet authorizes this customer-facing orientation edit.",
+      "reason": "Purpose-first account registration steps, approved product destination, and a direct connection next step.",
+      "permittedFields": [
+        "body"
+      ],
+      "frontMatterChanges": [],
+      "bodyChangeScope": [
+        "H1",
+        "ordered headings",
+        "prose",
+        "internal links"
+      ],
+      "preservedFields": [
+        "sourcePath",
+        "frontMatter",
+        "explicitId",
+        "effectiveId",
+        "slug",
+        "publicRoute",
+        "codeFences",
+        "images",
+        "sidebarOwnership"
+      ],
+      "approvedCurrent": {
+        "frontMatter": "---\nid: register-for-an-account\nslug: /get-started/register-for-an-account\ntitle: Register for an Account\n---",
+        "h1": {
+          "level": 1,
+          "text": "Register for an Account",
+          "lineNumber": 7
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Register for an Account",
+            "lineNumber": 7
+          },
+          {
+            "level": 2,
+            "text": "Register your account",
+            "lineNumber": 11
+          },
+          {
+            "level": 2,
+            "text": "Next step",
+            "lineNumber": 17
+          }
+        ],
+        "bodySha256": "e8b631df00bf7aa29d83af4132c2946a1e054803d3dcf0d4abb4471c90d7105c",
+        "internalLinks": [
+          {
+            "label": "Connect your database server",
+            "target": "/get-started/connect-your-database-server",
+            "lineNumber": 19
+          }
+        ],
+        "procedureHeadings": [
+          {
+            "level": 2,
+            "text": "Next step",
+            "lineNumber": 17
+          }
+        ],
+        "recoveryHeadings": [],
+        "sourceSha256": "5fa1e3e4912b56c179d505be73ddceb8c41abfa7a62060a3675348e4602e80ea"
+      }
+    },
+    {
+      "sourcePath": "docs/get-started/connect-your-database-server.md",
+      "status": "approved",
+      "approvedBy": "user",
+      "approvedOn": "2026-09-04",
+      "approvalEvidence": "The user authorized implementation of the next approved plan task with subagents on 2026-09-04; the bounded Task 4 packet authorizes this customer-facing orientation edit.",
+      "reason": "Database- and deployment-specific routing with separate Agent connection and current-data states plus a direct support handoff.",
+      "permittedFields": [
+        "body"
+      ],
+      "frontMatterChanges": [],
+      "bodyChangeScope": [
+        "H1",
+        "ordered headings",
+        "prose",
+        "internal links"
+      ],
+      "preservedFields": [
+        "sourcePath",
+        "frontMatter",
+        "explicitId",
+        "effectiveId",
+        "slug",
+        "publicRoute",
+        "codeFences",
+        "images",
+        "sidebarOwnership"
+      ],
+      "approvedCurrent": {
+        "frontMatter": "---\nid: connect-your-database-server\nslug: /get-started/connect-your-database-server\ntitle: Add Server\n---",
+        "h1": {
+          "level": 1,
+          "text": "Connect Your Database Server",
+          "lineNumber": 7
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Connect Your Database Server",
+            "lineNumber": 7
+          },
+          {
+            "level": 2,
+            "text": "Verify the connection and current data",
+            "lineNumber": 36
+          }
+        ],
+        "bodySha256": "72759547d49d11b1a352e0cb38fef8b2e841b4a407f119634f4d6270f0ccabc8",
+        "internalLinks": [
+          {
+            "label": "Register for an account",
+            "target": "/get-started/register-for-an-account",
+            "lineNumber": 11
+          },
+          {
+            "label": "MySQL on Linux Server: Automatic Agent Installation (Linux)",
+            "target": "/installation",
+            "lineNumber": 22
+          },
+          {
+            "label": "MySQL on Linux Server: Advanced Agent Installation",
+            "target": "/installation/installation-methods/linux-manual",
+            "lineNumber": 23
+          },
+          {
+            "label": "PostgreSQL on Linux Server: Manual Agent Installation",
+            "target": "/supported-databases/postgresql/install-on-linux",
+            "lineNumber": 24
+          },
+          {
+            "label": "WHM/cPanel",
+            "target": "/installation/installation-methods/whm-cpanel",
+            "lineNumber": 25
+          },
+          {
+            "label": "MySQL on Linux Server: Manual Installation in Docker",
+            "target": "/installation/installation-methods/docker",
+            "lineNumber": 26
+          },
+          {
+            "label": "Self-Managed Server (Windows)",
+            "target": "/installation/installation-methods/windows",
+            "lineNumber": 27
+          },
+          {
+            "label": "MySQL on AWS RDS: CloudFormation installation",
+            "target": "/installation/installation-methods/aws-rds",
+            "lineNumber": 28
+          },
+          {
+            "label": "MySQL on GCP Cloud SQL: Manual installation",
+            "target": "/installation/installation-methods/gcp-cloud-sql",
+            "lineNumber": 29
+          },
+          {
+            "label": "Azure Database for MySQL",
+            "target": "/installation/installation-methods/azure-database-for-mysql",
+            "lineNumber": 30
+          },
+          {
+            "label": "MySQL in Kubernetes",
+            "target": "/installation/installation-methods/kubernetes",
+            "lineNumber": 31
+          },
+          {
+            "label": "Troubleshoot the Releem Agent",
+            "target": "/get-started/troubleshoot-releem-agent",
+            "lineNumber": 43
+          },
+          {
+            "label": "Dashboard",
+            "target": "/dashboard",
+            "lineNumber": 43
+          },
+          {
+            "label": "Recommendations",
+            "target": "/recommendations",
+            "lineNumber": 43
+          }
+        ],
+        "procedureHeadings": [
+          {
+            "level": 1,
+            "text": "Connect Your Database Server",
+            "lineNumber": 7
+          },
+          {
+            "level": 2,
+            "text": "Verify the connection and current data",
+            "lineNumber": 36
+          }
+        ],
+        "recoveryHeadings": [],
+        "sourceSha256": "92df5c32102e244daa451581fb26844f84503e6bf04324a48658a327c0ab5710"
+      }
+    },
+    {
+      "sourcePath": "docs/get-started/troubleshoot-releem-agent.md",
+      "status": "approved",
+      "approvedBy": "user",
+      "approvedOn": "2026-09-04",
+      "approvalEvidence": "The user authorized implementation of the next approved plan task with subagents on 2026-09-04; the bounded Task 4 packet authorizes this customer-facing orientation edit.",
+      "reason": "Purpose-first service diagnostics and a direct return path to current-data verification.",
+      "permittedFields": [
+        "body"
+      ],
+      "frontMatterChanges": [],
+      "bodyChangeScope": [
+        "H1",
+        "ordered headings",
+        "prose",
+        "internal links"
+      ],
+      "preservedFields": [
+        "sourcePath",
+        "frontMatter",
+        "explicitId",
+        "effectiveId",
+        "slug",
+        "publicRoute",
+        "codeFences",
+        "images",
+        "sidebarOwnership"
+      ],
+      "approvedCurrent": {
+        "frontMatter": "---\nid: troubleshoot-releem-agent\nslug: /get-started/troubleshoot-releem-agent\ntitle: How to Check if Releem Agent is Working\n---",
+        "h1": {
+          "level": 1,
+          "text": "Troubleshoot the Releem Agent",
+          "lineNumber": 7
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Troubleshoot the Releem Agent",
+            "lineNumber": 7
+          },
+          {
+            "level": 2,
+            "text": "How to troubleshoot Releem Agent",
+            "lineNumber": 15
+          },
+          {
+            "level": 2,
+            "text": "Releem Agent Common Issues",
+            "lineNumber": 31
+          },
+          {
+            "level": 3,
+            "text": "CloudLinux",
+            "lineNumber": 33
+          },
+          {
+            "level": 4,
+            "text": "In the MySQL log file: [Warning] Aborted connection 181 to db: 'mysql' user: 'releem' host: 'localhost' (Got timeout reading communication packets)",
+            "lineNumber": 44
+          },
+          {
+            "level": 3,
+            "text": "cPanel/WHM",
+            "lineNumber": 49
+          },
+          {
+            "level": 3,
+            "text": "AWS RDS",
+            "lineNumber": 53
+          },
+          {
+            "level": 2,
+            "text": "Releem Agent Installation Errors",
+            "lineNumber": 57
+          },
+          {
+            "level": 3,
+            "text": "Failed to determine service to restart. The automatic applying configuration will not work.",
+            "lineNumber": 58
+          },
+          {
+            "level": 3,
+            "text": "Failed to determine file my.cnf in default path. The automatic applying configuration is disabled.",
+            "lineNumber": 63
+          },
+          {
+            "level": 3,
+            "text": "No parameter specified in AwsRDSParameterGroup agent settings. The automatic applying configuration is disabled.",
+            "lineNumber": 68
+          },
+          {
+            "level": 3,
+            "text": "Error creating agent catalog for configurations",
+            "lineNumber": 74
+          },
+          {
+            "level": 3,
+            "text": "Latency is not calculated",
+            "lineNumber": 79
+          },
+          {
+            "level": 2,
+            "text": "What to do next",
+            "lineNumber": 88
+          }
+        ],
+        "bodySha256": "89dffabab78b21d1a5028f8c1b9b3d5c4148586d6c8519bddc6d0367fe05008e",
+        "internalLinks": [
+          {
+            "label": "check the Agent logs",
+            "target": "/installation/manage-the-releem-agent/logs",
+            "lineNumber": 29
+          },
+          {
+            "label": "WHM/cPanel installation guide",
+            "target": "/installation/installation-methods/whm-cpanel",
+            "lineNumber": 51
+          },
+          {
+            "label": "Common issues for AWS RDS",
+            "target": "/installation/installation-methods/aws-rds#common-issues-for-aws-rds",
+            "lineNumber": 54
+          },
+          {
+            "label": "Connect Your Database Server",
+            "target": "/get-started/connect-your-database-server#verify-the-connection-and-current-data",
+            "lineNumber": 90
+          },
+          {
+            "label": "Dashboard",
+            "target": "/dashboard",
+            "lineNumber": 90
+          }
+        ],
+        "procedureHeadings": [
+          {
+            "level": 1,
+            "text": "Troubleshoot the Releem Agent",
+            "lineNumber": 7
+          },
+          {
+            "level": 2,
+            "text": "How to troubleshoot Releem Agent",
+            "lineNumber": 15
+          },
+          {
+            "level": 4,
+            "text": "In the MySQL log file: [Warning] Aborted connection 181 to db: 'mysql' user: 'releem' host: 'localhost' (Got timeout reading communication packets)",
+            "lineNumber": 44
+          },
+          {
+            "level": 2,
+            "text": "Releem Agent Installation Errors",
+            "lineNumber": 57
+          },
+          {
+            "level": 3,
+            "text": "Failed to determine service to restart. The automatic applying configuration will not work.",
+            "lineNumber": 58
+          },
+          {
+            "level": 3,
+            "text": "Failed to determine file my.cnf in default path. The automatic applying configuration is disabled.",
+            "lineNumber": 63
+          },
+          {
+            "level": 3,
+            "text": "No parameter specified in AwsRDSParameterGroup agent settings. The automatic applying configuration is disabled.",
+            "lineNumber": 68
+          },
+          {
+            "level": 3,
+            "text": "Error creating agent catalog for configurations",
+            "lineNumber": 74
+          }
+        ],
+        "recoveryHeadings": [
+          {
+            "level": 1,
+            "text": "Troubleshoot the Releem Agent",
+            "lineNumber": 7
+          },
+          {
+            "level": 2,
+            "text": "How to troubleshoot Releem Agent",
+            "lineNumber": 15
+          },
+          {
+            "level": 2,
+            "text": "Releem Agent Common Issues",
+            "lineNumber": 31
+          },
+          {
+            "level": 2,
+            "text": "Releem Agent Installation Errors",
+            "lineNumber": 57
+          },
+          {
+            "level": 3,
+            "text": "Failed to determine service to restart. The automatic applying configuration will not work.",
+            "lineNumber": 58
+          },
+          {
+            "level": 3,
+            "text": "Failed to determine file my.cnf in default path. The automatic applying configuration is disabled.",
+            "lineNumber": 63
+          },
+          {
+            "level": 3,
+            "text": "Error creating agent catalog for configurations",
+            "lineNumber": 74
+          }
+        ],
+        "sourceSha256": "5b7f22f2405df909fa45809f7c6f9f64cb9272e0570286a8fd46aa026f4f92a5"
+      }
+    },
+    {
+      "sourcePath": "docs/dashboard/overview.md",
+      "status": "approved",
+      "approvedBy": "user",
+      "approvedOn": "2026-09-04",
+      "approvalEvidence": "The user authorized implementation of the next approved plan task with subagents on 2026-09-04; the bounded Task 4 packet authorizes this customer-facing orientation edit.",
+      "reason": "Observed-state orientation and direct routing through the retained Dashboard specialist links.",
+      "permittedFields": [
+        "body"
+      ],
+      "frontMatterChanges": [],
+      "bodyChangeScope": [
+        "H1",
+        "ordered headings",
+        "prose",
+        "internal links"
+      ],
+      "preservedFields": [
+        "sourcePath",
+        "frontMatter",
+        "explicitId",
+        "effectiveId",
+        "slug",
+        "publicRoute",
+        "codeFences",
+        "images",
+        "sidebarOwnership"
+      ],
+      "approvedCurrent": {
+        "frontMatter": "---\nid: overview\nslug: /dashboard\ntitle: Dashboard\n---",
+        "h1": {
+          "level": 1,
+          "text": "Dashboard",
+          "lineNumber": 7
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Dashboard",
+            "lineNumber": 7
+          },
+          {
+            "level": 2,
+            "text": "1. [Releem Score](https://releem.com/docs/releem-score)",
+            "lineNumber": 15
+          },
+          {
+            "level": 2,
+            "text": "2. [Configuration Tuning](/recommendations)",
+            "lineNumber": 18
+          },
+          {
+            "level": 2,
+            "text": "3. Performance Monitoring",
+            "lineNumber": 21
+          },
+          {
+            "level": 2,
+            "text": "4. Query Optimization and Schema Checks",
+            "lineNumber": 29
+          },
+          {
+            "level": 2,
+            "text": "5. Processes & Locks",
+            "lineNumber": 34
+          },
+          {
+            "level": 2,
+            "text": "6. [Health Checks](/dashboard/health-checks)",
+            "lineNumber": 38
+          },
+          {
+            "level": 2,
+            "text": "7. [Security Checks](/dashboard/security-checks)",
+            "lineNumber": 41
+          }
+        ],
+        "bodySha256": "213bccb8444289ac360e6ec5c75d2b36d3527a0709423e072c21c3e97480d316",
+        "internalLinks": [
+          {
+            "label": "Reports",
+            "target": "/dashboard/reports",
+            "lineNumber": 13
+          },
+          {
+            "label": "Configuration Tuning",
+            "target": "/recommendations",
+            "lineNumber": 18
+          },
+          {
+            "label": "Query Analytics",
+            "target": "/dashboard/query-analytics",
+            "lineNumber": 30
+          },
+          {
+            "label": "Query Optimization",
+            "target": "/recommendations/query-optimization",
+            "lineNumber": 31
+          },
+          {
+            "label": "Schema Checks",
+            "target": "/dashboard/schema-checks",
+            "lineNumber": 32
+          },
+          {
+            "label": "Deadlock Monitoring",
+            "target": "/dashboard/deadlocks",
+            "lineNumber": 35
+          },
+          {
+            "label": "Process List",
+            "target": "/dashboard/process-list",
+            "lineNumber": 36
+          },
+          {
+            "label": "Health Checks",
+            "target": "/dashboard/health-checks",
+            "lineNumber": 38
+          },
+          {
+            "label": "Security Checks",
+            "target": "/dashboard/security-checks",
+            "lineNumber": 41
+          }
+        ],
+        "procedureHeadings": [
+          {
+            "level": 2,
+            "text": "2. [Configuration Tuning](/recommendations)",
+            "lineNumber": 18
+          },
+          {
+            "level": 2,
+            "text": "4. Query Optimization and Schema Checks",
+            "lineNumber": 29
+          },
+          {
+            "level": 2,
+            "text": "6. [Health Checks](/dashboard/health-checks)",
+            "lineNumber": 38
+          },
+          {
+            "level": 2,
+            "text": "7. [Security Checks](/dashboard/security-checks)",
+            "lineNumber": 41
+          }
+        ],
+        "recoveryHeadings": [],
+        "sourceSha256": "a4b764b1223931543deb8cc3c0a8a0be614a029bcbf5bd3d0198cc7557a745aa"
+      }
+    },
+    {
+      "sourcePath": "docs/recommendations/overview.md",
+      "status": "approved",
+      "approvedBy": "user",
+      "approvedOn": "2026-09-04",
+      "approvalEvidence": "The user explicitly requested improving the Query Optimization overview from the current official Releem product explanation on 2026-09-04.",
+      "reason": "A concise summary of weekly and on-demand Query Optimization, manual change control, and outcome measurement while retaining the complete Recommended Configuration explanation and FAQ.",
+      "permittedFields": [
+        "frontMatter.title",
+        "body"
+      ],
+      "frontMatterChanges": [
+        {
+          "field": "title",
+          "baselineValue": "Configuration Tuning",
+          "approvedValue": "Recommendations"
+        }
+      ],
+      "bodyChangeScope": [
+        "H1",
+        "ordered headings",
+        "prose",
+        "internal links"
+      ],
+      "preservedFields": [
+        "sourcePath",
+        "explicitId",
+        "effectiveId",
+        "slug",
+        "publicRoute",
+        "codeFences",
+        "images",
+        "sidebarOwnership"
+      ],
+      "approvedCurrent": {
+        "frontMatter": "---\nid: overview\nslug: /recommendations\ntitle: Recommendations\n---",
+        "h1": {
+          "level": 1,
+          "text": "Recommendations",
+          "lineNumber": 7
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Recommendations",
+            "lineNumber": 7
+          },
+          {
+            "level": 2,
+            "text": "Query Optimization",
+            "lineNumber": 13
+          },
+          {
+            "level": 2,
+            "text": "Recommended Configuration",
+            "lineNumber": 24
+          },
+          {
+            "level": 2,
+            "text": "Frequently Asked Questions about Configuration Tuning",
+            "lineNumber": 44
+          },
+          {
+            "level": 3,
+            "text": "How long does it take to receive my first recommended configuration?",
+            "lineNumber": 46
+          },
+          {
+            "level": 3,
+            "text": "How often will I receive new recommended configurations?",
+            "lineNumber": 49
+          },
+          {
+            "level": 3,
+            "text": "How do I know if the recommended configuration is applied?",
+            "lineNumber": 52
+          }
+        ],
+        "bodySha256": "a74d52628c2d1fae0702504a118868b31e2b525fd65458ff65a1062e868b6efa",
+        "internalLinks": [
+          {
+            "label": "Dashboard",
+            "target": "/dashboard",
+            "lineNumber": 11
+          },
+          {
+            "label": "Query Optimization",
+            "target": "/recommendations/query-optimization",
+            "lineNumber": 22
+          }
+        ],
+        "procedureHeadings": [
+          {
+            "level": 2,
+            "text": "Recommended Configuration",
+            "lineNumber": 24
+          },
+          {
+            "level": 2,
+            "text": "Frequently Asked Questions about Configuration Tuning",
+            "lineNumber": 44
+          },
+          {
+            "level": 3,
+            "text": "How long does it take to receive my first recommended configuration?",
+            "lineNumber": 46
+          },
+          {
+            "level": 3,
+            "text": "How often will I receive new recommended configurations?",
+            "lineNumber": 49
+          },
+          {
+            "level": 3,
+            "text": "How do I know if the recommended configuration is applied?",
+            "lineNumber": 52
+          }
+        ],
+        "recoveryHeadings": [],
+        "sourceSha256": "f89bc40bef53ac214d576d08d355836429b740a4aad8f3c0ec3cc17ed38c38d0"
+      }
+    },
+    {
+      "sourcePath": "docs/account/overview.md",
+      "status": "approved",
+      "approvedBy": "user",
+      "approvedOn": "2026-09-04",
+      "approvalEvidence": "The user authorized implementation of the next approved plan task with subagents on 2026-09-04; the bounded Task 4 packet authorizes this customer-facing orientation edit.",
+      "reason": "Task routing for server settings, access, billing details, and cancellation.",
+      "permittedFields": [
+        "frontMatter.title",
+        "frontMatter.sidebar_label",
+        "body"
+      ],
+      "frontMatterChanges": [
+        {
+          "field": "title",
+          "baselineValue": "Your server settings",
+          "approvedValue": "Account"
+        },
+        {
+          "field": "sidebar_label",
+          "baselineValue": "Your server settings",
+          "approvedValue": "Account"
+        }
+      ],
+      "bodyChangeScope": [
+        "H1",
+        "ordered headings",
+        "prose",
+        "internal links"
+      ],
+      "preservedFields": [
+        "sourcePath",
+        "explicitId",
+        "effectiveId",
+        "slug",
+        "publicRoute",
+        "codeFences",
+        "images",
+        "sidebarOwnership"
+      ],
+      "approvedCurrent": {
+        "frontMatter": "---\nid: overview\nslug: /account\ntitle: Account\nsidebar_label: Account\n---",
+        "h1": {
+          "level": 1,
+          "text": "Account",
+          "lineNumber": 8
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Account",
+            "lineNumber": 8
+          },
+          {
+            "level": 2,
+            "text": "Open your server settings",
+            "lineNumber": 16
+          }
+        ],
+        "bodySha256": "0e374002c424470fce49f67ca6933173c6c6cf777fb667e0fd8497551c0426e1",
+        "internalLinks": [
+          {
+            "label": "Users and Roles",
+            "target": "/account/access/users-and-roles",
+            "lineNumber": 12
+          },
+          {
+            "label": "Payment Information",
+            "target": "/account/billing/payment-information",
+            "lineNumber": 13
+          },
+          {
+            "label": "Cancel Subscription",
+            "target": "/account/billing/cancel-subscription",
+            "lineNumber": 14
+          }
+        ],
+        "procedureHeadings": [],
+        "recoveryHeadings": [],
+        "sourceSha256": "3c3e92d6716cd7d19f7b08cb7fb45b876419f7d8c2b574d5d2bdd020c031d11a"
+      }
+    },
+    {
+      "sourcePath": "docs/faq.md",
+      "status": "approved",
+      "approvedBy": "user",
+      "approvedOn": "2026-09-04",
+      "approvalEvidence": "The user authorized implementation of the next approved plan task with subagents on 2026-09-04; the bounded Task 4 packet authorizes this customer-facing orientation edit.",
+      "reason": "Purpose-first routing from existing answers to canonical checks, application methods, onboarding, access, and billing guidance.",
+      "permittedFields": [
+        "body"
+      ],
+      "frontMatterChanges": [],
+      "bodyChangeScope": [
+        "H1",
+        "ordered headings",
+        "prose",
+        "internal links"
+      ],
+      "preservedFields": [
+        "sourcePath",
+        "frontMatter",
+        "explicitId",
+        "effectiveId",
+        "slug",
+        "publicRoute",
+        "codeFences",
+        "images",
+        "sidebarOwnership"
+      ],
+      "approvedCurrent": {
+        "frontMatter": "---\nid: faq\nslug: /faq\ntitle: Frequently Asked Questions\n---",
+        "h1": {
+          "level": 1,
+          "text": "Frequently Asked Questions",
+          "lineNumber": 14
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Frequently Asked Questions",
+            "lineNumber": 14
+          },
+          {
+            "level": 2,
+            "text": "I've installed Releem Agent. How do I check if I've done it correctly?",
+            "lineNumber": 20
+          },
+          {
+            "level": 2,
+            "text": "Why does high latency occur after applying the recommended configuration?",
+            "lineNumber": 23
+          },
+          {
+            "level": 2,
+            "text": "I applied all recommendations, but Releem Score is not 100%. How can I improve it?",
+            "lineNumber": 26
+          },
+          {
+            "level": 2,
+            "text": "I applied all recommendations, but not all Health Checks are checked. How can I improve it?",
+            "lineNumber": 29
+          },
+          {
+            "level": 2,
+            "text": "Would Releem automatically change MySQL configuration without my approval?",
+            "lineNumber": 32
+          },
+          {
+            "level": 2,
+            "text": "How do I add my business details and the VAT number?",
+            "lineNumber": 37
+          },
+          {
+            "level": 2,
+            "text": "How do I get an invoice?",
+            "lineNumber": 40
+          }
+        ],
+        "bodySha256": "c492c37ab100167ef7f67905a82de585ba8a0725a5c9cfb8ed638cdeb2349426",
+        "internalLinks": [
+          {
+            "label": "Connect Your Database Server",
+            "target": "/get-started/connect-your-database-server",
+            "lineNumber": 16
+          },
+          {
+            "label": "Dashboard",
+            "target": "/dashboard",
+            "lineNumber": 16
+          },
+          {
+            "label": "Recommendations",
+            "target": "/recommendations",
+            "lineNumber": 16
+          },
+          {
+            "label": "Troubleshoot the Releem Agent",
+            "target": "/get-started/troubleshoot-releem-agent",
+            "lineNumber": 16
+          },
+          {
+            "label": "Users and Roles",
+            "target": "/account/access/users-and-roles",
+            "lineNumber": 18
+          },
+          {
+            "label": "Payment Information",
+            "target": "/account/billing/payment-information",
+            "lineNumber": 18
+          },
+          {
+            "label": "Cancel Subscription",
+            "target": "/account/billing/cancel-subscription",
+            "lineNumber": 18
+          },
+          {
+            "label": "Troubleshoot the Releem Agent",
+            "target": "/get-started/troubleshoot-releem-agent",
+            "lineNumber": 21
+          },
+          {
+            "label": "Health Checks",
+            "target": "/dashboard/health-checks",
+            "lineNumber": 27
+          },
+          {
+            "label": "Health Checks",
+            "target": "/dashboard/health-checks",
+            "lineNumber": 30
+          },
+          {
+            "label": "**Apply Now**",
+            "target": "/recommendations/configuration-tuning/apply-using-portal",
+            "lineNumber": 33
+          },
+          {
+            "label": "Releem Agent application guide",
+            "target": "/recommendations/configuration-tuning/apply-using-agent",
+            "lineNumber": 33
+          },
+          {
+            "label": "automate the application of configurations during the maintenance window",
+            "target": "/recommendations/configuration-tuning/apply-using-cron",
+            "lineNumber": 35
+          },
+          {
+            "label": "Payment Information",
+            "target": "/account/billing/payment-information",
+            "lineNumber": 38
+          },
+          {
+            "label": "Payment Information",
+            "target": "/account/billing/payment-information",
+            "lineNumber": 41
+          }
+        ],
+        "procedureHeadings": [
+          {
+            "level": 2,
+            "text": "I've installed Releem Agent. How do I check if I've done it correctly?",
+            "lineNumber": 20
+          },
+          {
+            "level": 2,
+            "text": "Why does high latency occur after applying the recommended configuration?",
+            "lineNumber": 23
+          },
+          {
+            "level": 2,
+            "text": "I applied all recommendations, but not all Health Checks are checked. How can I improve it?",
+            "lineNumber": 29
+          },
+          {
+            "level": 2,
+            "text": "Would Releem automatically change MySQL configuration without my approval?",
+            "lineNumber": 32
+          }
+        ],
+        "recoveryHeadings": [],
+        "sourceSha256": "e27d261f59778e5b28d7e5467a9950a7752deec09fdaa497803a810bd96e7ba1"
+      }
     }
   ],
   "routeExceptions": [],

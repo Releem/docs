@@ -30,6 +30,10 @@ const consolidationPath = path.join(
   projectRoot,
   '.agent/analysis/2026-09-03-linux-installation-consolidation.json',
 );
+const preservationManifestPath = path.join(
+  projectRoot,
+  '.agent/analysis/2026-09-03-committed-content-preservation.json',
+);
 
 const approvedRenames = {
   'docs/getting-started/schema-optimization.md':
@@ -886,6 +890,27 @@ function reverseMigratedDocument(contents, record) {
   return `---\n${record.originalFrontMatter}\n---\n${body}`;
 }
 
+function historicalMigrationSnapshots({
+  restoredBody,
+  restoredContents,
+  migrationRecord,
+  isRewritten,
+  isEditoriallyApproved,
+}) {
+  if (!migrationRecord || isRewritten || isEditoriallyApproved) {
+    return {reversedBodySha256: null, restoredWholeFileSha256: null};
+  }
+
+  return {
+    reversedBodySha256: sha256(
+      reverseDeclaredBodyChanges(restoredBody, migrationRecord),
+    ),
+    restoredWholeFileSha256: sha256(
+      reverseMigratedDocument(restoredContents, migrationRecord),
+    ),
+  };
+}
+
 function referencedImagePaths(sourcePath, contents) {
   const text = markdownProse(contents.toString('utf8'));
   const references = [];
@@ -925,10 +950,18 @@ function referencedImagePaths(sourcePath, contents) {
 }
 
 async function currentDocuments() {
-  const migrationMap = await migrationMapPromise;
-  const consolidation = await consolidationPromise;
+  const [migrationMap, consolidation, preservationManifest] = await Promise.all([
+    migrationMapPromise,
+    consolidationPromise,
+    preservationManifestPromise,
+  ]);
   const migrationByFinalSource = new Map(
     migrationMap.records.map((record) => [record.finalSource, record]),
+  );
+  const approvedEditorialSources = new Set(
+    preservationManifest.editorialExceptions
+      .filter(({status}) => status === 'approved')
+      .map(({sourcePath}) => sourcePath),
   );
   const markdownFiles = await listFiles(
     path.join(projectRoot, 'docs'),
@@ -959,6 +992,13 @@ async function currentDocuments() {
         sourcePath,
         consolidation,
       );
+      const migrationSnapshots = historicalMigrationSnapshots({
+        restoredBody,
+        restoredContents,
+        migrationRecord,
+        isRewritten,
+        isEditoriallyApproved: approvedEditorialSources.has(sourcePath),
+      });
       const images = await Promise.all(
         referencedImagePaths(sourcePath, contents).map(async (imagePath) => {
           const absoluteImagePath = path.join(projectRoot, imagePath);
@@ -984,12 +1024,7 @@ async function currentDocuments() {
         nonMigrationFrontMatter: stripMigrationFrontMatter(
           parsed.normalizedFrontMatter,
         ),
-        reversedBodySha256: migrationRecord && !isRewritten
-          ? sha256(reverseDeclaredBodyChanges(restoredBody, migrationRecord))
-          : null,
-        restoredWholeFileSha256: migrationRecord && !isRewritten
-          ? sha256(reverseMigratedDocument(restoredContents, migrationRecord))
-          : null,
+        ...migrationSnapshots,
         explicitId: parsed.explicitId,
         explicitSlug: parsed.explicitSlug,
         effectiveId: parsed.effectiveId,
@@ -1020,6 +1055,10 @@ async function currentAssets() {
 const manifestPromise = readFile(baselineManifestPath, 'utf8').then(JSON.parse);
 const migrationMapPromise = readFile(migrationMapPath, 'utf8').then(JSON.parse);
 const consolidationPromise = readFile(consolidationPath, 'utf8').then(JSON.parse);
+const preservationManifestPromise = readFile(
+  preservationManifestPath,
+  'utf8',
+).then(JSON.parse);
 
 const packageJson = JSON.parse(
   await readFile(path.join(projectRoot, 'package.json'), 'utf8'),
@@ -1027,6 +1066,42 @@ const packageJson = JSON.parse(
 const packageLock = JSON.parse(
   await readFile(path.join(projectRoot, 'package-lock.json'), 'utf8'),
 );
+
+test('approved editorial pages bypass historical reversal while undeclared migration tokens remain rejected', () => {
+  const migrationRecord = {
+    finalSource: 'docs/example.md',
+    allowedInternalLinkReplacements: [
+      {from: '/legacy-installation', to: '/installation', occurrences: 1},
+    ],
+    allowedRelativeAssetReplacements: [],
+  };
+  const bodyWithUndeclaredToken = [
+    '[Approved link](/installation)',
+    '[Undeclared extra link](/installation/installation-methods/azure-database-for-mysql)',
+  ].join('\n');
+  const documentWithUndeclaredToken = `---\ntitle: Example\n---\n${bodyWithUndeclaredToken}`;
+
+  assert.deepEqual(
+    historicalMigrationSnapshots({
+      restoredBody: bodyWithUndeclaredToken,
+      restoredContents: documentWithUndeclaredToken,
+      migrationRecord,
+      isRewritten: false,
+      isEditoriallyApproved: true,
+    }),
+    {reversedBodySha256: null, restoredWholeFileSha256: null},
+  );
+  assert.throws(
+    () => historicalMigrationSnapshots({
+      restoredBody: bodyWithUndeclaredToken,
+      restoredContents: documentWithUndeclaredToken,
+      migrationRecord,
+      isRewritten: false,
+      isEditoriallyApproved: false,
+    }),
+    /Unexpected occurrence count for migration token \/installation/u,
+  );
+});
 
 test('package and lockfile pin the same Docusaurus 3.9.2 family', () => {
   const productionPackages = [

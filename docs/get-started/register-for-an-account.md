@@ -6,9 +6,14 @@ title: Register for an Account
 
 # Register for an Account
 
-To use Releem, you need to register an account. To explore the product, we offer you a Free trial for 14 days.
+Create your Releem account before you connect your first database server. Releem includes a 14-day free trial.
 
-To register an account, do the following steps:
-1. Fill in your email address and full name, choose your account password, and click on the "Sign Up" button.
-2. We'll email you to verify your email address. Please open the link we sent to you through email to activate your Releem account
-3. Don't see this email in your inbox? Please check your spam folder and whether you've typed in the correct email address. Contact us if the problem persists.
+## Register your account
+
+1. Enter your email address and full name, choose a password, and select [**Sign Up**](https://app.releem.com).
+2. Open the verification email from Releem and follow its link to activate your account.
+3. If the email does not arrive, check your spam folder and confirm that you entered the correct address. Contact support if the problem continues.
+
+## Next step
+
+[Connect your database server](/get-started/connect-your-database-server) and choose the installation path that matches its database and deployment.

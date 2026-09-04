@@ -6,17 +6,17 @@ title: Dashboard
 
 # Dashboard
 
-The Releem Dashboard provides a comprehensive view of your server's performance, making it easy to monitor and optimize your MySQL instance. By regularly reviewing the dashboard, you can proactively address potential issues and maintain peak performance for your database.
+Use the Dashboard to review what Releem currently observes about your database server. Dashboard metrics and checks describe observed state; they do not apply a change. Open Recommendations separately to review actions proposed from those observations.
 
 <img src={require('../../assets/images/releem_dashboard.png').default} alt="Releem Dashboard" className="shadow-img" />
 
-The Releem Dashboard offers insights and recommendations for monitoring and improving MySQL performance. The dashboard consists of several blocks, each focusing on a specific aspect of your server's health and performance.
+Start with the Releem Score and data freshness. Then open the block that matches your task: Query Analytics, Schema Checks, Deadlocks, Health Checks, Security Checks, Process List, or [Reports](/dashboard/reports). The sections below explain each Dashboard area.
 
 ## 1. [Releem Score](https://releem.com/docs/releem-score)
 The Releem Score block displays the server's status and Releem Score, representing the best practices (health checks) for maintaining servers. The score provides a quick overview of your server's health, allowing you to assess its performance at a glance.
 
 ## 2. [Configuration Tuning](/recommendations)
-The Recommended Configuration block comes into play when Releem identifies opportunities to improve performance. Releem assesses the necessary configuration changes and notifies you when they're ready to apply. This block provides a concise summary of Releem's recommendations, making it easy to implement changes to enhance your MySQL performance. The Releem MySQL tuning process is designed to optimize MySQL performance using a systematic approach.
+The **Recommended Configuration** block summarizes proposed configuration changes. Follow its link to review the proposal and the applicable procedure before you make a change. The Releem MySQL tuning process uses a systematic approach to prepare configuration recommendations.
 
 ## 3. Performance Monitoring
 The Performance Metrics block displays key instance metrics, such as CPU usage, Memory Usage, Swap usage, and IOPS. Monitoring these metrics helps you keep a close eye on your server's performance. Clicking on a metric displays a daily graph, offering a visual representation of the metric's performance over time. 
@@ -26,10 +26,10 @@ The MySQL Metrics consists of several charts, including:
 - QPS (Queries Per Second): A measure of the number of queries processed per second.
 - Slow Log Queries: This graph displays the number of slow queries, helping you identify performance bottlenecks.
 
-## 4. Query & Schema Optimization
+## 4. Query Optimization and Schema Checks
 - [Query Analytics](/dashboard/query-analytics) tab provides insights into your database's performance by analyzing top and slow queries, including execution statistics, to help identify and resolve bottlenecks.
 - [Query Optimization](/recommendations/query-optimization) tab offers automatic recommendations, such as index suggestions and query enhancements, to improve efficiency and reduce resource usage.
-- [Schema Optimization](/dashboard/schema-checks) tab ensures your database structure remains optimized through automated reviews that detect inefficiencies and suggest actionable improvements.
+- [Schema Checks](/dashboard/schema-checks) tab ensures your database structure remains optimized through automated reviews that detect inefficiencies and suggest actionable improvements.
 
 ## 5. Processes & Locks
 - [Deadlock Monitoring](/dashboard/deadlocks) continuously monitors your MySQL database for deadlocks, providing instant notifications with complete transaction details to help you quickly identify and resolve locking conflicts.

@@ -4,16 +4,17 @@ slug: /get-started/troubleshoot-releem-agent
 title: How to Check if Releem Agent is Working
 ---
 
-# How to Check if Releem Agent is Working
+# Troubleshoot the Releem Agent
 
-After you've installed Releem Agent, it's time to check if Releem is working.
+Use this guide when the Releem Agent is disconnected or the Dashboard does not show current data. First confirm the Dashboard state, then check the service and its logs.
 
-On the Releem Score block, you should see Agent Status - Connected / Monitoring, which indicates that Releem Platform receives metrics from Releem Agent.
+On the Releem Score block, **Agent Status: Connected / Monitoring** indicates that the Releem platform receives metrics from the Releem Agent. Also confirm that the Dashboard shows a current data timestamp or recently updated metrics.
 
 <img src="/img/dashboard-releem-score.png" alt="Releem Score block" className="shadow-img" />
 
 ## How to troubleshoot Releem Agent
-If the Releem Agent is disconnected, please, take the following steps and check the most common issues.
+
+If the Releem Agent is disconnected, check the service status first.
 
 To check Releem Agent status, please run:
 
@@ -21,11 +22,11 @@ To check Releem Agent status, please run:
 systemctl status releem-agent
 ```
 
-If Releem Agent is not running to start it please run:
+If the Releem Agent is not running, start it:
 ```
 systemctl start releem-agent
 ```
-If Releem Agent is running but Dashboard informs you that it is disconnected please [check the logs](/installation/manage-the-releem-agent/logs)
+If the Releem Agent is running but the Dashboard reports it as disconnected, [check the Agent logs](/installation/manage-the-releem-agent/logs).
 
 ## Releem Agent Common Issues
 
@@ -83,3 +84,7 @@ You can specify “dummy” in the DBParameterGroup parameter if you do not plan
 **How to fix for AWS RDS:** Enable Performance Insights and Performance Schema for your RDS instance.
 
 **How to fix for GCP Cloud SQL:** Enable Performance Schema for your Cloud SQL instance.
+
+## What to do next
+
+After the Agent reconnects, return to [Connect Your Database Server](/get-started/connect-your-database-server#verify-the-connection-and-current-data) and confirm that current data has arrived. Then use the [Dashboard](/dashboard) to review checks and metrics.

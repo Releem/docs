@@ -1,26 +1,43 @@
 ---
 id: overview
 slug: /recommendations
-title: Configuration Tuning
+title: Recommendations
 ---
 
-# Configuration Tuning
+# Recommendations
 
-The Recommended Configuration block displays the current state of the configuration tuning process as it works to identify performance improvements for your MySQL server. This block provides valuable insights into the optimization process, allowing you to monitor progress and take action as needed.
+Use Recommendations to review actions that Releem proposes from observed database data. A Dashboard check or metric describes current state; a recommendation presents a proposed action. Review the evidence, affected scope, application method, and rollback guidance before you make a production change.
+
+Start with Configuration Tuning for server configuration or Query Optimization for query and index proposals. Return to the [Dashboard](/dashboard) when you need to inspect the observations behind a recommendation.
+
+## Query Optimization
+
+Query Optimization analyzes production query execution data and recommends changes for queries with a high performance impact. It supports two workflows:
+
+- **Weekly analysis:** Releem reviews the 100 most frequent queries and the 100 slowest queries.
+- **On-demand analysis:** You select a query in Query Analytics and request a recommendation.
+
+Releem considers execution statistics, access patterns, and existing indexes. A recommendation can address query logic, indexes, schema, or a related server configuration constraint. Releem presents the proposed change for review; it does not apply the change automatically.
+
+After you apply a recommendation manually, Releem continues observing the query so you can compare its execution time, frequency, and overall impact. See [Query Optimization](/recommendations/query-optimization) for the complete workflow.
+
+## Recommended Configuration
+
+The **Recommended Configuration** block displays the current state of the configuration tuning process as it works to identify performance improvements for your MySQL server. This block provides valuable insights into the optimization process, allowing you to monitor progress and take action as needed.
 
 ![Configuration Tuning block](../../assets/images/releem-dashboard-conf-tuning.png)
 
 The Recommended Configuration block consists of several components:
 
-- **Progress Bar**: The progress bar shows the process state, which can be either: "Searching Opportunities" or "Preparing Configuration". The Releem platform uses AI to continuously search for opportunities to enhance MySQL performance. If Releem identifies a viable hypothesis, the expert system checks whether it can be safely applied. Once all checks are complete, Releem prepares the recommended configuration.
+- **Progress Bar**: The progress bar shows the process state, which can be either: "Searching Opportunities" or "Preparing Configuration". The Releem platform uses AI to continuously search for opportunities to enhance database server performance. If Releem identifies a viable hypothesis, the expert system checks whether it can be safely applied. Once all checks are complete, Releem prepares the recommended configuration.
 - **Unapplied Recommendations Count**: Displays the number of recommendations that have not yet been applied to your server.
-- **Recommended Configuration Link**: Click this link to view the complete [recommended configuration](/recommendations/configuration-tuning/configuration-example) suggested by Releem.
+- **Recommended Configuration Link**: Click this link to view the complete recommended configuration suggested by Releem.
 - **Apply button**: Click it and follow the instructions to implement the recommended configuration on your server.
 
 Releem automates the process of applying and rolling back recommended configurations for self-managed instances where the Releem Agent is installed without Docker. Learn more about how to use these features:
 
-- [How to Apply](/recommendations/configuration-tuning/apply-using-portal): A guide on applying the recommended configuration to your server.
-- [How to Rollback](/recommendations/configuration-tuning/rollback): A guide on rolling back the recommended configuration if needed.
+- **How to Apply**: A guide on applying the recommended configuration to your server.
+- **How to Rollback**: A guide on rolling back the recommended configuration if needed.
 
 Utilizing the Recommended Configuration block lets you stay informed about the optimization process and easily apply configurations as needed to maintain optimal MySQL performance.
 
@@ -34,5 +51,3 @@ Releem continuously searches for opportunities to improve your MySQL performance
 
 ### How do I know if the recommended configuration is applied?
 You can check the status the Recommended Configuration block. If the configuration is applied, the status will be "All recomendations have been applied".
-
-

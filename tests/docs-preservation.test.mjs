@@ -1074,11 +1074,48 @@ test('classifies issue and unsuccessful-outcome headings as recovery guidance', 
   }
 });
 
-test('supersedes legacy whole-file checks with exact content identity outside the approved Overview pilot', async () => {
+test('supersedes legacy whole-file checks with exact content identity outside approved editorial pages', async () => {
+  const expectedEditorialExceptionPaths = [
+    'docs/get-started/releem-overview.md',
+    'docs/get-started/register-for-an-account.md',
+    'docs/get-started/connect-your-database-server.md',
+    'docs/get-started/troubleshoot-releem-agent.md',
+    'docs/dashboard/overview.md',
+    'docs/recommendations/overview.md',
+    'docs/account/overview.md',
+    'docs/faq.md',
+  ];
   assert.deepEqual(
     manifest.editorialExceptions.map(({sourcePath}) => sourcePath),
-    ['docs/get-started/releem-overview.md'],
+    expectedEditorialExceptionPaths,
   );
+  const taskFourFrontMatterChanges = new Map([
+    [
+      'docs/recommendations/overview.md',
+      [
+        {
+          field: 'title',
+          baselineValue: 'Configuration Tuning',
+          approvedValue: 'Recommendations',
+        },
+      ],
+    ],
+    [
+      'docs/account/overview.md',
+      [
+        {
+          field: 'title',
+          baselineValue: 'Your server settings',
+          approvedValue: 'Account',
+        },
+        {
+          field: 'sidebar_label',
+          baselineValue: 'Your server settings',
+          approvedValue: 'Account',
+        },
+      ],
+    ],
+  ]);
 
   for (const baselinePage of manifest.pages) {
     if (
@@ -1115,45 +1152,79 @@ test('supersedes legacy whole-file checks with exact content identity outside th
 
     assert.equal(exception.status, 'approved');
     assert.equal(exception.approvedBy, 'user');
-    assert.equal(exception.approvedOn, '2026-09-03');
-    assert.deepEqual(exception.permittedFields, [
-      'frontMatter.sidebar_label',
-      'body',
-    ]);
+    const isOverviewPilot =
+      exception.sourcePath === 'docs/get-started/releem-overview.md';
+    const frontMatterChanges = isOverviewPilot
+      ? [
+          {
+            field: 'sidebar_label',
+            baselineValue: 'Welcome',
+            approvedValue: 'Releem Overview',
+          },
+        ]
+      : taskFourFrontMatterChanges.get(exception.sourcePath) ?? [];
+    assert.equal(exception.approvedOn, isOverviewPilot ? '2026-09-03' : '2026-09-04');
+    assert.deepEqual(
+      exception.permittedFields,
+      [
+        ...frontMatterChanges.map(({field}) => `frontMatter.${field}`),
+        'body',
+      ],
+    );
     assert.deepEqual(exception.bodyChangeScope, [
       'H1',
       'ordered headings',
       'prose',
       'internal links',
     ]);
-    assert.deepEqual(exception.frontMatterChanges, [
-      {
-        field: 'sidebar_label',
-        baselineValue: 'Welcome',
-        approvedValue: 'Releem Overview',
-      },
-    ]);
-    assert.deepEqual(exception.preservedFields, [
-      'sourcePath',
-      'explicitId',
-      'effectiveId',
-      'slug',
-      'publicRoute',
-      'codeFences',
-      'images',
-      'sidebarOwnership',
-    ]);
+    assert.deepEqual(exception.frontMatterChanges, frontMatterChanges);
+    assert.deepEqual(
+      exception.preservedFields,
+      frontMatterChanges.length > 0
+        ? [
+            'sourcePath',
+            'explicitId',
+            'effectiveId',
+            'slug',
+            'publicRoute',
+            'codeFences',
+            'images',
+            'sidebarOwnership',
+          ]
+        : [
+            'sourcePath',
+            'frontMatter',
+            'explicitId',
+            'effectiveId',
+            'slug',
+            'publicRoute',
+            'codeFences',
+            'images',
+            'sidebarOwnership',
+          ],
+    );
     assert.ok(exception.reason.length > 0);
     assert.ok(exception.approvalEvidence.length > 0);
-    assert.deepEqual(
-      currentPage.frontMatter
-        .split('\n')
-        .filter((line) => !line.startsWith('sidebar_label:')),
-      baselinePage.frontMatter
-        .split('\n')
-        .filter((line) => !line.startsWith('sidebar_label:')),
-      'The Overview exception permits no other front-matter change',
-    );
+    if (frontMatterChanges.length > 0) {
+      const changedFields = new Set(
+        frontMatterChanges.map(({field}) => field),
+      );
+      assert.deepEqual(
+        currentPage.frontMatter
+          .split('\n')
+          .filter((line) => !changedFields.has(line.split(':', 1)[0])),
+        baselinePage.frontMatter
+          .split('\n')
+          .filter((line) => !changedFields.has(line.split(':', 1)[0])),
+        `${exception.sourcePath} changed undeclared front matter`,
+      );
+    } else {
+      assert.equal(
+        currentPage.frontMatter,
+        baselinePage.frontMatter,
+        `${exception.sourcePath} front matter changed`,
+      );
+    }
     for (const field of [
       'frontMatter',
       'sourceSha256',
@@ -1167,10 +1238,113 @@ test('supersedes legacy whole-file checks with exact content identity outside th
       assert.deepEqual(
         currentPage[field],
         exception.approvedCurrent[field],
-        `Overview drifted beyond its approved pilot ${field}`,
+        `${exception.sourcePath} drifted beyond its approved editorial snapshot: ${field}`,
       );
     }
   }
+});
+
+test('approved orientation pages route customer tasks without unsupported state claims', async () => {
+  const [
+    overview,
+    register,
+    connect,
+    dashboard,
+    recommendations,
+    account,
+    faq,
+  ] = await Promise.all([
+    'docs/get-started/releem-overview.md',
+    'docs/get-started/register-for-an-account.md',
+    'docs/get-started/connect-your-database-server.md',
+    'docs/dashboard/overview.md',
+    'docs/recommendations/overview.md',
+    'docs/account/overview.md',
+    'docs/faq.md',
+  ].map((sourcePath) => readFile(path.join(projectRoot, sourcePath), 'utf8')));
+
+  const overviewException = manifest.editorialExceptions[0];
+  assert.equal(overviewException.sourcePath, 'docs/get-started/releem-overview.md');
+  assert.equal(overviewException.approvedOn, '2026-09-03');
+  assert.match(overviewException.approvalEvidence, /one-page editorial pilot/iu);
+  assert.match(overviewException.reason, /Overview pilot/iu);
+  assert.equal(sha256(overview), overviewException.approvedCurrent.sourceSha256);
+
+  assert.match(register, /\[\*\*Sign Up\*\*\]\(https:\/\/app\.releem\.com\)/u);
+  assert.match(connect, /\/installation\/installation-methods\/azure-database-for-mysql/u);
+  assert.match(connect, /\[Releem Dashboard\]\(https:\/\/app\.releem\.com\)/u);
+  assert.doesNotMatch(
+    connect,
+    /completed Dashboard checks confirm|enough observations/iu,
+  );
+  for (const target of [
+    '/installation/linux?database=mysql#mysql-automatic-installation',
+    '/installation/linux?database=mysql#mysql-manual-installation',
+    '/installation/linux?database=mariadb#mariadb-automatic-installation',
+    '/installation/linux?database=mariadb#mariadb-manual-installation',
+    '/installation/linux?database=postgresql#postgresql-automatic-installation',
+    '/installation/linux?database=postgresql#postgresql-manual-installation',
+  ]) {
+    assert.equal(
+      connect.split(target).length - 1,
+      1,
+      `Connect page must contain exactly one Linux destination: ${target}`,
+    );
+  }
+
+  assert.match(dashboard, /\[Reports\]\(\/dashboard\/reports\)/u);
+  assert.match(dashboard, /\[Schema Checks\]\(\/dashboard\/schema-checks\)/u);
+  assert.doesNotMatch(dashboard, /Schema Optimization|retained Dashboard detail/iu);
+  assert.match(recommendations, /^title: Recommendations$/mu);
+  assert.doesNotMatch(recommendations, /Choose a recommendation task/u);
+  assert.match(recommendations, /^## Query Optimization$/mu);
+  assert.match(recommendations, /100 most frequent queries/u);
+  assert.match(recommendations, /100 slowest queries/u);
+  assert.match(recommendations, /it does not apply the change automatically/u);
+  assert.match(recommendations, /execution time, frequency, and overall impact/u);
+  assert.match(
+    recommendations,
+    /\[Query Optimization\]\(\/recommendations\/query-optimization\)/u,
+  );
+
+  assert.match(account, /^title: Account$/mu);
+  assert.match(account, /^sidebar_label: Account$/mu);
+  assert.doesNotMatch(
+    faq,
+    /canonical procedure|The first answer/iu,
+  );
+
+  const faqSection = (heading) => {
+    const afterHeading = faq.split(`## ${heading}\n`)[1];
+    assert.ok(afterHeading, `FAQ heading is missing: ${heading}`);
+    return afterHeading.split('\n## ')[0];
+  };
+  for (const heading of [
+    'I applied all recommendations, but Releem Score is not 100%. How can I improve it?',
+    'I applied all recommendations, but not all Health Checks are checked. How can I improve it?',
+  ]) {
+    assert.match(faqSection(heading), /\/dashboard\/health-checks/u);
+  }
+  const approvalSection = faqSection(
+    'Would Releem automatically change MySQL configuration without my approval?',
+  );
+  for (const target of [
+    '/recommendations/configuration-tuning/apply-using-portal',
+    '/recommendations/configuration-tuning/apply-using-agent',
+    '/recommendations/configuration-tuning/apply-using-cron',
+  ]) {
+    assert.match(approvalSection, new RegExp(target.replaceAll('/', '\\/'), 'u'));
+  }
+  for (const heading of [
+    'How do I add my business details and the VAT number?',
+    'How do I get an invoice?',
+  ]) {
+    assert.match(faqSection(heading), /\/account\/billing\/payment-information/u);
+  }
+  assert.match(
+    faqSection('Why does high latency occur after applying the recommended configuration?'),
+    /\[Learn more\]\(https:\/\/releem\.com\/docs\/mysql-latency\)/u,
+  );
 });
 
 test('manifest completely describes the committed preservation baseline', () => {

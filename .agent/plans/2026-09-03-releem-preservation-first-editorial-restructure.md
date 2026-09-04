@@ -93,19 +93,24 @@
 - Modify: `docs/recommendations/overview.md`
 - Modify: `docs/account/overview.md`
 - Modify: `docs/faq.md`
+- Modify: `.agent/analysis/2026-09-03-committed-content-preservation.json`
+- Modify: `tests/docs-preservation.test.mjs`
+- Modify: `tests/docs-structure.test.mjs`
 - Read: `docs/installation/linux.md`
 - Read: `.agent/analysis/2026-09-03-linux-installation-migration-checklist.md`
 
 **Reviewers:**
 - technical-writer
 
-- [ ] Add a short purpose-first introduction and direct next links to each existing hub. Keep every existing procedure, code block, screenshot, diagnostic, and recovery section in place.
+- [x] Add a short purpose-first introduction and direct next links to each existing hub. Keep every existing procedure, code block, screenshot, diagnostic, and recovery section in place.
 - [x] Route MySQL, MariaDB, and PostgreSQL Linux users from Connect Your Database Server to the exact canonical automatic/manual query-and-anchor destinations.
-- [ ] Make the Get Started journey explicit: register, choose the correct database and deployment path, connect the server, distinguish Agent connection from current-data arrival, and continue to Dashboard/Recommendations. Link to the canonical Linux method or other environment guide; do not duplicate installation commands.
-- [ ] Make Dashboard explain observed state and Recommendations explain proposed actions, while retaining detailed feature content on existing specialist pages.
-- [ ] State the visible user task and links for Account and FAQ without replacing current account/billing/access details.
-- [ ] Use direct customer language. Remove public internal-process wording only; do not delete technical explanation to make the page shorter.
-- [ ] Run `node --test tests/docs-linux-installation.test.mjs`, `npm run docs:preservation:check`, `npm run docs:check`, and `git diff --check`.
+- [x] Make the Get Started journey explicit: register, choose the correct database and deployment path, connect the server, distinguish Agent connection from current-data arrival, and continue to Dashboard/Recommendations. Link to the canonical Linux method or other environment guide; do not duplicate installation commands.
+- [x] Make Dashboard explain observed state and Recommendations explain proposed actions, while retaining detailed feature content on existing specialist pages.
+- [x] State the visible user task and links for Account and FAQ without replacing current account/billing/access details.
+- [x] Use direct customer language. Remove public internal-process wording only; do not delete technical explanation to make the page shorter.
+- [x] Record exact approved editorial snapshots for the seven newly changed hubs and make the preservation test require the complete eight-page exception set. Continue enforcing unchanged routes, IDs, code fences, screenshots, and sidebar ownership; do not weaken the preservation gate.
+- [x] Make structural inventory use the approved Task 4 editorial-exception set when parsing current page bodies, while retaining strict migration-token reversal for every unapproved page. Add a regression proving that an undeclared extra migration token still fails.
+- [x] Run `node --test tests/docs-linux-installation.test.mjs`, `npm run docs:preservation:check`, `npm run docs:check`, and `git diff --check`.
 
 ## Task 5: Make surgical clarity edits to existing procedures
 
