@@ -752,7 +752,7 @@
             "lineNumber": 52
           }
         ],
-        "bodySha256": "a74d52628c2d1fae0702504a118868b31e2b525fd65458ff65a1062e868b6efa",
+        "bodySha256": "ef75f5c9d5676616d8646dd764005303fcf93dc664dbe2335b6deaedff305bea",
         "internalLinks": [
           {
             "label": "Dashboard",
@@ -793,7 +793,7 @@
           }
         ],
         "recoveryHeadings": [],
-        "sourceSha256": "f89bc40bef53ac214d576d08d355836429b740a4aad8f3c0ec3cc17ed38c38d0"
+        "sourceSha256": "851370566053f653d2c92a808f6c5eab7d97916aae663d1e46e25584f78bc347"
       }
     },
     {
@@ -1057,6 +1057,70 @@
         ],
         "recoveryHeadings": [],
         "sourceSha256": "e27d261f59778e5b28d7e5467a9950a7752deec09fdaa497803a810bd96e7ba1"
+      }
+    },
+    {
+      "sourcePath": "docs/account/access/users-and-roles.md",
+      "status": "approved",
+      "approvedBy": "user",
+      "approvedOn": "2026-09-04",
+      "approvalEvidence": "The user's bounded Task 5 packet on 2026-09-04 authorizes this one-page clarity edit and exact preservation snapshot.",
+      "reason": "Direct customer language and explicit one-action invite, role-change, and removal sequences with all existing facts and screenshots retained.",
+      "permittedFields": [
+        "body"
+      ],
+      "frontMatterChanges": [],
+      "bodyChangeScope": [
+        "H1",
+        "ordered headings",
+        "prose",
+        "internal links"
+      ],
+      "preservedFields": [
+        "sourcePath",
+        "frontMatter",
+        "explicitId",
+        "effectiveId",
+        "slug",
+        "publicRoute",
+        "codeFences",
+        "images",
+        "sidebarOwnership"
+      ],
+      "approvedCurrent": {
+        "frontMatter": "---\nid: users-and-roles\nslug: /account/access/users-and-roles\ntitle: Invite users and assign roles\nsidebar_label: Invite users and assign roles\n---",
+        "h1": {
+          "level": 1,
+          "text": "Invite users and assign roles",
+          "lineNumber": 8
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Invite users and assign roles",
+            "lineNumber": 8
+          },
+          {
+            "level": 2,
+            "text": "Invite a user to a server",
+            "lineNumber": 12
+          },
+          {
+            "level": 2,
+            "text": "Change a user's role",
+            "lineNumber": 36
+          },
+          {
+            "level": 2,
+            "text": "Remove a user from a server",
+            "lineNumber": 43
+          }
+        ],
+        "bodySha256": "5e0f72531466a7039e0c9339fd95e7995b6e3d303341e56bc3aa3a7ba16086f9",
+        "internalLinks": [],
+        "procedureHeadings": [],
+        "recoveryHeadings": [],
+        "sourceSha256": "6205f665ead804b1f7561edb58ab2ade3bba6833002bfb4d01fcea8da11c7560"
       }
     }
   ],

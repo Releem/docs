@@ -7,31 +7,40 @@ sidebar_label: Invite users and assign roles
 
 # Invite users and assign roles
 
-You can invite users to shared dashboards per server and give them access to specific servers. This is useful when working with consultants, freelancers and team mates. Here's how to invite users.
+Invite teammates, consultants, or freelancers to a server's shared dashboard, then assign a role. Each invitation gives access to one specific server.
 
-## Inviting users to individual servers
+## Invite a user to a server
 
-1. Go into the server settings of the database server you'd like to invite users to
+1. Open the settings for the database server.
 
-<img src={require('../../../assets/images/dashboard-settings-invitation.png').default} alt="Dashboard Settings Invitation" className="shadow-img" />
+   <img src={require('../../../assets/images/dashboard-settings-invitation.png').default} alt="Dashboard Settings Invitation" className="shadow-img" />
 
-2. Click on the "Email invitation" link
+2. Select **Email invitation**.
 
-<img src={require('../../../assets/images/dashboard-settings-invitation-popup.png').default} alt="Dashboard Settings Invitation Popup" className="shadow-img" />
+   <img src={require('../../../assets/images/dashboard-settings-invitation-popup.png').default} alt="Dashboard Settings Invitation Popup" className="shadow-img" />
 
-3. Enter the email address of the person you'd like to invite. If you invite a new person to Releem, account will be created automatically
-4. Assign the role for the invited user. You can choose between two different roles:
-   - **Viewer** – Read-only access to dashboard and insights
-   - **Editor** – Can change settings and apply recommendations
-5. Click on the "Send" button. We will email the invited person to notify them about your invitation. They will need to accept the invitation. New users will need to set up a password. 
+3. Enter the person's email address.
 
-## Adjusting the guest roles
+   If the person is new to Releem, Releem automatically creates an account.
 
-1. Go to settings
-2. Choose a new role for the user
-3. That's it. The user now has a different role.
+4. Assign a role to the invited user:
 
-## Removing a user from a server
+   - **Viewer** - Has read-only access to the Dashboard and insights.
+   - **Editor** - Can change settings and apply recommendations.
 
-1. Go to settings
-2. Click red cross next to user email
+5. Select **Send**.
+6. Releem sends an email to the invited person.
+7. The invited person accepts the invitation.
+8. A new user sets a password.
+
+## Change a user's role
+
+1. Open the settings for the server.
+2. Choose a new role for the user.
+
+The user now has the new role.
+
+## Remove a user from a server
+
+1. Open the settings for the server.
+2. Select the red cross next to the user's email address.

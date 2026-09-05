@@ -115,13 +115,23 @@
 ## Task 5: Make surgical clarity edits to existing procedures
 
 **Files:**
-- Modify: one exact existing page path selected from an approved unchecked row in `.agent/analysis/2026-09-03-editorial-change-register.md`, written into the active task packet before work begins
-- Modify: `.agent/analysis/2026-09-03-committed-content-preservation.json` only for a documented safety exception
+- Modify: `docs/account/access/users-and-roles.md` — current bounded page packet selected from the first approved unchecked Task 5 queue row
+- Modify: `.agent/analysis/2026-09-03-editorial-change-register.md` — mark only the selected queue row complete after all gates pass
+- Modify: `.agent/analysis/2026-09-03-committed-content-preservation.json` — add the exact approved editorial snapshot for only the selected page
+- Modify: `tests/docs-preservation.test.mjs` — require the selected page's exact approved snapshot, retained screenshots, and retained role/invitation facts
 - Read: `.agent/analysis/2026-09-03-linux-installation-consolidation.json`
 - Read: `.agent/analysis/2026-09-03-linux-installation-migration-checklist.md`
 
 **Reviewers:**
 - technical-writer
+- releem-user
+
+**Current bounded page packet:**
+
+- [x] Improve `docs/account/access/users-and-roles.md` with direct customer language and one action per numbered step.
+- [x] Preserve both existing screenshot placements and all existing facts about Viewer, Editor, invitation email, invitation acceptance, automatic account creation, and password setup.
+- [x] Add no unsupported role, ownership, removal-effect, or account-lifecycle claim.
+- [x] Record and test the exact approved editorial snapshot, then obtain technical-writer specification and Releem-user clarity verdicts.
 
 - [ ] Work one existing specialist page at a time. Start with the reader outcome and prerequisites, retain all existing technical detail, then add small labels or links for expected result, verification, recovery, and next step where the source already supports them.
 - [ ] Do not delete or paraphrase an executable code fence. Preserve it exactly unless the corresponding safety-exception record authorizes a specific replacement and private historical copy. Treat the six one-command blocks in `docs/installation/linux.md` as the current protected versions, not the retired baseline commands.

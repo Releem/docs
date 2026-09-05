@@ -1,12 +1,16 @@
 # Private editorial change register
 
 **Audit date:** 2026-09-03
-**Status:** internal inventory only; no publication or implementation approval
+**Status:** `docs/account/access/users-and-roles.md` clarity edit approved and completed; no publication or other implementation approval
 **Baseline:** commit `9ad7ce3`, as frozen by `.agent/analysis/2026-09-03-committed-content-preservation.json`
 
 This register applies the copy-editing clarity, evidence, specificity, and risk sweeps to the current 54-page documentation corpus. Current documentation is the only factual product source used. No product behavior, version support, permission requirement, interface state, or recovery guarantee is inferred from outside the repository.
 
-The classification `Safety exception` means **candidate pending release review**, not an approved exception. The active manifest `safetyExceptions` array remains empty. No entry below authorizes editing a public page, route, sidebar, redirect, test, package file, or asset. Proposed archive paths do not yet exist and must contain placeholder-only historical material headed `DO NOT RUN` if a later review approves an exception.
+## Approved Task 5 execution queue
+
+- [x] `docs/account/access/users-and-roles.md` — approved by the user's 2026-09-04 instruction to implement the next plan task with subagents. Limit the edit to sentence-level grammar and explicit numbering of the retained invite, role-change, and removal sequences. Preserve both screenshots and every existing role-capability, invitation, account-creation, acceptance, and password fact.
+
+The classification `Safety exception` means **candidate pending release review**, not an approved exception. The active manifest `safetyExceptions` array remains empty. The checked `docs/account/access/users-and-roles.md` row above is the only approved and completed public-page edit in this register. No other entry authorizes editing a public page, route, sidebar, redirect, test, package file, or asset. Proposed archive paths do not yet exist and must contain placeholder-only historical material headed `DO NOT RUN` if a later review approves an exception.
 
 ## Validation summary
 

@@ -1084,6 +1084,7 @@ test('supersedes legacy whole-file checks with exact content identity outside ap
     'docs/recommendations/overview.md',
     'docs/account/overview.md',
     'docs/faq.md',
+    'docs/account/access/users-and-roles.md',
   ];
   assert.deepEqual(
     manifest.editorialExceptions.map(({sourcePath}) => sourcePath),
@@ -1345,6 +1346,98 @@ test('approved orientation pages route customer tasks without unsupported state 
     faqSection('Why does high latency occur after applying the recommended configuration?'),
     /\[Learn more\]\(https:\/\/releem\.com\/docs\/mysql-latency\)/u,
   );
+});
+
+test('users and roles keeps its contract while presenting explicit one-action sequences', async () => {
+  const sourcePath = 'docs/account/access/users-and-roles.md';
+  const source = await readFile(path.join(projectRoot, sourcePath), 'utf8');
+  const page = parseDocument(sourcePath, source);
+  const baselinePage = manifest.pages.find(
+    ({sourcePath: candidatePath}) => candidatePath === sourcePath,
+  );
+  const exception = manifest.editorialExceptions.find(
+    ({sourcePath: candidatePath}) => candidatePath === sourcePath,
+  );
+
+  assert.ok(baselinePage, 'Users and Roles baseline record is missing');
+  assert.equal(page.frontMatter, baselinePage.frontMatter);
+  assert.equal(page.explicitId, 'users-and-roles');
+  assert.equal(page.effectiveId, 'account/access/users-and-roles');
+  assert.equal(page.slug, '/account/access/users-and-roles');
+  assert.equal(page.publicRoute, '/account/access/users-and-roles');
+
+  const imageContract = ({syntax, reference, assetPath, altText}) => ({
+    syntax,
+    reference,
+    assetPath,
+    altText,
+  });
+  assert.deepEqual(
+    page.images.map(imageContract),
+    baselinePage.images.map(imageContract),
+  );
+  const firstImageOffset = source.indexOf('dashboard-settings-invitation.png');
+  const secondImageOffset = source.indexOf('dashboard-settings-invitation-popup.png');
+  assert.ok(source.indexOf('1. Open the settings for the database server.') < firstImageOffset);
+  assert.ok(firstImageOffset < source.indexOf('2. Select **Email invitation**.'));
+  assert.ok(source.indexOf('2. Select **Email invitation**.') < secondImageOffset);
+  assert.ok(secondImageOffset < source.indexOf("3. Enter the person's email address."));
+
+  const section = (heading, nextHeading) => {
+    const start = source.indexOf(`## ${heading}\n`);
+    assert.notEqual(start, -1, `Missing task heading: ${heading}`);
+    const contentStart = start + `## ${heading}\n`.length;
+    const end = nextHeading
+      ? source.indexOf(`## ${nextHeading}\n`, contentStart)
+      : source.length;
+    assert.notEqual(end, -1, `Missing next task heading: ${nextHeading}`);
+    return source.slice(contentStart, end);
+  };
+  const numberedActions = (content) => [
+    ...content.matchAll(/^(\d+)\. (.+)$/gmu),
+  ].map(([, number, action]) => ({number: Number(number), action}));
+
+  const invite = section('Invite a user to a server', "Change a user's role");
+  const changeRole = section("Change a user's role", 'Remove a user from a server');
+  const remove = section('Remove a user from a server');
+  assert.deepEqual(numberedActions(invite), [
+    {number: 1, action: 'Open the settings for the database server.'},
+    {number: 2, action: 'Select **Email invitation**.'},
+    {number: 3, action: "Enter the person's email address."},
+    {number: 4, action: 'Assign a role to the invited user:'},
+    {number: 5, action: 'Select **Send**.'},
+    {number: 6, action: 'Releem sends an email to the invited person.'},
+    {number: 7, action: 'The invited person accepts the invitation.'},
+    {number: 8, action: 'A new user sets a password.'},
+  ]);
+  assert.deepEqual(numberedActions(changeRole), [
+    {number: 1, action: 'Open the settings for the server.'},
+    {number: 2, action: 'Choose a new role for the user.'},
+  ]);
+  assert.match(
+    changeRole,
+    /2\. Choose a new role for the user\.\n\nThe user now has the new role\./u,
+  );
+  assert.doesNotMatch(changeRole, /confirm/iu);
+  assert.deepEqual(numberedActions(remove), [
+    {number: 1, action: 'Open the settings for the server.'},
+    {number: 2, action: "Select the red cross next to the user's email address."},
+  ]);
+
+  assert.match(source, /Each invitation gives access to one specific server\./u);
+  assert.match(source, /\*\*Viewer\*\* - Has read-only access to the Dashboard and insights\./u);
+  assert.match(source, /\*\*Editor\*\* - Can change settings and apply recommendations\./u);
+  assert.match(source, /Releem automatically creates an account\./u);
+  assert.match(source, /Releem sends an email to the invited person\./u);
+  assert.match(source, /The invited person accepts the invitation\./u);
+  assert.match(source, /A new user sets a password\./u);
+  assert.equal(page.codeFences.length, 0);
+
+  assert.ok(exception, 'Users and Roles requires an exact editorial exception');
+  assert.equal(exception.status, 'approved');
+  assert.equal(exception.approvedBy, 'user');
+  assert.equal(exception.approvedOn, '2026-09-04');
+  assert.equal(page.sourceSha256, exception.approvedCurrent.sourceSha256);
 });
 
 test('manifest completely describes the committed preservation baseline', () => {
