@@ -14,7 +14,7 @@ Choose the installation flow that matches your setup:
 <Tabs>
 <TabItem value="automatic-user-creation" label="Automatic User Creation" default>
 
-# Automatic Installation for Self-Managed PostgreSQL Servers
+## Automatic Installation for Self-Managed PostgreSQL Servers
 
 Use this instruction to install Releem Agent automatically on a self-managed PostgreSQL server. The installer creates the monitoring user, enables `pg_stat_statements` when possible, and starts metrics collection.
 
@@ -55,16 +55,10 @@ For a full list of configuration settings, see [Releem Agent Configuration](/rel
 
 3. Open the [Releem Dashboard](https://app.releem.com/). If the server does not appear immediately, refresh the page.
 
-## Notes
-
-- PostgreSQL support is enabled when `pg_user` and `pg_password` are set in the agent configuration.
-- `pg_ssl_mode` in `releem.conf` is a boolean: `true` means `sslmode=require`, omitted/false means `sslmode=disable`.
-- If you prefer to create the monitoring user yourself, use the [Manual](/releem-agent/installation-guides/postgresql-manual-linux) installation.
-
 </TabItem>
 <TabItem value="manual-user-creation" label="Manual User Creation">
 
-# Manual Installation for Self-Managed PostgreSQL Servers
+## Manual Installation for Self-Managed PostgreSQL Servers
 
 Use this instruction to install Releem Agent after you create the PostgreSQL monitoring user yourself.
 
@@ -152,7 +146,7 @@ For a full list of configuration settings, see [Releem Agent Configuration](/rel
 </TabItem>
 <TabItem value="docker" label="Docker">
 
-# Installation in a Docker Container on Self-Managed PostgreSQL Servers
+## Installation in a Docker Container on Self-Managed PostgreSQL Servers
 
 Use this instruction to run Releem Agent in a Docker container against a self-managed PostgreSQL server. Releem Agent collects metrics and recommends configuration.
 
@@ -242,7 +236,7 @@ include_dir = 'conf.d'
 </TabItem>
 <TabItem value="aws-rds" label="AWS RDS">
 
-# Cloud-Managed AWS RDS and Aurora PostgreSQL Installation
+## Cloud-Managed AWS RDS and Aurora PostgreSQL Installation
 
 Use this instruction to install Releem Agent automatically via CloudFormation to AWS Fargate, or manually on an EC2 instance. Releem Agent runs in a container on AWS Fargate or directly on the EC2 instance, depending on your choice.
 
@@ -461,6 +455,9 @@ You have the following options to install Releem Agent:
 </TabItem>
 </Tabs>
 
+</TabItem>
+</Tabs>
+
 ## Common Issues for AWS RDS and Aurora PostgreSQL
 
 To check Releem Agent logs, open CloudWatch → Log Groups and select the Releem Agent log group.
@@ -489,12 +486,10 @@ To check Releem Agent logs, open CloudWatch → Log Groups and select the Releem
 7. Cluster parameters are not applied on a reader
    - Only the Agent targeting the writer modifies cluster parameters. Keep an Agent on the writer instance.
 
-</TabItem>
-</Tabs>
-
 ## Notes
 
 - PostgreSQL support is enabled when `pg_user` and `pg_password` are set in the agent configuration.
 - `pg_stat_statements` is recommended for query performance visibility.
 - `pg_ssl_mode` in `releem.conf` is a boolean: `true` means `sslmode=require`, omitted/false means `sslmode=disable`.
 - On Amazon RDS and Aurora PostgreSQL, `pg_hba_file_rules` is owned by `rdsadmin` and cannot be granted to a customer monitoring role. Skip those grants and use the AWS RDS tab above.
+- If you prefer to create the monitoring user yourself, use the [Manual](/releem-agent/installation-guides/postgresql-manual-linux) installation.
