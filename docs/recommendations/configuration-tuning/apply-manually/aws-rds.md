@@ -9,6 +9,9 @@ sidebar_label: AWS RDS
 
 Use Parameter Groups to apply the recommended configuration. Follow the steps below:
 
+Before you begin, record the parameter group assigned to your RDS instance and its current parameter values.
+Use this record to compare the configuration after the change and to plan recovery if needed.
+
 ## Step 1: Modify the Parameter Group in AWS RDS
 
 1. Log in to the AWS Management Console.
@@ -24,18 +27,20 @@ Use Parameter Groups to apply the recommended configuration. Follow the steps be
 1. Go back to the RDS Dashboard and select your database instance.
 2. Click on the **Modify** button.
 3. In the Database options section, select the updated parameter group.
-4. Save the changes.
-   - Choose whether to apply the changes immediately or during the next maintenance window.
+4. Before you save, choose whether to apply the changes immediately or during the next maintenance window.
+5. Save the changes.
 
 ## Step 3: Reboot the RDS Instance
 
-1. After applying the parameter group, reboot your RDS instance:
+Coordinate the reboot with the application timing you chose in Step 2.
+
+1. At the planned reboot time, reboot your RDS instance:
    - In the RDS Dashboard, select your instance.
    - Click **Actions → Reboot**.
 2. This will apply the new parameter settings.
 
 ## Step 4: Verify the Applied Configuration
 
-You should see event **Applied recommended configuration** on the MySQL Metrics graph.
+You should see event **Applied recommended configuration** on the Metrics graph.
 
 For additional help, feel free to contact **Releem support**.

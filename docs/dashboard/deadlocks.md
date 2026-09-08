@@ -6,18 +6,22 @@ title: Deadlock Monitoring
 
 # Deadlock Monitoring
 
-Releem continuously monitors your MySQL database for deadlocks and provides instant notifications with complete transaction details. Deadlocks can cause application errors and degrade user experience, so early detection and resolution are critical for maintaining database reliability.
+Releem monitors your database for deadlocks and provides notifications with the transaction details available for each detected event. Deadlocks can cause application errors and affect user experience, so reviewing detected events can help you investigate database reliability issues.
 
 <img src={require('../../assets/images/releem-deadlock-monitoring.png').default} alt="Releem Deadlock Monitoring" className="shadow-img" />
 
 ## How Releem Monitors Deadlocks
 
-Releem continuously analyzes MySQL's internal status reports to detect deadlocks in real-time.
+### Detected evidence
 
-Releem automatically identifies the type of deadlock and provides suggestions on how to resolve it. All deadlock information, including identification and suggested fixes, is stored in your Releem dashboard for historical analysis to uncover recurring issues and patterns.
+Releem analyzes database internal status reports to detect deadlocks. When Releem detects a deadlock, it identifies the deadlock type and records the available transaction details. A notification alerts you to the detected event. This deadlock information is stored in your Releem dashboard, where you can review its history for recurring issues and patterns.
+
+### Suggested action
+
+Releem also provides suggested fixes for that deadlock type, which are stored with the detected evidence in your Releem dashboard. Treat each suggestion as a possible way to resolve the deadlock, and review it with the recorded evidence before deciding what to change.
 
 <img src={require('../../assets/images/releem-deadlock-monitoring-details.png').default} alt="Releem Deadlock Monitoring Details" className="shadow-img" />
 
-For detailed information about each deadlock type, comprehensive solutions, and best practices, see the [MySQL Deadlock Detection](https://releem.com/blog/mysql-deadlock-detection) article.
+For detailed information about each deadlock type, possible solutions, and best practices, see the [MySQL Deadlock Detection](https://releem.com/blog/mysql-deadlock-detection) article.
 
-Releem's continuous deadlock monitoring ensures you're immediately aware of issues, with complete historical records to help you identify patterns and implement effective solutions.
+Use the notifications, recorded transaction details, deadlock type, suggestions, and Dashboard history to investigate detected events and decide which responses fit your database and application.

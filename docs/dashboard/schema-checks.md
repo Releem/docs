@@ -6,26 +6,28 @@ title: Schema Optimization
 
 # Schema Optimization
 
-Releem's Schema Optimization feature automatically examines your database structure to identify schema issues that can impact performance, storage efficiency, and data integrity. It is like the schema watchdog that detects problems before they become serious and provides ready-to-use SQL recommendations.
+Use Schema Optimization to review schema issues that Releem detected and any SQL proposed for addressing them. These issues may affect performance, storage efficiency, or data integrity.
+
+A detected issue describes the database structure that Releem observed. The provided SQL is a proposed change, not an applied change. Review the affected objects and test the proposed SQL before you decide whether to execute it.
 
 ![Releem Schema Optimization](../../assets/images/releem-schema-optimization.png)
 
-Schema optimization helps you detect and fix:
+Schema Optimization reports these issue types:
 
-- **Missing Primary Keys** – Causes replication issues and performance degradation
-- **Duplicate & Unused Indexes** – Waste disk space and slow down write operations
+- **Missing Primary Keys** – May cause replication issues and performance degradation
+- **Duplicate & Unused Indexes** – May waste disk space and slow down write operations
 - **Deprecated Storage Engines** – Tables using MyISAM instead of InnoDB
-- **Mixed Character Sets & Collations** – Prevent index usage and slow queries
-- **Table Fragmentation** – Scattered data reduces query efficiency
+- **Mixed Character Sets & Collations** – May prevent index usage and slow queries
+- **Table Fragmentation** – Scattered data may reduce query efficiency
 - **Auto Increment Overflow Risks** – Insufficient column types for growing tables
 
-### Using Schema Optimization
+## Review and apply a schema change
 
-1. Navigate to the **Schema Optimization** section in your Releem dashboard
-2. Review detected issues categorized by type and severity
-3. Copy the provided SQL statements (e.g., `ALTER TABLE`)
-4. Test changes in a development environment first
-5. Execute the SQL on your production database during low-traffic periods
+1. **Open Schema Optimization.** Navigate to the **Schema Optimization** section in your Releem dashboard.
+2. **Review the detected issue.** Review detected issues categorized by type and severity.
+3. **Review the proposed SQL.** Copy the provided SQL statements (e.g., `ALTER TABLE`).
+4. **Test the proposed SQL.** Test changes in a development environment first.
+5. **Execute the approved SQL.** Execute the SQL on your production database during low-traffic periods.
 
 To let Releem apply approved schema changes for you instead of running SQL manually, follow [Automatic Schema Changes](/recommendations/query-optimization/automatic-schema-changes).
 
@@ -33,4 +35,4 @@ If an automatic schema change fails in Releem, use the [Schema Change Troublesho
 
 For detailed information about each type of schema check and comprehensive best practices, see the [MySQL Database Schema Checks](https://releem.com/blog/mysql-database-schema-checks) article.
 
-Schema optimization is essential for maintaining long-term database health and performance as your application grows.
+Use the detected issue, affected objects, and your test results to decide whether the proposed change is appropriate for your database.

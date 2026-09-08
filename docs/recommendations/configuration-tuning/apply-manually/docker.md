@@ -16,9 +16,12 @@ Follow these steps to apply the recommended configuration for MySQL in Docker:
 3. Click the **Copy** icon to copy the recommended configuration.
 
 ## Step 2: Modify the my.cnf file
-Paste the copied configuration into the end of file.
+
+Identify the `my.cnf` file used by the target Docker container. Paste the copied configuration at the end of that file.
 
 ## Step 3: Restart Docker container
+
+Before restarting, review the pasted settings and confirm that `<container_name_or_id>` identifies the MySQL container you intend to restart.
 
 Restart your MySQL Docker container to apply the new configuration:
 
@@ -28,6 +31,6 @@ docker restart <container_name_or_id>
 
 ## Step 4: Verify the Applied Configuration
 
-You should see event **Applied recommended configuration** on the MySQL Metrics graph.
+You should see event **Applied recommended configuration** on the Database Metrics graph.
 
 For additional help, feel free to contact **Releem support**.

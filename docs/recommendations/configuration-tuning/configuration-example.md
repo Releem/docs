@@ -6,10 +6,13 @@ title: Example of Configuration
 
 # Example of Recommended Configuration
 
-This page provides an example of a recommended MySQL configuration as suggested by the Releem platform. The configuration settings listed here are designed to optimize the performance of your MySQL server by adjusting various parameters.
+Use this page to understand how a recommended MySQL configuration can appear in Releem.
 
+This example is illustrative only. Do not copy or apply it to a database server.
 
 ![Releem Dashboard example of Configuration](../../../assets/images/releem-dashboard-recommended-configuration.png)
+
+Each line shows an example recommended value, followed by the `Previous value` paired with that setting in this example.
 
 ```
 [mysqld]
@@ -39,5 +42,4 @@ innodb_file_per_table = 1 ### Previous value : ON
 innodb_flush_method = O_DIRECT ### Previous value :
 innodb_thread_concurrency = 0 ### Previous value : 0
 ```
-
 

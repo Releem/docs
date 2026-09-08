@@ -6,21 +6,21 @@ title: MySQL Tuning Process
 
 # MySQL Tuning Process
 
-The Releem MySQL tuning process is designed to optimize MySQL performance using a systematic approach that involves several stages. Each stage plays a crucial role in ensuring that the resulting configuration improves your server's performance while maintaining stability and security.
+Use this page to understand how Releem turns MySQL metrics into a recommended configuration and where you make the change. The process separates analysis from application: Releem collects data, searches for candidates, evaluates and presents a proposal, and you review and decide how to apply it.
 
 ### Stage 1: Collecting Baseline
-After installing the Releem Agent, the platform will collect baseline data over several days. This data is used to train the AI, allowing it to recognize when a new configuration leads to improved performance.
+Releem's AI is trained with data from different controlled workloads. After you install the Releem Agent, the platform collects baseline data over several days. This server-specific data helps the AI recognize when a new configuration leads to improved performance.
 
 ### Stage 2: Searching for Opportunities
-The Releem platform uses AI to continuously search for opportunities to enhance MySQL performance. On the Free plan, Releem tunes only 10 MySQL variables, while the Premium plan offers tuning of more variables.
+The Releem platform uses AI to continuously search for opportunities to enhance MySQL performance. On the Free plan, Releem tunes only 10 MySQL variables, while the Premium plan offers tuning of more variables. This stage identifies candidates; it does not apply them.
 
 ### Stage 3: Expert System Evaluation
-If Releem's AI identifies a viable hypothesis for performance improvement, the platform's expert system will assess whether it can be safely applied to your server. This step ensures that any proposed changes do not adversely affect the stability or security of your MySQL instance.
+If Releem's AI identifies a viable hypothesis for performance improvement, the platform's expert system assesses whether the proposed change could adversely affect the stability or security of your MySQL instance. This assessment filters the proposal, but it does not guarantee the result for your workload.
 
 ### Stage 4: Preparing New Configuration
-Once the expert system has verified the safety of a proposed change, Releem will prepare a new configuration and display it to the user. At this stage, you will see the number of unapplied recommendations in the Recommended Configuration block.
+After the expert-system evaluation, Releem prepares a new configuration and displays it as a proposal for you to review. At this stage, you will see the number of unapplied recommendations in the Recommended Configuration block. Displaying a recommendation does not change your server configuration.
 
 ### Stage 5: Applying Recommended Configuration
-When the recommended configuration is ready, you should apply it to your server. You can do this manually or automatically using the Releem Agent, depending on your server type and installation method. After applying the configuration, it may take up to 12 hours for Releem to detect the changes and update the unapplied recommendations count.
+Review the recommended configuration and decide how to apply it. You can apply it manually or using the Releem Agent, depending on your server type and installation method. After applying the configuration, it may take up to 12 hours for Releem to detect the changes and update the unapplied recommendations count.
 
-By following these stages, the Releem tuning process ensures that your MySQL server's performance is optimized safely and effectively. Regularly reviewing and applying recommended configurations will help you maintain peak performance and meet your business requirements.
+After Releem updates the count, compare your server's behavior with its baseline and your operational requirements. The recommendation and expert-system assessment support your decision; they do not replace your review of the proposed values and affected server.

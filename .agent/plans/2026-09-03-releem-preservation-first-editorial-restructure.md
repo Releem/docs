@@ -115,7 +115,7 @@
 ## Task 5: Make surgical clarity edits to existing procedures
 
 **Files:**
-- Modify: `docs/account/access/users-and-roles.md` — current bounded page packet selected from the first approved unchecked Task 5 queue row
+- Modify: `docs/recommendations/query-optimization/prepared-statements.md` — current bounded page packet selected from the first approved unchecked Task 5 queue row
 - Modify: `.agent/analysis/2026-09-03-editorial-change-register.md` — mark only the selected queue row complete after all gates pass
 - Modify: `.agent/analysis/2026-09-03-committed-content-preservation.json` — add the exact approved editorial snapshot for only the selected page
 - Modify: `tests/docs-preservation.test.mjs` — require the selected page's exact approved snapshot, retained screenshots, and retained role/invitation facts
@@ -128,17 +128,17 @@
 
 **Current bounded page packet:**
 
-- [x] Improve `docs/account/access/users-and-roles.md` with direct customer language and one action per numbered step.
-- [x] Preserve both existing screenshot placements and all existing facts about Viewer, Editor, invitation email, invitation acceptance, automatic account creation, and password setup.
-- [x] Add no unsupported role, ownership, removal-effect, or account-lifecycle claim.
+- [x] Improve `docs/recommendations/query-optimization/prepared-statements.md` by distinguishing the documented limitation from the client-side Java and PHP workarounds and adding test/reversal caution.
+- [x] Preserve the existing PHP command fence byte-for-byte, all Java and PHP guidance, route, and every documented prepared-statement fact.
+- [x] Add no unsupported driver behavior, compatibility, security, deployment, reversibility, safety, or performance-outcome claim.
 - [x] Record and test the exact approved editorial snapshot, then obtain technical-writer specification and Releem-user clarity verdicts.
 
-- [ ] Work one existing specialist page at a time. Start with the reader outcome and prerequisites, retain all existing technical detail, then add small labels or links for expected result, verification, recovery, and next step where the source already supports them.
-- [ ] Do not delete or paraphrase an executable code fence. Preserve it exactly unless the corresponding safety-exception record authorizes a specific replacement and private historical copy. Treat the six one-command blocks in `docs/installation/linux.md` as the current protected versions, not the retired baseline commands.
-- [ ] Keep code blocks near their documented context. Do not move commands into generic overview pages or duplicate them across install pages.
-- [ ] Do not restore the retired Linux pages, the removed sensitive screenshot, inline secret examples, unrestricted network rules, or curl-to-shell examples. If upstream installer behavior changes, authorize and test that remediation as a separate bounded task before changing the Linux warning or publication gate.
-- [ ] Keep screenshots where they explain navigation or interpretation. For any other stale or potentially sensitive image, add a release-review question and block its publication when necessary; do not fabricate a replacement.
-- [ ] Run focused route/link checks, `node --test tests/docs-linux-installation.test.mjs`, `npm run docs:preservation:check`, `npm run docs:check`, `npm run typecheck`, `npm run build`, and `git diff --check` after each bounded page packet.
+- [x] Work one existing specialist page at a time. Start with the reader outcome and prerequisites, retain all existing technical detail, then add small labels or links for expected result, verification, recovery, and next step where the source already supports them.
+- [x] Do not delete or paraphrase an executable code fence. Preserve it exactly unless the corresponding safety-exception record authorizes a specific replacement and private historical copy. Treat the six one-command blocks in `docs/installation/linux.md` as the current protected versions, not the retired baseline commands.
+- [x] Keep code blocks near their documented context. Do not move commands into generic overview pages or duplicate them across install pages.
+- [x] Do not restore the retired Linux pages, the removed sensitive screenshot, inline secret examples, unrestricted network rules, or curl-to-shell examples. If upstream installer behavior changes, authorize and test that remediation as a separate bounded task before changing the Linux warning or publication gate.
+- [x] Keep screenshots where they explain navigation or interpretation. For any other stale or potentially sensitive image, add a release-review question and block its publication when necessary; do not fabricate a replacement.
+- [x] Run focused route/link checks, `node --test tests/docs-linux-installation.test.mjs`, `npm run docs:preservation:check`, `npm run docs:check`, `npm run typecheck`, `npm run build`, and `git diff --check` after each bounded page packet.
 
 ## Task 6: Review the preserved, detailed documentation experience
 
@@ -148,13 +148,15 @@
 
 **Reviewers:**
 - technical-writer
+- releem-user
+- docusaurus-qa
 
-- [ ] Review every changed page against the baseline. Confirm that each retained code block, image placement, procedure, diagnostic path, and recovery instruction remains present and reachable unless the change register records a safety exception.
-- [ ] Perform the non-DBA findability journey using current content: supported-database information, exact Linux engine/method selection, permissions, one-command installation, Agent connection, current-data verification, Dashboard checks, Recommendations, and recovery.
-- [ ] Inspect desktop and 375 px mobile rendering, keyboard navigation, links, images, redirects, code-block readability, all `?database=` selections, and every query-plus-anchor destination. Confirm the six one-command blocks remain usable without horizontal page overflow.
-- [ ] Confirm the removed credential-bearing screenshot is absent from source and build. Report freshness or credential concerns for remaining screenshots as release questions without restoring unsafe evidence or fabricating replacements.
-- [ ] Run `node --test tests/docs-linux-installation.test.mjs`, `npm run docs:preservation:check`, `npm run docs:check`, `npm run typecheck`, `npm run build`, `RELEEM_VERIFY_REDIRECT_BUILD=1 node --test tests/docs-directory-mirror.test.mjs`, and `git diff --check`.
-- [ ] Report only genuine remaining gaps: current UI screenshots, unsupported/missing engine facts, the unresolved upstream installer risks, legal destinations, Algolia reindex, and publication approval. Do not treat the retired Linux pages or the existence of detailed legacy content as gaps.
+- [x] Review every changed page against the baseline. Confirm that each retained code block, image placement, procedure, diagnostic path, and recovery instruction remains present and reachable unless the change register records a safety exception.
+- [x] Perform the non-DBA findability journey using current content: supported-database information, exact Linux engine/method selection, permissions, one-command installation, Agent connection, current-data verification, Dashboard checks, Recommendations, and recovery.
+- [x] Inspect desktop and 375 px mobile rendering, keyboard navigation, links, images, redirects, code-block readability, all `?database=` selections, and every query-plus-anchor destination. Confirm the six one-command blocks remain usable without horizontal page overflow.
+- [x] Confirm the removed credential-bearing screenshot is absent from source and build. Report freshness or credential concerns for remaining screenshots as release questions without restoring unsafe evidence or fabricating replacements.
+- [x] Run `node --test tests/docs-linux-installation.test.mjs`, `npm run docs:preservation:check`, `npm run docs:check`, `npm run typecheck`, `npm run build`, `RELEEM_VERIFY_REDIRECT_BUILD=1 node --test tests/docs-directory-mirror.test.mjs`, and `git diff --check`.
+- [x] Report only genuine remaining gaps: current UI screenshots, unsupported/missing engine facts, the unresolved upstream installer risks, legal destinations, Algolia reindex, and publication approval. Do not treat the retired Linux pages or the existence of detailed legacy content as gaps.
 
 ## Completion criteria
 

@@ -9,6 +9,8 @@ sidebar_label: GCP Cloud SQL
 
 Use Database Flags to apply the recommended configuration. Follow the steps below:
 
+**Application timing:** Before you change the instance, decide whether to apply the changes immediately or during the next maintenance window (if this option is available for your instance).
+
 ## Step 1: Get the Recommended Configuration
 
 1. Log in to the Releem dashboard.
@@ -26,18 +28,27 @@ Use Database Flags to apply the recommended configuration. Follow the steps belo
 7. Configure the database flags:
    - To set a new flag: Click **Add item**, choose the flag from the drop-down menu, and set its value based on the Releem recommendations.
    - To modify an existing flag: Update its value according to the Releem recommendations.
-8. Click **Save** to apply your changes.
+8. In the Google Cloud Console, before you click **Save**, choose one of the timing options available for your instance:
+   - **Apply immediately**.
+   - **Schedule during the next maintenance window**, if this option is available for your instance.
+
+   For either timing choice, Cloud SQL may automatically restart the instance if required, as described in Step 3.
+9. Click **Save** to apply your changes.
 
 ## Step 3: Apply the Changes
 
-1. After clicking Save, GCP Cloud SQL will automatically restart your instance if required to apply the configuration changes.
-2. You can choose to apply changes immediately or schedule them during the next maintenance window (if this option is available for your instance).
-3. Wait for the instance to complete the restart process.
+1. At the timing you selected, GCP Cloud SQL will automatically restart your instance if required to apply the configuration changes.
+2. Wait for the instance to complete the restart process.
 
 ## Step 4: Verify the Applied Configuration
 
+### Confirm the flags in Google Cloud
+
 1. On the **Instance Overview** page, check the **Database flags** section to confirm the flags have been applied.
-2. You should see event **Applied recommended configuration** on the MySQL Metrics graph in the Releem Dashboard.
+
+### Verify the application event in Releem
+
+1. You should see event **Applied recommended configuration** on the Database Metrics graph in the Releem Dashboard.
 
 :::info
 Database flags are persisted for the instance until you manually remove them. Some flags may require the instance to be restarted for changes to take effect.

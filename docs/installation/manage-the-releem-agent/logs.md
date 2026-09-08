@@ -9,7 +9,9 @@ import TabItem from '@theme/TabItem';
 
 # How to Check Releem Agent Logs?
 
-This guide explains how to check Releem Agent logs for different environments and operating systems.
+Choose the tab for the environment where the Releem Agent runs. Use the command or log location in that tab to inspect its logs.
+
+Before you share log output, review it for sensitive values and customer data, and remove anything you should not disclose.
 
 <Tabs>
   <TabItem value="debian" label="Debian" default>

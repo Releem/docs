@@ -6,7 +6,7 @@ title: "Limit Memory for MySQL"
 
 # Limit Memory for MySQL
 
-If your server has not only MySQL installed, but also other software like a web server, it is important to limit the memory allocated for MySQL using the memory_limit option in Releem Agent configuration. This option will inform Releem Platform to limit memory for MySQL and helps ensure that MySQL does not consume excessive resources and affect the performance of other applications on the server.
+If this server runs MySQL alongside other software, such as a web server, use the `memory_limit` option in Releem Agent configuration to set the memory target that Releem uses when preparing MySQL settings. The Memory Limit setting is a tuning target, not an enforced process or system memory cap. MySQL can use more than this value, as explained in the FAQ below.
 
 To set the memory limit follow the steps below:
 1. Open the Dashboard->Recommended Configuration->Settings

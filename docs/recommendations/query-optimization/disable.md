@@ -9,7 +9,7 @@ import TabItem from '@theme/TabItem';
 
 # Disable SQL Query Optimization
 
-To disable the SQL Query Optimization feature, please select your installation type and follow the instructions below.
+Choose your installation type. These steps change the Query Optimization setting and then restart or recreate the Releem Agent.
 
 <Tabs>
   <TabItem value="linux" label="Linux" default>
@@ -86,3 +86,9 @@ Set `query_optimization=false` in `C:\ProgramData\ReleemAgent\releem.conf`, then
 
   </TabItem>
 </Tabs>
+
+## Verify the change
+
+Confirm that the Releem Agent service or container is running after the restart or recreation. 
+
+This procedure does not establish whether disabling Query Optimization deletes previously collected query data or revokes database permissions. Do not assume that either action occurs. Review database access separately, and contact Releem support if you need a data-retention or access-removal procedure.

@@ -1122,6 +1122,1580 @@
         "recoveryHeadings": [],
         "sourceSha256": "6205f665ead804b1f7561edb58ab2ade3bba6833002bfb4d01fcea8da11c7560"
       }
+    },
+    {
+      "sourcePath": "docs/account/billing/cancel-subscription.md",
+      "status": "approved",
+      "approvedBy": "user",
+      "approvedOn": "2026-09-05",
+      "approvalEvidence": "The user's bounded Task 5 packet on 2026-09-05 authorizes this one-page clarity edit and exact preservation snapshot.",
+      "reason": "A concise outcome and prerequisite lead plus consistently labeled customer actions, with the existing five-step sequence and all account, billing, confirmation, and support facts retained.",
+      "permittedFields": [
+        "body"
+      ],
+      "frontMatterChanges": [],
+      "bodyChangeScope": [
+        "H1",
+        "ordered headings",
+        "prose",
+        "internal links"
+      ],
+      "preservedFields": [
+        "sourcePath",
+        "frontMatter",
+        "explicitId",
+        "effectiveId",
+        "slug",
+        "publicRoute",
+        "codeFences",
+        "images",
+        "sidebarOwnership"
+      ],
+      "approvedCurrent": {
+        "frontMatter": "---\nid: cancel-subscription\nslug: /account/billing/cancel-subscription\ntitle: Cancellation\n---",
+        "h1": {
+          "level": 1,
+          "text": "Cancellation",
+          "lineNumber": 7
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Cancellation",
+            "lineNumber": 7
+          }
+        ],
+        "bodySha256": "d44cdba481869f10aaaf5f0717b1902edf0982738c7cb31f081210b1c2cd8b3e",
+        "internalLinks": [],
+        "procedureHeadings": [],
+        "recoveryHeadings": [],
+        "sourceSha256": "7eed5e32d49bec1eac8e6136e10a8a11d61b1bfd4417cb92fc7d8dcd6bde1d30"
+      }
+    },
+    {
+      "sourcePath": "docs/dashboard/deadlocks.md",
+      "status": "approved",
+      "approvedBy": "user",
+      "approvedOn": "2026-09-05",
+      "approvalEvidence": "The user's bounded Task 5 packet on 2026-09-05 authorizes this one-page clarity edit and exact preservation snapshot.",
+      "reason": "Detected deadlock evidence is separated from suggested action, absolute timing and outcome wording is qualified, and both screenshots, the external detail link, and all existing workflow facts are retained.",
+      "permittedFields": [
+        "body"
+      ],
+      "frontMatterChanges": [],
+      "bodyChangeScope": [
+        "H1",
+        "ordered headings",
+        "prose",
+        "internal links"
+      ],
+      "preservedFields": [
+        "sourcePath",
+        "frontMatter",
+        "explicitId",
+        "effectiveId",
+        "slug",
+        "publicRoute",
+        "codeFences",
+        "images",
+        "sidebarOwnership"
+      ],
+      "approvedCurrent": {
+        "frontMatter": "---\nid: deadlocks\nslug: /dashboard/deadlocks\ntitle: Deadlock Monitoring\n---",
+        "h1": {
+          "level": 1,
+          "text": "Deadlock Monitoring",
+          "lineNumber": 7
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Deadlock Monitoring",
+            "lineNumber": 7
+          },
+          {
+            "level": 2,
+            "text": "How Releem Monitors Deadlocks",
+            "lineNumber": 13
+          },
+          {
+            "level": 3,
+            "text": "Detected evidence",
+            "lineNumber": 15
+          },
+          {
+            "level": 3,
+            "text": "Suggested action",
+            "lineNumber": 19
+          }
+        ],
+        "bodySha256": "db858eda9911a403e7a9050fdb42611fef7e6d19fa9d92d2f6a224b74988b433",
+        "internalLinks": [],
+        "procedureHeadings": [],
+        "recoveryHeadings": [],
+        "sourceSha256": "1e6e06b7dbbef1f292a3812f8ea0915a0f39d2ec0456b6650a08e40954714f55"
+      }
+    },
+    {
+      "sourcePath": "docs/dashboard/health-checks.md",
+      "status": "approved",
+      "approvedBy": "user",
+      "approvedOn": "2026-09-05",
+      "approvalEvidence": "The user's bounded Task 5 packet on 2026-09-05 authorizes this one-page clarity edit and exact preservation snapshot.",
+      "reason": "A plain-language review lead explains how to interpret Health Checks, absolute outcome claims are qualified, and the screenshot, four blocks, every metric, and all existing workflow facts are retained.",
+      "permittedFields": [
+        "body"
+      ],
+      "frontMatterChanges": [],
+      "bodyChangeScope": [
+        "H1",
+        "ordered headings",
+        "prose",
+        "internal links"
+      ],
+      "preservedFields": [
+        "sourcePath",
+        "frontMatter",
+        "explicitId",
+        "effectiveId",
+        "slug",
+        "publicRoute",
+        "codeFences",
+        "images",
+        "sidebarOwnership"
+      ],
+      "approvedCurrent": {
+        "frontMatter": "---\nid: health-checks\nslug: /dashboard/health-checks\ntitle: Health Checks\n---",
+        "h1": {
+          "level": 1,
+          "text": "Health Checks",
+          "lineNumber": 7
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Health Checks",
+            "lineNumber": 7
+          },
+          {
+            "level": 2,
+            "text": "System Block",
+            "lineNumber": 15
+          },
+          {
+            "level": 2,
+            "text": "MyISAM/InnoDB Block",
+            "lineNumber": 23
+          },
+          {
+            "level": 2,
+            "text": "Memory Block",
+            "lineNumber": 31
+          },
+          {
+            "level": 2,
+            "text": "Queries/Logs Block",
+            "lineNumber": 38
+          }
+        ],
+        "bodySha256": "7e9467f116408279180f25103f17d91a268d00b4c3ec8a1bb1b777e5395689a7",
+        "internalLinks": [],
+        "procedureHeadings": [
+          {
+            "level": 1,
+            "text": "Health Checks",
+            "lineNumber": 7
+          }
+        ],
+        "recoveryHeadings": [],
+        "sourceSha256": "5582bbea0fce325071e048e0c82da2be35b49fe9d7837df5d176aff11dad8761"
+      }
+    },
+    {
+      "sourcePath": "docs/dashboard/process-list.md",
+      "status": "approved",
+      "approvedBy": "user",
+      "approvedOn": "2026-09-05",
+      "approvalEvidence": "The user's bounded Task 5 packet on 2026-09-05 authorizes this one-page clarity edit and exact preservation snapshot.",
+      "reason": "Process List now distinguishes reported activity from operator decisions, qualifies completeness and timing claims, and retains all four use cases, the screenshot, the external article link, and every existing workflow fact.",
+      "permittedFields": [
+        "body"
+      ],
+      "frontMatterChanges": [],
+      "bodyChangeScope": [
+        "H1",
+        "ordered headings",
+        "prose",
+        "internal links"
+      ],
+      "preservedFields": [
+        "sourcePath",
+        "frontMatter",
+        "explicitId",
+        "effectiveId",
+        "slug",
+        "publicRoute",
+        "codeFences",
+        "images",
+        "sidebarOwnership"
+      ],
+      "approvedCurrent": {
+        "frontMatter": "---\nid: process-list\nslug: /dashboard/process-list\ntitle: Process List\n---",
+        "h1": {
+          "level": 1,
+          "text": "Process List",
+          "lineNumber": 7
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Process List",
+            "lineNumber": 7
+          }
+        ],
+        "bodySha256": "7e4fbcd40261e009eaef3ee56cbc44cbdeb02c935320ab253c1fabd18783c93f",
+        "internalLinks": [],
+        "procedureHeadings": [],
+        "recoveryHeadings": [],
+        "sourceSha256": "3cac4647b4c425dafebd5e2fef8ac36b4c03c59c01007061d9d1e939374262ca"
+      }
+    },
+    {
+      "sourcePath": "docs/dashboard/query-analytics.md",
+      "status": "approved",
+      "approvedBy": "user",
+      "approvedOn": "2026-09-05",
+      "approvalEvidence": "The user's bounded Task 5 packet on 2026-09-05 authorizes this one-page clarity edit and exact preservation snapshot.",
+      "reason": "Query Analytics now distinguishes observed query activity from requested optimization proposals and presents its three existing analysis tasks as parallel choices while retaining every column, step, screenshot, link, and workflow fact.",
+      "permittedFields": [
+        "body"
+      ],
+      "frontMatterChanges": [],
+      "bodyChangeScope": [
+        "H1",
+        "ordered headings",
+        "prose",
+        "internal links"
+      ],
+      "preservedFields": [
+        "sourcePath",
+        "frontMatter",
+        "explicitId",
+        "effectiveId",
+        "slug",
+        "publicRoute",
+        "codeFences",
+        "images",
+        "sidebarOwnership"
+      ],
+      "approvedCurrent": {
+        "frontMatter": "---\nid: query-analytics\nslug: /dashboard/query-analytics\ntitle: Query Analytics\n---",
+        "h1": {
+          "level": 1,
+          "text": "Query Analytics",
+          "lineNumber": 7
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Query Analytics",
+            "lineNumber": 7
+          },
+          {
+            "level": 2,
+            "text": "Find slow queries",
+            "lineNumber": 22
+          },
+          {
+            "level": 2,
+            "text": "Find queries with the highest total load time",
+            "lineNumber": 31
+          },
+          {
+            "level": 2,
+            "text": "Inspect query details and request optimization suggestions",
+            "lineNumber": 38
+          }
+        ],
+        "bodySha256": "5e9cc5c54dc8802e061ecc62141e7e0279a5c1ddb17346f6f01c7968e57f8874",
+        "internalLinks": [
+          {
+            "label": "Query Optimization",
+            "target": "/recommendations/query-optimization",
+            "lineNumber": 9
+          }
+        ],
+        "procedureHeadings": [],
+        "recoveryHeadings": [],
+        "sourceSha256": "4df2225bf2ba945c9e58e08915acbcf4c29eae8d0b4dc9ff8e1cf88f969b62ab"
+      }
+    },
+    {
+      "sourcePath": "docs/dashboard/reports.md",
+      "status": "approved",
+      "approvedBy": "user",
+      "approvedOn": "2026-09-05",
+      "approvalEvidence": "The user's bounded Task 5 packet on 2026-09-05 authorizes this one-page clarity edit and exact preservation snapshot.",
+      "reason": "Weekly Reports now describes Latency and QPS changes without presuming improvement or attributing causation, directs readers to compare reported values with their operational baseline and workload context, and retains the complete report inventory, screenshot, benefits, and workflow facts.",
+      "permittedFields": [
+        "body"
+      ],
+      "frontMatterChanges": [],
+      "bodyChangeScope": [
+        "H1",
+        "ordered headings",
+        "prose",
+        "internal links"
+      ],
+      "preservedFields": [
+        "sourcePath",
+        "frontMatter",
+        "explicitId",
+        "effectiveId",
+        "slug",
+        "publicRoute",
+        "codeFences",
+        "images",
+        "sidebarOwnership"
+      ],
+      "approvedCurrent": {
+        "frontMatter": "---\nid: reports\nslug: /dashboard/reports\ntitle: Weekly Reports\n---",
+        "h1": {
+          "level": 1,
+          "text": "Weekly Reports",
+          "lineNumber": 7
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Weekly Reports",
+            "lineNumber": 7
+          },
+          {
+            "level": 2,
+            "text": "Overview of Weekly Report Contents",
+            "lineNumber": 13
+          },
+          {
+            "level": 2,
+            "text": "Benefits of Releem Weekly Reports",
+            "lineNumber": 27
+          }
+        ],
+        "bodySha256": "c17a87f6842f42f2e16f2edc843b5dfe15ac506fed217060354ab58de95856b6",
+        "internalLinks": [],
+        "procedureHeadings": [],
+        "recoveryHeadings": [],
+        "sourceSha256": "b1008deab10cef24d2725da1046b212ff533a0cfd42841133f6f8a39876a7b14"
+      }
+    },
+    {
+      "sourcePath": "docs/dashboard/schema-checks.md",
+      "status": "approved",
+      "approvedBy": "user",
+      "approvedOn": "2026-09-05",
+      "approvalEvidence": "The user's bounded Task 5 packet on 2026-09-05 authorizes this one-page clarity edit and exact preservation snapshot.",
+      "reason": "Schema Optimization now distinguishes detected schema evidence from proposed SQL and labels the retained review, test, and execution sequence while preserving every issue type, workflow fact, screenshot, and follow-up link.",
+      "permittedFields": [
+        "body"
+      ],
+      "frontMatterChanges": [],
+      "bodyChangeScope": [
+        "H1",
+        "ordered headings",
+        "prose",
+        "internal links"
+      ],
+      "preservedFields": [
+        "sourcePath",
+        "frontMatter",
+        "explicitId",
+        "effectiveId",
+        "slug",
+        "publicRoute",
+        "codeFences",
+        "images",
+        "sidebarOwnership"
+      ],
+      "approvedCurrent": {
+        "frontMatter": "---\nid: schema-checks\nslug: /dashboard/schema-checks\ntitle: Schema Optimization\n---",
+        "h1": {
+          "level": 1,
+          "text": "Schema Optimization",
+          "lineNumber": 7
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Schema Optimization",
+            "lineNumber": 7
+          },
+          {
+            "level": 2,
+            "text": "Review and apply a schema change",
+            "lineNumber": 24
+          }
+        ],
+        "bodySha256": "41f233d8c997c7ce0d27ea8f0fff45640aa14369757a841ffddb3795575f3606",
+        "internalLinks": [
+          {
+            "label": "Automatic Schema Changes",
+            "target": "/recommendations/query-optimization/automatic-schema-changes",
+            "lineNumber": 32
+          },
+          {
+            "label": "Schema Change Troubleshooting",
+            "target": "/recommendations/query-optimization/schema-change-troubleshooting",
+            "lineNumber": 34
+          }
+        ],
+        "procedureHeadings": [
+          {
+            "level": 2,
+            "text": "Review and apply a schema change",
+            "lineNumber": 24
+          }
+        ],
+        "recoveryHeadings": [],
+        "sourceSha256": "9e6cb0a527c10237a3fc39328d0477d86636e73395b8efec5c1be4b2940316c5"
+      }
+    },
+    {
+      "sourcePath": "docs/dashboard/security-checks.md",
+      "status": "approved",
+      "approvedBy": "user",
+      "approvedOn": "2026-09-05",
+      "approvalEvidence": "The user's bounded Task 5 packet on 2026-09-05 authorizes this one-page clarity edit and exact preservation snapshot.",
+      "reason": "Security Checks retains its existing scope and supporting resources while replacing two compliance and protection guarantees with guidance to review identified issues.",
+      "permittedFields": [
+        "body"
+      ],
+      "frontMatterChanges": [],
+      "bodyChangeScope": [
+        "H1",
+        "ordered headings",
+        "prose",
+        "internal links"
+      ],
+      "preservedFields": [
+        "sourcePath",
+        "frontMatter",
+        "explicitId",
+        "effectiveId",
+        "slug",
+        "publicRoute",
+        "codeFences",
+        "images",
+        "sidebarOwnership"
+      ],
+      "approvedCurrent": {
+        "frontMatter": "---\nid: security-checks\nslug: /dashboard/security-checks\ntitle: Security Checks\n---",
+        "h1": {
+          "level": 1,
+          "text": "Security Checks",
+          "lineNumber": 7
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Security Checks",
+            "lineNumber": 7
+          }
+        ],
+        "bodySha256": "cfd1224323680a76a0cc5bdbbc406f97ba48f02dad87cd8226e6c7442988c81c",
+        "internalLinks": [],
+        "procedureHeadings": [
+          {
+            "level": 1,
+            "text": "Security Checks",
+            "lineNumber": 7
+          }
+        ],
+        "recoveryHeadings": [],
+        "sourceSha256": "b87f3bd6e15712d2dbffebf4ba0610c1688863163acb291fa38e9c410c6d5e4c"
+      }
+    },
+    {
+      "sourcePath": "docs/installation/manage-the-releem-agent/logs.md",
+      "status": "approved",
+      "approvedBy": "user",
+      "approvedOn": "2026-09-05",
+      "approvalEvidence": "The user's bounded Task 5 packet on 2026-09-05 authorizes this one-page clarity edit and exact preservation snapshot.",
+      "reason": "The Agent logs guide now routes readers by environment and reminds them to review logs before sharing while preserving every tab, location, command, and inspection fact.",
+      "permittedFields": [
+        "body"
+      ],
+      "frontMatterChanges": [],
+      "bodyChangeScope": [
+        "H1",
+        "ordered headings",
+        "prose",
+        "internal links"
+      ],
+      "preservedFields": [
+        "sourcePath",
+        "frontMatter",
+        "explicitId",
+        "effectiveId",
+        "slug",
+        "publicRoute",
+        "codeFences",
+        "images",
+        "sidebarOwnership"
+      ],
+      "approvedCurrent": {
+        "frontMatter": "---\nid: logs\nslug: /installation/manage-the-releem-agent/logs\ntitle: How to Check Releem Agent Logs?\n---",
+        "h1": {
+          "level": 1,
+          "text": "How to Check Releem Agent Logs?",
+          "lineNumber": 10
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "How to Check Releem Agent Logs?",
+            "lineNumber": 10
+          }
+        ],
+        "bodySha256": "c39a9757c286782cabf4ee222abae9118a80777625f6b3822fda8f7cff54908a",
+        "internalLinks": [],
+        "procedureHeadings": [
+          {
+            "level": 1,
+            "text": "How to Check Releem Agent Logs?",
+            "lineNumber": 10
+          }
+        ],
+        "recoveryHeadings": [],
+        "sourceSha256": "511c9d226291608bf2addd81b1ef9aec2c58f6d6dc6bc452ff1aab4e654d33c0"
+      }
+    },
+    {
+      "sourcePath": "docs/recommendations/configuration-tuning/apply-manually/aws-rds.md",
+      "status": "approved",
+      "approvedBy": "user",
+      "approvedOn": "2026-09-05",
+      "approvalEvidence": "The user's bounded Task 5 packet on 2026-09-05 authorizes this one-page clarity edit and exact preservation snapshot.",
+      "reason": "A recorded-state prerequisite, recovery-planning boundary, and explicit pre-save timing decision were added; the reboot is coordinated with that decision while every existing AWS RDS option, parameter-group fact, restart fact, verification statement, and support path is retained.",
+      "permittedFields": [
+        "body"
+      ],
+      "frontMatterChanges": [],
+      "bodyChangeScope": [
+        "H1",
+        "ordered headings",
+        "prose",
+        "internal links"
+      ],
+      "preservedFields": [
+        "sourcePath",
+        "frontMatter",
+        "explicitId",
+        "effectiveId",
+        "slug",
+        "publicRoute",
+        "codeFences",
+        "images",
+        "sidebarOwnership"
+      ],
+      "approvedCurrent": {
+        "frontMatter": "---\nid: aws-rds\nslug: /recommendations/configuration-tuning/apply-manually/aws-rds\ntitle: How to apply the Recommended Configuration for AWS RDS\nsidebar_label: AWS RDS\n---",
+        "h1": {
+          "level": 1,
+          "text": "How to apply the Recommended Configuration for AWS RDS",
+          "lineNumber": 8
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "How to apply the Recommended Configuration for AWS RDS",
+            "lineNumber": 8
+          },
+          {
+            "level": 2,
+            "text": "Step 1: Modify the Parameter Group in AWS RDS",
+            "lineNumber": 15
+          },
+          {
+            "level": 2,
+            "text": "Step 2: Apply the Parameter Group to Your RDS Instance",
+            "lineNumber": 25
+          },
+          {
+            "level": 2,
+            "text": "Step 3: Reboot the RDS Instance",
+            "lineNumber": 33
+          },
+          {
+            "level": 2,
+            "text": "Step 4: Verify the Applied Configuration",
+            "lineNumber": 42
+          }
+        ],
+        "bodySha256": "c78897d40f35a015a4935967b2af750fa1b156486441cee0f73adf006ca9978b",
+        "internalLinks": [],
+        "procedureHeadings": [
+          {
+            "level": 1,
+            "text": "How to apply the Recommended Configuration for AWS RDS",
+            "lineNumber": 8
+          },
+          {
+            "level": 2,
+            "text": "Step 1: Modify the Parameter Group in AWS RDS",
+            "lineNumber": 15
+          },
+          {
+            "level": 2,
+            "text": "Step 2: Apply the Parameter Group to Your RDS Instance",
+            "lineNumber": 25
+          },
+          {
+            "level": 2,
+            "text": "Step 3: Reboot the RDS Instance",
+            "lineNumber": 33
+          },
+          {
+            "level": 2,
+            "text": "Step 4: Verify the Applied Configuration",
+            "lineNumber": 42
+          }
+        ],
+        "recoveryHeadings": [],
+        "sourceSha256": "12b6a7723ef8bc630b2bd3ce67f6134675f0dcca05516d3415b3a76191e6690f"
+      }
+    },
+    {
+      "sourcePath": "docs/recommendations/configuration-tuning/apply-manually/docker.md",
+      "status": "approved",
+      "approvedBy": "user",
+      "approvedOn": "2026-09-05",
+      "approvalEvidence": "The user's bounded Task 5 packet on 2026-09-05 authorizes this one-page clarity edit and exact preservation snapshot.",
+      "reason": "The procedure now identifies the target container's MySQL configuration file and requires the reader to review the pasted settings and confirm the exact target container before restart; every existing step, command, configuration fact, verification statement, and support path is retained.",
+      "permittedFields": [
+        "body"
+      ],
+      "frontMatterChanges": [],
+      "bodyChangeScope": [
+        "H1",
+        "ordered headings",
+        "prose",
+        "internal links"
+      ],
+      "preservedFields": [
+        "sourcePath",
+        "frontMatter",
+        "explicitId",
+        "effectiveId",
+        "slug",
+        "publicRoute",
+        "codeFences",
+        "images",
+        "sidebarOwnership"
+      ],
+      "approvedCurrent": {
+        "frontMatter": "---\nid: docker\nslug: /recommendations/configuration-tuning/apply-manually/docker\ntitle: How to apply the Recommended Configuration for MySQL in Docker\nsidebar_label: Docker\n---",
+        "h1": {
+          "level": 1,
+          "text": "How to apply the Recommended Configuration for MySQL in Docker",
+          "lineNumber": 8
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "How to apply the Recommended Configuration for MySQL in Docker",
+            "lineNumber": 8
+          },
+          {
+            "level": 2,
+            "text": "Step 1: Copy the Recommended Configuration",
+            "lineNumber": 12
+          },
+          {
+            "level": 2,
+            "text": "Step 2: Modify the my.cnf file",
+            "lineNumber": 18
+          },
+          {
+            "level": 2,
+            "text": "Step 3: Restart Docker container",
+            "lineNumber": 22
+          },
+          {
+            "level": 2,
+            "text": "Step 4: Verify the Applied Configuration",
+            "lineNumber": 32
+          }
+        ],
+        "bodySha256": "1a6f762429f27debd068c8374d0d7f82013b8fe426b3a7c49389b2bafaeae3a5",
+        "internalLinks": [],
+        "procedureHeadings": [
+          {
+            "level": 1,
+            "text": "How to apply the Recommended Configuration for MySQL in Docker",
+            "lineNumber": 8
+          },
+          {
+            "level": 2,
+            "text": "Step 1: Copy the Recommended Configuration",
+            "lineNumber": 12
+          },
+          {
+            "level": 2,
+            "text": "Step 2: Modify the my.cnf file",
+            "lineNumber": 18
+          },
+          {
+            "level": 2,
+            "text": "Step 3: Restart Docker container",
+            "lineNumber": 22
+          },
+          {
+            "level": 2,
+            "text": "Step 4: Verify the Applied Configuration",
+            "lineNumber": 32
+          }
+        ],
+        "recoveryHeadings": [],
+        "sourceSha256": "82fcee6da8675d5b7ffbae4e039ac165ee498f3d600b786b745a916bf6165cb2"
+      }
+    },
+    {
+      "sourcePath": "docs/recommendations/configuration-tuning/apply-manually/gcp-cloud-sql.md",
+      "status": "approved",
+      "approvedBy": "user",
+      "approvedOn": "2026-09-05",
+      "approvalEvidence": "The user's bounded Task 5 packet on 2026-09-05 authorizes this one-page clarity edit and exact preservation snapshot.",
+      "reason": "The procedure now presents the existing application-timing decision before the reader changes the instance and separates provider-side flag confirmation from the later Releem event check while retaining every existing Cloud SQL step, option, restart fact, verification fact, and support path.",
+      "permittedFields": [
+        "body"
+      ],
+      "frontMatterChanges": [],
+      "bodyChangeScope": [
+        "H1",
+        "ordered headings",
+        "prose",
+        "internal links"
+      ],
+      "preservedFields": [
+        "sourcePath",
+        "frontMatter",
+        "explicitId",
+        "effectiveId",
+        "slug",
+        "publicRoute",
+        "codeFences",
+        "images",
+        "sidebarOwnership"
+      ],
+      "approvedCurrent": {
+        "frontMatter": "---\nid: gcp-cloud-sql\nslug: /recommendations/configuration-tuning/apply-manually/gcp-cloud-sql\ntitle: How to apply the Recommended Configuration for GCP Cloud SQL\nsidebar_label: GCP Cloud SQL\n---",
+        "h1": {
+          "level": 1,
+          "text": "How to apply the Recommended Configuration for GCP Cloud SQL",
+          "lineNumber": 8
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "How to apply the Recommended Configuration for GCP Cloud SQL",
+            "lineNumber": 8
+          },
+          {
+            "level": 2,
+            "text": "Step 1: Get the Recommended Configuration",
+            "lineNumber": 14
+          },
+          {
+            "level": 2,
+            "text": "Step 2: Configure Database Flags in GCP Cloud SQL",
+            "lineNumber": 20
+          },
+          {
+            "level": 2,
+            "text": "Step 3: Apply the Changes",
+            "lineNumber": 38
+          },
+          {
+            "level": 2,
+            "text": "Step 4: Verify the Applied Configuration",
+            "lineNumber": 43
+          },
+          {
+            "level": 3,
+            "text": "Confirm the flags in Google Cloud",
+            "lineNumber": 45
+          },
+          {
+            "level": 3,
+            "text": "Verify the application event in Releem",
+            "lineNumber": 49
+          }
+        ],
+        "bodySha256": "2514469da4ddbfb27865ad537b6c07165436bf318838ca01fc36cc086b5ca0eb",
+        "internalLinks": [],
+        "procedureHeadings": [
+          {
+            "level": 1,
+            "text": "How to apply the Recommended Configuration for GCP Cloud SQL",
+            "lineNumber": 8
+          },
+          {
+            "level": 2,
+            "text": "Step 1: Get the Recommended Configuration",
+            "lineNumber": 14
+          },
+          {
+            "level": 2,
+            "text": "Step 2: Configure Database Flags in GCP Cloud SQL",
+            "lineNumber": 20
+          },
+          {
+            "level": 2,
+            "text": "Step 3: Apply the Changes",
+            "lineNumber": 38
+          },
+          {
+            "level": 2,
+            "text": "Step 4: Verify the Applied Configuration",
+            "lineNumber": 43
+          },
+          {
+            "level": 3,
+            "text": "Verify the application event in Releem",
+            "lineNumber": 49
+          }
+        ],
+        "recoveryHeadings": [],
+        "sourceSha256": "dd89dc8c16c6b45af5b98b5a0ab39ce65fedf38241fff674392b61fa6de6164f"
+      }
+    },
+    {
+      "sourcePath": "docs/recommendations/configuration-tuning/apply-manually/windows.md",
+      "status": "approved",
+      "approvedBy": "user",
+      "approvedOn": "2026-09-05",
+      "approvalEvidence": "The user's bounded Task 5 packet on 2026-09-05 authorizes this one-page clarity edit and exact preservation snapshot.",
+      "reason": "The procedure now stops the reader until the active my.ini file is confirmed and requires review of the exact recommended settings before saving while preserving every existing Windows step, file location, encoding instruction, restart fact, verification statement, and support path.",
+      "permittedFields": [
+        "body"
+      ],
+      "frontMatterChanges": [],
+      "bodyChangeScope": [
+        "H1",
+        "ordered headings",
+        "prose",
+        "internal links"
+      ],
+      "preservedFields": [
+        "sourcePath",
+        "frontMatter",
+        "explicitId",
+        "effectiveId",
+        "slug",
+        "publicRoute",
+        "codeFences",
+        "images",
+        "sidebarOwnership"
+      ],
+      "approvedCurrent": {
+        "frontMatter": "---\nid: windows\nslug: /recommendations/configuration-tuning/apply-manually/windows\ntitle: How to apply the Recommended Configuration for Windows\nsidebar_label: Windows\n---",
+        "h1": {
+          "level": 1,
+          "text": "How to apply the Recommended Configuration for Windows",
+          "lineNumber": 8
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "How to apply the Recommended Configuration for Windows",
+            "lineNumber": 8
+          },
+          {
+            "level": 2,
+            "text": "Before you begin",
+            "lineNumber": 12
+          },
+          {
+            "level": 2,
+            "text": "Step 1: Copy the Recommended Configuration",
+            "lineNumber": 17
+          },
+          {
+            "level": 2,
+            "text": "Step 2: Modify the my.ini File",
+            "lineNumber": 23
+          },
+          {
+            "level": 2,
+            "text": "Step 3: Restart the MySQL Database Service",
+            "lineNumber": 33
+          },
+          {
+            "level": 2,
+            "text": "Step 4: Verify the Applied Configuration",
+            "lineNumber": 40
+          }
+        ],
+        "bodySha256": "e2e9226bc94bfa7cd0f59a6e297b6c2fe5960060ffca703b0d55c74ee48968da",
+        "internalLinks": [],
+        "procedureHeadings": [
+          {
+            "level": 1,
+            "text": "How to apply the Recommended Configuration for Windows",
+            "lineNumber": 8
+          },
+          {
+            "level": 2,
+            "text": "Step 1: Copy the Recommended Configuration",
+            "lineNumber": 17
+          },
+          {
+            "level": 2,
+            "text": "Step 2: Modify the my.ini File",
+            "lineNumber": 23
+          },
+          {
+            "level": 2,
+            "text": "Step 3: Restart the MySQL Database Service",
+            "lineNumber": 33
+          },
+          {
+            "level": 2,
+            "text": "Step 4: Verify the Applied Configuration",
+            "lineNumber": 40
+          }
+        ],
+        "recoveryHeadings": [],
+        "sourceSha256": "a32b4a3b2569de31cc5206b3455aed16ac8ef87c034f301ece7b44ff4f5ba9aa"
+      }
+    },
+    {
+      "sourcePath": "docs/recommendations/configuration-tuning/apply-using-agent.md",
+      "status": "approved",
+      "approvedBy": "user",
+      "approvedOn": "2026-09-05",
+      "approvalEvidence": "The user's bounded Task 5 packet on 2026-09-05 authorizes this one-page clarity edit and exact preservation snapshot.",
+      "reason": "The page now places the retained operating-system commands behind a concise self-managed-server preflight, defines the successful command outcome without extending its effect, and links to the existing rollback owner while preserving both commands and the cloud-managed application note.",
+      "permittedFields": [
+        "body"
+      ],
+      "frontMatterChanges": [],
+      "bodyChangeScope": [
+        "H1",
+        "ordered headings",
+        "prose",
+        "internal links"
+      ],
+      "preservedFields": [
+        "sourcePath",
+        "frontMatter",
+        "explicitId",
+        "effectiveId",
+        "slug",
+        "publicRoute",
+        "codeFences",
+        "images",
+        "sidebarOwnership"
+      ],
+      "approvedCurrent": {
+        "frontMatter": "---\nid: apply-using-agent\nslug: /recommendations/configuration-tuning/apply-using-agent\ntitle: How to Apply Configuration Using Agent\n---",
+        "h1": {
+          "level": 1,
+          "text": "How to Apply Configuration Using Agent",
+          "lineNumber": 10
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "How to Apply Configuration Using Agent",
+            "lineNumber": 10
+          },
+          {
+            "level": 2,
+            "text": "Before you begin",
+            "lineNumber": 14
+          },
+          {
+            "level": 2,
+            "text": "Apply the configuration",
+            "lineNumber": 18
+          },
+          {
+            "level": 2,
+            "text": "Expected result",
+            "lineNumber": 36
+          },
+          {
+            "level": 2,
+            "text": "Cloud-Managed Databases",
+            "lineNumber": 42
+          }
+        ],
+        "bodySha256": "c9678f20cbcae4c13134a0ecc46f2d947d8c0c7d12fdb97292a12d1e92f3403f",
+        "internalLinks": [
+          {
+            "label": "How to Rollback to Previous Configuration",
+            "target": "/recommendations/configuration-tuning/rollback",
+            "lineNumber": 40
+          }
+        ],
+        "procedureHeadings": [
+          {
+            "level": 1,
+            "text": "How to Apply Configuration Using Agent",
+            "lineNumber": 10
+          },
+          {
+            "level": 2,
+            "text": "Apply the configuration",
+            "lineNumber": 18
+          }
+        ],
+        "recoveryHeadings": [],
+        "sourceSha256": "81e9167dc5bf344527cf276760141b81be46647945929d838fc80e8484ffca29"
+      }
+    },
+    {
+      "sourcePath": "docs/recommendations/configuration-tuning/configuration-example.md",
+      "status": "approved",
+      "approvedBy": "user",
+      "approvedOn": "2026-09-05",
+      "approvalEvidence": "The user's bounded Task 5 packet on 2026-09-05 authorizes this one-page clarity edit and exact preservation snapshot.",
+      "reason": "The page now labels the retained configuration sample as illustrative and non-runnable and explains the displayed Previous value notation without claiming an unsupported source or outcome.",
+      "permittedFields": [
+        "body"
+      ],
+      "frontMatterChanges": [],
+      "bodyChangeScope": [
+        "H1",
+        "ordered headings",
+        "prose",
+        "internal links"
+      ],
+      "preservedFields": [
+        "sourcePath",
+        "frontMatter",
+        "explicitId",
+        "effectiveId",
+        "slug",
+        "publicRoute",
+        "codeFences",
+        "images",
+        "sidebarOwnership"
+      ],
+      "approvedCurrent": {
+        "frontMatter": "---\nid: configuration-example\nslug: /recommendations/configuration-tuning/configuration-example\ntitle: Example of Configuration\n---",
+        "h1": {
+          "level": 1,
+          "text": "Example of Recommended Configuration",
+          "lineNumber": 7
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Example of Recommended Configuration",
+            "lineNumber": 7
+          }
+        ],
+        "bodySha256": "901eda7dc7fa6e60bf06c7ca09d0ba0004faeb869c0d736df60f8f88f420f5b3",
+        "internalLinks": [],
+        "procedureHeadings": [
+          {
+            "level": 1,
+            "text": "Example of Recommended Configuration",
+            "lineNumber": 7
+          }
+        ],
+        "recoveryHeadings": [],
+        "sourceSha256": "a962c252e00c10549cf46b7b6721163faab540e0ee1a9a206861495d51cde1b4"
+      }
+    },
+    {
+      "sourcePath": "docs/recommendations/configuration-tuning/limit-mysql-memory.md",
+      "status": "approved",
+      "approvedBy": "user",
+      "approvedOn": "2026-09-05",
+      "approvalEvidence": "The user's bounded Task 5 packet on 2026-09-05 authorizes this one-page clarity edit and exact preservation snapshot.",
+      "reason": "The page now explains before the retained steps that Releem's MySQL Memory Limit is a tuning target rather than an enforced process or system cap, while retaining the timing statement, FAQ interpretation, and screenshot.",
+      "permittedFields": [
+        "body"
+      ],
+      "frontMatterChanges": [],
+      "bodyChangeScope": [
+        "H1",
+        "ordered headings",
+        "prose",
+        "internal links"
+      ],
+      "preservedFields": [
+        "sourcePath",
+        "frontMatter",
+        "explicitId",
+        "effectiveId",
+        "slug",
+        "publicRoute",
+        "codeFences",
+        "images",
+        "sidebarOwnership"
+      ],
+      "approvedCurrent": {
+        "frontMatter": "---\nid: limit-mysql-memory\nslug: /recommendations/configuration-tuning/limit-mysql-memory\ntitle: \"Limit Memory for MySQL\"\n---",
+        "h1": {
+          "level": 1,
+          "text": "Limit Memory for MySQL",
+          "lineNumber": 7
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Limit Memory for MySQL",
+            "lineNumber": 7
+          },
+          {
+            "level": 2,
+            "text": "FAQ",
+            "lineNumber": 19
+          },
+          {
+            "level": 3,
+            "text": "I’ve set the MySQL Memory Limit to 6144 MB, but MySQL is using about 11 GB of 16 GB RAM (≈67%). Shouldn’t it be capped at 40%?",
+            "lineNumber": 21
+          }
+        ],
+        "bodySha256": "13a8cd75d8000fa41033753f0269654500dccfba5540ffa7b3a928cde82bcbc8",
+        "internalLinks": [],
+        "procedureHeadings": [],
+        "recoveryHeadings": [],
+        "sourceSha256": "c45c84407b688dea9441a0104ced4e1265f9a207b53954905286c6e4e360fe29"
+      }
+    },
+    {
+      "sourcePath": "docs/recommendations/configuration-tuning/mysql-tuning-process.md",
+      "status": "approved",
+      "approvedBy": "user",
+      "approvedOn": "2026-09-05",
+      "approvalEvidence": "The user's bounded Task 5 packet on 2026-09-05 authorizes this one-page clarity edit and exact preservation snapshot.",
+      "reason": "The page now distinguishes collection, candidate search, expert-system evaluation, user review, and application while retaining all five stages, plan limits, the controlled-workload and AI explanation, and the existing post-application timing.",
+      "permittedFields": [
+        "body"
+      ],
+      "frontMatterChanges": [],
+      "bodyChangeScope": [
+        "H1",
+        "ordered headings",
+        "prose",
+        "internal links"
+      ],
+      "preservedFields": [
+        "sourcePath",
+        "frontMatter",
+        "explicitId",
+        "effectiveId",
+        "slug",
+        "publicRoute",
+        "codeFences",
+        "images",
+        "sidebarOwnership"
+      ],
+      "approvedCurrent": {
+        "frontMatter": "---\nid: mysql-tuning-process\nslug: /recommendations/configuration-tuning/mysql-tuning-process\ntitle: MySQL Tuning Process\n---",
+        "h1": {
+          "level": 1,
+          "text": "MySQL Tuning Process",
+          "lineNumber": 7
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "MySQL Tuning Process",
+            "lineNumber": 7
+          },
+          {
+            "level": 3,
+            "text": "Stage 1: Collecting Baseline",
+            "lineNumber": 11
+          },
+          {
+            "level": 3,
+            "text": "Stage 2: Searching for Opportunities",
+            "lineNumber": 14
+          },
+          {
+            "level": 3,
+            "text": "Stage 3: Expert System Evaluation",
+            "lineNumber": 17
+          },
+          {
+            "level": 3,
+            "text": "Stage 4: Preparing New Configuration",
+            "lineNumber": 20
+          },
+          {
+            "level": 3,
+            "text": "Stage 5: Applying Recommended Configuration",
+            "lineNumber": 23
+          }
+        ],
+        "bodySha256": "30993f45ea2f153120975e854b7485ca9a6fdc42e54934dc7a2b6e674cd15022",
+        "internalLinks": [],
+        "procedureHeadings": [
+          {
+            "level": 3,
+            "text": "Stage 4: Preparing New Configuration",
+            "lineNumber": 20
+          },
+          {
+            "level": 3,
+            "text": "Stage 5: Applying Recommended Configuration",
+            "lineNumber": 23
+          }
+        ],
+        "recoveryHeadings": [],
+        "sourceSha256": "f7204c230e129561fd57b6b8eb5d3685043acd30c86f09993c1068e644b52212"
+      }
+    },
+    {
+      "sourcePath": "docs/recommendations/configuration-tuning/rollback.md",
+      "status": "approved",
+      "approvedBy": "user",
+      "approvedOn": "2026-09-05",
+      "approvalEvidence": "The user's bounded Task 5 packet on 2026-09-05 authorizes this one-page clarity edit and exact preservation snapshot.",
+      "reason": "The page now states the documented rollback scope without defining the exact restored settings and provides the existing Agent logs and support failure path while preserving the rollback command exactly.",
+      "permittedFields": [
+        "body"
+      ],
+      "frontMatterChanges": [],
+      "bodyChangeScope": [
+        "H1",
+        "ordered headings",
+        "prose",
+        "internal links"
+      ],
+      "preservedFields": [
+        "sourcePath",
+        "frontMatter",
+        "explicitId",
+        "effectiveId",
+        "slug",
+        "publicRoute",
+        "codeFences",
+        "images",
+        "sidebarOwnership"
+      ],
+      "approvedCurrent": {
+        "frontMatter": "---\nid: rollback\nslug: /recommendations/configuration-tuning/rollback\ntitle: How to Rollback to Previous Configuration\n---",
+        "h1": {
+          "level": 1,
+          "text": "How to Rollback to Previous Configuration",
+          "lineNumber": 7
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "How to Rollback to Previous Configuration",
+            "lineNumber": 7
+          },
+          {
+            "level": 2,
+            "text": "Run the rollback command",
+            "lineNumber": 11
+          },
+          {
+            "level": 2,
+            "text": "If the rollback fails",
+            "lineNumber": 19
+          }
+        ],
+        "bodySha256": "aab89beedcdbf114227735e8dd4c7464f147bf02852d4e3b58786daff142f069",
+        "internalLinks": [
+          {
+            "label": "Releem Agent logs",
+            "target": "/installation/manage-the-releem-agent/logs",
+            "lineNumber": 21
+          }
+        ],
+        "procedureHeadings": [
+          {
+            "level": 1,
+            "text": "How to Rollback to Previous Configuration",
+            "lineNumber": 7
+          },
+          {
+            "level": 2,
+            "text": "Run the rollback command",
+            "lineNumber": 11
+          },
+          {
+            "level": 2,
+            "text": "If the rollback fails",
+            "lineNumber": 19
+          }
+        ],
+        "recoveryHeadings": [
+          {
+            "level": 1,
+            "text": "How to Rollback to Previous Configuration",
+            "lineNumber": 7
+          },
+          {
+            "level": 2,
+            "text": "Run the rollback command",
+            "lineNumber": 11
+          },
+          {
+            "level": 2,
+            "text": "If the rollback fails",
+            "lineNumber": 19
+          }
+        ],
+        "sourceSha256": "db31b84c1e5912d4347eb6833474c1d3b8307647656d29dd891a39a44d1eded3"
+      }
+    },
+    {
+      "sourcePath": "docs/recommendations/query-optimization/disable.md",
+      "status": "approved",
+      "approvedBy": "user",
+      "approvedOn": "2026-09-05",
+      "approvalEvidence": "The user's bounded Task 5 packet on 2026-09-05 authorizes this one-page clarity edit and exact preservation snapshot.",
+      "reason": "The page now defines an observable configuration check and states that the available procedure does not establish retained-query-data deletion or database-permission revocation, while preserving every deployment tab and all seven command fences.",
+      "permittedFields": [
+        "body"
+      ],
+      "frontMatterChanges": [],
+      "bodyChangeScope": [
+        "H1",
+        "ordered headings",
+        "prose",
+        "internal links"
+      ],
+      "preservedFields": [
+        "sourcePath",
+        "frontMatter",
+        "explicitId",
+        "effectiveId",
+        "slug",
+        "publicRoute",
+        "codeFences",
+        "images",
+        "sidebarOwnership"
+      ],
+      "approvedCurrent": {
+        "frontMatter": "---\nid: disable\nslug: /recommendations/query-optimization/disable\ntitle: \"Disable SQL Query Optimization\"\n---",
+        "h1": {
+          "level": 1,
+          "text": "Disable SQL Query Optimization",
+          "lineNumber": 10
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Disable SQL Query Optimization",
+            "lineNumber": 10
+          },
+          {
+            "level": 2,
+            "text": "Verify the change",
+            "lineNumber": 90
+          }
+        ],
+        "bodySha256": "fce04bb9677696d96d3d6db9db04acec643e86e01cbdbbdc66af1ddc4091d3c1",
+        "internalLinks": [],
+        "procedureHeadings": [
+          {
+            "level": 1,
+            "text": "Disable SQL Query Optimization",
+            "lineNumber": 10
+          },
+          {
+            "level": 2,
+            "text": "Verify the change",
+            "lineNumber": 90
+          }
+        ],
+        "recoveryHeadings": [],
+        "sourceSha256": "13625187c84caecad8f67a9a7d5c5e5834a5176cb61cb2b427e93dbf927285fb"
+      }
+    },
+    {
+      "sourcePath": "docs/recommendations/query-optimization/overview.md",
+      "status": "approved",
+      "approvedBy": "user",
+      "approvedOn": "2026-09-05",
+      "approvalEvidence": "The user's bounded Task 5 packet on 2026-09-05 authorizes this one-page clarity edit and exact preservation snapshot.",
+      "reason": "The page now separates observed query data, proposed optimization, manual operator implementation, and post-change result validation; it scopes manual SQL execution to this workflow and links the separate Automatic Schema Changes documentation while preserving both workflows, both screenshots, and the SQL example.",
+      "permittedFields": [
+        "body"
+      ],
+      "frontMatterChanges": [],
+      "bodyChangeScope": [
+        "H1",
+        "ordered headings",
+        "prose",
+        "internal links"
+      ],
+      "preservedFields": [
+        "sourcePath",
+        "frontMatter",
+        "explicitId",
+        "effectiveId",
+        "slug",
+        "publicRoute",
+        "codeFences",
+        "images",
+        "sidebarOwnership"
+      ],
+      "approvedCurrent": {
+        "frontMatter": "---\nid: overview\nslug: /recommendations/query-optimization\ntitle: SQL Query Optimization\n---",
+        "h1": {
+          "level": 1,
+          "text": "SQL Query Optimization",
+          "lineNumber": 7
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "SQL Query Optimization",
+            "lineNumber": 7
+          },
+          {
+            "level": 2,
+            "text": "How Automatic Query Optimization Works",
+            "lineNumber": 13
+          },
+          {
+            "level": 3,
+            "text": "1. Observe query data",
+            "lineNumber": 17
+          },
+          {
+            "level": 3,
+            "text": "2. Review the proposed optimization",
+            "lineNumber": 29
+          },
+          {
+            "level": 3,
+            "text": "3. Implement the change manually",
+            "lineNumber": 38
+          },
+          {
+            "level": 3,
+            "text": "4. Validate the result",
+            "lineNumber": 48
+          },
+          {
+            "level": 2,
+            "text": "Manual Query Optimization",
+            "lineNumber": 54
+          }
+        ],
+        "bodySha256": "a4dcb1c4b2f3a418954405a6aa9ae1ce3a7cb0b67804a720f77bb73df1e11037",
+        "internalLinks": [
+          {
+            "label": "Automatic Schema Changes",
+            "target": "/recommendations/query-optimization/automatic-schema-changes",
+            "lineNumber": 15
+          }
+        ],
+        "procedureHeadings": [
+          {
+            "level": 2,
+            "text": "How Automatic Query Optimization Works",
+            "lineNumber": 13
+          },
+          {
+            "level": 3,
+            "text": "3. Implement the change manually",
+            "lineNumber": 38
+          },
+          {
+            "level": 2,
+            "text": "Manual Query Optimization",
+            "lineNumber": 54
+          }
+        ],
+        "recoveryHeadings": [],
+        "sourceSha256": "6caee936fd754096c29237df4cac8192b086bb660149e1adaede019f7dcc2855"
+      }
+    },
+    {
+      "sourcePath": "docs/recommendations/query-optimization/prepared-statements.md",
+      "status": "approved",
+      "approvedBy": "user",
+      "approvedOn": "2026-09-05",
+      "approvalEvidence": "The user's bounded Task 5 packet on 2026-09-05 authorizes this one-page clarity edit and exact preservation snapshot.",
+      "reason": "The page now separates the documented MySQL/MariaDB prepared-statement visibility limitation from the retained PHP and Java client-side workarounds and requires non-production testing plus recording the prior setting for reversal, while preserving the existing PHP command and all application guidance.",
+      "permittedFields": [
+        "body"
+      ],
+      "frontMatterChanges": [],
+      "bodyChangeScope": [
+        "H1",
+        "ordered headings",
+        "prose",
+        "internal links"
+      ],
+      "preservedFields": [
+        "sourcePath",
+        "frontMatter",
+        "explicitId",
+        "effectiveId",
+        "slug",
+        "publicRoute",
+        "codeFences",
+        "images",
+        "sidebarOwnership"
+      ],
+      "approvedCurrent": {
+        "frontMatter": "---\nid: prepared-statements\nslug: /recommendations/query-optimization/prepared-statements\ntitle: \"How to Fix Prepared Statements Issue\"\n---",
+        "h1": {
+          "level": 1,
+          "text": "Prepared Statements and Query Analytics",
+          "lineNumber": 7
+        },
+        "headings": [
+          {
+            "level": 1,
+            "text": "Prepared Statements and Query Analytics",
+            "lineNumber": 7
+          },
+          {
+            "level": 2,
+            "text": "Documented limitation",
+            "lineNumber": 11
+          },
+          {
+            "level": 2,
+            "text": "Current Status",
+            "lineNumber": 25
+          },
+          {
+            "level": 2,
+            "text": "Client-side workarounds",
+            "lineNumber": 29
+          },
+          {
+            "level": 3,
+            "text": "For PHP applications",
+            "lineNumber": 35
+          },
+          {
+            "level": 4,
+            "text": "For Laravel",
+            "lineNumber": 39
+          },
+          {
+            "level": 3,
+            "text": "For Java applications",
+            "lineNumber": 44
+          }
+        ],
+        "bodySha256": "46e8376b7bdae5ae9e5e1955c5f70708798016b0579833370224df40de42b63b",
+        "internalLinks": [],
+        "procedureHeadings": [],
+        "recoveryHeadings": [],
+        "sourceSha256": "3d769885b7822c055e116a85c7f2f826f16d0fea11ea99dc02ab948b41cc7d70"
+      }
     }
   ],
   "routeExceptions": [],

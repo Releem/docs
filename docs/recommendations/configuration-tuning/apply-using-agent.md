@@ -11,6 +11,12 @@ import TabItem from '@theme/TabItem';
 
 Use this method for self-managed MySQL, MariaDB, or Percona servers where Releem Agent is installed directly on the database host.
 
+## Before you begin
+
+Confirm that the database server is self-managed, uses MySQL, MariaDB, or Percona, and has Releem Agent installed directly on the database host.
+
+## Apply the configuration
+
 To apply the recommended configuration, run the command for your operating system:
 
 
@@ -27,8 +33,11 @@ To apply the recommended configuration, run the command for your operating syste
   </TabItem>
 </Tabs>
 
-Releem Agent is equipped with an automatic rollback function. This means if any issues arise while applying a new configuration, Releem will smartly revert to the previous configuration.
+## Expected result
 
+When the command completes successfully, Releem Agent has applied the recommended configuration.
+
+If you need to return to the previous configuration, follow [How to Rollback to Previous Configuration](/recommendations/configuration-tuning/rollback).
 
 ## Cloud-Managed Databases
 
