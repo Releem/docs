@@ -39,26 +39,43 @@ const sidebars = {
     {
       type: 'category',
       label: 'Installation',
+      link: {type: 'doc', id: 'installation/index'},
       items: [
         {
-          type: 'doc',
-          id: 'installation/linux',
-          label: 'Linux',
-        },
-        'installation/installation-methods/windows',
-        'installation/installation-methods/docker',
-        'installation/installation-methods/kubernetes',
-        {
           type: 'category',
-          label: 'Managed databases',
+          label: 'MySQL',
+          link: {type: 'doc', id: 'installation/mysql/index'},
           items: [
-            'installation/installation-methods/aws-rds',
-            'installation/installation-methods/gcp-cloud-sql',
-            'installation/installation-methods/azure-database-for-mysql',
+            'installation/mysql/linux',
+            'installation/mysql/windows',
+            'installation/mysql/docker',
+            'installation/mysql/aws-rds',
+            'installation/mysql/gcp-cloud-sql',
+            'installation/mysql/azure-database-for-mysql',
+            'installation/mysql/clusters',
+            'installation/mysql/whm-cpanel',
           ],
         },
-        'installation/installation-methods/clusters',
-        'installation/installation-methods/whm-cpanel',
+        {
+          type: 'category',
+          label: 'MariaDB',
+          link: {type: 'doc', id: 'installation/mariadb/index'},
+          items: [
+            'installation/mariadb/linux',
+            'installation/mariadb/windows',
+            'installation/mariadb/docker',
+            'installation/mariadb/kubernetes',
+            'installation/mariadb/clusters',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'PostgreSQL',
+          link: {type: 'doc', id: 'installation/postgresql/index'},
+          items: [
+            'installation/postgresql/linux',
+          ],
+        },
         {
           type: 'category',
           label: 'Manage the Releem Agent',

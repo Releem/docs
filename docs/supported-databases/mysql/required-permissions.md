@@ -90,3 +90,7 @@ SHOW GRANTS FOR 'releem'@'AGENT_SOURCE_HOST';
 ```
 
 Record the approved capabilities, verify that no unintended host variant exists, and retest the grants whenever the Agent features, database version, or hosting model changes.
+
+## Continue installation
+
+Choose a supported environment on the [MySQL installation page](/installation/mysql).

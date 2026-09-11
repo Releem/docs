@@ -48,10 +48,10 @@ Please exclude "releem" user from MySQLGovernor.
 
 ### cPanel/WHM
 
-If your server is managed through WHM/cPanel, use the [WHM/cPanel installation guide](/installation/installation-methods/whm-cpanel) for setup-specific troubleshooting, including how to verify that cPanel MySQL auto-adjust settings are disabled.
+The WHM/cPanel installation procedure is currently unavailable. Do not re-run or remove the module from an incomplete procedure. Contact Releem Support for the current installation or recovery steps, then use the [MySQL WHM/cPanel page](/installation/mysql/whm-cpanel) to verify the Agent status and current metrics.
 
 ### AWS RDS
-[Common issues for AWS RDS](/installation/installation-methods/aws-rds#common-issues-for-aws-rds)
+[Troubleshoot MySQL on AWS RDS](/installation/mysql/aws-rds#troubleshooting)
 
 
 ## Releem Agent Installation Errors

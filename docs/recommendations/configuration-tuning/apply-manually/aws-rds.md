@@ -10,7 +10,7 @@ sidebar_label: AWS RDS
 Use Parameter Groups to apply the recommended configuration. Follow the steps below:
 
 Before you begin, record the parameter group assigned to your RDS instance and its current parameter values.
-Use this record to compare the configuration after the change and to plan recovery if needed.
+Use this record to compare the configuration after the change and to plan recovery if needed. Recording it does not guarantee that a change can be reversed.
 
 ## Step 1: Modify the Parameter Group in AWS RDS
 
@@ -41,6 +41,6 @@ Coordinate the reboot with the application timing you chose in Step 2.
 
 ## Step 4: Verify the Applied Configuration
 
-You should see event **Applied recommended configuration** on the Metrics graph.
+You should see event **Applied recommended configuration** on the MySQL Metrics graph.
 
 For additional help, feel free to contact **Releem support**.

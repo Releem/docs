@@ -24,6 +24,10 @@ const consolidationPath = path.join(
   projectRoot,
   '.agent/analysis/2026-09-03-linux-installation-consolidation.json',
 );
+const engineFirstManifestPath = path.join(
+  projectRoot,
+  '.agent/analysis/2026-09-10-engine-first-installation-manifest.json',
+);
 const approvedTopLevelDirectories = [
   'get-started',
   'supported-databases',
@@ -75,22 +79,43 @@ const expectedFinalSidebar = {
     {
       type: 'category',
       label: 'Installation',
+      link: {type: 'doc', id: 'installation/index'},
       items: [
-        {type: 'doc', id: 'installation/linux', label: 'Linux'},
-        'installation/installation-methods/windows',
-        'installation/installation-methods/docker',
-        'installation/installation-methods/kubernetes',
         {
           type: 'category',
-          label: 'Managed databases',
+          label: 'MySQL',
+          link: {type: 'doc', id: 'installation/mysql/index'},
           items: [
-            'installation/installation-methods/aws-rds',
-            'installation/installation-methods/gcp-cloud-sql',
-            'installation/installation-methods/azure-database-for-mysql',
+            'installation/mysql/linux',
+            'installation/mysql/windows',
+            'installation/mysql/docker',
+            'installation/mysql/aws-rds',
+            'installation/mysql/gcp-cloud-sql',
+            'installation/mysql/azure-database-for-mysql',
+            'installation/mysql/clusters',
+            'installation/mysql/whm-cpanel',
           ],
         },
-        'installation/installation-methods/clusters',
-        'installation/installation-methods/whm-cpanel',
+        {
+          type: 'category',
+          label: 'MariaDB',
+          link: {type: 'doc', id: 'installation/mariadb/index'},
+          items: [
+            'installation/mariadb/linux',
+            'installation/mariadb/windows',
+            'installation/mariadb/docker',
+            'installation/mariadb/kubernetes',
+            'installation/mariadb/clusters',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'PostgreSQL',
+          link: {type: 'doc', id: 'installation/postgresql/index'},
+          items: [
+            'installation/postgresql/linux',
+          ],
+        },
         {
           type: 'category',
           label: 'Manage the Releem Agent',
@@ -280,6 +305,7 @@ function parseDocument(sourcePath, contents) {
     ? explicitSlug
     : `/${explicitSlug ? path.posix.join(directory, explicitSlug) : effectiveId}`;
   return {
+    sourcePath,
     frontMatter,
     body,
     explicitId,
@@ -514,6 +540,43 @@ const expectedCurrentRedirects = [
     !manifest.records.some(({currentRoute}) => currentRoute === from),
   ),
 ];
+const engineFirstRedirectChanges = [
+  {from: '/releem-agent/installation-guides/self-managed-servers-automatic-installation', to: '/installation/mysql/linux#automatic-installation'},
+  {from: '/releem-agent/installation-guides/self-managed-servers-manual-installation-linux', to: '/installation/mysql/linux#manual-installation'},
+  {from: '/releem-agent/installation-guides/postgresql-manual-linux', to: '/installation/postgresql/linux#manual-installation'},
+  {from: '/releem-agent/installation-guides/self-managed-servers-manual-installation-windows', to: '/installation/mysql/windows'},
+  {from: '/releem-agent/installation-guides/self-managed-servers-docker-installation', to: '/installation/mysql/docker'},
+  {from: '/releem-agent/installation-guides/installation-in-kubernetes', to: '/installation/mariadb/kubernetes'},
+  {from: '/releem-agent/installation-guides/cloud-managed-aws-rds-automatic-installation', to: '/installation/mysql/aws-rds'},
+  {from: '/releem-agent/installation-guides/cloud-managed-gcp-cloud-sql-automatic-installation', to: '/installation/mysql/gcp-cloud-sql'},
+  {from: '/releem-agent/installation-guides/cloud-managed-azure-mysql-automatic-installation', to: '/installation/mysql/azure-database-for-mysql'},
+  {from: '/releem-agent/installation-guides/clusters', to: '/installation'},
+  {from: '/releem-agent/installation-guides/whm-cpanel', to: '/installation/mysql/whm-cpanel'},
+  {from: '/installation/linux-automatic', to: '/installation/mysql/linux#automatic-installation'},
+  {from: '/installation/installation-methods/linux-manual', to: '/installation/mysql/linux#manual-installation'},
+  {from: '/supported-databases/postgresql/install-on-linux', to: '/installation/postgresql/linux#manual-installation'},
+  {from: '/installation/postgresql-on-linux', to: '/installation/postgresql/linux#manual-installation'},
+  {from: '/installation/installation-methods/postgresql-on-linux', to: '/installation/postgresql/linux#manual-installation'},
+  {from: '/installation/installation-methods/windows', to: '/installation/mysql/windows'},
+  {from: '/installation/installation-methods/docker', to: '/installation/mysql/docker'},
+  {from: '/installation/installation-methods/kubernetes', to: '/installation/mariadb/kubernetes'},
+  {from: '/installation/installation-methods/aws-rds', to: '/installation/mysql/aws-rds'},
+  {from: '/installation/installation-methods/gcp-cloud-sql', to: '/installation/mysql/gcp-cloud-sql'},
+  {from: '/installation/installation-methods/azure-database-for-mysql', to: '/installation/mysql/azure-database-for-mysql'},
+  {from: '/installation/installation-methods/clusters', to: '/installation'},
+  {from: '/installation/installation-methods/whm-cpanel', to: '/installation/mysql/whm-cpanel'},
+];
+const engineFirstRedirectBySource = new Map(
+  engineFirstRedirectChanges.map((redirect) => [redirect.from, redirect]),
+);
+const engineFirstRemovedRedirectSources = ['/installation'];
+const priorRedirectSources = new Set(expectedCurrentRedirects.map(({from}) => from));
+const expectedEngineFirstRedirects = [
+  ...expectedCurrentRedirects
+    .filter(({from}) => !engineFirstRemovedRedirectSources.includes(from))
+    .map((redirect) => engineFirstRedirectBySource.get(redirect.from) ?? redirect),
+  ...engineFirstRedirectChanges.filter(({from}) => !priorRedirectSources.has(from)),
+];
 
 test('migration map freezes the exact 54-row path, ID, route, hash, and token contract', async () => {
   assert.equal(manifest.schemaVersion, 1);
@@ -632,34 +695,112 @@ test('all image and static assets retain their paths and hashes', async () => {
   );
 });
 
-test('current source tree applies the approved Linux consolidation over the 54-page baseline', async () => {
+test('engine-first overlay owns the exact 63-page corpus, database-first sidebar, canonical links, and direct redirects', async () => {
+  assert.equal(
+    existsSync(engineFirstManifestPath),
+    true,
+    'Create .agent/analysis/2026-09-10-engine-first-installation-manifest.json',
+  );
+  const overlay = JSON.parse(await readFile(engineFirstManifestPath, 'utf8'));
+  assert.equal(overlay.historicalBaselinePageCount, 54);
+  assert.equal(overlay.currentPageCount, 63);
+  assert.equal(overlay.installationDocuments.length, 18);
+
   const markdownFiles = await listFiles(
     path.join(projectRoot, 'docs'),
     (absolutePath) => /\.mdx?$/u.test(absolutePath),
   );
-  const actualFiles = markdownFiles.map(toRepoPath);
-  const expectedFiles = currentSourcePaths;
-  assert.deepEqual(
-    actualFiles,
-    expectedFiles,
-    'The mirrored seven-section source tree is not installed yet',
+  const documents = await Promise.all(
+    markdownFiles.map(async (absolutePath) => {
+      const sourcePath = toRepoPath(absolutePath);
+      return parseDocument(sourcePath, await readFile(absolutePath));
+    }),
   );
+  assert.equal(documents.length, 63);
+  assertUnique(documents.map(({effectiveId}) => effectiveId), 'current document IDs');
+  assertUnique(documents.map(({route}) => route), 'current document routes');
+  assert.deepEqual(
+    overlay.installationDocuments.map(({sourcePath}) => sourcePath).sort(compare),
+    markdownFiles.map(toRepoPath).filter((sourcePath) =>
+      overlay.installationDocuments.some((document) => document.sourcePath === sourcePath),
+    ).sort(compare),
+  );
+  const documentsBySource = new Map(
+    documents.map((document) => [document.sourcePath, document]),
+  );
+  for (const expected of overlay.installationDocuments) {
+    const actual = documentsBySource.get(expected.sourcePath);
+    assert.ok(actual, `Missing engine-first document: ${expected.sourcePath}`);
+    assert.equal(actual.effectiveId, expected.id, `${expected.sourcePath} ID drifted`);
+    assert.equal(actual.route, expected.route, `${expected.sourcePath} route drifted`);
+  }
 
-  const actualDirectories = (await listDirectories(path.join(projectRoot, 'docs'))).map(toRepoPath);
-  const expectedDirectories = [
-    ...new Set(
-      expectedFiles.flatMap((sourcePath) => {
-        const directories = [];
-        let directory = path.posix.dirname(sourcePath);
-        while (directory !== 'docs') {
-          directories.push(directory);
-          directory = path.posix.dirname(directory);
-        }
-        return directories;
-      }),
-    ),
-  ].sort(compare);
-  assert.deepEqual(actualDirectories, expectedDirectories);
+  const sidebarSource = await readFile(path.join(projectRoot, 'sidebars.js'), 'utf8');
+  const sidebarUrl = `data:text/javascript;base64,${Buffer.from(sidebarSource).toString('base64')}`;
+  const sidebars = (await import(sidebarUrl)).default;
+  assert.deepEqual(sidebars, expectedFinalSidebar);
+  const ownedIds = [...topLevelOwnership(sidebars.docs).values()].flat();
+  assert.equal(ownedIds.length, 63);
+  assertUnique(ownedIds, 'sidebar document IDs');
+  assert.deepEqual(ownedIds.sort(compare), documents.map(({effectiveId}) => effectiveId).sort(compare));
+
+  assert.deepEqual(
+    overlay.directRedirects,
+    expectedEngineFirstRedirects,
+    'The engine-first overlay must retain every unrelated prior redirect and apply only explicit removals, overrides, and additions',
+  );
+  const redirectModule = await loadRedirectsModule();
+  assert.deepEqual(redirectModule.redirects, expectedEngineFirstRedirects);
+  const docusaurusConfig = await loadDocusaurusConfig();
+  assert.deepEqual(docusaurusConfig.plugins, [
+    ['@docusaurus/plugin-client-redirects', {redirects: expectedEngineFirstRedirects}],
+  ]);
+  assertUnique(redirectModule.redirects.map(({from}) => from), 'redirect sources');
+  const redirectSources = new Set(redirectModule.redirects.map(({from}) => from));
+  assert.equal(redirectSources.has('/installation'), false);
+  assert.equal(redirectSources.has('/installation/linux'), false);
+  for (const {from, to} of redirectModule.redirects) {
+    assert.equal(from === to, false, `Redirect loop: ${from}`);
+    assert.equal(to.includes('/installation/linux?database='), false, `${from} retains a stale Linux selector`);
+    assert.equal(
+      redirectSources.has(new URL(to, 'https://docs.releem.com').pathname),
+      false,
+      `Redirect chain: ${from} -> ${to}`,
+    );
+  }
+  for (const redirect of engineFirstRedirectChanges) {
+    assert.deepEqual(
+      redirectModule.redirects.find(({from}) => from === redirect.from),
+      redirect,
+    );
+  }
+  for (const blockedRoute of overlay.blockedRoutes) {
+    assert.equal(
+      redirectModule.redirects.some(({from, to}) =>
+        from === blockedRoute || new URL(to, 'https://docs.releem.com').pathname === blockedRoute,
+      ),
+      false,
+      `Blocked route appears in redirects: ${blockedRoute}`,
+    );
+  }
+
+  const currentRoutes = new Set(documents.map(({route}) => route));
+  for (const absolutePath of markdownFiles) {
+    const sourcePath = toRepoPath(absolutePath);
+    const contents = await readFile(absolutePath, 'utf8');
+    for (const target of markdownLinkTargets(contents)) {
+      if (!target.startsWith('/')) continue;
+      const url = new URL(target, 'https://docs.releem.com');
+      assert.equal(
+        url.pathname === '/installation/linux' && url.searchParams.has('database'),
+        false,
+        `${sourcePath} links to stale Linux selector ${target}`,
+      );
+      if (url.pathname.startsWith('/installation/')) {
+        assert.equal(currentRoutes.has(url.pathname), true, `${sourcePath} links to noncanonical ${target}`);
+      }
+    }
+  }
 });
 
 // Superseded by the exception-aware whole-content gate in docs-preservation.test.mjs.
@@ -697,22 +838,6 @@ test.skip('every mirrored page has explicit final metadata and preserved content
       );
     }
   }
-});
-
-test('seven-section sidebar ownership covers every mirrored document exactly once', async () => {
-  const sidebarSource = await readFile(path.join(projectRoot, 'sidebars.js'), 'utf8');
-  const sidebarUrl = `data:text/javascript;base64,${Buffer.from(sidebarSource).toString('base64')}`;
-  const sidebars = (await import(sidebarUrl)).default;
-  assert.deepEqual(
-    sidebars,
-    expectedFinalSidebar,
-    'Sidebar labels, category links, nesting, document placement, or order do not mirror the approved tree',
-  );
-  const ownership = topLevelOwnership(sidebars.docs);
-  const ownedIds = [...ownership.values()].flat();
-  assert.equal(ownedIds.length, 54);
-  assertUnique(ownedIds, 'sidebar document IDs');
-  assert.deepEqual([...ownedIds].sort(compare), [...currentIds].sort(compare));
 });
 
 test('Docusaurus navbar logo links directly to the canonical Get Started route', async () => {
@@ -755,37 +880,8 @@ test('Security Checks and Schema Checks remain aggregate pages only', () => {
   );
 });
 
-test('runtime redirect module applies the exact 60-rule consolidation overlay', async () => {
-  const expectedRedirects = expectedCurrentRedirects;
-  const redirectModule = await loadRedirectsModule();
-  assert.deepEqual(Object.keys(redirectModule), ['redirects']);
-  assert.deepEqual(redirectModule.redirects, expectedRedirects);
-
-  const redirects = redirectModule.redirects;
-  assert.equal(redirects.length, 60);
-  assertUnique(redirects.map(({from}) => from), 'redirect sources');
-  assert.deepEqual(redirects[0], {from: '/', to: '/get-started'});
-  const sources = new Set(redirects.map(({from}) => from));
-  for (const {from, to} of redirects) {
-    const targetPath = new URL(to, 'https://docs.releem.com').pathname;
-    assert.equal(from === to, false, `Redirect loop: ${from}`);
-    assert.equal(sources.has(targetPath), false, `Redirect chain: ${from} -> ${to}`);
-  }
-});
-
-test('Docusaurus config registers only the exact runtime client redirects', async () => {
-  const expectedRedirects = expectedCurrentRedirects;
-  const {redirects} = await loadRedirectsModule();
-  const config = await loadDocusaurusConfig();
-
-  assert.deepEqual(redirects, expectedRedirects);
-  assert.deepEqual(config.plugins, [
-    ['@docusaurus/plugin-client-redirects', {redirects}],
-  ]);
-});
-
 if (process.env.RELEEM_VERIFY_REDIRECT_BUILD === '1') {
-  test('built redirect artifacts preserve every exact consolidation query and hash', async () => {
+  test('engine-first built redirect artifacts and Linux compatibility page are distinct canonical outputs', async () => {
     const buildDirectory = path.join(projectRoot, 'build');
     assert.equal(
       existsSync(buildDirectory),
@@ -801,10 +897,18 @@ if (process.env.RELEEM_VERIFY_REDIRECT_BUILD === '1') {
       route === '/'
         ? path.join(buildDirectory, 'index.html')
         : path.join(buildDirectory, `${route.slice(1)}.html`);
-    const expectedRedirectArtifacts = expectedCurrentRedirects.map(({from}) =>
+    assert.equal(
+      existsSync(engineFirstManifestPath),
+      true,
+      'Create .agent/analysis/2026-09-10-engine-first-installation-manifest.json',
+    );
+    const overlay = JSON.parse(await readFile(engineFirstManifestPath, 'utf8'));
+    assert.deepEqual(overlay.directRedirects, expectedEngineFirstRedirects);
+    const expectedRedirects = expectedEngineFirstRedirects;
+    const expectedRedirectArtifacts = expectedRedirects.map(({from}) =>
       redirectArtifactPath(from),
     );
-    const expectedCanonicalArtifacts = expectedCurrentRedirects.map(({to}) =>
+    const expectedCanonicalArtifacts = expectedRedirects.map(({to}) =>
       canonicalArtifactPath(new URL(to, 'https://docs.releem.com').pathname),
     );
     const htmlFiles = await listFiles(
@@ -823,12 +927,12 @@ if (process.env.RELEEM_VERIFY_REDIRECT_BUILD === '1') {
     assert.deepEqual(
       redirectArtifacts,
       expectedRedirectArtifacts.sort((left, right) => compare(toRepoPath(left), toRepoPath(right))),
-      'Built redirect HTML artifacts must be exactly the 60 retired-route artifacts',
+      'Built redirect HTML artifacts must exactly match the engine-first direct redirects',
     );
     assert.equal(
       new Set(expectedRedirectArtifacts).size,
-      60,
-      'Retired routes must produce 60 distinct redirect artifacts',
+      expectedRedirects.length,
+      'Every retired route must produce one distinct redirect artifact',
     );
     assert.deepEqual(
       expectedRedirectArtifacts.filter((absolutePath) =>
@@ -838,7 +942,7 @@ if (process.env.RELEEM_VERIFY_REDIRECT_BUILD === '1') {
       'Retired and canonical route artifacts must not overlap',
     );
 
-    for (const {from, to} of expectedCurrentRedirects) {
+    for (const {from, to} of expectedRedirects) {
       const redirectArtifact = redirectArtifactPath(from);
       assert.equal(
         existsSync(redirectArtifact),
@@ -878,34 +982,48 @@ if (process.env.RELEEM_VERIFY_REDIRECT_BUILD === '1') {
         `${toRepoPath(canonicalArtifact)} must not be a redirect artifact`,
       );
     }
+
+    for (const document of overlay.installationDocuments) {
+      const canonicalArtifact = canonicalArtifactPath(document.route);
+      assert.equal(
+        existsSync(canonicalArtifact),
+        true,
+        `Missing canonical engine-first artifact for ${document.route}`,
+      );
+      const canonicalHtml = await readFile(canonicalArtifact, 'utf8');
+      assert.equal(
+        canonicalHtml.includes('<meta http-equiv="refresh"'),
+        false,
+        `${toRepoPath(canonicalArtifact)} must be canonical content, not a redirect`,
+      );
+      assert.ok(
+        canonicalHtml.includes(`<title data-rh="true">${document.title} | Releem Documentation</title>`),
+        `${toRepoPath(canonicalArtifact)} must render the exact engine-first title`,
+      );
+      assert.ok(
+        canonicalHtml.includes(
+          `<link data-rh="true" rel="canonical" href="https://docs.releem.com${document.route}">`,
+        ),
+        `${toRepoPath(canonicalArtifact)} must render its canonical URL`,
+      );
+    }
+
+    const compatibilityArtifact = path.join(buildDirectory, 'installation/linux.html');
+    assert.equal(
+      existsSync(compatibilityArtifact),
+      true,
+      'The build must contain the query-aware /installation/linux compatibility page',
+    );
+    const compatibilityHtml = await readFile(compatibilityArtifact, 'utf8');
+    assert.equal(
+      compatibilityHtml.includes('<meta http-equiv="refresh"'),
+      false,
+      '/installation/linux must be a page, not a path-only redirect artifact',
+    );
+    assert.equal(
+      expectedRedirectArtifacts.includes(compatibilityArtifact),
+      false,
+      '/installation/linux must not collide with client redirect output',
+    );
   });
 }
-
-test('internal links use canonical routes instead of retired routes', async () => {
-  const retiredRoutes = new Set(manifest.records.map(({currentRoute}) => currentRoute));
-  const currentSources = new Set(manifest.records.map(({currentSource}) => currentSource));
-  for (const sourcePath of currentSourcePaths) {
-    const absolutePath = path.join(projectRoot, sourcePath);
-    assert.equal(existsSync(absolutePath), true, `Current page is absent: ${sourcePath}`);
-    const contents = await readFile(absolutePath, 'utf8');
-    for (const target of markdownLinkTargets(contents)) {
-      let parsed;
-      if (/^https:\/\/docs\.releem\.com(?:\/|$)/u.test(target)) {
-        parsed = new URL(target);
-      } else if (target.startsWith('/')) {
-        parsed = new URL(target, 'https://docs.releem.com');
-      } else {
-        continue;
-      }
-      const pathname = decodeURIComponent(parsed.pathname);
-      const sourceCandidate = pathname.startsWith('/docs/')
-        ? pathname.slice(1)
-        : `docs${pathname}`;
-      const retired =
-        retiredRoutes.has(pathname) ||
-        retiredRoutes.has(pathname.replace(/\.md$/u, '')) ||
-        currentSources.has(sourceCandidate);
-      assert.equal(retired, false, `${sourcePath} links to retired target ${target}`);
-    }
-  }
-});

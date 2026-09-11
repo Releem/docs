@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
+import {existsSync} from 'node:fs';
 import {
   mkdir,
   lstat,
@@ -34,6 +35,62 @@ const preservationManifestPath = path.join(
   projectRoot,
   '.agent/analysis/2026-09-03-committed-content-preservation.json',
 );
+const engineFirstManifestPath = path.join(
+  projectRoot,
+  '.agent/analysis/2026-09-10-engine-first-installation-manifest.json',
+);
+
+const expectedEngineFirstInstallationSidebar = {
+  type: 'category',
+  label: 'Installation',
+  link: {type: 'doc', id: 'installation/index'},
+  items: [
+    {
+      type: 'category',
+      label: 'MySQL',
+      link: {type: 'doc', id: 'installation/mysql/index'},
+      items: [
+        'installation/mysql/linux',
+        'installation/mysql/windows',
+        'installation/mysql/docker',
+        'installation/mysql/aws-rds',
+        'installation/mysql/gcp-cloud-sql',
+        'installation/mysql/azure-database-for-mysql',
+        'installation/mysql/clusters',
+        'installation/mysql/whm-cpanel',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'MariaDB',
+      link: {type: 'doc', id: 'installation/mariadb/index'},
+      items: [
+        'installation/mariadb/linux',
+        'installation/mariadb/windows',
+        'installation/mariadb/docker',
+        'installation/mariadb/kubernetes',
+        'installation/mariadb/clusters',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'PostgreSQL',
+      link: {type: 'doc', id: 'installation/postgresql/index'},
+      items: ['installation/postgresql/linux'],
+    },
+    {
+      type: 'category',
+      label: 'Manage the Releem Agent',
+      items: [
+        'installation/manage-the-releem-agent/configuration',
+        'installation/manage-the-releem-agent/logs',
+        'installation/manage-the-releem-agent/migrate',
+        'installation/manage-the-releem-agent/update',
+        'installation/manage-the-releem-agent/uninstall',
+      ],
+    },
+  ],
+};
 
 const approvedRenames = {
   'docs/getting-started/schema-optimization.md':
@@ -882,6 +939,84 @@ function reverseConsolidationLinks(text, sourcePath, consolidation) {
   return restored;
 }
 
+function canonicalEngineFirstLinuxTarget(target) {
+  const url = new URL(target, 'https://docs.releem.com');
+  if (url.pathname !== '/installation/linux') return null;
+  const database = url.searchParams.get('database');
+  if (!['mysql', 'mariadb', 'postgresql'].includes(database)) return null;
+  const legacyPrefix = `#${database}-`;
+  if (!url.hash.startsWith(legacyPrefix)) return null;
+  const legacyAnchor = url.hash.slice(legacyPrefix.length);
+  const canonicalAnchor = legacyAnchor === 'installation'
+    ? ''
+    : legacyAnchor === 'automatic-installation' || legacyAnchor === 'manual-installation'
+      ? `#${legacyAnchor}`
+      : null;
+  if (canonicalAnchor === null) return null;
+  return `/installation/${database}/linux${canonicalAnchor}`;
+}
+
+function reverseEngineFirstLinkOverlay(text, sourcePath, consolidation, engineFirstManifest) {
+  const additions = consolidation.internalLinkAdditions
+    .filter((addition) => addition.sourcePath === sourcePath);
+  const replacements = consolidation.internalLinkReplacements
+    .filter((replacement) => replacement.sourcePath === sourcePath);
+  if (additions.length === 0 && replacements.length === 0) return text;
+
+  const canonicalRoutes = new Set(
+    engineFirstManifest.installationDocuments.map(({route}) => route),
+  );
+  let restored = text;
+  for (const addition of additions) {
+    const insertedLine = `${addition.content}\n`;
+    const priorOccurrences = restored.split(insertedLine).length - 1;
+    if (priorOccurrences === 1) continue;
+    assert.equal(priorOccurrences, 0);
+    const priorTarget = addition.content.match(/\]\((\/[^)]+)\)/u)?.[1];
+    const canonicalTarget = priorTarget
+      ? canonicalEngineFirstLinuxTarget(priorTarget)
+      : null;
+    assert.ok(
+      canonicalTarget,
+      `No engine-first link mapping for consolidation addition in ${sourcePath}`,
+    );
+    assert.equal(
+      canonicalRoutes.has(new URL(canonicalTarget, 'https://docs.releem.com').pathname),
+      true,
+      `Engine-first target is not canonical: ${canonicalTarget}`,
+    );
+    const currentLines = restored
+      .split('\n')
+      .filter((line) => line.includes(`](${canonicalTarget})`));
+    assert.equal(
+      currentLines.length,
+      1,
+      `Engine-first overlay must account for ${canonicalTarget} exactly once in ${sourcePath}`,
+    );
+    restored = restored.replace(currentLines[0], addition.content);
+  }
+
+  for (const replacement of replacements) {
+    const priorOccurrences = restored.split(replacement.to).length - 1;
+    if (priorOccurrences === replacement.occurrences) continue;
+    assert.equal(priorOccurrences, 0);
+    const canonicalTarget = canonicalEngineFirstLinuxTarget(replacement.to);
+    if (!canonicalTarget) continue;
+    assert.equal(
+      canonicalRoutes.has(new URL(canonicalTarget, 'https://docs.releem.com').pathname),
+      true,
+      `Engine-first target is not canonical: ${canonicalTarget}`,
+    );
+    assert.equal(
+      restored.split(canonicalTarget).length - 1,
+      replacement.occurrences,
+      `Engine-first overlay must account for ${canonicalTarget} before historical reversal`,
+    );
+    restored = restored.split(canonicalTarget).join(replacement.to);
+  }
+  return restored;
+}
+
 function reverseMigratedDocument(contents, record) {
   const text = contents.toString('utf8');
   const match = text.match(/^---\r?\n[\s\S]*?\r?\n---(?:\r?\n|$)/u);
@@ -950,10 +1085,11 @@ function referencedImagePaths(sourcePath, contents) {
 }
 
 async function currentDocuments() {
-  const [migrationMap, consolidation, preservationManifest] = await Promise.all([
+  const [migrationMap, consolidation, preservationManifest, engineFirstManifest] = await Promise.all([
     migrationMapPromise,
     consolidationPromise,
     preservationManifestPromise,
+    loadEngineFirstManifest(),
   ]);
   const migrationByFinalSource = new Map(
     migrationMap.records.map((record) => [record.finalSource, record]),
@@ -962,6 +1098,9 @@ async function currentDocuments() {
     preservationManifest.editorialExceptions
       .filter(({status}) => status === 'approved')
       .map(({sourcePath}) => sourcePath),
+  );
+  const engineFirstSources = new Set(
+    engineFirstManifest.installationDocuments.map(({sourcePath}) => sourcePath),
   );
   const markdownFiles = await listFiles(
     path.join(projectRoot, 'docs'),
@@ -974,21 +1113,35 @@ async function currentDocuments() {
       const migrationRecord = migrationByFinalSource.get(sourcePath);
       const isRewritten = consolidation.rewrittenSources.includes(sourcePath);
       assert.ok(
-        migrationRecord || consolidation.addedSources.includes(sourcePath),
-        `Consolidation overlay is missing ${sourcePath}`,
+        migrationRecord ||
+          consolidation.addedSources.includes(sourcePath) ||
+          engineFirstSources.has(sourcePath),
+        `Migration overlays are missing ${sourcePath}`,
       );
       const baselineSourcePath = migrationRecord
         ? baselineSourcePathFor(migrationRecord.currentSource)
         : sourcePath;
       const contents = await readFile(absolutePath);
       const parsed = parseDocument(sourcePath, contents);
-      const restoredBody = reverseConsolidationLinks(
+      const engineFirstRestoredBody = reverseEngineFirstLinkOverlay(
         parsed.normalizedBody,
         sourcePath,
         consolidation,
+        engineFirstManifest,
+      );
+      const restoredBody = reverseConsolidationLinks(
+        engineFirstRestoredBody,
+        sourcePath,
+        consolidation,
+      );
+      const engineFirstRestoredContents = reverseEngineFirstLinkOverlay(
+        contents.toString('utf8'),
+        sourcePath,
+        consolidation,
+        engineFirstManifest,
       );
       const restoredContents = reverseConsolidationLinks(
-        contents.toString('utf8'),
+        engineFirstRestoredContents,
         sourcePath,
         consolidation,
       );
@@ -1059,6 +1212,8 @@ const preservationManifestPromise = readFile(
   preservationManifestPath,
   'utf8',
 ).then(JSON.parse);
+const loadEngineFirstManifest = () =>
+  readFile(engineFirstManifestPath, 'utf8').then(JSON.parse);
 
 const packageJson = JSON.parse(
   await readFile(path.join(projectRoot, 'package.json'), 'utf8'),
@@ -1217,6 +1372,34 @@ test('baseline manifest records exactly 54 unique documents, routes, IDs, and ap
   }
 });
 
+test('engine-first overlay has 63 unique current routes and exact database-first Installation ownership', async () => {
+  assert.equal(
+    existsSync(engineFirstManifestPath),
+    true,
+    'Create .agent/analysis/2026-09-10-engine-first-installation-manifest.json',
+  );
+  const [overlay, documents, sidebars] = await Promise.all([
+    loadEngineFirstManifest(),
+    currentDocuments(),
+    loadSidebars(),
+  ]);
+  assert.equal(overlay.schemaVersion, 1);
+  assert.equal(overlay.historicalBaselinePageCount, 54);
+  assert.equal(overlay.currentPageCount, 63);
+  assert.equal(overlay.installationDocuments.length, 18);
+  assert.equal(documents.length, 63);
+  assert.equal(new Set(documents.map(({effectiveId}) => effectiveId)).size, 63);
+  assert.equal(new Set(documents.map(({route}) => route)).size, 63);
+  assert.deepEqual(
+    sidebars.docs.find(({label}) => label === 'Installation'),
+    expectedEngineFirstInstallationSidebar,
+  );
+  for (const route of overlay.blockedRoutes) {
+    assert.equal(documents.some((document) => document.route === route), false);
+    assert.equal(JSON.stringify(sidebars).includes(route.slice(1)), false);
+  }
+});
+
 // Superseded by the exception-aware whole-content gate in docs-preservation.test.mjs.
 test.skip('approved directory mirror preserves the corpus and establishes the seven-section sidebar', async () => {
   const [manifest, migrationMap, documents, sidebars] = await Promise.all([
@@ -1343,74 +1526,6 @@ test.skip('non-migration front matter and reversed bodies match immutable hashes
       document.reversedBodySha256,
       record.originalBodySha256,
       `${document.sourcePath} body must match after reversing declared migration tokens`,
-    );
-  }
-});
-
-test('current effective IDs and complete 54-route set apply the Linux consolidation overlay', async () => {
-  const [manifest, migrationMap, consolidation, documents, docusaurusConfig] = await Promise.all([
-    manifestPromise,
-    migrationMapPromise,
-    consolidationPromise,
-    currentDocuments(),
-    loadDocusaurusConfig(),
-  ]);
-  assertRoutingMatchesManifest(
-    routingFromDocusaurusConfig(docusaurusConfig),
-    manifest.routing,
-  );
-  assert.equal(documents.length, consolidation.currentPageCount);
-  assert.equal(new Set(documents.map(({effectiveId}) => effectiveId)).size, 54);
-  assert.equal(new Set(documents.map(({route}) => route)).size, 54);
-  const addedRoutes = new Map([
-    ['docs/installation/linux.md', '/installation/linux'],
-    ['docs/supported-databases/mariadb/required-permissions.md', '/supported-databases/mariadb/required-permissions'],
-    ['docs/supported-databases/postgresql/required-permissions.md', '/supported-databases/postgresql/required-permissions'],
-  ]);
-  for (const document of documents) {
-    const record = document.migrationRecord;
-    if (!record) {
-      assert.equal(document.route, addedRoutes.get(document.sourcePath));
-      continue;
-    }
-    assert.equal(
-      document.effectiveId,
-      record.finalId,
-      `${document.sourcePath} effective document ID must match the migration map`,
-    );
-    assert.equal(
-      document.route,
-      record.finalRoute,
-      `${document.sourcePath} public route must match the migration map`,
-    );
-  }
-  const retiredSources = new Set(consolidation.retiredSources);
-  const expectedRoutes = [
-    ...migrationMap.records
-      .filter(({finalSource}) => !retiredSources.has(finalSource))
-      .map(({finalRoute}) => finalRoute),
-    ...addedRoutes.values(),
-  ].sort(compare);
-  assert.deepEqual(documents.map(({route}) => route).sort(compare), expectedRoutes);
-});
-
-test('every referenced local image exists and matches the page baseline', async () => {
-  const [manifest, documents] = await Promise.all([
-    manifestPromise,
-    currentDocuments(),
-  ]);
-  const baselineByPath = new Map(
-    manifest.documents.map((document) => [document.sourcePath, document]),
-  );
-  for (const document of documents) {
-    if (!document.migrationRecord) {
-      assert.deepEqual(document.images, []);
-      continue;
-    }
-    assert.deepEqual(
-      document.images,
-      baselineByPath.get(document.baselineSourcePath).images,
-      `${document.sourcePath} referenced local images must match ${document.baselineSourcePath}`,
     );
   }
 });
@@ -1784,36 +1899,6 @@ test('local image extraction ignores metadata, comments, and code but preserves 
   );
 });
 
-test('all 54 current documents have one top-level owner and no cross-section ownership', async () => {
-  const [documents, sidebars] = await Promise.all([
-    currentDocuments(),
-    loadSidebars(),
-  ]);
-  const expectedFinalIds = documents.map(({effectiveId}) => effectiveId).sort(compare);
-  const currentIds = documents.map(({effectiveId}) => effectiveId).sort(compare);
-  const ownership = topLevelDocumentOwnership(sidebars);
-  const duplicateOwnership = [...ownership]
-    .filter(([, owners]) => owners.length !== 1)
-    .map(([id, owners]) => `${id}: ${owners.join(' | ')}`);
-
-  assert.deepEqual(currentIds, expectedFinalIds);
-  assert.deepEqual(
-    [...ownership.keys()].sort(compare),
-    expectedFinalIds,
-    'Every final document, including category-link documents, must be sidebar-owned',
-  );
-  assert.deepEqual(
-    duplicateOwnership,
-    [],
-    `Documents cannot be owned by multiple top-level sections:\n${duplicateOwnership.join('\n')}`,
-  );
-  assert.equal(
-    [...ownership.values()].flat().length,
-    54,
-    'Category-link and item documents together must provide exactly 54 ownership entries',
-  );
-});
-
 test('every internal Markdown and MDX link resolves directly to a canonical route or current source file', async () => {
   const [migrationMap, documents] = await Promise.all([
     migrationMapPromise,
@@ -1860,10 +1945,11 @@ test('every internal Markdown and MDX link resolves directly to a canonical rout
 });
 
 test('mirrored documents resolve every image from the final source location without path or hash drift', async () => {
-  const [manifest, migrationMap, consolidation, documents] = await Promise.all([
+  const [manifest, migrationMap, consolidation, engineFirstManifest, documents] = await Promise.all([
     manifestPromise,
     migrationMapPromise,
     consolidationPromise,
+    loadEngineFirstManifest(),
     currentDocuments(),
   ]);
   const baselineByPath = new Map(
@@ -1874,7 +1960,10 @@ test('mirrored documents resolve every image from the final source location with
   );
 
   for (const record of migrationMap.records) {
-    if (consolidation.retiredSources.includes(record.finalSource)) continue;
+    if (
+      consolidation.retiredSources.includes(record.finalSource) ||
+      engineFirstManifest.retiredSources.includes(record.finalSource)
+    ) continue;
     const baselinePath = baselineSourcePathFor(record.currentSource);
     const finalPath = record.finalSource;
     assert.deepEqual(

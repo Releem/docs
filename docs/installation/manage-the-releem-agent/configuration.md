@@ -14,7 +14,7 @@ All Releem Agent settings are stored in `/opt/releem/releem.conf`. The following
 
 ```ini
 # API key for Releem Platform
-apikey="<api_key>"
+apikey="[RELEEM_API_KEY]"
 
 # Hostname for the instance. This hostname will be displayed in the Releem Dashboard
 hostname=""
@@ -32,22 +32,22 @@ aws_rds_db="[RDS_INSTANCE_NAME]"
 aws_rds_parameter_group="releem-agent"
 
 #GCP project ID for Cloud SQL instance
-gcp_project_id="my-project-123"
+gcp_project_id="[GCP_PROJECT_ID]"
 
 #GCP region for Cloud SQL instance
-gcp_region="us-central1"
+gcp_region="[GCP_REGION]"
 
 #Name of Cloud SQL instance
-gcp_cloudsql_instance="my-mysql-instance"
+gcp_cloudsql_instance="[GCP_CLOUDSQL_INSTANCE]"
 
 # Azure subscription ID for Azure Database for MySQL Flexible Server
-azure_subscription_id="00000000-0000-0000-0000-000000000000"
+azure_subscription_id="[AZURE_SUBSCRIPTION_ID]"
 
 # Azure resource group for Azure Database for MySQL Flexible Server
-azure_resource_group="my-resource-group"
+azure_resource_group="[AZURE_RESOURCE_GROUP]"
 
 # Azure Database for MySQL Flexible Server resource name
-azure_mysql_server="my-mysql-server"
+azure_mysql_server="[AZURE_MYSQL_SERVER]"
 
 # Database memory usage limit in MB (0 = use all available memory)
 memory_limit=0
@@ -56,7 +56,7 @@ memory_limit=0
 mysql_user="releem"
 
 # MySQL user password for collecting metrics
-mysql_password="releem"
+mysql_password="[MYSQL_PASSWORD]"
 
 # MySQL host for collecting metrics
 mysql_host="127.0.0.1"
@@ -68,7 +68,7 @@ mysql_port="3306"
 pg_user="releem"
 
 # PostgreSQL user password for collecting metrics
-pg_password="releem"
+pg_password="[POSTGRESQL_PASSWORD]"
 
 # PostgreSQL host for collecting metrics
 pg_host="127.0.0.1"
@@ -130,10 +130,11 @@ releem_region=""
 
 ## Important Notes
 
+- Protect `/opt/releem/releem.conf` because it contains credentials. Keep it owned by the service administrator and readable only by root and the Agent service account. Verify restrictive ownership and permissions after installation and every edit; do not make the file world-readable or broadly group-readable.
 - After modifying the configuration file, restart the Releem Agent service to apply changes
-- The `apikey` field must be set to your actual Releem API key
-- For MySQL, the `mysql_password` field should contain the password for the user specified in `mysql_user`.
-- For PostgreSQL, the `pg_password` field should contain the password for the user specified in `pg_user`.
+- Replace `[RELEEM_API_KEY]` through your approved secret-management process.
+- For MySQL, replace `[MYSQL_PASSWORD]` with the password for the user specified in `mysql_user`.
+- For PostgreSQL, replace `[POSTGRESQL_PASSWORD]` with the password for the user specified in `pg_user`.
 - PostgreSQL monitoring is enabled when `pg_user` and `pg_password` are configured.
 - Set `query_optimization=true` to enable SQL query optimization features where supported.
 - Use `databases_query_optimization` to specify which databases to monitor for query optimization (leave empty for all databases).

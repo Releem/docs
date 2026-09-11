@@ -9,18 +9,18 @@ import TabItem from '@theme/TabItem';
 
 # Update Releem Agent
 
-To update Releem Agent, select your installation type and follow the step below:
+Choose how the Agent was installed. Automatic updates run only when you explicitly enabled them during installation. The documented Linux installation default is `RELEEM_CRON_ENABLE=0`, which leaves scheduled updates disabled.
 
 <Tabs>
   <TabItem value="linux" label="Linux">
 
-  Releem Agent updates automatically.
+  Automatic updates are disabled by the documented installation command. They run only when you explicitly install with `RELEEM_CRON_ENABLE=1`.
 
-  To update Releem Agent manually please run the following command:
+  Before changing the update setting, inspect `/opt/releem/releem.conf`, the `releem-agent` service definition, and the root user's scheduled jobs or cron entries for update-related settings. The exact stored key and job name are not documented here. Do not edit an entry you cannot identify; contact Releem Support.
 
-  ```bash
-  /opt/releem/mysqlconfigurer.sh -u
-  ```
+  Manual Linux updates are currently unavailable in this guide because the installed updater's download and integrity-verification behavior is not documented. Contact Releem Support for the current Linux update procedure.
+
+  An update succeeds when the Agent service is running, the Dashboard shows the intended Agent version, and current metrics continue to arrive. If any check fails, review [Agent logs](/installation/manage-the-releem-agent/logs) before another attempt. Keep the previous configuration and package details until you complete these checks.
 
   </TabItem>
   <TabItem value="aws" label="AWS" default>
@@ -36,32 +36,13 @@ To update Releem Agent, select your installation type and follow the step below:
   </TabItem>
   <TabItem value="docker" label="Docker">
 
-  We automated update of Releem Agent installed in Docker container.
+  Docker update installation is currently unavailable in this guide because image selection, secret handling, and the previous remote update script are not documented as a complete current procedure. Do not download or schedule that script. Contact Releem Support for the current image tag and container replacement procedure.
 
-  To setup automated Releem Agent update please follow the steps below:
-
-  1. Download script for update
-     ```bash
-     mkdir -p /opt/releem 
-     curl -s -L -o /opt/releem/update_releem_docker.sh https://releem.s3.amazonaws.com/v2/update_releem_docker.sh
-     chmod +x /opt/releem/update_releem_docker.sh
-     ```
-
-  2. Set the container name (by default the name of container is "releem-agent") and run the command below for test
-     ```bash
-     PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin bash /opt/releem/update_releem_docker.sh <container_name>
-     ```
-
-  3. Set container name and execute the following command to add script to cron for every Releem Agent container
-     ```bash
-     ( crontab -l 2>/dev/null | grep -v "/opt/releem/update_releem_docker.sh" || true; echo "0 0 * * * PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin bash /opt/releem/update_releem_docker.sh <container_name> >> /tmp/update_releem_docker.log 2>&1") | crontab -
-     ```
+  An update succeeds when the replacement container is running, the Dashboard shows the intended Agent version, and current metrics continue to arrive. Keep the previous image reference and configuration until you complete those checks.
   </TabItem>
   <TabItem value="windows" label="Windows">
 
-  1. Stop Releem Agent service.
-  2. Download the [Releem Agent](https://releem.s3.us-east-1.amazonaws.com/v2/releem-agent.exe) file to the folder `C:\Program Files\ReleemAgent`
-  3. Start Releem Agent service.
+  Windows update installation is currently unavailable in this guide because package selection and integrity verification are not documented. Contact Releem Support for the current Windows package and update procedure. An update succeeds when the service is running, the intended version is shown, and current metrics continue to arrive.
 
   </TabItem>
-</Tabs> 
+</Tabs>

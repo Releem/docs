@@ -16,7 +16,7 @@ Use Query Optimization to review resource-intensive queries, examine a proposed 
 
 ### 1. Observe query data
 
-Releem continuously analyzes database queries to identify optimization opportunities. The system examines **top 100 queries** and **top 100 slowest queries** to identify queries for review.
+Releem continuously analyzes your database queries to identify optimization opportunities. The system examines your **top 100 queries** and **top 100 slowest queries** to identify queries for review.
 
 When Releem detects an inefficient query, it:
 - Automatically flags it with a **"New"** status in the Query Optimization tab

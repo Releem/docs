@@ -6,7 +6,7 @@ title: Security Checks
 
 # Security Checks
 
-Releem's Security Checks feature continuously monitors your database server for security vulnerabilities and misconfigurations that could expose your data to risks. The results help you review identified issues and decide what requires further investigation.
+Releem's Security Checks feature continuously monitors your MySQL database for security vulnerabilities and misconfigurations that could expose your data to risks. The results help you review identified issues and decide what requires further investigation.
 
 <img src={require('../../assets/images/releem-security-checks.png').default} alt="Releem Security Checks" className="shadow-img" />
 

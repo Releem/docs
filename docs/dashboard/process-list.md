@@ -6,7 +6,7 @@ title: Process List
 
 # Process List
 
-Use Process List to inspect active databasw connections and running queries reported for the selected server. This centralized Dashboard view lets you investigate database activity without opening an SSH session just to view the process list.
+Use Process List to inspect active MySQL connections and running queries reported for the selected server. This centralized Dashboard view lets you investigate database activity without opening an SSH session just to view the process list.
 
 ![Releem Process List](../../assets/images/releem-process-list.png)
 
@@ -18,3 +18,5 @@ The Process List can help you investigate:
 - **Track connection activity** – Observe which applications and users are connected
 
 The Process List shows activity to investigate; it does not by itself prove the cause of a database problem or determine whether a connection should be terminated. Confirm the workload context and application impact before you terminate a connection or change the database.
+
+For detailed information, refer to the [Show MySQL Process List](https://releem.com/blog/show-mysql-process-list) article.

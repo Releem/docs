@@ -48,7 +48,7 @@ Use Database Flags to apply the recommended configuration. Follow the steps belo
 
 ### Verify the application event in Releem
 
-1. You should see event **Applied recommended configuration** on the Database Metrics graph in the Releem Dashboard.
+1. You should see event **Applied recommended configuration** on the MySQL Metrics graph in the Releem Dashboard.
 
 :::info
 Database flags are persisted for the instance until you manually remove them. Some flags may require the instance to be restarted for changes to take effect.

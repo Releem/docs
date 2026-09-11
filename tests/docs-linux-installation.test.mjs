@@ -42,6 +42,79 @@ const hashScrollerComponentPath = path.join(
   projectRoot,
   'src/components/HashTargetScroller.js',
 );
+const engineFirstManifestPath = path.join(
+  projectRoot,
+  '.agent/analysis/2026-09-10-engine-first-installation-manifest.json',
+);
+const legacyLinuxRedirectPath = path.join(
+  projectRoot,
+  'src/components/legacyLinuxRedirect.mjs',
+);
+const legacyLinuxRoutePath = path.join(
+  projectRoot,
+  'src/pages/installation/linux.js',
+);
+
+const engineFirstInstallationDocuments = [
+  ['docs/installation/index.md', '/installation', null, null, 'Install Releem', []],
+  ['docs/installation/mysql/index.md', '/installation/mysql', 'mysql', null, 'Install Releem for MySQL', []],
+  ['docs/installation/mysql/linux.md', '/installation/mysql/linux', 'mysql', 'linux', 'Install Releem for MySQL on Linux', ['automatic', 'manual']],
+  ['docs/installation/mysql/windows.md', '/installation/mysql/windows', 'mysql', 'windows', 'Install Releem for MySQL on Windows', ['automatic', 'manual']],
+  ['docs/installation/mysql/docker.md', '/installation/mysql/docker', 'mysql', 'docker', 'Install Releem for MySQL on Docker', ['manual']],
+  ['docs/installation/mysql/aws-rds.md', '/installation/mysql/aws-rds', 'mysql', 'aws-rds', 'Install Releem for MySQL on AWS RDS', ['automatic', 'manual']],
+  ['docs/installation/mysql/gcp-cloud-sql.md', '/installation/mysql/gcp-cloud-sql', 'mysql', 'gcp-cloud-sql', 'Install Releem for MySQL on GCP Cloud SQL', ['automatic', 'manual']],
+  ['docs/installation/mysql/azure-database-for-mysql.md', '/installation/mysql/azure-database-for-mysql', 'mysql', 'azure-database-for-mysql', 'Install Releem for MySQL on Azure Database for MySQL', []],
+  ['docs/installation/mysql/clusters.md', '/installation/mysql/clusters', 'mysql', 'clusters', 'Install Releem for MySQL on Clusters', ['manual']],
+  ['docs/installation/mysql/whm-cpanel.md', '/installation/mysql/whm-cpanel', 'mysql', 'whm-cpanel', 'Install Releem for MySQL on WHM/cPanel', ['automatic']],
+  ['docs/installation/mariadb/index.md', '/installation/mariadb', 'mariadb', null, 'Install Releem for MariaDB', []],
+  ['docs/installation/mariadb/linux.md', '/installation/mariadb/linux', 'mariadb', 'linux', 'Install Releem for MariaDB on Linux', ['automatic', 'manual']],
+  ['docs/installation/mariadb/windows.md', '/installation/mariadb/windows', 'mariadb', 'windows', 'Install Releem for MariaDB on Windows', ['automatic', 'manual']],
+  ['docs/installation/mariadb/docker.md', '/installation/mariadb/docker', 'mariadb', 'docker', 'Install Releem for MariaDB on Docker', ['manual']],
+  ['docs/installation/mariadb/kubernetes.md', '/installation/mariadb/kubernetes', 'mariadb', 'kubernetes', 'Install Releem for MariaDB on Kubernetes', []],
+  ['docs/installation/mariadb/clusters.md', '/installation/mariadb/clusters', 'mariadb', 'clusters', 'Install Releem for MariaDB on Clusters', ['manual']],
+  ['docs/installation/postgresql/index.md', '/installation/postgresql', 'postgresql', null, 'Install Releem for PostgreSQL', []],
+  ['docs/installation/postgresql/linux.md', '/installation/postgresql/linux', 'postgresql', 'linux', 'Install Releem for PostgreSQL on Linux', ['automatic', 'manual']],
+].map(([sourcePath, route, database, environment, title, methods]) => ({
+  sourcePath,
+  id: sourcePath.slice('docs/'.length, -'.md'.length),
+  route,
+  database,
+  environment,
+  title,
+  methods,
+}));
+
+const engineFirstRetiredSources = [
+  'docs/installation/linux.md',
+  'docs/installation/installation-methods/windows.md',
+  'docs/installation/installation-methods/docker.md',
+  'docs/installation/installation-methods/kubernetes.md',
+  'docs/installation/installation-methods/aws-rds.md',
+  'docs/installation/installation-methods/gcp-cloud-sql.md',
+  'docs/installation/installation-methods/azure-database-for-mysql.md',
+  'docs/installation/installation-methods/clusters.md',
+  'docs/installation/installation-methods/whm-cpanel.md',
+];
+
+const blockedEngineFirstRoutes = [
+  '/installation/mysql/kubernetes',
+  '/installation/mariadb/whm-cpanel',
+  '/installation/mariadb/aws-rds',
+  '/installation/mariadb/gcp-cloud-sql',
+  '/installation/mariadb/azure-database-for-mysql',
+];
+
+const unavailableEnvironmentRoutes = [
+  '/installation/mysql/windows',
+  '/installation/mysql/docker',
+  '/installation/mysql/aws-rds',
+  '/installation/mysql/gcp-cloud-sql',
+  '/installation/mysql/azure-database-for-mysql',
+  '/installation/mysql/whm-cpanel',
+  '/installation/mariadb/windows',
+  '/installation/mariadb/docker',
+  '/installation/mariadb/kubernetes',
+];
 
 const redirectChanges = [
   {from: '/installation', to: '/installation/linux?database=mysql#mysql-automatic-installation'},
@@ -87,225 +160,495 @@ function tabBody(source, value, nextValue) {
   return source.slice(start, end);
 }
 
-test('Linux consolidation has the exact 54-page source and redaction overlay', async () => {
-  assert.equal(existsSync(linuxPath), true, 'Create the canonical Linux guide');
-  assert.equal(existsSync(mariadbPermissionsPath), true, 'Create MariaDB permissions guide');
-  assert.equal(existsSync(postgresPermissionsPath), true, 'Create PostgreSQL permissions guide');
-  for (const source of retiredSources) {
-    assert.equal(existsSync(path.join(projectRoot, source)), false, `Retire ${source}`);
-  }
-  assert.equal(existsSync(path.join(projectRoot, sensitiveAsset)), false);
-  assert.equal((await listMarkdown(path.join(projectRoot, 'docs'))).length, 54);
+function codeFenceBodies(source) {
+  return [...source.matchAll(/^\s*(`{3,}|~{3,})[^\n]*\n([\s\S]*?)^\s*\1\s*$/gmu)]
+    .map((match) => match[2]);
+}
 
-  const overlay = JSON.parse(await readFile(consolidationPath, 'utf8'));
+function hasUnavailableRouteLabel(source, route) {
+  const unavailable = /(?:procedure|installation|workflow)\s+(?:currently\s+)?unavailable|no (?:verified|executable) (?:procedure|installation|workflow)/iu;
+  const linkToken = `](${route})`;
+  return source.split('\n').some((line) => {
+    const linkEnd = line.indexOf(linkToken);
+    if (linkEnd === -1) return false;
+    const linkStart = line.lastIndexOf('[', linkEnd);
+    const tailStart = linkEnd + linkToken.length;
+    const nextDot = line.indexOf(' · ', tailStart);
+    const nextLink = line.indexOf(' [', tailStart);
+    const boundaries = [nextDot, nextLink].filter((index) => index !== -1);
+    const tailEnd = boundaries.length > 0 ? Math.min(...boundaries) : line.length;
+    return unavailable.test(`${line.slice(linkStart, linkEnd)} ${line.slice(tailStart, tailEnd)}`);
+  });
+}
+
+test('engine-first installation pages, links, permissions, anchors, and Linux compatibility match the manifest', async () => {
+  assert.equal(
+    existsSync(engineFirstManifestPath),
+    true,
+    'Create .agent/analysis/2026-09-10-engine-first-installation-manifest.json',
+  );
+  const overlay = JSON.parse(await readFile(engineFirstManifestPath, 'utf8'));
   assert.equal(overlay.schemaVersion, 1);
   assert.equal(overlay.historicalBaselinePageCount, 54);
-  assert.equal(overlay.currentPageCount, 54);
-  assert.deepEqual(overlay.retiredSources, retiredSources);
-  assert.deepEqual(overlay.addedSources, [
-    'docs/installation/linux.md',
-    'docs/supported-databases/mariadb/required-permissions.md',
-    'docs/supported-databases/postgresql/required-permissions.md',
-  ]);
-  assert.deepEqual(overlay.rewrittenSources, [
-    'docs/supported-databases/mysql/required-permissions.md',
-  ]);
+  assert.equal(overlay.currentPageCount, 63);
+  assert.deepEqual(overlay.retiredSources, engineFirstRetiredSources);
+  assert.deepEqual(overlay.installationDocuments, engineFirstInstallationDocuments);
+  assert.deepEqual(overlay.blockedRoutes, blockedEngineFirstRoutes);
+  assert.ok(
+    Array.isArray(overlay.conditionalEvidence),
+    'Manifest must provide structured conditionalEvidence for MariaDB Windows, Docker, and Kubernetes',
+  );
   assert.deepEqual(
-    overlay.sidebarOwnershipOverrides.map(({sourcePath}) => sourcePath),
+    overlay.conditionalEvidence.map(({sourcePath}) => sourcePath),
     [
-      'docs/installation/installation-methods/windows.md',
-      'docs/installation/installation-methods/docker.md',
-      'docs/installation/installation-methods/kubernetes.md',
-      'docs/installation/installation-methods/aws-rds.md',
-      'docs/installation/installation-methods/gcp-cloud-sql.md',
-      'docs/installation/installation-methods/azure-database-for-mysql.md',
-      'docs/installation/installation-methods/clusters.md',
-      'docs/installation/installation-methods/whm-cpanel.md',
+      'docs/installation/mariadb/windows.md',
+      'docs/installation/mariadb/docker.md',
+      'docs/installation/mariadb/kubernetes.md',
     ],
   );
-  assert.deepEqual(
-    overlay.internalLinkAdditions.map(({sourcePath, content}) => ({sourcePath, content})),
-    [
-      {
-        sourcePath: 'docs/get-started/connect-your-database-server.md',
-        content: '- [MariaDB on Linux Server: Automatic Agent Installation](/installation/linux?database=mariadb#mariadb-automatic-installation) – Automatic installation for MariaDB instances running on Linux-based servers.',
-      },
-      {
-        sourcePath: 'docs/get-started/connect-your-database-server.md',
-        content: '- [MariaDB on Linux Server: Manual Agent Installation](/installation/linux?database=mariadb#mariadb-manual-installation) – Manual installation for MariaDB instances when a DBA creates the monitoring account.',
-      },
-      {
-        sourcePath: 'docs/get-started/connect-your-database-server.md',
-        content: '- [PostgreSQL on Linux Server: Automatic Agent Installation](/installation/linux?database=postgresql#postgresql-automatic-installation) – Automatic database-user creation for PostgreSQL instances running on Linux-based servers.',
-      },
-    ],
-  );
-  assert.equal(overlay.removedSensitiveAsset.path, sensitiveAsset);
-  assert.match(overlay.removedSensitiveAsset.sha256, /^[a-f0-9]{64}$/u);
-  assert.match(overlay.removedSensitiveAsset.reason, /credential|API key/iu);
-  assert.equal(overlay.removedSensitiveAsset.rotationRequiredIfEverValid, true);
-  assert.deepEqual(overlay.installerEvidence, {
-    version: '1.25.2',
-    branch: 'master',
-    commit: '01e1f6e',
-    observedOn: '2026-09-01',
-    mutableDownloadDigestPublished: false,
-    installerLogUploadAndRetention: 'UNCONFIRMED',
-  });
-});
-
-test('canonical Linux guide has exact metadata, one engine Tabs group, and ordered anchors', async () => {
-  assert.equal(existsSync(linuxPath), true, 'Create the canonical Linux guide');
-  const source = await readFile(linuxPath, 'utf8');
-  assert.deepEqual(frontMatter(source), {
-    id: 'linux',
-    slug: '/installation/linux',
-    title: 'Install Releem Agent on Linux',
-  });
-  assert.equal((source.match(/<Tabs\b/gu) ?? []).length, 1);
-  assert.equal((source.match(/<\/Tabs>/gu) ?? []).length, 1);
-  assert.match(
-    source,
-    /<Tabs\s+groupId="database-engine"\s+queryString="database"\s+defaultValue="mysql">/u,
-  );
-  assert.deepEqual(
-    [...source.matchAll(/<TabItem\s+value="([^"]+)"/gu)].map((match) => match[1]),
-    ['mysql', 'mariadb', 'postgresql'],
-  );
-
-  const anchors = [
-    'mysql-installation',
-    'mysql-automatic-installation',
-    'mysql-manual-installation',
-    'mariadb-installation',
-    'mariadb-automatic-installation',
-    'mariadb-manual-installation',
-    'postgresql-installation',
-    'postgresql-automatic-installation',
-    'postgresql-manual-installation',
-  ];
-  let previous = -1;
-  for (const anchor of anchors) {
-    const index = source.indexOf(`{#${anchor}}`);
-    assert.ok(index > previous, `${anchor} must exist in the required order`);
-    previous = index;
+  for (const evidence of overlay.conditionalEvidence) {
+    assert.deepEqual(Object.keys(evidence).sort(), [
+      'evidence',
+      'limitations',
+      'publicNotice',
+      'sourcePath',
+      'status',
+    ]);
+    assert.equal(evidence.status, 'conditional');
+    assert.ok(Array.isArray(evidence.evidence) && evidence.evidence.length > 0);
+    assert.ok(Array.isArray(evidence.limitations) && evidence.limitations.length > 0);
+    assert.ok(evidence.publicNotice.length >= 24);
+    for (const item of evidence.evidence) {
+      assert.deepEqual(Object.keys(item).sort(), ['finding', 'source']);
+      assert.ok(item.source.length > 0);
+      assert.ok(item.finding.length >= 12);
+    }
   }
-  assert.match(source, /### Automatic installation \{#mysql-automatic-installation\}/u);
-  assert.match(source, /### Automatic installation \{#mariadb-automatic-installation\}/u);
-  assert.match(source, /### Automatic database-user creation \{#postgresql-automatic-installation\}/u);
-  assert.match(source, /### Manual database-user creation \{#postgresql-manual-installation\}/u);
-  assert.doesNotMatch(source, /Recommended/iu);
-});
+  assert.ok(Array.isArray(overlay.methodBlockers));
+  assert.deepEqual(
+    overlay.methodBlockers.map(({sourcePath, method}) => [sourcePath, method]),
+    [
+      ['docs/installation/mysql/windows.md', 'automatic'],
+      ['docs/installation/mysql/windows.md', 'manual'],
+      ['docs/installation/mysql/docker.md', 'manual'],
+      ['docs/installation/mysql/aws-rds.md', 'automatic'],
+      ['docs/installation/mysql/aws-rds.md', 'manual'],
+      ['docs/installation/mysql/gcp-cloud-sql.md', 'automatic'],
+      ['docs/installation/mysql/gcp-cloud-sql.md', 'manual'],
+      ['docs/installation/mysql/azure-database-for-mysql.md', 'procedure'],
+      ['docs/installation/mysql/whm-cpanel.md', 'automatic'],
+      ['docs/installation/mariadb/windows.md', 'automatic'],
+      ['docs/installation/mariadb/windows.md', 'manual'],
+      ['docs/installation/mariadb/docker.md', 'manual'],
+      ['docs/installation/mariadb/kubernetes.md', 'procedure'],
+    ],
+    'methodBlockers must cover every disabled installation method exactly once',
+  );
+  const blockerBySource = new Map();
+  for (const blocker of overlay.methodBlockers) {
+    assert.deepEqual(Object.keys(blocker).sort(), [
+      'evidence',
+      'method',
+      'publicNotice',
+      'reason',
+      'sourcePath',
+    ]);
+    assert.ok(['automatic', 'manual', 'procedure'].includes(blocker.method));
+    assert.ok(blocker.reason.length >= 12);
+    assert.ok(blocker.evidence.length >= 12);
+    assert.ok(blocker.publicNotice.length >= 24);
+    assert.match(
+      blocker.publicNotice,
+      /(?:not (?:independently )?verified|unverified|verification (?:is )?(?:blocked|unavailable))/iu,
+      `${blocker.sourcePath} blocker must state the verification limit`,
+    );
+    assert.match(
+      blocker.publicNotice,
+      /(?:no executable|does not provide executable|do not (?:run|execute)|contact (?:Releem )?Support)/iu,
+      `${blocker.sourcePath} blocker must give a non-executable next step`,
+    );
+    const blockers = blockerBySource.get(blocker.sourcePath) ?? [];
+    blockers.push(blocker);
+    blockerBySource.set(blocker.sourcePath, blockers);
+  }
+  for (const document of engineFirstInstallationDocuments.filter(
+    ({environment, methods}) => environment && methods.length === 0,
+  )) {
+    assert.ok(blockerBySource.has(document.sourcePath), `${document.sourcePath} needs a method blocker`);
+  }
+  assert.equal((await listMarkdown(path.join(projectRoot, 'docs'))).length, 63);
 
-test('every engine tab hands off all installation tasks without duplicating shared operations', async () => {
-  assert.equal(existsSync(linuxPath), true, 'Create the canonical Linux guide');
-  const source = await readFile(linuxPath, 'utf8');
-  const engineConfig = [
-    ['mysql', 'mariadb', '/supported-databases/mysql/required-permissions'],
-    ['mariadb', 'postgresql', '/supported-databases/mariadb/required-permissions'],
-    ['postgresql', null, '/supported-databases/postgresql/required-permissions'],
-  ];
-  for (const [engine, nextEngine, permissions] of engineConfig) {
-    const tab = tabBody(source, engine, nextEngine);
-    for (const target of [
-      `#${engine}-installation`,
-      permissions,
-      `#${engine}-automatic-installation`,
-      `#${engine}-manual-installation`,
-      '#installer-parameters',
-      '#expected-result',
-      '#verify-installation',
-      '#troubleshooting',
+  for (const sourcePath of engineFirstRetiredSources) {
+    assert.equal(existsSync(path.join(projectRoot, sourcePath)), false, `Retire ${sourcePath}`);
+  }
+  for (const document of engineFirstInstallationDocuments) {
+    assert.equal(existsSync(path.join(projectRoot, document.sourcePath)), true, `Create ${document.sourcePath}`);
+    const source = await readFile(path.join(projectRoot, document.sourcePath), 'utf8');
+    const metadata = frontMatter(source);
+    assert.equal(metadata.id, path.posix.basename(document.id), `${document.sourcePath} ID drifted`);
+    assert.equal(metadata.slug, document.route, `${document.sourcePath} route drifted`);
+    assert.equal(metadata.title, document.title, `${document.sourcePath} title drifted`);
+    assert.deepEqual(
+      source.match(/^# .+$/gmu),
+      [`# ${document.title}`],
+      `${document.sourcePath} must have the exact single H1`,
+    );
+    assert.doesNotMatch(source, /['"]releem['"]@['"]%['"]/iu);
+    assert.doesNotMatch(
+      source,
+      /\b(?:engine-first|retired source|migration manifest|preservation mapping|evidence boundary|implementation task)\b/iu,
+      `${document.sourcePath} exposes internal migration wording`,
+    );
+    assert.doesNotMatch(
+      source,
+      /\b(?:not independently verified|existing commands?|retained|historical|future (?:verified|verification)|verification checklist|governance|validated for publication|pending verification|reviewed for publication)\b/iu,
+      `${document.sourcePath} exposes internal evidence or future-governance wording`,
+    );
+    const fencedText = codeFenceBodies(source).join('\n');
+    assert.doesNotMatch(
+      fencedText,
+      /(?:RELEEM_QUERY_OPTIMIZATION|query_optimization|QueryOptimization)\s*(?:=|:)\s*["']?(?:true|True)["']?/u,
+      `${document.sourcePath} must not enable Query Optimization by default in examples`,
+    );
+    assert.doesNotMatch(
+      fencedText,
+      /rds:ModifyDBParameterGroup|--role\s+["']?Contributor\b|["']role["']\s*:\s*["']Contributor["']/iu,
+      `${document.sourcePath} must not publish executable state-changing IAM grants`,
+    );
+    if (document.environment && document.environment !== 'linux') {
+      assert.doesNotMatch(fencedText, /\biwr\b[^\n]*\|\s*iex\b/iu);
+      assert.doesNotMatch(fencedText, /bash\s+-c\s+["']\$\(curl/iu);
+      assert.doesNotMatch(fencedText, /--api-key=/iu);
+      assert.doesNotMatch(
+        fencedText,
+        /(?:-e\s+|^\s*)(?:RELEEM_API_KEY|DB_PASSWORD)\s*(?:=|:)\s*\S+/imu,
+      );
+      assert.doesNotMatch(
+        fencedText,
+        /-\s*name:\s*(?:RELEEM_API_KEY|DB_PASSWORD)\s*\n\s*value:\s*\S+/imu,
+      );
+    }
+    for (const blocker of blockerBySource.get(document.sourcePath) ?? []) {
+      assert.equal(source.includes(blocker.publicNotice), true);
+      assert.equal(fencedText.includes(blocker.publicNotice), false);
+    }
+    const conditional = overlay.conditionalEvidence.find(
+      ({sourcePath}) => sourcePath === document.sourcePath,
+    );
+    if (conditional) assert.equal(source.includes(conditional.publicNotice), true);
+  }
+
+  const chooser = await readFile(path.join(projectRoot, 'docs/installation/index.md'), 'utf8');
+  for (const [database, route] of [
+    ['MySQL', '/installation/mysql'],
+    ['MariaDB', '/installation/mariadb'],
+    ['PostgreSQL', '/installation/postgresql'],
+  ]) {
+    assert.match(chooser, new RegExp(`^## \\[${database}\\]\\(${route}\\)$`, 'mu'));
+    assert.match(
+      chooser,
+      new RegExp(`\\[View ${database} installation options\\]\\(${route}\\)`, 'u'),
+    );
+    assert.equal(
+      chooser.split(`](${route})`).length - 1,
+      2,
+      `Chooser must link its ${database} heading and CTA to ${route}`,
+    );
+  }
+  for (const {route, environment} of engineFirstInstallationDocuments) {
+    if (!environment) continue;
+    assert.equal(
+      chooser.split(`](${route})`).length - 1,
+      1,
+      `Chooser must expose the supported environment route ${route}`,
+    );
+  }
+  for (const database of ['mysql', 'mariadb', 'postgresql']) {
+    const hub = await readFile(path.join(projectRoot, `docs/installation/${database}/index.md`), 'utf8');
+    const expectedRoutes = engineFirstInstallationDocuments
+      .filter((document) => document.database === database && document.environment)
+      .map(({route}) => route);
+    const actualRoutes = [...hub.matchAll(/\]\((\/installation\/[a-z-]+\/[a-z-]+)\)/gu)]
+      .map((match) => match[1])
+      .filter((route) => route.startsWith(`/installation/${database}/`));
+    assert.deepEqual(actualRoutes, expectedRoutes, `${database} hub route order drifted`);
+    assert.match(hub, new RegExp(`/supported-databases/${database}/required-permissions`, 'u'));
+    assert.match(hub, /\/get-started\/connect-your-database-server/u);
+  }
+  const hubSources = new Map(await Promise.all(
+    ['mysql', 'mariadb', 'postgresql'].map(async (database) => [
+      database,
+      await readFile(path.join(projectRoot, `docs/installation/${database}/index.md`), 'utf8'),
+    ]),
+  ));
+  for (const sourcePath of new Set(overlay.methodBlockers.map(({sourcePath}) => sourcePath))) {
+    const document = engineFirstInstallationDocuments.find((item) => item.sourcePath === sourcePath);
+    assert.ok(document, `Unknown blocked-method page: ${sourcePath}`);
+    assert.equal(
+      hasUnavailableRouteLabel(chooser, document.route),
+      true,
+      `Chooser must visibly label ${document.route} as procedure unavailable`,
+    );
+    assert.equal(
+      hasUnavailableRouteLabel(hubSources.get(document.database), document.route),
+      true,
+      `${document.database} hub must visibly label ${document.route} as procedure unavailable`,
+    );
+  }
+
+  const permissionRoutes = {
+    mysql: '/supported-databases/mysql/required-permissions',
+    mariadb: '/supported-databases/mariadb/required-permissions',
+    postgresql: '/supported-databases/postgresql/required-permissions',
+  };
+  for (const document of engineFirstInstallationDocuments.filter(({environment}) => environment)) {
+    const source = await readFile(path.join(projectRoot, document.sourcePath), 'utf8');
+    assert.equal(source.includes(`](/installation/${document.database})`), true);
+    assert.match(source, new RegExp(permissionRoutes[document.database].replaceAll('/', '\\/'), 'u'));
+    assert.match(source, /^## Expected result(?:\s+\{#[^}]+\})?$/imu);
+    assert.match(source, /Agent Status:\s*Connected/iu);
+    assert.match(source, /current (?:data timestamp|metrics)/iu);
+    assert.match(source, /^## Troubleshooting(?:\s+\{#[^}]+\})?$/imu);
+    assert.match(source, /^## Next steps(?:\s+\{#[^}]+\})?$/imu);
+    const methodHeadings = [...source.matchAll(
+      /^## (Automatic|Manual) installation\b.*$/gimu,
+    )].map(([heading, label]) => ({heading, method: label.toLowerCase()}));
+    assert.deepEqual(
+      methodHeadings.map(({method}) => method),
+      document.methods,
+      `${document.sourcePath} must expose only supported method H2s in canonical order`,
+    );
+    assert.deepEqual(
+      methodHeadings.map(({heading}) => heading),
+      document.methods.map((method) =>
+        `## ${method[0].toUpperCase()}${method.slice(1)} installation {#${method}-installation}`,
+      ),
+      `${document.sourcePath} method H2s must use exact canonical labels and anchors`,
+    );
+    assert.match(source, /^## Prerequisites(?:\s+\{#[^}]+\})?$/imu);
+    if (document.database === 'mariadb') {
+      assert.doesNotMatch(source, /\/supported-databases\/mysql\/required-permissions/u);
+      if (/RELEEM_MYSQL_/u.test(source)) {
+        assert.match(
+          source,
+          /(?:RELEEM_MYSQL_\*[^\n]*MariaDB|MariaDB[^\n]*RELEEM_MYSQL_\*)/iu,
+          `${document.sourcePath} must explain the retained RELEEM_MYSQL_* compatibility names`,
+        );
+      }
+    }
+    if (document.database === 'mysql') {
+      assert.doesNotMatch(
+        source,
+        /RELEEM_MYSQL_TYPE\s*=\s*2|\/installation\/mariadb\/kubernetes|your-name-space-mariadb|statefulset\.kubernetes\.io\/pod-name/iu,
+      );
+    }
+  }
+  const parameterEnvironments = new Set([
+    'linux',
+    'windows',
+    'docker',
+    'aws-rds',
+    'gcp-cloud-sql',
+    'azure-database-for-mysql',
+  ]);
+  for (const document of engineFirstInstallationDocuments.filter(({environment}) => environment)) {
+    const source = await readFile(path.join(projectRoot, document.sourcePath), 'utf8');
+    if (parameterEnvironments.has(document.environment)) {
+      assert.match(source, /^## (?:Installer )?parameters(?:\s+\{#[^}]+\})?$/imu);
+    }
+    assert.match(source, /^## Verify (?:the )?(?:installation|connectivity)(?: and current metrics)?(?:\s+\{#[^}]+\})?$/imu);
+    assert.match(source, /Agent Status:\s*Connected/iu);
+    assert.match(source, /current (?:data timestamp|metrics)/iu);
+    assert.match(source, /^## Troubleshooting(?: and recovery)?(?:\s+\{#[^}]+\})?$/imu);
+    assert.match(source, /\/get-started\/troubleshoot-releem-agent/u);
+    assert.match(source, /recover|re-run|restart|logs?/iu);
+    for (const route of [
+      '/installation/manage-the-releem-agent/configuration',
       '/installation/manage-the-releem-agent/update',
       '/installation/manage-the-releem-agent/uninstall',
-    ]) assert.match(tab, new RegExp(target.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&'), 'u'));
+    ]) {
+      assert.match(source, new RegExp(route.replaceAll('/', '\\/'), 'u'));
+    }
+    if (document.environment === 'linux' && document.database !== 'postgresql') {
+      assert.match(source, /CloudLinux/iu);
+      assert.match(source, /\/get-started\/troubleshoot-releem-agent#cloudlinux/u);
+      assert.match(source, /MySQLGovernor/iu);
+    } else if (document.database === 'postgresql') {
+      assert.doesNotMatch(source, /CloudLinux|MySQLGovernor/iu);
+    }
   }
-  for (const anchor of [
-    'installer-parameters',
-    'expected-result',
-    'verify-installation',
-    'troubleshooting',
-  ]) {
-    const index = source.indexOf(`{#${anchor}}`);
-    assert.ok(index > source.indexOf('</Tabs>'), `${anchor} must be shared after Tabs`);
+  for (const database of ['mysql', 'mariadb', 'postgresql']) {
+    const linux = await readFile(path.join(projectRoot, `docs/installation/${database}/linux.md`), 'utf8');
+    assert.doesNotMatch(linux, /1\.25\.2|01e1f6e|September 1, 2026/u);
+    assert.match(
+      linux,
+      database === 'mysql'
+        ? /MySQL 5\.5[^\n]+8\.0/u
+        : database === 'mariadb'
+          ? /MariaDB 10\.1[^\n]+11\.0/u
+          : /PostgreSQL 15[^\n]+18/u,
+    );
+    assert.match(linux, /\{#automatic-installation\}/u);
+    assert.match(linux, /\{#manual-installation\}/u);
+    assert.equal((linux.match(/sudo bash -c '/gu) ?? []).length, 2);
+    assert.match(linux, /read -r -s/iu);
+    assert.match(linux, /mktemp/iu);
+    assert.match(linux, /trap[^\n]+rm -f/iu);
+    assert.match(linux, /curl --fail --location --proto ["']=https["'] --tlsv1\.2/iu);
+    assert.match(linux, /private root Bash session/iu);
+    assert.doesNotMatch(linux, /\. \/root\/releem-install\.env|sudoedit|releem-install\.env/iu);
+    assert.match(linux, /\/opt\/releem\/releem\.conf/u);
+    if (database === 'postgresql') {
+      assert.match(linux, /RELEEM_PG_TYPE=1/u);
+      assert.match(linux, /RELEEM_PG_ROOT_LOGIN[^\n]+default[^\n]+postgres/iu);
+      assert.match(linux, /RELEEM_PG_HOST[^\n]+127\.0\.0\.1[^\n]+RELEEM_PG_PORT[^\n]+5432/iu);
+    } else {
+      assert.match(linux, /RELEEM_MYSQL_ROOT_LOGIN[^\n]+default[^\n]+root/iu);
+      assert.match(linux, /RELEEM_MYSQL_HOST[^\n]+127\.0\.0\.1[^\n]+RELEEM_MYSQL_PORT[^\n]+3306/iu);
+    }
+    assert.match(linux, /RELEEM_QUERY_OPTIMIZATION=true/u);
+    assert.match(linux, /omit[^\n]+RELEEM_QUERY_OPTIMIZATION/iu);
+    if (database === 'postgresql') assert.match(linux, /verify-full/iu);
+    else assert.doesNotMatch(linux, /verify-full/iu);
+    assert.match(linux, /downloads components from mutable URLs/iu);
+    assert.match(linux, /without published signature or checksum verification/iu);
+    assert.match(linux, /attempts to upload `\/var\/log\/releem-install\.log` on exit/iu);
+    assert.match(
+      linux,
+      /If your policy forbids mutable or unverified downloads, secrets in the process environment, or automatic log uploads, do not use any installer flow\./u,
+    );
+    assert.match(linux, /process environment/iu);
+    assert.match(linux, /private administrative session/iu);
+    assert.match(linux, /RELEEM_CRON_ENABLE=0/iu);
+    assert.match(
+      linux,
+      /RELEEM_CRON_ENABLE=1[^\n]+daily[^\n]+midnight[^\n]+\/installation\/manage-the-releem-agent\/update/iu,
+    );
+    assert.doesNotMatch(linux, /RELEEM_CRON_ENABLE=1\s*$/gmu);
+    assert.match(linux, /current[^\n]+(?:data timestamp|metrics)/iu);
+    assert.doesNotMatch(linux, /first metrics can take|short time/iu);
+    assert.doesNotMatch(linux, /unresolved/iu);
+    if (database !== 'postgresql') {
+      assert.match(linux, /admin(?:istrative)? and monitoring passwords in child-process arguments/iu);
+      assert.match(linux, /existing-user authentication failure[^\n]+monitoring password[^\n]+uploaded log/iu);
+      assert.match(
+        linux,
+        /If child-process argument exposure or failure-log password exposure is unacceptable, do not use the MySQL or MariaDB installer flow\./u,
+      );
+    }
+    assert.doesNotMatch(linux, /curl[^\n]+\|\s*(?:sudo\s+)?bash/iu);
+    assert.doesNotMatch(
+      linux,
+      /0\.0\.0\.0\/0|\bmd5\b|RELEEM_(?:MYSQL|PG)_ROOT_PASSWORD\s*=|releem-dashboard-agent-automatic-installation|cryptographically verified/iu,
+    );
   }
+
+  const mariaHub = await readFile(path.join(projectRoot, 'docs/installation/mariadb/index.md'), 'utf8');
+  assert.doesNotMatch(mariaHub, /\/supported-databases\/mysql\/required-permissions/u);
+
+  const publicSources = await Promise.all(
+    (await listMarkdown(path.join(projectRoot, 'docs'))).map((file) => readFile(file, 'utf8')),
+  );
+  const publicText = publicSources.join('\n');
+  assert.doesNotMatch(publicText, /\/installation\/linux\?database=/u);
+  for (const route of blockedEngineFirstRoutes) {
+    assert.equal(publicText.includes(route), false, `Blocked route is advertised: ${route}`);
+    assert.equal(existsSync(path.join(projectRoot, `docs${route}.md`)), false);
+    assert.equal(existsSync(path.join(projectRoot, `docs${route}/index.md`)), false);
+  }
+
+  assert.equal(existsSync(legacyLinuxRedirectPath), true, 'Create the pure legacy Linux helper');
+  assert.equal(existsSync(legacyLinuxRoutePath), true, 'Create the /installation/linux compatibility page');
+  const [helperSource, routeSource] = await Promise.all([
+    readFile(legacyLinuxRedirectPath, 'utf8'),
+    readFile(legacyLinuxRoutePath, 'utf8'),
+  ]);
+  assert.doesNotMatch(helperSource, /\b(?:window|document|globalThis)\s*\./u);
+  assert.match(routeSource, /search:\s*window\.location\.search/u);
+  assert.match(routeSource, /hash:\s*window\.location\.hash/u);
+  const directResolverToReplace = /(?:window\.)?location\.replace\(\s*resolveLegacyLinuxRedirect\(/u
+    .test(routeSource);
+  const resolvedVariable = routeSource.match(
+    /(?:const|let)\s+([A-Za-z_$][\w$]*)\s*=\s*resolveLegacyLinuxRedirect\(/u,
+  )?.[1];
+  const assignedResolverToReplace = resolvedVariable
+    ? new RegExp(`(?:window\\.)?location\\.replace\\(\\s*${resolvedVariable}\\s*\\)`, 'u')
+      .test(routeSource)
+    : false;
+  assert.equal(
+    directResolverToReplace || assignedResolverToReplace,
+    true,
+    'The compatibility page must pass the pure resolver result to location.replace',
+  );
+  const {resolveLegacyLinuxRedirect} = await import(
+    `${pathToFileURL(legacyLinuxRedirectPath).href}?test=${Date.now()}`
+  );
+  assert.equal(resolveLegacyLinuxRedirect({search: '', hash: ''}), '/installation');
+  for (const database of ['mysql', 'mariadb', 'postgresql']) {
+    const route = `/installation/${database}/linux`;
+    assert.equal(
+      resolveLegacyLinuxRedirect({search: `?database=${database}`, hash: `#${database}-installation`}),
+      route,
+    );
+    assert.equal(
+      resolveLegacyLinuxRedirect({search: `?database=${database}`, hash: `#${database}-automatic-installation`}),
+      `${route}#automatic-installation`,
+    );
+    assert.equal(
+      resolveLegacyLinuxRedirect({search: `?database=${database}`, hash: `#${database}-manual-installation`}),
+      `${route}#manual-installation`,
+    );
+  }
+  assert.equal(resolveLegacyLinuxRedirect({search: '?database=oracle', hash: ''}), '/installation');
+  assert.equal(
+    resolveLegacyLinuxRedirect({search: '?database=oracle', hash: '#mysql-manual-installation'}),
+    '/installation',
+  );
+  assert.equal(
+    resolveLegacyLinuxRedirect({search: '?database=mysql', hash: '#postgresql-manual-installation'}),
+    '/installation/mysql/linux',
+  );
+  assert.doesNotThrow(() =>
+    resolveLegacyLinuxRedirect({search: '?database=%E0%A4%A', hash: '#mysql-installation'}),
+  );
+  assert.equal(
+    resolveLegacyLinuxRedirect({search: '?database=%E0%A4%A', hash: '#mysql-installation'}),
+    '/installation',
+  );
+  assert.equal(
+    resolveLegacyLinuxRedirect({search: '?database=mysql&utm=%E0%A4%A', hash: '#custom%E0%A4%A'}),
+    '/installation/mysql/linux?utm=%EF%BF%BD%25A#custom%E0%A4%A',
+  );
+  assert.equal(
+    resolveLegacyLinuxRedirect({
+      search: '?utm_source=legacy&database=mariadb&mode=advanced',
+      hash: '#custom-section',
+    }),
+    '/installation/mariadb/linux?utm_source=legacy&mode=advanced#custom-section',
+  );
+  assert.equal(
+    resolveLegacyLinuxRedirect({search: '?utm_source=legacy', hash: '#custom-section'}),
+    '/installation?utm_source=legacy#custom-section',
+  );
+  assert.equal(
+    resolveLegacyLinuxRedirect({search: '?database=oracle&utm_source=legacy', hash: '#custom-section'}),
+    '/installation?utm_source=legacy#custom-section',
+  );
 });
 
-test('Linux guide states current installer exposure facts and uses masked data prompts', async () => {
-  assert.equal(existsSync(linuxPath), true, 'Create the canonical Linux guide');
-  const source = await readFile(linuxPath, 'utf8');
-  assert.doesNotMatch(source, /1\.25\.2|01e1f6e|September 1, 2026/u);
-  assert.match(source, /MySQL 5\.5[^\n]+8\.0/u);
-  assert.match(source, /MariaDB 10\.1[^\n]+11\.0/u);
-  assert.match(source, /PostgreSQL 15[^\n]+18/u);
-  assert.match(source, /curl --fail --location --proto ["']=https["'] --tlsv1\.2/u);
-  assert.match(source, /read -r -s/iu);
-  assert.match(source, /private root Bash session/iu);
-  assert.doesNotMatch(source, /\. \/root\/releem-install\.env|sudoedit|releem-install\.env/iu);
-  assert.match(source, /\/opt\/releem\/releem\.conf/u);
-  assert.match(source, /RELEEM_PG_TYPE=1/u);
-  assert.match(source, /RELEEM_MYSQL_ROOT_LOGIN[^\n]+default[^\n]+root/iu);
-  assert.match(source, /RELEEM_PG_ROOT_LOGIN[^\n]+default[^\n]+postgres/iu);
-  assert.match(source, /RELEEM_MYSQL_HOST[^\n]+127\.0\.0\.1[^\n]+RELEEM_MYSQL_PORT[^\n]+3306/iu);
-  assert.match(source, /RELEEM_PG_HOST[^\n]+127\.0\.0\.1[^\n]+RELEEM_PG_PORT[^\n]+5432/iu);
-  assert.match(source, /RELEEM_QUERY_OPTIMIZATION=true/u);
-  assert.match(source, /omit[^\n]+RELEEM_QUERY_OPTIMIZATION/iu);
-  assert.match(source, /verify-full/iu);
-  assert.match(source, /downloads components from mutable URLs/iu);
-  assert.match(source, /without published signature or checksum verification/iu);
-  assert.match(source, /attempts to upload `\/var\/log\/releem-install\.log` on exit/iu);
-  assert.match(source, /admin(?:istrative)? and monitoring passwords in child-process arguments/iu);
-  assert.match(source, /existing-user authentication failure[^\n]+monitoring password[^\n]+uploaded log/iu);
-  assert.match(
-    source,
-    /If your policy forbids mutable or unverified downloads, secrets in the process environment, or automatic log uploads, do not use any installer flow\./u,
-  );
-  assert.match(
-    source,
-    /If child-process argument exposure or failure-log password exposure is unacceptable, do not use the MySQL or MariaDB installer flow\./u,
-  );
-  assert.doesNotMatch(source, /unresolved/iu);
-  assert.match(source, /process environment/iu);
-  assert.match(source, /private administrative session/iu);
-  assert.match(source, /RELEEM_CRON_ENABLE=0/iu);
-  assert.match(source, /RELEEM_CRON_ENABLE=1[^\n]+daily[^\n]+midnight[^\n]+\/installation\/manage-the-releem-agent\/update/iu);
-  assert.doesNotMatch(source, /RELEEM_CRON_ENABLE=1\s*$/gmu);
-  assert.match(source, /current[^\n]+(?:data timestamp|metrics)/iu);
-  assert.doesNotMatch(source, /first metrics can take|short time/iu);
-  assert.doesNotMatch(source, /curl[^\n]+\|\s*(?:sudo\s+)?bash/iu);
-  assert.doesNotMatch(source, /0\.0\.0\.0\/0|\bmd5\b|RELEEM_(?:MYSQL|PG)_ROOT_PASSWORD\s*=|releem-dashboard-agent-automatic-installation|cryptographically verified/iu);
-});
-
-test('each Linux installation method is one copyable command', async () => {
-  const source = await readFile(linuxPath, 'utf8');
-  const methodAnchors = [
-    'mysql-automatic-installation',
-    'mysql-manual-installation',
-    'mariadb-automatic-installation',
-    'mariadb-manual-installation',
-    'postgresql-automatic-installation',
-    'postgresql-manual-installation',
-  ];
-
-  assert.equal((source.match(/sudo bash -c '/gu) ?? []).length, methodAnchors.length);
-  assert.doesNotMatch(source, /^## Prepare the installer safely$/mu);
-  assert.doesNotMatch(source, /^## Run the installer/u);
-  assert.doesNotMatch(source, /\/root\/releem-install\.sh/u);
-  assert.doesNotMatch(source, /review the downloaded script|inspect the complete file|\bless releem-install/iu);
-
-  for (const [index, anchor] of methodAnchors.entries()) {
-    const start = source.indexOf(`{#${anchor}}`);
-    const nextAnchor = methodAnchors[index + 1];
-    const end = nextAnchor ? source.indexOf(`{#${nextAnchor}}`, start) : source.indexOf('</Tabs>', start);
-    const method = source.slice(start, end);
-
-    assert.match(method, /Run this one-step command/u, `${anchor} must lead with one command`);
-    assert.equal((method.match(/```bash/gu) ?? []).length, 1, `${anchor} must have one Bash block`);
-    assert.match(method, /read -r -s/iu, `${anchor} must prompt without echo`);
-    assert.match(method, /mktemp/iu, `${anchor} must use a protected temporary file`);
-    assert.match(method, /trap[^\n]+rm -f/iu, `${anchor} must remove the downloaded installer`);
-    assert.match(method, /curl --fail --location --proto "=https" --tlsv1\.2/iu);
-    assert.match(method, /bash "\$installer"/u);
+test('public engine-first pages use availability language without internal evidence terms or executable mutation grants', async () => {
+  for (const document of engineFirstInstallationDocuments) {
+    const source = await readFile(path.join(projectRoot, document.sourcePath), 'utf8');
+    assert.doesNotMatch(
+      source,
+      /\b(?:not independently verified|existing commands?|retained|historical|future (?:verified|verification)|verification checklist|governance|validated for publication|pending verification|reviewed for publication)\b/iu,
+      `${document.sourcePath} exposes internal evidence or future-governance wording`,
+    );
+    assert.doesNotMatch(
+      codeFenceBodies(source).join('\n'),
+      /rds:ModifyDBParameterGroup|--role\s+["']?Contributor\b|["']role["']\s*:\s*["']Contributor["']/iu,
+      `${document.sourcePath} publishes an executable state-changing IAM grant`,
+    );
   }
 });
 
@@ -399,46 +742,6 @@ test('MariaDB permissions are canonical, exact-source, and exclude MySQL-only gr
   assert.match(source, /remote[\s\S]+wildcard account host[\s\S]+DBA-created[\s\S]+manual/iu);
 });
 
-test('Linux page schedules a safe post-tab hash scroll after hydration', async () => {
-  assert.equal(existsSync(hashScrollHelperPath), true, 'Create the hash-scroll helper');
-  assert.equal(existsSync(hashScrollerComponentPath), true, 'Create the React hash scroller');
-  const linuxSource = await readFile(linuxPath, 'utf8');
-  const componentSource = await readFile(hashScrollerComponentPath, 'utf8');
-  assert.match(linuxSource, /import HashTargetScroller from '\.\.\/\.\.\/src\/components\/HashTargetScroller';/u);
-  assert.match(linuxSource, /<HashTargetScroller\s*\/>/u);
-  assert.match(componentSource, /useLocation\(\)/u);
-  assert.match(componentSource, /\[search, hash\]/u);
-
-  const {decodeHashTarget, scheduleHashTargetScroll} = await import(
-    `${pathToFileURL(hashScrollHelperPath).href}?test=${Date.now()}`
-  );
-  assert.equal(decodeHashTarget('#postgresql-installation'), 'postgresql-installation');
-  assert.equal(decodeHashTarget('#bad%E0%A4%A'), null);
-
-  const frames = [];
-  const scrollCalls = [];
-  const cleanup = scheduleHashTargetScroll({
-    hash: '#postgresql-installation',
-    documentObject: {
-      getElementById: (id) => id === 'postgresql-installation'
-        ? {scrollIntoView: (options) => scrollCalls.push(options)}
-        : null,
-    },
-    requestFrame: (callback) => {
-      frames.push(callback);
-      return frames.length;
-    },
-    cancelFrame: () => {},
-  });
-  assert.equal(frames.length, 1);
-  frames.shift()();
-  assert.equal(scrollCalls.length, 0);
-  assert.equal(frames.length, 1);
-  frames.shift()();
-  assert.deepEqual(scrollCalls, [{block: 'start'}]);
-  cleanup();
-});
-
 test('Add Server exposes automatic and manual Linux paths for all three engines', async () => {
   const source = await readFile(
     path.join(projectRoot, 'docs/get-started/connect-your-database-server.md'),
@@ -448,27 +751,47 @@ test('Add Server exposes automatic and manual Linux paths for all three engines'
     for (const mode of ['automatic', 'manual']) {
       assert.match(
         source,
-        new RegExp(`/installation/linux\\?database=${engine}#${engine}-${mode}-installation`, 'u'),
+        new RegExp(`/installation/${engine}/linux#${mode}-installation`, 'u'),
       );
     }
   }
+  for (const {route, environment} of engineFirstInstallationDocuments) {
+    if (!environment || environment === 'linux') continue;
+    assert.equal(source.includes(`](${route})`), true);
+  }
+  for (const route of unavailableEnvironmentRoutes) {
+    const line = source
+      .split('\n')
+      .find((candidate) => candidate.includes(`](${route})`));
+    assert.ok(line, `Add Server must link to ${route}`);
+    assert.match(
+      line,
+      /\*\*Procedure unavailable\.\*\*/u,
+      `Add Server must mark ${route} as unavailable`,
+    );
+  }
+  for (const route of blockedEngineFirstRoutes) {
+    assert.equal(source.includes(route), false, `Add Server advertises blocked route ${route}`);
+  }
 });
 
-test('mixed MySQL and MariaDB workflows link to both permission references', async () => {
-  const clusters = await readFile(
-    path.join(projectRoot, 'docs/installation/installation-methods/clusters.md'),
-    'utf8',
-  );
+test('split cluster and mixed-engine workflows use contextual permission references', async () => {
+  const [mysqlClusters, mariadbClusters] = await Promise.all([
+    readFile(path.join(projectRoot, 'docs/installation/mysql/clusters.md'), 'utf8'),
+    readFile(path.join(projectRoot, 'docs/installation/mariadb/clusters.md'), 'utf8'),
+  ]);
   const queryOptimization = await readFile(
     path.join(projectRoot, 'docs/recommendations/query-optimization/enable.md'),
     'utf8',
   );
-  for (const source of [clusters, queryOptimization]) {
-    assert.match(source, /\/supported-databases\/mysql\/required-permissions/u);
-    assert.match(source, /\/supported-databases\/mariadb\/required-permissions/u);
-  }
-  assert.match(clusters, /\/installation\/linux\?database=mysql#mysql-manual-installation/u);
-  assert.match(clusters, /\/installation\/linux\?database=mariadb#mariadb-manual-installation/u);
+  assert.match(mysqlClusters, /\/supported-databases\/mysql\/required-permissions/u);
+  assert.doesNotMatch(mysqlClusters, /\/supported-databases\/mariadb\/required-permissions/u);
+  assert.match(mysqlClusters, /\/installation\/mysql\/linux#manual-installation/u);
+  assert.match(mariadbClusters, /\/supported-databases\/mariadb\/required-permissions/u);
+  assert.doesNotMatch(mariadbClusters, /\/supported-databases\/mysql\/required-permissions/u);
+  assert.match(mariadbClusters, /\/installation\/mariadb\/linux#manual-installation/u);
+  assert.match(queryOptimization, /\/supported-databases\/mysql\/required-permissions/u);
+  assert.match(queryOptimization, /\/supported-databases\/mariadb\/required-permissions/u);
   assert.doesNotMatch(
     queryOptimization,
     /For MySQL\/MariaDB\/Percona[^\n]+\/supported-databases\/mysql\/required-permissions/iu,
@@ -488,119 +811,7 @@ test('PostgreSQL permissions separate baseline, extension, and optional DBA-revi
   assert.match(source, /first matching/iu);
   assert.match(source, /listen_addresses/iu);
   assert.match(source, /firewall/iu);
-  assert.match(source, /\/installation\/linux\?database=postgresql#postgresql-installation/u);
+  assert.match(source, /\/installation\/postgresql\/linux/u);
+  assert.doesNotMatch(source, /\/installation\/linux\?database=/u);
   assert.doesNotMatch(source, /0\.0\.0\.0\/0|\bmd5\b|@'%'|minimal privileges/iu);
-});
-
-test('sidebar exposes the exact flat Installation child order and owns all 54 docs once', async () => {
-  const source = await readFile(path.join(projectRoot, 'sidebars.js'), 'utf8');
-  const url = `data:text/javascript;base64,${Buffer.from(source).toString('base64')}`;
-  const sidebars = (await import(url)).default;
-  assert.deepEqual(sidebars.docs.map(({label}) => label), [
-    'Get Started',
-    'Supported Databases',
-    'Installation',
-    'Dashboard',
-    'Recommendations',
-    'Account',
-    'FAQ',
-  ]);
-  const installation = sidebars.docs.find(({label}) => label === 'Installation');
-  assert.equal(Object.hasOwn(installation, 'link'), false);
-  assert.deepEqual(installation.items, [
-    {type: 'doc', id: 'installation/linux', label: 'Linux'},
-    'installation/installation-methods/windows',
-    'installation/installation-methods/docker',
-    'installation/installation-methods/kubernetes',
-    {
-      type: 'category',
-      label: 'Managed databases',
-      items: [
-        'installation/installation-methods/aws-rds',
-        'installation/installation-methods/gcp-cloud-sql',
-        'installation/installation-methods/azure-database-for-mysql',
-      ],
-    },
-    'installation/installation-methods/clusters',
-    'installation/installation-methods/whm-cpanel',
-    {
-      type: 'category',
-      label: 'Manage the Releem Agent',
-      items: [
-        'installation/manage-the-releem-agent/configuration',
-        'installation/manage-the-releem-agent/logs',
-        'installation/manage-the-releem-agent/migrate',
-        'installation/manage-the-releem-agent/update',
-        'installation/manage-the-releem-agent/uninstall',
-      ],
-    },
-  ]);
-  assert.equal(JSON.stringify(installation).includes('Installation Methods'), false);
-  const ids = [];
-  const visit = (items) => {
-    for (const item of items) {
-      if (typeof item === 'string') ids.push(item);
-      else if (item.type === 'doc') ids.push(item.id);
-      else if (item.type === 'category') {
-        if (item.link?.type === 'doc') ids.push(item.link.id);
-        visit(item.items ?? []);
-      }
-    }
-  };
-  visit(sidebars.docs);
-  assert.equal(ids.length, 54);
-  assert.equal(new Set(ids).size, 54);
-  assert.deepEqual(ids.filter((id) => [
-    'installation/linux',
-    'installation/linux-automatic',
-    'installation/installation-methods/linux-manual',
-    'supported-databases/postgresql/install-on-linux',
-  ].includes(id)), [
-    'installation/linux',
-  ]);
-  for (const id of [
-    'installation/installation-methods/aws-rds',
-    'installation/installation-methods/gcp-cloud-sql',
-    'installation/installation-methods/azure-database-for-mysql',
-    'installation/installation-methods/clusters',
-    'installation/installation-methods/whm-cpanel',
-    'installation/manage-the-releem-agent/configuration',
-    'installation/manage-the-releem-agent/update',
-    'installation/manage-the-releem-agent/uninstall',
-    'supported-databases/mariadb/required-permissions',
-    'supported-databases/postgresql/required-permissions',
-  ]) assert.equal(ids.filter((candidate) => candidate === id).length, 1, id);
-});
-
-test('redirects include the exact nine direct consolidation rules and total 60 unique sources', async () => {
-  const module = await import(pathToFileURL(path.join(projectRoot, 'redirects.mjs')).href);
-  assert.equal(module.redirects.length, 60);
-  assert.equal(new Set(module.redirects.map(({from}) => from)).size, 60);
-  for (const mapping of redirectChanges) {
-    assert.deepEqual(module.redirects.find(({from}) => from === mapping.from), mapping);
-  }
-  const sources = new Set(module.redirects.map(({from}) => from));
-  for (const {from, to} of module.redirects) {
-    assert.notEqual(from, to);
-    assert.equal(sources.has(new URL(to, 'https://docs.releem.com').pathname), false, `${from} creates a redirect chain`);
-  }
-});
-
-test('public docs contain no links to retired Linux routes', async () => {
-  const files = await listMarkdown(path.join(projectRoot, 'docs'));
-  const retiredRoutes = [
-    '/installation',
-    '/installation/linux-automatic',
-    '/installation/installation-methods/linux-manual',
-    '/supported-databases/postgresql/install-on-linux',
-  ];
-  for (const file of files) {
-    const source = await readFile(file, 'utf8');
-    const targets = [...source.matchAll(/(?<!!)\[[^\]\n]+\]\(([^\s)>]+)[^)]*\)/gu)]
-      .map((match) => match[1]);
-    for (const target of targets) {
-      const url = new URL(target, 'https://docs.releem.com');
-      assert.equal(retiredRoutes.includes(url.pathname), false, `${path.relative(projectRoot, file)}: ${target}`);
-    }
-  }
 });

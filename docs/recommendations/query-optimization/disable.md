@@ -89,6 +89,6 @@ Set `query_optimization=false` in `C:\ProgramData\ReleemAgent\releem.conf`, then
 
 ## Verify the change
 
-Confirm that the Releem Agent service or container is running after the restart or recreation. 
+Confirm that the Releem Agent service or container is running after the restart or recreation. Then verify that the active configuration uses `query_optimization=false`, `RELEEM_QUERY_OPTIMIZATION=false`, or `QueryOptimization` set to `false`, depending on your installation type.
 
 This procedure does not establish whether disabling Query Optimization deletes previously collected query data or revokes database permissions. Do not assume that either action occurs. Review database access separately, and contact Releem support if you need a data-retention or access-removal procedure.

@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import {existsSync} from 'node:fs';
 import {readFile} from 'node:fs/promises';
@@ -15,15 +16,304 @@ const consolidationPath = path.join(
   projectRoot,
   '.agent/analysis/2026-09-03-linux-installation-consolidation.json',
 );
+const engineFirstManifestPath = path.join(
+  projectRoot,
+  '.agent/analysis/2026-09-10-engine-first-installation-manifest.json',
+);
+const engineFirstExcludedInstructionsPath = path.join(
+  projectRoot,
+  '.agent/analysis/2026-09-10-engine-first-excluded-instructions.md',
+);
 const baselineRevision = '9ad7ce3';
 const expectedPageCount = 54;
 const expectedAssetCount = 31;
 const consolidation = JSON.parse(await readFile(consolidationPath, 'utf8'));
-const retiredSources = new Set(consolidation.retiredSources);
+const engineFirstRetiredSources = [
+  'docs/installation/linux.md',
+  'docs/installation/installation-methods/windows.md',
+  'docs/installation/installation-methods/docker.md',
+  'docs/installation/installation-methods/kubernetes.md',
+  'docs/installation/installation-methods/aws-rds.md',
+  'docs/installation/installation-methods/gcp-cloud-sql.md',
+  'docs/installation/installation-methods/azure-database-for-mysql.md',
+  'docs/installation/installation-methods/clusters.md',
+  'docs/installation/installation-methods/whm-cpanel.md',
+];
+const engineFirstSourceRevision = 'ab7e49710584ad1ba2355e7a0cb230a309559f85';
+const engineFirstSourceHashes = new Map([
+  ['docs/installation/linux.md', '1c68450ef9e4054d9c80562aebe9e0ba7479e245f7f31737d292f98a50bae8d9'],
+  ['docs/installation/installation-methods/windows.md', '8cf658fa7aae2b065e477eeca22656bd6eb59cecfb63d60ac47dba729ec951d4'],
+  ['docs/installation/installation-methods/docker.md', 'b67c1fd5936e721872bfcffc4d72626449173e11363e383b7f45a275a977887f'],
+  ['docs/installation/installation-methods/kubernetes.md', '2f41a1a0d228fb7ad3ab48c7bc1a4abd7e4bea81c5ec906ed10e5271c3c55301'],
+  ['docs/installation/installation-methods/aws-rds.md', '3436cb8ec254d1c36bfdc7eea54fbf8ddac21473d3046797670393ac5f30ea7f'],
+  ['docs/installation/installation-methods/gcp-cloud-sql.md', '91ade7bc6967459bdbaa20554b17dc4abf9784ae5231d33b70b500f4137e0996'],
+  ['docs/installation/installation-methods/azure-database-for-mysql.md', '191ad5acf5ca429ab9c894685d478a72e82d2f9b59a1aa72a99dbbcfc14ebcff'],
+  ['docs/installation/installation-methods/clusters.md', 'fc3d81f17c42ce6dd3cd6e06911683d9471a3a43332b377cd1ba885178f43359'],
+  ['docs/installation/installation-methods/whm-cpanel.md', 'c4ac9b5ab7bf8f10e3f7c7c24518d060b23fd9043b8e8acefd05122566714882'],
+]);
+const expectedLifecycleSafetyExclusions = [
+  {
+    pageSourcePath: 'docs/installation/manage-the-releem-agent/uninstall.md',
+    fenceIndex: 0,
+    baselineLineNumber: 19,
+    baselineLanguage: 'bash',
+    baselineContentSha256: 'fbff726cdc416fff663f6f4fb292372605db35028c24dd87f01597d57536ef5f',
+  },
+  {
+    pageSourcePath: 'docs/installation/manage-the-releem-agent/uninstall.md',
+    fenceIndex: 3,
+    baselineLineNumber: 43,
+    baselineLanguage: 'powershell',
+    baselineContentSha256: '5d1bc55c5faf02d4cf3201ba27024d6db9f5dea701164a61c73700c339fa5d35',
+  },
+  {
+    pageSourcePath: 'docs/installation/manage-the-releem-agent/update.md',
+    fenceIndex: 0,
+    baselineLineNumber: 21,
+    baselineLanguage: 'bash',
+    baselineContentSha256: 'd61ac3810bc8c1bf1a512fb1905794d0bcc03bd506f917d8273a25f0276f7dfc',
+  },
+  {
+    pageSourcePath: 'docs/installation/manage-the-releem-agent/update.md',
+    fenceIndex: 1,
+    baselineLineNumber: 44,
+    baselineLanguage: 'bash',
+    baselineContentSha256: 'f8b0a7a453c882a45703ed39e338ca2982624ef095f1531f1d866fd858521791',
+  },
+  {
+    pageSourcePath: 'docs/installation/manage-the-releem-agent/update.md',
+    fenceIndex: 2,
+    baselineLineNumber: 51,
+    baselineLanguage: 'bash',
+    baselineContentSha256: 'a60dadb0bcb9d4fb47671ccd5d432515c694c33c7acbb8f5e465efffeb25b692',
+  },
+  {
+    pageSourcePath: 'docs/installation/manage-the-releem-agent/update.md',
+    fenceIndex: 3,
+    baselineLineNumber: 56,
+    baselineLanguage: 'bash',
+    baselineContentSha256: 'c4b856a5e7c84b7ca7585b598778c8ca9abbd34e4572ba7659ca31ec118050bb',
+  },
+];
+const expectedLifecycleSafetyRewrites = [
+  {
+    pageSourcePath: 'docs/installation/manage-the-releem-agent/migrate.md',
+    fenceIndex: 0,
+    baselineLineNumber: 32,
+    baselineLanguage: 'bash',
+    baselineContentSha256: '2d3f7b021aa6a4d36dda516aae738aa210ef195592ac110d391680eeb907300d',
+    currentContentSha256: 'ded3a05271babfba4903449c56691bb684f69687d24c2cd620621ed2af0c4bfa',
+  },
+  {
+    pageSourcePath: 'docs/installation/manage-the-releem-agent/configuration.md',
+    fenceIndex: 0,
+    baselineLineNumber: 15,
+    baselineLanguage: 'ini',
+    baselineContentSha256: '636caa167d53b5277bd3f962426031c53f3df68ffe49cd4a8147011dc2ec9609',
+    currentContentSha256: '3a87cec17ba71b5794f03f5f1ad41822f3a7e4d526b7ae2cd745deeff8933067',
+  },
+];
+const lifecycleSourceOverlayHashes = new Map([
+  [
+    'docs/installation/manage-the-releem-agent/configuration.md',
+    '965db46d90cbe9cdd3d56e02c5553efe1b2369a64da848409c5e212177f63579',
+  ],
+  [
+    'docs/installation/manage-the-releem-agent/migrate.md',
+    'f6f27112f2cc73c2c5c46523061352a1a70c335dce2763d5ca8bbc95241e0937',
+  ],
+  [
+    'docs/installation/manage-the-releem-agent/uninstall.md',
+    'edfa5f0aa38b41052bc59d0c787b45427e45fa8db97f2d29edb59d5ea103ec5e',
+  ],
+  [
+    'docs/installation/manage-the-releem-agent/update.md',
+    'e5584078175e4f0c9380b072c0620eea6544be95cc2175cf7d69e59b518852c2',
+  ],
+]);
+const retiredSources = new Set([
+  ...consolidation.retiredSources,
+  ...engineFirstRetiredSources,
+]);
 const rewrittenSources = new Set(consolidation.rewrittenSources);
 
-function reverseConsolidationLinks(text, sourcePath) {
+const engineFirstConnectLinkChanges = [
+  {
+    from: '- [MySQL on Linux: Automatic installation](/installation/mysql/linux#automatic-installation) – Create the database user during installation.',
+    to: '- [MySQL on Linux Server: Automatic Agent Installation (Linux)](/installation/linux?database=mysql#mysql-automatic-installation) – Automatic installation for MySQL instances running on Linux-based servers.',
+  },
+  {
+    from: '- [MySQL on Linux: Manual installation](/installation/mysql/linux#manual-installation) – Use an existing monitoring account.',
+    to: "- [MySQL on Linux Server: Advanced Agent Installation](/installation/linux?database=mysql#mysql-manual-installation) – Manual installation for MySQL instances running on Linux-based servers. Use this guide if you don't have a MySQL root user, or if MySQL is installed on a different IP address, or if you want to create a Releem user manually.",
+  },
+  {
+    from: '- [MariaDB on Linux: Automatic installation](/installation/mariadb/linux#automatic-installation) – Create the database user during installation.',
+    to: '- [MariaDB on Linux Server: Automatic Agent Installation](/installation/linux?database=mariadb#mariadb-automatic-installation) – Automatic installation for MariaDB instances running on Linux-based servers.',
+  },
+  {
+    from: '- [MariaDB on Linux: Manual installation](/installation/mariadb/linux#manual-installation) – Use an existing monitoring account.',
+    to: '- [MariaDB on Linux Server: Manual Agent Installation](/installation/linux?database=mariadb#mariadb-manual-installation) – Manual installation for MariaDB instances when a DBA creates the monitoring account.',
+  },
+  {
+    from: '- [PostgreSQL on Linux: Automatic installation](/installation/postgresql/linux#automatic-installation) – Create the database user during installation.',
+    to: '- [PostgreSQL on Linux Server: Automatic Agent Installation](/installation/linux?database=postgresql#postgresql-automatic-installation) – Automatic database-user creation for PostgreSQL instances running on Linux-based servers.',
+  },
+  {
+    from: '- [PostgreSQL on Linux: Manual installation](/installation/postgresql/linux#manual-installation) – Use an existing monitoring account.',
+    to: '- [PostgreSQL on Linux Server: Manual Agent Installation](/installation/linux?database=postgresql#postgresql-manual-installation) – Manual installation for PostgreSQL instances running on Linux-based servers.',
+  },
+  {
+    from: '- [MySQL on WHM/cPanel](/installation/mysql/whm-cpanel) – **Procedure unavailable.** The page explains how to request the current procedure.',
+    to: '- [WHM/cPanel](/installation/installation-methods/whm-cpanel) – Recommended installation path for database servers managed through WHM/cPanel.',
+  },
+  {
+    from: '- [MySQL in Docker](/installation/mysql/docker) – **Procedure unavailable.** The page explains how to request the current procedure.',
+    to: '- [MySQL on Linux Server: Manual Installation in Docker](/installation/installation-methods/docker) – Manual installation for MySQL instances running in Docker containers.',
+  },
+  {
+    from: '- [MariaDB in Docker](/installation/mariadb/docker) – **Procedure unavailable.** The page explains how to request the current procedure.',
+    to: null,
+  },
+  {
+    from: '- [MySQL on Windows](/installation/mysql/windows) – **Procedure unavailable.** The page explains how to request the current procedure.',
+    to: '- [Self-Managed Server (Windows)](/installation/installation-methods/windows) – For MySQL instances running on Windows.',
+  },
+  {
+    from: '- [MariaDB on Windows](/installation/mariadb/windows) – **Procedure unavailable.** The page explains how to request the current procedure.',
+    to: null,
+  },
+  {
+    from: '- [MySQL on AWS RDS](/installation/mysql/aws-rds) – **Procedure unavailable.** The page explains how to request the current procedure.',
+    to: '- [MySQL on AWS RDS: CloudFormation installation](/installation/installation-methods/aws-rds) – For managed MySQL databases hosted on AWS.',
+  },
+  {
+    from: '- [MySQL on GCP Cloud SQL](/installation/mysql/gcp-cloud-sql) – **Procedure unavailable.** The page explains how to request the current procedure.',
+    to: '- [MySQL on GCP Cloud SQL: Manual installation](/installation/installation-methods/gcp-cloud-sql) – For managed MySQL databases hosted on GCP.',
+  },
+  {
+    from: '- [Azure Database for MySQL](/installation/mysql/azure-database-for-mysql) – **Procedure unavailable.** The page explains how to request the current procedure.',
+    to: '- [Azure Database for MySQL](/installation/installation-methods/azure-database-for-mysql) – For managed MySQL databases hosted on Azure.',
+  },
+  {
+    from: '- [MariaDB in Kubernetes](/installation/mariadb/kubernetes) – **Procedure unavailable.** The page explains how to request the current procedure.',
+    to: '- [MySQL in Kubernetes](/installation/installation-methods/kubernetes) – If your MySQL instance is deployed in a Kubernetes cluster.',
+  },
+  {
+    from: '- [MySQL clusters](/installation/mysql/clusters) or [MariaDB clusters](/installation/mariadb/clusters) – Install one Agent for each database node.',
+    to: null,
+  },
+];
+
+const engineFirstExistingDocumentChanges = new Map([
+  [
+    'docs/get-started/connect-your-database-server.md',
+    engineFirstConnectLinkChanges,
+  ],
+  [
+    'docs/get-started/troubleshoot-releem-agent.md',
+    [
+      {
+        from: 'The WHM/cPanel installation procedure is currently unavailable. Do not re-run or remove the module from an incomplete procedure. Contact Releem Support for the current installation or recovery steps, then use the [MySQL WHM/cPanel page](/installation/mysql/whm-cpanel) to verify the Agent status and current metrics.',
+        to: 'If your server is managed through WHM/cPanel, use the [WHM/cPanel installation guide](/installation/installation-methods/whm-cpanel) for setup-specific troubleshooting, including how to verify that cPanel MySQL auto-adjust settings are disabled.',
+      },
+      {
+        from: '[Troubleshoot MySQL on AWS RDS](/installation/mysql/aws-rds#troubleshooting)',
+        to: '[Common issues for AWS RDS](/installation/installation-methods/aws-rds#common-issues-for-aws-rds)',
+      },
+    ],
+  ],
+  [
+    'docs/installation/manage-the-releem-agent/migrate.md',
+    [
+      {
+        from: '1. Review the [uninstall guide](/installation/manage-the-releem-agent/uninstall) and contact Releem Support for the current source-server removal procedure.',
+        to: '1. Uninstall Releem Agent from Source Server using the following [guide](/installation/manage-the-releem-agent/uninstall)',
+      },
+      {
+        from: '2. [Choose an installation guide](/installation) for the destination server and install the Releem Agent.',
+        to: '2. Install Releem Agent on Destination Server',
+      },
+      {
+        from: 'To preserve the Dashboard identity used by historical metrics, record the exact hostname shown for the old server. In the destination server\'s canonical one-step Linux command, add this environment-variable line immediately before the `curl` line:\n\n```bash\nexport RELEEM_HOSTNAME="[OLD_SERVER_HOSTNAME]"\n```\n\nReplace `[OLD_SERVER_HOSTNAME]` with the exact recorded Dashboard hostname. After installation, confirm that the expected server identity is shown and that current metrics arrive. If a duplicate server appears or history is not associated as expected, stop and contact Releem Support before removing either record.',
+        to: 'If you want to maintain the historical metrics and continue from where you left off, install the agent with the same hostname as the old server. \nTo do that just add the following variable to the installation command:\n\n```bash\n--hostname="OLD_SERVER_HOSTNAME"\n```\n\nReplace `OLD_SERVER_HOSTNAME` with your previous server\'s hostname (e.g., "db1.example.com").',
+        literal: true,
+      },
+      {
+        from: 'If you need assistance with the migration process, please contact our support team via the chat in the [Releem Dashboard](https://app.releem.com) or email us at hello@releem.com.\n',
+        to: 'If you need assistance with the migration process, please contact our support team via the chat in the [Releem Dashboard](https://app.releem.com) or email us at hello@releem.com.',
+        literal: true,
+      },
+    ],
+  ],
+  [
+    'docs/supported-databases/mysql/required-permissions.md',
+    [
+      {
+        from: '\n## Continue installation\n\nChoose a supported environment on the [MySQL installation page](/installation/mysql).\n',
+        to: '',
+        literal: true,
+      },
+    ],
+  ],
+  [
+    'docs/supported-databases/mariadb/required-permissions.md',
+    [
+      {
+        from: '\n## Continue installation\n\nChoose a supported environment on the [MariaDB installation page](/installation/mariadb).\n',
+        to: '',
+        literal: true,
+      },
+    ],
+  ],
+  [
+    'docs/supported-databases/postgresql/required-permissions.md',
+    [
+      {
+        from: 'Use this page with the [PostgreSQL Linux installation guide](/installation/postgresql/linux). Releem supports PostgreSQL 15–18. Install the `postgresql-contrib` package that matches the server version before enabling `pg_stat_statements`.',
+        to: 'Use this page with the [PostgreSQL Linux installation tab](/installation/linux?database=postgresql#postgresql-installation). Releem supports PostgreSQL 15–18. Install the `postgresql-contrib` package that matches the server version before enabling `pg_stat_statements`.',
+      },
+      {
+        from: 'Return to [Install Releem for PostgreSQL on Linux](/installation/postgresql/linux) and choose automatic or manual account creation.',
+        to: 'Return to [Install Releem Agent on Linux](/installation/linux?database=postgresql#postgresql-installation) and choose automatic or manual account creation.',
+      },
+    ],
+  ],
+]);
+
+function reverseEngineFirstLinks(text, sourcePath) {
+  const lifecycleSourceHash = lifecycleSourceOverlayHashes.get(sourcePath);
+  if (lifecycleSourceHash) {
+    assert.equal(
+      sha256(text),
+      lifecycleSourceHash,
+      `${sourcePath} changed beyond the exact lifecycle safety overlay`,
+    );
+    return execFileSync(
+      'git',
+      ['show', `${engineFirstSourceRevision}:${sourcePath}`],
+      {cwd: projectRoot, encoding: 'utf8'},
+    );
+  }
   let restored = text;
+  for (const change of engineFirstExistingDocumentChanges.get(sourcePath) ?? []) {
+    const currentValue = change.literal ? change.from : `${change.from}\n`;
+    const restoredValue = change.literal
+      ? change.to
+      : change.to
+        ? `${change.to}\n`
+        : '';
+    assert.equal(
+      restored.split(currentValue).length - 1,
+      1,
+      `${sourcePath} must contain the exact engine-first integration change once`,
+    );
+    restored = restored.replace(currentValue, restoredValue);
+  }
+  return restored;
+}
+
+function reverseConsolidationLinks(text, sourcePath) {
+  let restored = reverseEngineFirstLinks(text, sourcePath);
   const additions = consolidation.internalLinkAdditions
     .filter((addition) => addition.sourcePath === sourcePath);
   for (const addition of additions) {
@@ -107,6 +397,43 @@ function parseCodeFences(text) {
   }
 
   return {codeFences, fencedLineNumbers, fencedContentLineNumbers};
+}
+
+function codeFenceBodies(text) {
+  return [...text.matchAll(/^\s*(`{3,}|~{3,})[^\n]*\n([\s\S]*?)^\s*\1\s*$/gmu)]
+    .map((match) => match[2]);
+}
+
+function h2Sections(text) {
+  const headings = [...text.matchAll(/^## .+$/gmu)];
+  return headings.map((heading, index) =>
+    text.slice(heading.index, headings[index + 1]?.index ?? text.length).trim());
+}
+
+const frozenUnbracketedSensitivePlaceholders = [
+  'your-name-space-mariadb-primary-0',
+  'your-name-space-mariadb-secondary-0',
+  'change to your API key',
+  'change to your password',
+  'your_root_password',
+  'New-Password-Here',
+  'your-name-space',
+  'your-db-service',
+  'your_api_key',
+  'your-passw',
+  'your-user',
+  'your-key',
+];
+
+function normalizeRedactedHistoricalFence(text) {
+  let normalized = text
+    .replace(/\[[^\]\n]+\]/gu, '[REDACTED]')
+    .replace(/\$\{[^}\n]+\}/gu, '[REDACTED]')
+    .replaceAll('YOUR_API_KEY', '[REDACTED]');
+  for (const literal of frozenUnbracketedSensitivePlaceholders) {
+    normalized = normalized.replaceAll(literal, '[REDACTED]');
+  }
+  return normalized;
 }
 
 function withoutCodeFences(text) {
@@ -251,6 +578,27 @@ function parseDocument(sourcePath, input) {
       recoveryPattern.test(heading),
     ),
   };
+}
+
+function sectionInventory(sourcePath, input) {
+  const text = normalizeLineEndings(input);
+  const lines = text.split('\n');
+  const document = parseDocument(sourcePath, text);
+  const h1 = document.h1;
+  assert.ok(h1, `${sourcePath} must have an H1 in frozen section evidence`);
+  const headings = document.headings.filter(({level}) => level === 2 || level === 3);
+  const sections = [{
+    heading: null,
+    content: lines.slice(h1.lineNumber, (headings[0]?.lineNumber ?? lines.length + 1) - 1).join('\n'),
+  }];
+  for (const [index, heading] of headings.entries()) {
+    const next = headings.slice(index + 1).find(({level}) => level <= heading.level);
+    sections.push({
+      heading: `${'#'.repeat(heading.level)} ${heading.text}`,
+      content: lines.slice(heading.lineNumber, (next?.lineNumber ?? lines.length + 1) - 1).join('\n'),
+    });
+  }
+  return sections;
 }
 
 function collectSidebarOwnership(sidebars) {
@@ -408,6 +756,54 @@ function assertCodeFenceIdentity(
     currentPage.codeFences.map(fenceSnapshot),
     expectedFences,
     `Code fences changed beyond approved snapshots: ${baselinePage.sourcePath}`,
+  );
+}
+
+function assertLifecycleCodeFenceIdentity(
+  baselinePage,
+  currentPage,
+  lifecycleSafetyExclusions,
+  lifecycleSafetyRewrites,
+) {
+  const exclusions = lifecycleSafetyExclusions.filter(
+    ({pageSourcePath}) => pageSourcePath === baselinePage.sourcePath,
+  );
+  const rewrites = lifecycleSafetyRewrites.filter(
+    ({pageSourcePath}) => pageSourcePath === baselinePage.sourcePath,
+  );
+  const records = [...exclusions, ...rewrites];
+  assert.equal(
+    new Set(records.map(({fenceIndex}) => fenceIndex)).size,
+    records.length,
+    `Duplicate lifecycle fence record for ${baselinePage.sourcePath}`,
+  );
+
+  const expectedFences = baselinePage.codeFences.flatMap((fence) => {
+    const exclusion = exclusions.find(({fenceIndex}) => fenceIndex === fence.index);
+    const rewrite = rewrites.find(({fenceIndex}) => fenceIndex === fence.index);
+    const record = exclusion ?? rewrite;
+    if (!record) return [fenceSnapshot(fence)];
+    assert.equal(record.baselineLineNumber, fence.lineNumber);
+    assert.equal(record.baselineLanguage, fence.language);
+    assert.equal(record.baselineContentSha256, fence.contentSha256);
+    assert.match(record.reason, /\S.{15,}/u);
+    assert.match(record.evidence, /\S.{15,}/u);
+    if (exclusion) return [];
+    assert.match(record.currentContentSha256, /^[a-f0-9]{64}$/u);
+    return [{
+      ...fenceSnapshot(fence),
+      contentSha256: record.currentContentSha256,
+    }];
+  });
+  assert.equal(
+    records.every(({fenceIndex}) => baselinePage.codeFences[fenceIndex]),
+    true,
+    `Lifecycle record references a missing fence: ${baselinePage.sourcePath}`,
+  );
+  assert.deepEqual(
+    currentPage.codeFences.map(fenceSnapshot),
+    expectedFences,
+    `Code fences changed beyond lifecycle safety records: ${baselinePage.sourcePath}`,
   );
 }
 
@@ -1139,6 +1535,25 @@ test('supersedes legacy whole-file checks with exact content identity outside ap
     ],
   ]);
 
+  const exactOverlaySources = new Set([
+    ...engineFirstExistingDocumentChanges.keys(),
+    ...lifecycleSourceOverlayHashes.keys(),
+  ]);
+  for (const sourcePath of exactOverlaySources) {
+    const currentText = await readFile(path.join(projectRoot, sourcePath), 'utf8');
+    const restoredText = reverseEngineFirstLinks(currentText, sourcePath);
+    const frozenText = execFileSync(
+      'git',
+      ['show', `${engineFirstSourceRevision}:${sourcePath}`],
+      {cwd: projectRoot, encoding: 'utf8'},
+    );
+    assert.equal(
+      restoredText,
+      frozenText,
+      `${sourcePath} changed beyond the exact engine-first integration overlay`,
+    );
+  }
+
   for (const baselinePage of manifest.pages) {
     if (
       retiredSources.has(baselinePage.sourcePath) ||
@@ -1320,19 +1735,19 @@ test('approved orientation pages route customer tasks without unsupported state 
   assert.equal(sha256(overview), overviewException.approvedCurrent.sourceSha256);
 
   assert.match(register, /\[\*\*Sign Up\*\*\]\(https:\/\/app\.releem\.com\)/u);
-  assert.match(connect, /\/installation\/installation-methods\/azure-database-for-mysql/u);
+  assert.match(connect, /\/installation\/mysql\/azure-database-for-mysql/u);
   assert.match(connect, /\[Releem Dashboard\]\(https:\/\/app\.releem\.com\)/u);
   assert.doesNotMatch(
     connect,
     /completed Dashboard checks confirm|enough observations/iu,
   );
   for (const target of [
-    '/installation/linux?database=mysql#mysql-automatic-installation',
-    '/installation/linux?database=mysql#mysql-manual-installation',
-    '/installation/linux?database=mariadb#mariadb-automatic-installation',
-    '/installation/linux?database=mariadb#mariadb-manual-installation',
-    '/installation/linux?database=postgresql#postgresql-automatic-installation',
-    '/installation/linux?database=postgresql#postgresql-manual-installation',
+    '/installation/mysql/linux#automatic-installation',
+    '/installation/mysql/linux#manual-installation',
+    '/installation/mariadb/linux#automatic-installation',
+    '/installation/mariadb/linux#manual-installation',
+    '/installation/postgresql/linux#automatic-installation',
+    '/installation/postgresql/linux#manual-installation',
   ]) {
     assert.equal(
       connect.split(target).length - 1,
@@ -3274,6 +3689,588 @@ test('manifest completely describes the committed preservation baseline', () => 
   }
 });
 
+test('engine-first preservation mappings retain the exact evidence-bounded fence sequence per destination', async () => {
+  assert.equal(
+    existsSync(engineFirstManifestPath),
+    true,
+    'Create .agent/analysis/2026-09-10-engine-first-installation-manifest.json',
+  );
+  const overlay = JSON.parse(await readFile(engineFirstManifestPath, 'utf8'));
+  assert.equal(manifest.baseline.pageCount, 54);
+  assert.equal(manifest.pages.length, 54);
+  assert.equal(overlay.historicalBaselinePageCount, 54);
+  assert.equal(overlay.currentPageCount, 63);
+  assert.deepEqual(overlay.retiredSources, engineFirstRetiredSources);
+
+  const frozenSourceContents = new Map(
+    engineFirstRetiredSources.map((sourcePath) => [
+      sourcePath,
+      execFileSync('git', ['show', `${engineFirstSourceRevision}:${sourcePath}`], {
+        cwd: projectRoot,
+        encoding: 'utf8',
+      }),
+    ]),
+  );
+  const frozenSourceSections = new Map();
+  for (const [sourcePath, contents] of frozenSourceContents) {
+    assert.equal(
+      sha256(contents),
+      engineFirstSourceHashes.get(sourcePath),
+      `${sourcePath} no longer matches the frozen engine-first source evidence`,
+    );
+    const sections = sectionInventory(sourcePath, contents);
+    frozenSourceSections.set(sourcePath, sections);
+    assert.equal(sections[0].heading, null, `${sourcePath} must begin with a preamble section`);
+  }
+
+  assert.ok(Array.isArray(overlay.sectionMappings));
+  const sectionKey = (sourcePath, heading) =>
+    `${sourcePath}\0${heading ?? '<preamble>'}`;
+  const expectedSectionKeys = [...frozenSourceSections]
+    .flatMap(([sourcePath, sections]) =>
+      sections.map(({heading}) => sectionKey(sourcePath, heading)),
+    )
+    .sort();
+  const actualSectionKeys = [...new Set(overlay.sectionMappings.map(
+    ({sourcePath, sourceHeading}) => sectionKey(sourcePath, sourceHeading),
+  ))].sort();
+  assert.deepEqual(
+    actualSectionKeys,
+    expectedSectionKeys,
+    'Every retired-source preamble and H2/H3 needs a section disposition, with no invented source section',
+  );
+  const installationSources = new Set(
+    overlay.installationDocuments.map(({sourcePath}) => sourcePath),
+  );
+  const destinationContents = new Map();
+  const destinationSections = new Map();
+  const mappingKeys = new Set();
+  const mappingsBySection = new Map();
+  for (const mapping of overlay.sectionMappings) {
+    assert.deepEqual(Object.keys(mapping).sort(), [
+      'destinationHeading',
+      'destinationMarkers',
+      'destinationSource',
+      'disposition',
+      'reason',
+      'sourceHeading',
+      'sourceMarkers',
+      'sourcePath',
+    ]);
+    assert.ok(['preserve', 'rewrite', 'exclude'].includes(mapping.disposition));
+    assert.equal(typeof mapping.reason, 'string');
+    assert.ok(mapping.reason.trim().length >= 12, 'Each section disposition needs a useful reason');
+    const sourceSection = frozenSourceSections.get(mapping.sourcePath)
+      ?.find(({heading}) => heading === mapping.sourceHeading);
+    assert.ok(sourceSection, `Unknown source section: ${mapping.sourcePath} ${mapping.sourceHeading}`);
+    assert.ok(Array.isArray(mapping.sourceMarkers));
+    assert.ok(Array.isArray(mapping.destinationMarkers));
+    assert.equal(mapping.sourceMarkers.length, mapping.destinationMarkers.length);
+    const sourceSectionKey = sectionKey(mapping.sourcePath, mapping.sourceHeading);
+    const sectionMappings = mappingsBySection.get(sourceSectionKey) ?? [];
+    sectionMappings.push(mapping);
+    mappingsBySection.set(sourceSectionKey, sectionMappings);
+    if (mapping.disposition === 'exclude') {
+      assert.equal(mapping.destinationSource, null);
+      assert.equal(mapping.destinationHeading, null);
+      assert.deepEqual(mapping.sourceMarkers, []);
+      assert.deepEqual(mapping.destinationMarkers, []);
+      continue;
+    }
+    assert.equal(
+      installationSources.has(mapping.destinationSource),
+      true,
+      `Unknown section destination: ${mapping.destinationSource}`,
+    );
+    assert.ok(
+      mapping.destinationHeading === null || /^#{2,3}\s+\S/u.test(mapping.destinationHeading),
+    );
+    assert.ok(mapping.sourceMarkers.length > 0);
+    if (mapping.disposition === 'preserve') {
+      assert.deepEqual(mapping.destinationMarkers, mapping.sourceMarkers);
+    }
+    const mappingKey = `${sourceSectionKey}\0${mapping.destinationSource}`;
+    assert.equal(mappingKeys.has(mappingKey), false, `Duplicate section mapping: ${mappingKey}`);
+    mappingKeys.add(mappingKey);
+    if (!destinationContents.has(mapping.destinationSource)) {
+      const contents = await readFile(path.join(projectRoot, mapping.destinationSource), 'utf8');
+      destinationContents.set(mapping.destinationSource, contents);
+      destinationSections.set(
+        mapping.destinationSource,
+        sectionInventory(mapping.destinationSource, contents),
+      );
+    }
+    const destinationSection = destinationSections.get(mapping.destinationSource)
+      .find(({heading}) => heading === mapping.destinationHeading);
+    assert.ok(
+      destinationSection,
+      `${mapping.destinationSource} is missing declared section ${mapping.destinationHeading ?? '<preamble>'}`,
+    );
+    for (const [index, sourceMarker] of mapping.sourceMarkers.entries()) {
+      const destinationMarker = mapping.destinationMarkers[index];
+      assert.equal(typeof sourceMarker, 'string');
+      assert.equal(typeof destinationMarker, 'string');
+      assert.ok(sourceMarker.trim().length >= 8);
+      assert.ok(destinationMarker.trim().length >= 8);
+      assert.doesNotMatch(sourceMarker, /^#{1,6}\s/u);
+      assert.doesNotMatch(destinationMarker, /^#{1,6}\s/u);
+      assert.equal(
+        sourceSection.content.includes(sourceMarker),
+        true,
+        `${mapping.sourcePath} ${mapping.sourceHeading ?? '<preamble>'} is missing source marker ${JSON.stringify(sourceMarker)}`,
+      );
+      assert.equal(
+        destinationSection.content.includes(destinationMarker),
+        true,
+        `${mapping.destinationSource} ${mapping.destinationHeading ?? '<preamble>'} is missing destination marker ${JSON.stringify(destinationMarker)}`,
+      );
+    }
+  }
+  for (const [sourceSectionKey, mappings] of mappingsBySection) {
+    assert.equal(
+      mappings.some(({disposition}) => disposition === 'exclude') && mappings.length > 1,
+      false,
+      `${sourceSectionKey} cannot be both excluded and mapped to a destination`,
+    );
+  }
+
+  const expectedPreservationMappings = [
+    {
+      retiredSource: 'docs/installation/linux.md',
+      destinationSource: 'docs/installation/mysql/linux.md',
+      preservedFenceIndexes: [0, 1],
+      excludedFenceIndexes: [],
+    },
+    {
+      retiredSource: 'docs/installation/linux.md',
+      destinationSource: 'docs/installation/mariadb/linux.md',
+      preservedFenceIndexes: [2, 3],
+      excludedFenceIndexes: [],
+    },
+    {
+      retiredSource: 'docs/installation/linux.md',
+      destinationSource: 'docs/installation/postgresql/linux.md',
+      preservedFenceIndexes: [4, 5],
+      excludedFenceIndexes: [],
+    },
+    {
+      retiredSource: 'docs/installation/installation-methods/windows.md',
+      destinationSource: 'docs/installation/mysql/windows.md',
+      preservedFenceIndexes: [2, 3],
+      excludedFenceIndexes: [0, 1],
+    },
+    {
+      retiredSource: 'docs/installation/installation-methods/windows.md',
+      destinationSource: 'docs/installation/mariadb/windows.md',
+      preservedFenceIndexes: [3],
+      excludedFenceIndexes: [0, 1],
+    },
+    {
+      retiredSource: 'docs/installation/installation-methods/docker.md',
+      destinationSource: 'docs/installation/mysql/docker.md',
+      preservedFenceIndexes: [2, 3, 4],
+      excludedFenceIndexes: [0, 1],
+    },
+    {
+      retiredSource: 'docs/installation/installation-methods/docker.md',
+      destinationSource: 'docs/installation/mariadb/docker.md',
+      preservedFenceIndexes: [],
+      excludedFenceIndexes: [0, 1],
+    },
+    {
+      retiredSource: 'docs/installation/installation-methods/kubernetes.md',
+      destinationSource: 'docs/installation/mariadb/kubernetes.md',
+      preservedFenceIndexes: [],
+      excludedFenceIndexes: [0],
+    },
+    {
+      retiredSource: 'docs/installation/installation-methods/aws-rds.md',
+      destinationSource: 'docs/installation/mysql/aws-rds.md',
+      preservedFenceIndexes: [0],
+      excludedFenceIndexes: [1, 2, 3, 4, 5, 6],
+    },
+    {
+      retiredSource: 'docs/installation/installation-methods/gcp-cloud-sql.md',
+      destinationSource: 'docs/installation/mysql/gcp-cloud-sql.md',
+      preservedFenceIndexes: [0],
+      excludedFenceIndexes: [1, 2, 3, 4],
+    },
+    {
+      retiredSource: 'docs/installation/installation-methods/azure-database-for-mysql.md',
+      destinationSource: 'docs/installation/mysql/azure-database-for-mysql.md',
+      preservedFenceIndexes: [0, 1, 4],
+      excludedFenceIndexes: [2, 3, 5],
+    },
+    {
+      retiredSource: 'docs/installation/installation-methods/clusters.md',
+      destinationSource: 'docs/installation/mysql/clusters.md',
+      preservedFenceIndexes: [],
+      excludedFenceIndexes: [],
+    },
+    {
+      retiredSource: 'docs/installation/installation-methods/clusters.md',
+      destinationSource: 'docs/installation/mariadb/clusters.md',
+      preservedFenceIndexes: [],
+      excludedFenceIndexes: [],
+    },
+    {
+      retiredSource: 'docs/installation/installation-methods/whm-cpanel.md',
+      destinationSource: 'docs/installation/mysql/whm-cpanel.md',
+      preservedFenceIndexes: [1, 3, 4],
+      excludedFenceIndexes: [0, 2],
+    },
+  ];
+  assert.equal(
+    overlay.preservationMappings.every(({excludedFences}) => Array.isArray(excludedFences)),
+    true,
+    'Every preservation mapping must explicitly list safety-excluded fences, including an empty list',
+  );
+  assert.deepEqual(
+    overlay.preservationMappings.map((mapping) => ({
+      retiredSource: mapping.retiredSource,
+      destinationSource: mapping.destinationSource,
+      preservedFenceIndexes: mapping.preservedFenceIndexes,
+      excludedFenceIndexes: mapping.excludedFences.map(({index}) => index),
+    })),
+    expectedPreservationMappings,
+  );
+  assert.deepEqual(
+    [...new Set(overlay.preservationMappings.map(({retiredSource}) => retiredSource))],
+    engineFirstRetiredSources,
+  );
+
+  const baselinePages = new Map(manifest.pages.map((page) => [page.sourcePath, page]));
+  const currentLinuxFenceHashes = [
+      '533bf161b8b335649f39fec30cd8a3661887fa99c51bf58be00a8adb8ed36578',
+      '1334b130eb3e20da8ce656c6e4c69cb1afa35e7efbea8cf97757663e764d916c',
+      '533bf161b8b335649f39fec30cd8a3661887fa99c51bf58be00a8adb8ed36578',
+      '1334b130eb3e20da8ce656c6e4c69cb1afa35e7efbea8cf97757663e764d916c',
+      '8c4769cfb884551d7bbaab67de7267819b70dd8e32a0d07895e0d35428f67998',
+      '0ef9e7dc859f23c5a6e3823726fc6f7e3e833e4f2f11d2a3884d7165a5c30966',
+  ];
+  for (const mapping of overlay.preservationMappings) {
+    assert.deepEqual(
+      Object.keys(mapping).sort(),
+      ['destinationSource', 'excludedFences', 'preservedFenceIndexes', 'retiredSource'],
+      `${mapping.retiredSource} -> ${mapping.destinationSource} preservation mapping shape changed`,
+    );
+    assert.ok(Array.isArray(mapping.preservedFenceIndexes));
+    assert.ok(Array.isArray(mapping.excludedFences));
+    assert.equal(
+      installationSources.has(mapping.destinationSource),
+      true,
+      `Unknown preservation destination: ${mapping.destinationSource}`,
+    );
+    const destinationPage = parseDocument(
+      mapping.destinationSource,
+      await readFile(path.join(projectRoot, mapping.destinationSource), 'utf8'),
+    );
+    const evidencePage = mapping.retiredSource === 'docs/installation/linux.md'
+      ? {codeFences: currentLinuxFenceHashes.map((contentSha256, index) => ({index, contentSha256})), images: []}
+      : baselinePages.get(mapping.retiredSource);
+    assert.ok(evidencePage, `Unknown preservation evidence source: ${mapping.retiredSource}`);
+    const excludedIndexes = mapping.excludedFences.map((excludedFence) => {
+      assert.deepEqual(
+        Object.keys(excludedFence).sort(),
+        ['contentSha256', 'evidence', 'index', 'reason'],
+        `${mapping.retiredSource} excluded-fence evidence shape changed`,
+      );
+      assert.equal(Number.isInteger(excludedFence.index), true);
+      assert.match(excludedFence.reason, /\S.{15,}/u);
+      assert.match(excludedFence.evidence, /\S.{15,}/u);
+      const sourceFence = evidencePage.codeFences[excludedFence.index];
+      assert.ok(sourceFence, `${mapping.retiredSource} has no excluded code fence ${excludedFence.index}`);
+      assert.equal(sourceFence.index, excludedFence.index);
+      assert.equal(
+        excludedFence.contentSha256,
+        sourceFence.contentSha256,
+        `${mapping.retiredSource} excluded fence ${excludedFence.index} must retain its private evidence hash`,
+      );
+      return excludedFence.index;
+    });
+    assert.equal(
+      new Set([...mapping.preservedFenceIndexes, ...excludedIndexes]).size,
+      mapping.preservedFenceIndexes.length + excludedIndexes.length,
+      `${mapping.retiredSource} fence indexes must be unique and cannot be both public and excluded`,
+    );
+    const expectedFenceHashes = mapping.preservedFenceIndexes.map((index) => {
+      const fence = evidencePage.codeFences[index];
+      assert.ok(fence, `${mapping.retiredSource} has no code fence ${index}`);
+      assert.equal(fence.index, index);
+      return fence.contentSha256;
+    });
+    assert.deepEqual(
+      destinationPage.codeFences.map(({contentSha256}) => contentSha256),
+      expectedFenceHashes,
+      `${mapping.destinationSource} must preserve exactly its assigned fence sequence`,
+    );
+    const destinationFenceHashes = new Set(
+      destinationPage.codeFences.map(({contentSha256}) => contentSha256),
+    );
+    for (const excludedFence of mapping.excludedFences) {
+      assert.equal(
+        destinationFenceHashes.has(excludedFence.contentSha256),
+        false,
+        `${mapping.destinationSource} must not publish excluded source fence ${excludedFence.index}`,
+      );
+    }
+    if (mapping.excludedFences.length > 0) {
+      assert.equal(
+        overlay.methodBlockers.some(({sourcePath}) => sourcePath === mapping.destinationSource),
+        true,
+        `${mapping.destinationSource} needs a public non-executable verification blocker for excluded commands`,
+      );
+    }
+  }
+});
+
+test('private excluded-instructions ledger preserves every unsafe historical fence as placeholder-only DO NOT RUN evidence', async () => {
+  assert.equal(
+    existsSync(engineFirstExcludedInstructionsPath),
+    true,
+    'Create the private engine-first excluded-instructions ledger',
+  );
+  const [overlay, archive] = await Promise.all([
+    readFile(engineFirstManifestPath, 'utf8').then(JSON.parse),
+    readFile(engineFirstExcludedInstructionsPath, 'utf8'),
+  ]);
+  assert.match(
+    archive,
+    /^# DO NOT RUN\b.+$/mu,
+    'The private archive must lead with a prominent DO NOT RUN heading',
+  );
+
+  const excludedFences = overlay.preservationMappings.flatMap((mapping) =>
+    mapping.excludedFences.map((fence) => ({
+      ...fence,
+      sourcePath: mapping.retiredSource,
+    })));
+  const sections = h2Sections(archive);
+  assert.equal(
+    sections.length,
+    excludedFences.length,
+    'The private archive must have one H2 section per manifest excluded-fence entry',
+  );
+
+  const frozenBodies = new Map(engineFirstRetiredSources.map((sourcePath) => [
+    sourcePath,
+    codeFenceBodies(execFileSync(
+      'git',
+      ['show', `${engineFirstSourceRevision}:${sourcePath}`],
+      {cwd: projectRoot, encoding: 'utf8'},
+    )),
+  ]));
+  const archivedBodies = [];
+  for (const [index, excludedFence] of excludedFences.entries()) {
+    const section = sections[index];
+    assert.equal(section.includes(`- Source: \`${excludedFence.sourcePath}\``), true);
+    assert.equal(section.includes(`- Fence index: \`${excludedFence.index}\``), true);
+    assert.equal(section.includes(`- SHA-256: \`${excludedFence.contentSha256}\``), true);
+    assert.equal(section.includes(`- Reason: ${excludedFence.reason}`), true);
+    const bodies = codeFenceBodies(section);
+    assert.equal(bodies.length, 1, `${excludedFence.sourcePath} fence ${excludedFence.index} needs one historical code block`);
+    const historicalBody = frozenBodies.get(excludedFence.sourcePath)?.[excludedFence.index];
+    assert.ok(historicalBody, `${excludedFence.sourcePath} has no frozen fence ${excludedFence.index}`);
+    assert.equal(
+      normalizeRedactedHistoricalFence(bodies[0]),
+      normalizeRedactedHistoricalFence(historicalBody),
+      `${excludedFence.sourcePath} fence ${excludedFence.index} may redact values but must retain its historical structure`,
+    );
+    archivedBodies.push(bodies[0]);
+  }
+
+  const privateFenceText = archivedBodies.join('\n');
+  assert.doesNotMatch(privateFenceText, /\b(?:AKIA|ASIA)[A-Z0-9]{16}\b/u);
+  assert.doesNotMatch(privateFenceText, /\b\d{12}\b/u);
+  assert.doesNotMatch(
+    privateFenceText,
+    /\b[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\b/iu,
+  );
+  assert.doesNotMatch(privateFenceText, /-----BEGIN [A-Z ]*PRIVATE KEY-----/u);
+  assert.doesNotMatch(privateFenceText, /\beyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\b/u);
+  assert.doesNotMatch(privateFenceText, /\b[\w.+-]+@[^\s]+\.gserviceaccount\.com\b/iu);
+  for (const literal of frozenUnbracketedSensitivePlaceholders) {
+    assert.equal(
+      privateFenceText.includes(literal),
+      false,
+      `Private archive must replace ${JSON.stringify(literal)} with a bracketed field placeholder`,
+    );
+  }
+  assert.doesNotMatch(privateFenceText, /--api-key=YOUR_API_KEY/u);
+
+  const secretAssignments = [...privateFenceText.matchAll(
+    /(?:api[-_]?key|password|secret|token)\s*(?:=|:)\s*["']?([^\s;"']+)/giu,
+  )].map((match) => match[1]);
+  for (const value of secretAssignments) {
+    assert.match(
+      value,
+      /^\[[A-Z][A-Z0-9_]*\]$/u,
+      `Private historical credential value must be a bracketed placeholder: ${value}`,
+    );
+  }
+  for (const match of privateFenceText.matchAll(
+    /-\s*name:\s*(?:RELEEM_API_KEY|DB_PASSWORD)\s*\n\s*value:\s*["']?([^\s"']+)/giu,
+  )) {
+    assert.match(match[1], /^\[[^\]]+\]$/u);
+  }
+});
+
+test('lifecycle safety manifest records exact frozen exclusions and rewrites with private evidence', async () => {
+  const [overlay, archive] = await Promise.all([
+    readFile(engineFirstManifestPath, 'utf8').then(JSON.parse),
+    readFile(engineFirstExcludedInstructionsPath, 'utf8'),
+  ]);
+  assert.ok(
+    Array.isArray(overlay.lifecycleSafetyExclusions),
+    'Manifest must declare lifecycleSafetyExclusions',
+  );
+  assert.ok(
+    Array.isArray(overlay.lifecycleSafetyRewrites),
+    'Manifest must declare lifecycleSafetyRewrites',
+  );
+  for (const [field, expected] of [
+    ['lifecycleSafetyExclusions', expectedLifecycleSafetyExclusions],
+    ['lifecycleSafetyRewrites', expectedLifecycleSafetyRewrites],
+  ]) {
+    assert.deepEqual(
+      overlay[field].map((record) => ({
+        pageSourcePath: record.pageSourcePath,
+        fenceIndex: record.fenceIndex,
+        baselineLineNumber: record.baselineLineNumber,
+        baselineLanguage: record.baselineLanguage,
+        baselineContentSha256: record.baselineContentSha256,
+        ...(field === 'lifecycleSafetyRewrites'
+          ? {currentContentSha256: record.currentContentSha256}
+          : {}),
+      })),
+      expected,
+      `${field} must identify only the reviewed frozen lifecycle fences`,
+    );
+    for (const record of overlay[field]) {
+      const expectedKeys = [
+        'baselineContentSha256',
+        'baselineLanguage',
+        'baselineLineNumber',
+        'evidence',
+        'fenceIndex',
+        'pageSourcePath',
+        'reason',
+        ...(field === 'lifecycleSafetyRewrites' ? ['currentContentSha256'] : []),
+      ].sort();
+      assert.deepEqual(Object.keys(record).sort(), expectedKeys);
+      assert.match(record.reason, /\S.{15,}/u);
+      assert.match(record.evidence, /\S.{15,}/u);
+      const baselinePage = manifest.pages.find(
+        ({sourcePath}) => sourcePath === record.pageSourcePath,
+      );
+      const baselineFence = baselinePage?.codeFences[record.fenceIndex];
+      assert.ok(baselineFence, `${record.pageSourcePath} has no fence ${record.fenceIndex}`);
+      assert.equal(record.baselineLineNumber, baselineFence.lineNumber);
+      assert.equal(record.baselineLanguage, baselineFence.language);
+      assert.equal(record.baselineContentSha256, baselineFence.contentSha256);
+      if (field === 'lifecycleSafetyRewrites') {
+        assert.match(record.currentContentSha256, /^[a-f0-9]{64}$/u);
+      }
+      assert.match(archive, /^# DO NOT RUN\b.+$/mu);
+      assert.equal(archive.includes(`- Source: \`${record.pageSourcePath}\``), true);
+      assert.equal(archive.includes(`- Fence index: \`${record.fenceIndex}\``), true);
+      assert.equal(archive.includes(`- SHA-256: \`${record.baselineContentSha256}\``), true);
+    }
+  }
+  assert.doesNotMatch(
+    archive,
+    /(?:apikey|mysql_password|pg_password)\s*=\s*["'](?:<api_key>|releem)["']/iu,
+    'Private lifecycle evidence must redact credential-like sample values',
+  );
+});
+
+test('Agent uninstall and update pages remove unverified remote execution and explain update control', async () => {
+  const [uninstall, update] = await Promise.all([
+    readFile(path.join(projectRoot, 'docs/installation/manage-the-releem-agent/uninstall.md'), 'utf8'),
+    readFile(path.join(projectRoot, 'docs/installation/manage-the-releem-agent/update.md'), 'utf8'),
+  ]);
+  const executableText = codeFenceBodies(`${uninstall}\n${update}`).join('\n');
+  assert.doesNotMatch(executableText, /bash\s+-c\s+["']\$\(curl|\biwr\b[^\n]*\b(?:iex|Invoke-Expression)\b/iu);
+  assert.doesNotMatch(executableText, /\/opt\/releem\/mysqlconfigurer\.sh\s+-u\b/iu);
+  assert.doesNotMatch(executableText, /update_releem_docker\.sh|\bcrontab\b/iu);
+  assert.match(uninstall, /(?:uninstall|removal)[^\n]*(?:currently unavailable|not documented)/iu);
+  assert.match(uninstall, /contact Releem Support/iu);
+  assert.match(update, /automatic updates?[^\n]*(?:only|when)[^\n]*explicitly enabled/iu);
+  assert.match(update, /RELEEM_CRON_ENABLE=0/iu);
+  const linuxUpdate = update.match(
+    /<TabItem value="linux"[^>]*>([\s\S]*?)(?=<TabItem value=)/u,
+  )?.[1] ?? '';
+  assert.match(
+    linuxUpdate,
+    /manual[^\n]*(?:currently unavailable|not documented)|(?:currently unavailable|not documented)[^\n]*manual/iu,
+  );
+  assert.match(linuxUpdate, /contact Releem Support/iu);
+  assert.match(update, /(?:Docker|container)[^\n]*(?:currently unavailable|not documented)/iu);
+  assert.match(update, /contact Releem Support/iu);
+});
+
+test('Agent migration and configuration keep identity and secrets out of unsafe reusable examples', async () => {
+  const [migrate, configuration] = await Promise.all([
+    readFile(path.join(projectRoot, 'docs/installation/manage-the-releem-agent/migrate.md'), 'utf8'),
+    readFile(path.join(projectRoot, 'docs/installation/manage-the-releem-agent/configuration.md'), 'utf8'),
+  ]);
+  const migrateFences = codeFenceBodies(migrate).join('\n');
+  assert.doesNotMatch(migrateFences, /--hostname(?:=|\s)/u);
+  assert.ok(
+    /RELEEM_HOSTNAME/u.test(migrateFences) ||
+      /preserv(?:e|ing) historical metrics[^\n]*(?:currently unavailable|not documented)/iu.test(migrate),
+    'Migration must show verified RELEEM_HOSTNAME placement or mark history preservation unavailable',
+  );
+  const configurationFence = codeFenceBodies(configuration)[0];
+  for (const key of ['apikey', 'mysql_password', 'pg_password']) {
+    assert.match(
+      configurationFence,
+      new RegExp(`^${key}=["']\\[[A-Z][A-Z0-9_]*\\]["']$`, 'mu'),
+      `${key} must use a bracketed secret placeholder`,
+    );
+  }
+  assert.match(
+    configuration,
+    /protect[^\n]*`\/opt\/releem\/releem\.conf`|`\/opt\/releem\/releem\.conf`[^\n]*(?:restrictive|authorized users?)/iu,
+  );
+});
+
+test('automatic MySQL-family installation discloses configuration-changing account authority', async () => {
+  for (const [engine, privilege] of [
+    ['mysql', 'SYSTEM_VARIABLES_ADMIN'],
+    ['mariadb', 'SUPER'],
+  ]) {
+    const source = await readFile(
+      path.join(projectRoot, `docs/installation/${engine}/linux.md`),
+      'utf8',
+    );
+    const automatic = source.match(
+      /^## Automatic installation[^\n]*\n([\s\S]*?)(?=^## Manual installation)/mu,
+    )?.[1] ?? '';
+    const authorityDisclosure =
+      automatic.includes(privilege) &&
+      /configuration-changing|change (?:database )?configuration/iu.test(automatic) &&
+      /authoriz|approv/iu.test(automatic);
+    const unavailable = /automatic installation[^\n]*(?:currently unavailable|not documented)/iu.test(automatic);
+    assert.equal(
+      authorityDisclosure || unavailable,
+      true,
+      `${engine} automatic installation must disclose ${privilege} authority and approval or be unavailable`,
+    );
+  }
+});
+
+test('WHM troubleshooting matches the unavailable installation procedure', async () => {
+  const source = await readFile(
+    path.join(projectRoot, 'docs/get-started/troubleshoot-releem-agent.md'),
+    'utf8',
+  );
+  const whm = source.match(/^### cPanel\/WHM\n([\s\S]*?)(?=^### |^## )/mu)?.[1] ?? '';
+  assert.match(whm, /(?:procedure|installation)[^\n]*(?:currently unavailable|not documented)/iu);
+  assert.match(whm, /contact Releem Support/iu);
+  assert.doesNotMatch(whm, /verify that cPanel MySQL auto-adjust settings are disabled/iu);
+});
+
 test('baseline pages and route identity remain unless explicitly excepted', async () => {
   for (const baselinePage of manifest.pages) {
     if (retiredSources.has(baselinePage.sourcePath)) continue;
@@ -3300,6 +4297,7 @@ test('baseline pages and route identity remain unless explicitly excepted', asyn
 });
 
 test('baseline code fences remain byte-for-byte unless a safety exception is approved', async () => {
+  const overlay = JSON.parse(await readFile(engineFirstManifestPath, 'utf8'));
   for (const baselinePage of manifest.pages) {
     if (
       retiredSources.has(baselinePage.sourcePath) ||
@@ -3310,10 +4308,41 @@ test('baseline code fences remain byte-for-byte unless a safety exception is app
         baselineSourcePath === baselinePage.sourcePath && status === 'approved',
     );
     const currentSourcePath = routeException?.currentSourcePath ?? baselinePage.sourcePath;
+    const currentText = await readFile(
+      path.join(projectRoot, currentSourcePath),
+      'utf8',
+    );
+    const lifecycleExclusions = overlay.lifecycleSafetyExclusions.filter(
+      ({pageSourcePath}) => pageSourcePath === baselinePage.sourcePath,
+    );
+    const lifecycleRewrites = overlay.lifecycleSafetyRewrites.filter(
+      ({pageSourcePath}) => pageSourcePath === baselinePage.sourcePath,
+    );
     const currentPage = parseDocument(
       currentSourcePath,
-      await readFile(path.join(projectRoot, currentSourcePath), 'utf8'),
+      lifecycleExclusions.length === 0 &&
+        lifecycleRewrites.length === 0 &&
+        engineFirstExistingDocumentChanges.has(currentSourcePath)
+        ? reverseEngineFirstLinks(currentText, currentSourcePath)
+        : currentText,
     );
+    if (lifecycleExclusions.length > 0 || lifecycleRewrites.length > 0) {
+      assert.equal(
+        manifest.safetyExceptions.some(
+          ({pageSourcePath, status}) =>
+            pageSourcePath === baselinePage.sourcePath && status === 'approved',
+        ),
+        false,
+        `${baselinePage.sourcePath} cannot use overlapping preservation exception systems`,
+      );
+      assertLifecycleCodeFenceIdentity(
+        baselinePage,
+        currentPage,
+        lifecycleExclusions,
+        lifecycleRewrites,
+      );
+      continue;
+    }
     assertCodeFenceIdentity(
       baselinePage,
       currentPage,

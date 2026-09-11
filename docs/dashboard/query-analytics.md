@@ -6,7 +6,7 @@ title: Query Analytics
 
 # Query Analytics
 
-Use Query Analytics to review query activity reported in the Dashboard and choose a query to inspect. Query Analytics shows observed activity, while [Query Optimization](/recommendations/query-optimization) presents proposed changes.
+Use Query Analytics to review MySQL query activity reported in the Dashboard and choose a query to inspect. Query Analytics shows observed activity, while [Query Optimization](/recommendations/query-optimization) presents proposed changes.
 
 <img src={require('../../assets/images/releem-dashboard-query-analytics.png').default} alt="Releem Query Analytics block" className="shadow-img" />
 
@@ -35,8 +35,9 @@ Releem sorts your top 100 queries, with the slowest-executing queries listed at 
 
 Releem sorts your top 100 queries, with the queries with the highest cumulative execution time listed at the top.
 
-## Inspect query details and optimization suggestions
+## Inspect query details and request optimization suggestions
 
 <img src={require('../../assets/images/releem-dashboard-query-analytics-inspection.png').default} alt="Releem Query Analytics block" className="shadow-img" />
 
-1. Click the query in the Query Analytics tab to view the full query statement, execution plan and recommendations.
+1. Click the query in the Query Analytics tab to view the full query statement.
+2. Click **Get Recommendations** to get suggestions on query performance optimization and missed indexes.

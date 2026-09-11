@@ -6,9 +6,9 @@ title: Health Checks
 
 # Health Checks
 
-Use Health Checks to review the database system, storage-engine, memory, query, and log metrics that Releem evaluates. Review a check together with its current value and recent workload before deciding whether further investigation or a configuration change is needed.
+Use Health Checks to review the MySQL system, storage-engine, memory, query, and log metrics that Releem evaluates. Review a check together with its current value and recent workload before deciding whether further investigation or a configuration change is needed.
 
-Releem groups these metrics into four blocks: System, Engine, Memory, and Queries/Logs. A check is a diagnostic signal; it does not by itself identify the cause of a problem or guarantee a performance outcome.
+Releem groups these metrics into four blocks: System, MyISAM/InnoDB, Memory, and Queries/Logs. A check is a diagnostic signal; it does not by itself identify the cause of a problem or guarantee a performance outcome.
 
 ![Releem Health Checks block](../../assets/images/releem-dashboard-health-checks.png)
 
@@ -20,7 +20,7 @@ The System block shows essential system-level metrics for reviewing the overall 
 - **Disk Space Usage**: Tracks the amount of disk space being used and helps identify potential storage issues.
 - **Database Connection Utilization**: Monitors the percentage of connections used out of the total available connections.
 
-## MyISAM/InnoDB Block (for MySQL and MariaDB)
+## MyISAM/InnoDB Block
 The MyISAM/InnoDB block focuses on specific storage engines and their related metrics.
 
 - **MyISAM Cache Hit Rate**: Measures the efficiency of the MyISAM key cache.

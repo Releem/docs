@@ -6,7 +6,7 @@ title: PostgreSQL Permissions for Releem Agent
 
 # PostgreSQL Permissions for Releem Agent
 
-Use this page with the [PostgreSQL Linux installation tab](/installation/linux?database=postgresql#postgresql-installation). Releem supports PostgreSQL 15–18. Install the `postgresql-contrib` package that matches the server version before enabling `pg_stat_statements`.
+Use this page with the [PostgreSQL Linux installation guide](/installation/postgresql/linux). Releem supports PostgreSQL 15–18. Install the `postgresql-contrib` package that matches the server version before enabling `pg_stat_statements`.
 
 These grants are not universally least-privilege. Object ownership, managed-service restrictions, extensions, and Releem features vary. A DBA must validate every grant and connection rule for the target database and enabled features.
 
@@ -91,4 +91,4 @@ After editing `pg_hba.conf`, reload PostgreSQL with your platform's approved pro
 
 ## Continue installation
 
-Return to [Install Releem Agent on Linux](/installation/linux?database=postgresql#postgresql-installation) and choose automatic or manual account creation.
+Return to [Install Releem for PostgreSQL on Linux](/installation/postgresql/linux) and choose automatic or manual account creation.

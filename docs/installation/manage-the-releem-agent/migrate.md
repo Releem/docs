@@ -18,22 +18,21 @@ Before starting the migration process, ensure you have:
 
 ## Migration Steps
 
-1. Uninstall Releem Agent from Source Server using the following [guide](/installation/manage-the-releem-agent/uninstall)
+1. Review the [uninstall guide](/installation/manage-the-releem-agent/uninstall) and contact Releem Support for the current source-server removal procedure.
 
-2. Install Releem Agent on Destination Server
+2. [Choose an installation guide](/installation) for the destination server and install the Releem Agent.
 
 You have two options for installation:
 
 **Option A: Preserve Historical Metrics**
 
-If you want to maintain the historical metrics and continue from where you left off, install the agent with the same hostname as the old server. 
-To do that just add the following variable to the installation command:
+To preserve the Dashboard identity used by historical metrics, record the exact hostname shown for the old server. In the destination server's canonical one-step Linux command, add this environment-variable line immediately before the `curl` line:
 
 ```bash
---hostname="OLD_SERVER_HOSTNAME"
+export RELEEM_HOSTNAME="[OLD_SERVER_HOSTNAME]"
 ```
 
-Replace `OLD_SERVER_HOSTNAME` with your previous server's hostname (e.g., "db1.example.com").
+Replace `[OLD_SERVER_HOSTNAME]` with the exact recorded Dashboard hostname. After installation, confirm that the expected server identity is shown and that current metrics arrive. If a duplicate server appears or history is not associated as expected, stop and contact Releem Support before removing either record.
 
 **Option B: Fresh Start**
 
