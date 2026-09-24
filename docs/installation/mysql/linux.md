@@ -26,10 +26,6 @@ Use these task links for the complete flow: [requirements](#prerequisites), [per
 
 Use this path when the installer may create the `releem` monitoring user. The installer asks for the MySQL administrative password if it needs one.
 
-:::warning Configuration-changing account authority
-The installer-created account receives `SYSTEM_VARIABLES_ADMIN` on MySQL 8.0 or `SUPER` on MySQL 5.5–5.7. These privileges can change database configuration. Use automatic installation only when you authorize the installer to create an account with this configuration-changing authority. Otherwise, have a DBA create an approved account and use [manual installation](#manual-installation).
-:::
-
 ```bash
 RELEEM_MYSQL_TYPE=1 RELEEM_DB_MEMORY_LIMIT=0 RELEEM_API_KEY='[RELEEM_API_KEY]' RELEEM_CRON_ENABLE=1 bash -c "$(curl -L https://releem.s3.amazonaws.com/v2/install.sh)"
 ```
