@@ -25,15 +25,15 @@ Choose the type of database server you are adding:
 - [MariaDB on Linux: Manual installation](/installation/mariadb/linux#manual-installation) – Use an existing monitoring account.
 - [PostgreSQL on Linux: Automatic installation](/installation/postgresql/linux#automatic-installation) – Create the database user during installation.
 - [PostgreSQL on Linux: Manual installation](/installation/postgresql/linux#manual-installation) – Use an existing monitoring account.
-- [MySQL on WHM/cPanel](/installation/mysql/whm-cpanel) – **Procedure unavailable.** The page explains how to request the current procedure.
-- [MySQL in Docker](/installation/mysql/docker) – **Procedure unavailable.** The page explains how to request the current procedure.
-- [MariaDB in Docker](/installation/mariadb/docker) – **Procedure unavailable.** The page explains how to request the current procedure.
-- [MySQL on Windows](/installation/mysql/windows) – **Procedure unavailable.** The page explains how to request the current procedure.
-- [MariaDB on Windows](/installation/mariadb/windows) – **Procedure unavailable.** The page explains how to request the current procedure.
-- [MySQL on AWS RDS](/installation/mysql/aws-rds) – **Procedure unavailable.** The page explains how to request the current procedure.
-- [MySQL on GCP Cloud SQL](/installation/mysql/gcp-cloud-sql) – **Procedure unavailable.** The page explains how to request the current procedure.
-- [Azure Database for MySQL](/installation/mysql/azure-database-for-mysql) – **Procedure unavailable.** The page explains how to request the current procedure.
-- [MariaDB in Kubernetes](/installation/mariadb/kubernetes) – **Procedure unavailable.** The page explains how to request the current procedure.
+- [MySQL on WHM/cPanel](/installation/mysql/whm-cpanel)
+- [MySQL in Docker](/installation/mysql/docker)
+- [MariaDB in Docker](/installation/mariadb/docker)
+- [MySQL on Windows](/installation/mysql/windows)
+- [MariaDB on Windows](/installation/mariadb/windows)
+- [MySQL on AWS RDS](/installation/mysql/aws-rds)
+- [MySQL on GCP Cloud SQL](/installation/mysql/gcp-cloud-sql)
+- [Azure Database for MySQL](/installation/mysql/azure-database-for-mysql)
+- [MariaDB in Kubernetes](/installation/mariadb/kubernetes)
 - [MySQL clusters](/installation/mysql/clusters) or [MariaDB clusters](/installation/mariadb/clusters) – Install one Agent for each database node.
 
 

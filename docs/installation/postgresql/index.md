@@ -10,5 +10,4 @@ Choose where you want to run the Releem Agent.
 
 - [Linux](/installation/postgresql/linux)
 
-Review [PostgreSQL permissions](/supported-databases/postgresql/required-permissions) before installation. You can also return to [Connect Your Database Server](/get-started/connect-your-database-server) or [choose another database](/installation).
-
+Review [PostgreSQL permissions](/supported-databases/postgresql/required-permissions) before installation. For guided setup, use [Connect Your Database Server](/get-started/connect-your-database-server). To select a different engine, open [Install Releem](/installation).

@@ -8,7 +8,7 @@ title: Recommendations
 
 Use Recommendations to review actions that Releem proposes from observed database data. A Dashboard check or metric describes current state; a recommendation presents a proposed action. Review the evidence, affected scope, application method, and rollback guidance before you make a production change.
 
-Start with Configuration Tuning for server configuration or Query Optimization for query and index proposals. Return to the [Dashboard](/dashboard) when you need to inspect the observations behind a recommendation.
+Start with Configuration Tuning for server configuration or Query Optimization for query and index proposals. Open the [Dashboard](/dashboard) to inspect the observations behind a recommendation.
 
 ## Query Optimization
 

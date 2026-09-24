@@ -8,8 +8,6 @@ title: Install Releem for MySQL on WHM/cPanel
 
 Use the Releem WHM/cPanel module on a MySQL server managed through WHM.
 
-[Back to MySQL installation options](/installation/mysql).
-
 ## Prerequisites
 
 - cPanel/WHM installed and running
@@ -20,13 +18,21 @@ Use the Releem WHM/cPanel module on a MySQL server managed through WHM.
 
 ## Automatic installation {#automatic-installation}
 
-WHM/cPanel automatic installation is currently unavailable. Download integrity, API-key handling, module changes, and recovery are unverified. This page provides no executable installer command; contact Releem Support for the current module procedure. Success means **Agent Status: Connected** and current metrics in the Dashboard.
+Run the installer as `root`. If you omit `--api-key`, the installer asks for the key interactively.
 
-Ask Support how the module obtains the API key and local database credentials, which service and configuration paths it uses, and which cPanel settings it changes.
+```bash
+installer=$(mktemp)
+curl --fail --location --proto '=https' --tlsv1.2 \
+  --output "$installer" https://releem.s3.amazonaws.com/v2/whm/whm-install.sh
+bash "$installer"
+rm -f "$installer"
+```
+
+The installer detects local database credentials, installs or starts the Agent, registers **WHM > Plugins > Releem Database Advisor**, and disables cPanel database auto-adjust settings that can conflict with Releem-managed values.
 
 ## Logs
 
-After Support installs the module, check this path for installation activity:
+Check this path for installation activity:
 
 ```bash
 /var/log/releem/whm-install.log
@@ -36,15 +42,25 @@ Use [Agent logs](/installation/manage-the-releem-agent/logs) for runtime diagnos
 
 ## Uninstall and recovery
 
-Module removal and restoration of cPanel auto-adjust settings are unverified. This page provides no executable uninstall command. Before removal, record those settings and ask Releem Support for the current restoration procedure.
+Record the cPanel database auto-adjust settings before removal. Then run:
+
+```bash
+installer=$(mktemp)
+curl --fail --location --proto '=https' --tlsv1.2 \
+  --output "$installer" https://releem.s3.amazonaws.com/v2/whm/whm-install.sh
+bash "$installer" --uninstall
+rm -f "$installer"
+```
+
+After removal, restore any cPanel settings that your hosting policy requires.
 
 ## Re-run behavior
 
-Do not re-run the installer. Ask Releem Support how it handles the Agent service, module files, credentials, and previously changed cPanel settings.
+You can re-run the installer. It keeps the existing Agent binary, starts the service when needed, reapplies the cPanel settings, and registers the module files again.
 
 ## Troubleshooting
 
-These local service commands do not install or remove the module. Use them only after Support installs the Agent service:
+Use these commands to inspect or start the Agent service:
 
 ```bash
 systemctl status releem-agent
@@ -54,16 +70,12 @@ systemctl status releem-agent
 systemctl start releem-agent
 ```
 
-If the Agent is absent or disconnected, use [Troubleshoot the Releem Agent](/get-started/troubleshoot-releem-agent) and contact Releem Support for the current module procedure.
+If the Agent is absent or disconnected, review `/var/log/releem/whm-install.log` and use [Troubleshoot the Releem Agent](/get-started/troubleshoot-releem-agent).
 
 ## Expected result
 
-After Support completes the installation, **WHM > Plugins > Releem Database Advisor** should show the Agent service and the Dashboard should show **Agent Status: Connected** with current metrics or a current data timestamp.
+**WHM > Plugins > Releem Database Advisor** should show the Agent service, and the Dashboard should show **Agent Status: Connected** with current metrics or a current data timestamp.
 
 ## Verify the installation
 
 Confirm the service status in WHM and verify both Agent connectivity and current metrics in the Dashboard.
-
-## Next steps
-
-Return to [MySQL installation options](/installation/mysql), or continue with [Agent configuration](/installation/manage-the-releem-agent/configuration), [Update the Agent](/installation/manage-the-releem-agent/update), and [Uninstall the Agent](/installation/manage-the-releem-agent/uninstall).

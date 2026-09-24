@@ -48,7 +48,7 @@ Please exclude "releem" user from MySQLGovernor.
 
 ### cPanel/WHM
 
-The WHM/cPanel installation procedure is currently unavailable. Do not re-run or remove the module from an incomplete procedure. Contact Releem Support for the current installation or recovery steps, then use the [MySQL WHM/cPanel page](/installation/mysql/whm-cpanel) to verify the Agent status and current metrics.
+Open **WHM > Plugins > Releem Database Advisor** and check the Agent service status. If it is stopped, inspect `/var/log/releem/whm-install.log`, start `releem-agent`, and confirm that cPanel database auto-adjust is disabled. Use the [MySQL WHM/cPanel guide](/installation/mysql/whm-cpanel) to reinstall or remove the module.
 
 ### AWS RDS
 [Troubleshoot MySQL on AWS RDS](/installation/mysql/aws-rds#troubleshooting)
@@ -87,4 +87,4 @@ You can specify “dummy” in the DBParameterGroup parameter if you do not plan
 
 ## What to do next
 
-After the Agent reconnects, return to [Connect Your Database Server](/get-started/connect-your-database-server#verify-the-connection-and-current-data) and confirm that current data has arrived. Then use the [Dashboard](/dashboard) to review checks and metrics.
+After the Agent reconnects, [verify the connection and current data](/get-started/connect-your-database-server#verify-the-connection-and-current-data). Then use the [Dashboard](/dashboard) to review checks and metrics.

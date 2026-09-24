@@ -8,31 +8,59 @@ title: Install Releem for MariaDB on Windows
 
 Install the Releem Agent on a Windows server that runs MariaDB.
 
-[Back to MariaDB installation options](/installation/mariadb).
-
 ## Prerequisites
 
-Run PowerShell as Administrator. Review [MariaDB permissions](/supported-databases/mariadb/required-permissions). The Agent uses the `RELEEM_MYSQL_*` variable names for MariaDB compatibility; those names do not establish MySQL feature or privilege parity.
+Run PowerShell as Administrator. Make sure `mysql.exe` is available in `PATH`, and review [MariaDB permissions](/supported-databases/mariadb/required-permissions). The Agent uses `RELEEM_MYSQL_*` setting names for MariaDB connections.
 
 ## Automatic installation {#automatic-installation}
 
-Automatic MariaDB installation on Windows is currently unavailable. Credential handling and download integrity are unverified. This page provides no executable installer command; contact Releem Support for the current MariaDB Windows procedure. Success means **Agent Status: Connected** and current metrics in the Dashboard.
+Download and run the Releem installer. It detects MariaDB and asks for your Releem API key and the database administrator password when required.
+
+```powershell
+$installer = Join-Path $env:TEMP 'releem-install.ps1'
+Invoke-WebRequest -UseBasicParsing `
+  -Uri 'https://releem.s3.us-east-1.amazonaws.com/v2/install.ps1' `
+  -OutFile $installer
+& $installer
+Remove-Item $installer
+```
 
 ## Installer parameters
 
-Ask Releem Support how the current installer accepts the API key, MariaDB connection, memory limit, update setting, and optional query collection without exposing secrets in command arguments or history.
+- `RELEEM_HOSTNAME` changes the server name shown in the Dashboard.
+- `RELEEM_MYSQL_HOST` defaults to `127.0.0.1`.
+- `RELEEM_MYSQL_PORT` defaults to `3306`.
+- `RELEEM_MYSQL_LOGIN` and `RELEEM_MYSQL_PASSWORD` select an existing MariaDB monitoring account.
+- `RELEEM_DB_MEMORY_LIMIT` reserves memory for other software. `0` lets Releem consider all memory.
+- `RELEEM_CRON_ENABLE=1` enables the scheduled Agent update; `0` disables it.
+- `RELEEM_QUERY_OPTIMIZATION=true` enables query data collection after you grant the required permissions.
 
 ## Manual installation {#manual-installation}
 
-Manual MariaDB installation on Windows is currently unavailable. The Agent package and credential setup are unverified. This page provides no executable download or credential setup; contact Releem Support for the current MariaDB Windows package and procedure. Success means **Agent Status: Connected** and current metrics in the Dashboard.
+1. Create the `releem` account using the [MariaDB permissions guide](/supported-databases/mariadb/required-permissions).
+2. Create `C:\ProgramData\ReleemAgent\conf.d` and `C:\Program Files\ReleemAgent`.
+3. Download `https://releem.s3.us-east-1.amazonaws.com/v2/releem-agent.exe` to `C:\Program Files\ReleemAgent\releem-agent.exe`.
+4. Create `C:\ProgramData\ReleemAgent\releem.conf` and restrict access to administrators and the Agent service account:
 
-After Releem Support provides the Agent package and credential configuration, use these service commands only for that supported package.
+```ini
+apikey="[RELEEM_API_KEY]"
+releem_cnf_dir="C:\\ProgramData\\ReleemAgent\\conf.d"
+mysql_host="127.0.0.1"
+mysql_port="3306"
+mysql_user="releem"
+mysql_password="[MONITORING_PASSWORD]"
+interval_seconds=60
+interval_read_config_seconds=3600
+query_optimization=false
+```
 
-   ```powershell
-   C:\'Program Files'\ReleemAgent\releem-agent.exe -f
-   C:\'Program Files'\ReleemAgent\releem-agent.exe install
-   C:\'Program Files'\ReleemAgent\releem-agent.exe start
-   ```
+5. Install and start the service:
+
+```powershell
+& 'C:\Program Files\ReleemAgent\releem-agent.exe' -f
+& 'C:\Program Files\ReleemAgent\releem-agent.exe' install
+& 'C:\Program Files\ReleemAgent\releem-agent.exe' start
+```
 
 ## Expected result
 
@@ -45,7 +73,3 @@ Confirm both the Agent connection and current metrics in the Dashboard. If eithe
 ## Troubleshooting
 
 Use [Troubleshoot the Releem Agent](/get-started/troubleshoot-releem-agent). Correct the reported permission, network, or configuration issue before you re-run or restart the supported procedure.
-
-## Next steps
-
-Return to [MariaDB installation options](/installation/mariadb), or continue with [Agent configuration](/installation/manage-the-releem-agent/configuration), [Update the Agent](/installation/manage-the-releem-agent/update), and [Uninstall the Agent](/installation/manage-the-releem-agent/uninstall).

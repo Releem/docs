@@ -22,8 +22,13 @@ const sidebars = {
     {
       type: 'category',
       label: 'Supported Databases',
-      link: {type: 'doc', id: 'supported-databases/mysql/required-permissions'},
+      link: {type: 'doc', id: 'supported-databases/index'},
       items: [
+        {
+          type: 'doc',
+          id: 'supported-databases/mysql/required-permissions',
+          label: 'MySQL Permissions',
+        },
         {
           type: 'doc',
           id: 'supported-databases/mariadb/required-permissions',

@@ -8,8 +8,6 @@ title: Install Releem for MariaDB on Clusters
 
 Install one Agent for every MariaDB cluster node.
 
-[Back to MariaDB installation options](/installation/mariadb).
-
 ## Prerequisites
 
 Create the monitoring account with [MariaDB permissions](/supported-databases/mariadb/required-permissions). Review the additional permissions only when you enable the corresponding query or schema feature.
@@ -29,8 +27,3 @@ Open the Dashboard and confirm **Agent Status: Connected** and a current data ti
 ## Troubleshooting
 
 Use [Troubleshoot the Releem Agent](/get-started/troubleshoot-releem-agent). Check the database permissions, connection values, network access, and [Agent logs](/installation/manage-the-releem-agent/logs). Correct the reported problem before you re-run or restart the installation.
-
-## Next steps
-
-Return to [MariaDB installation options](/installation/mariadb), or continue with [Agent configuration](/installation/manage-the-releem-agent/configuration), [Update the Agent](/installation/manage-the-releem-agent/update), and [Uninstall the Agent](/installation/manage-the-releem-agent/uninstall).
-

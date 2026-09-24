@@ -91,4 +91,4 @@ After editing `pg_hba.conf`, reload PostgreSQL with your platform's approved pro
 
 ## Continue installation
 
-Return to [Install Releem for PostgreSQL on Linux](/installation/postgresql/linux) and choose automatic or manual account creation.
+Continue with [Install Releem for PostgreSQL on Linux](/installation/postgresql/linux) and choose automatic or manual account creation.
