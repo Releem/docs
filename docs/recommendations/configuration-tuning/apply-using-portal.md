@@ -1,194 +1,85 @@
 ---
 id: apply-using-portal
 slug: /recommendations/configuration-tuning/apply-using-portal
-title: How to Apply Configuration Using Portal
+title: Apply configuration using the Portal
 ---
 
-# How to Apply Configuration Using Portal
+# Apply configuration using the Portal
 
-To apply the recommended configuration using the Releem Portal, follow these steps:
+Use the Releem Portal to review and submit a recommended configuration. This page describes the shared Portal sequence for self-managed MySQL and MariaDB, and the shared interface shown for managed MySQL on AWS RDS, GCP Cloud SQL, and Azure Database for MySQL.
 
-1. **Access the Releem Dashboard**: Log in to your Releem account and navigate to the Dashboard.
+For a managed MySQL deployment, use **Apply** only after Releem Support confirms that Portal application is available for that deployment and the provider administrator separately approves narrowly scoped configuration-changing authority. Otherwise, do not apply the change. Portal application is not documented for PostgreSQL.
 
-2. **Locate the Configuration Section**: In the Dashboard, find the section dedicated to configuration management.
+## Before you begin
 
-3. **Review Recommended Configuration**: Examine the recommended configuration settings provided by Releem.
+1. Confirm that you selected the intended server.
+2. Review every changed value and record the current values before you apply the recommendation.
+3. For a self-managed server, create a known-good backup artifact of the active database configuration and confirm the approved service restart procedure.
+4. For a managed server, record the assigned parameter group or database flags and every previous value. Confirm an applicable provider recovery procedure. If no verified recovery procedure exists, do not proceed; contact Releem Support.
+5. Plan the maintenance window and application checks.
+6. Confirm the required access in [MySQL Required Permissions](/supported-databases/mysql/required-permissions) or [MariaDB Required Permissions](/supported-databases/mariadb/required-permissions).
+7. For managed MySQL, obtain Releem Support confirmation for the exact deployment and separate provider-administrator approval for narrowly scoped configuration-changing authority. Installation access alone is not sufficient. Otherwise, do not apply.
 
-4. **Apply Configuration**:
-   - **Without Restart**: If you wish to apply the configuration without restarting the database server, click the "Apply" button followed by "Apply Without Restart". This option is suitable for changes that do not require a server restart.
-   - **With Restart**: For changes that necessitate a server restart, click the "Apply" button and then "Apply and Restart". This will apply all configuration changes and restart the database server to ensure all settings take effect.
+## Apply the configuration
+
+1. Open the server in the Releem Dashboard.
+2. Open **Configuration** in the **Recommended Configuration** block.
+3. Review the proposed changes and their current values.
+4. Select **Apply**, then choose the option available for the server:
+   - **Apply Without Restart** submits values that the database or provider can apply dynamically. Confirm that those values are active; restart-required values can remain pending.
+   - **Apply and Restart** submits the changes and requests a database service or managed-instance restart. Use it only during an approved maintenance window.
+5. Wait for the application task to finish, then verify the result below.
 
 ![Releem Dashboard Apply Configuration](../../../assets/images/releem-dashboard-apply.png)
 
-By following these steps, you can efficiently apply and manage your database configuration using the Releem Portal.
+## Verify the result
 
-## Troubleshooting applying configuration
+1. Check whether any value remains restart-pending or requires a restart.
+2. Verify the effective database settings on the database server or managed instance.
+3. Confirm the database service or instance health is normal and its status is available or running.
+4. Check application connectivity and review application errors.
+5. Confirm the Releem event for the application attempt, then review current metrics for the same server.
 
-### **FOR SELF-MANAGED SERVERS**
+The Portal task completing or an event appearing does not prove that every value is effective.
 
-#### 1. The latest recommended configuration is partially applied
-Certain MySQL variables require a server restart to be applied.
+## Troubleshooting self-managed servers
 
-**User Action**: Click "Apply" followed by "Apply and Restart" in the Dashboard to apply all the recommended parameters and restart the database service.
+### The recommendation is only partially applied
 
-#### 2. MySQL 'releem' user lacks required permissions to apply without restarting
-This issue occurs if there are not enough permissions to apply without restarting.
+Check for restart-required variables. If a restart is pending, use **Apply and Restart** only in an approved maintenance window, then repeat the effective-value and health checks.
 
-**User Action**: To grant these privileges, run the following query in the MySQL console, depending on your version:
-MariaDB and MySQL < 8:
-```
-select Concat("GRANT SUPER on *.* to `",User,"`@`", Host,"`;") from mysql.user where User='releem';
-```
+### The Releem database user lacks access
 
-MySQL >= 8:
-```
-select Concat("GRANT SYSTEM_VARIABLES_ADMIN on *.* to `",User,"`@`", Host,"`;") from mysql.user where User='releem';
-```
+Do not add grants from a generic troubleshooting command. Compare the account with the canonical [MySQL permissions](/supported-databases/mysql/required-permissions) or [MariaDB permissions](/supported-databases/mariadb/required-permissions), and have the database owner approve any change.
 
-After executing the generated queries, restart the agent by running the commands on the server:
-```
-/opt/releem/releem-agent stop ; /opt/releem/releem-agent start
-```
+### Recommended Configuration is not available
 
-#### 3. Recommended MySQL Configuration Not Found
-This issue arises if the process of applying recommendations is initiated before the Releem platform has completed generating these
+Confirm that the Agent is connected and current database metrics are arriving. Review [Releem Agent logs](/installation/manage-the-releem-agent/logs) if collection is not current. Do not submit an older proposal to work around a missing result.
 
-**User Action**: Wait for approximately 12 hours to allow Releem to generate recommendations, or force the process by running:
-```
-/opt/releem/releem-agent -f
-```
+### The configuration directory or restart command cannot be found
 
-#### 4. MySQL Version Lower Than 5.6.7
-Releem's automated features may not fully support MySQL versions lower than 5.6.7, especially if file replacement is required for an update.
+Confirm that the Agent was installed on the database host and that its configured database path and service controls match the active installation. Use the matching [installation guide](/installation) and [Agent configuration reference](/installation/manage-the-releem-agent/configuration). Do not reinstall until you have identified why the active path or service differs.
 
-**User Action**: [Manual applying of MySQL configuration](https://releem.com/docs/getstarted#rec491011156) is recommended in this case.
+### The database service does not restart
 
-#### 5. MySQL Configuration Directory Not Found
-This occurs when the installation of the Releem Agent is incorrect, or if the MySQL configuration directory has been deleted by the user.
+Do not retry while the database is unhealthy. Check the database error log and service status. Restore the known-good configuration artifact to the active path, then restart the database through your approved service procedure. If you cannot restore service, contact Releem Support and your database owner.
 
-**User Action**: The most straightforward solution is to reinstall the Releem Agent to ensure it's set up correctly.
+### The application task or Agent stops unexpectedly
 
-#### 6. Command to Restart MySQL Service Not Found
-This typically indicates an incorrect installation, often seen in Docker environments, where the command to restart MySQL services isn't found or accessible by the Releem Agent.
+Review the [Releem Agent logs](/installation/manage-the-releem-agent/logs) for the failed task. Remove credentials and customer data before sharing a focused excerpt with Releem Support.
 
-**User Action**: Reinstalling the agent is usually necessary to correct this issue. Also, please check mysql_restart_service setting in the /opt/releem/releem.conf
+## Troubleshooting managed MySQL
 
-#### 7. No Confirmation to Restart Service Received
-This can occur in scenarios where the database is too large, leading to delays, or in the event of a crash.
+### AWS RDS
 
-**User Action**: If the database is large, allow some time for it to restart automatically. If a crash is suspected, check the error logs for more details.
+Confirm that the DB instance is available, the assigned parameter group is the intended group, and its status is in sync. Check whether values are pending reboot. Review the access and parameter-group setup in [Install Releem for MySQL on AWS RDS](/installation/mysql/aws-rds) rather than adding an IAM action from this page. Do not use **Apply** unless Releem Support confirms it for this RDS deployment and the AWS administrator separately approves the required configuration-changing authority.
 
-#### 8. MySQL Service Failed to Start in 1200 Seconds
-Indicates that the MySQL service did not restart within the expected timeframe, which can happen with large databases or due to a crash.
+### GCP Cloud SQL
 
-**User Action**: Wait for the service to restart if you have a large database. In the case of a crash, consult the error logs.
+Confirm that the MySQL instance is available, the expected database flags were submitted, and the Agent identity has the access documented in [Install Releem for MySQL on GCP Cloud SQL](/installation/mysql/gcp-cloud-sql). Check for a pending restart before verifying effective values. Do not use **Apply** unless Releem Support confirms it for this Cloud SQL deployment and the Google Cloud administrator separately approves the required configuration-changing authority.
 
-#### 9. MySQL Service Failed to Start
-This is a more general indication of a crash or failure in starting the MySQL service.
+### Azure Database for MySQL
 
-**User Action**: The primary recourse here is to check the MySQL error logs to diagnose the reason for the failure.
+Confirm that the Flexible Server state is **Ready** and that the Agent identity has the access documented in [Install Releem for MySQL on Azure Database for MySQL](/installation/mysql/azure-database-for-mysql). If the Portal shows a partial application, check for restart-required values before choosing **Apply and Restart**. Do not use **Apply** unless Releem Support confirms it for this Azure deployment and the Azure administrator separately approves the required configuration-changing authority.
 
-#### 10. Failed to finish applying the configuration
-Agent stopped unexpectedly during applying configuration and unable to send information about task to Releem Platform.
-
-**User Action**: send us please the output of the command "journalctl -u releem-agent" to hello@releem.com
-
-#### 11. Unexpected Releem Agent error
-Releem Platform received unexpected error from Releem Agent.
-
-**User Action**: Please check that /opt/releem/mysqlconfigurer.sh is not empty and it has permissions to execute.
-Send us please the output of the command "journalctl -u releem-agent" to hello@releem.com
-
-#### 12. The DB configuration file does not include the directory that contains Releem's option files
-This occurs when the installation of the Releem Agent is incorrect, or if the MySQL configuration file has been changed by the user.
-
-**User Action**: Reinstalling the agent is usually necessary to correct this issue.
-
-
-### **FOR AWS RDS INSTANCES**
-
-#### 1. RDS database instance has a status of not available
-Check the status of the database instance in the aws console https://console.aws.amazon.com/rds/. Correct errors or wait until the instance status changes to available and reapply the configuration.
-
-#### 2. DB instance parameter group has a status of not in-sync
-Check the status of the DB instance parameter group in the aws console https://console.aws.amazon.com/rds/, under the Configuration tab on the DB instance information page. Correct errors or reload the DB instance to change the status to in-sync and reapply the configuration.
-
-#### 3. DB instance parameter group is not specified in the agent settings, or is not found in the database configuration
-In the aws console, create Parameter groups for your version of the db instance named “releem-agent”. Perform DB parameter group change for your db instance, reboot it if necessary.
-Then update CloudFormation stack “releem-agent” with the new template https://releem.s3.amazonaws.com/v2/releem-agent-cloudformation.yml and in the DBParametrGroup field specify the name of the created Parameter group.
-
-If CloudFormation is not used to start the agent, then in the agent settings add
-``` 
-aws_rds_parametr_group="releem-agent”
-```
-and restart the service
-```
-service releem-agent restart
-```
-
-#### 4. Parameter group applying failed by timeout (long applying)
-Check the status of the db instance and DB instance parameter group. It may have taken longer than 20 minutes to change the instance.
-#### 5. RDS database instance failed to apply configuration
-Check the status of the db instance and DB instance parameter group.
-
-#### 6. Other errors applying without restart
-Check the status of the db instance and DB instance parameter group.
-
-#### 7. IAM role lacks required permissions to apply
-This issue occurs if there are not enough permissions to apply without restarting.
-For the role with which the agent works add permissions to rds:ModifyDBParameterGroup
-
-#### 8. The latest recommended configuration is partially applied. To fully apply all parameters, restart the database instance.
-
-Certain MySQL variables require a server restart to be applied.
-
-Sign in to the AWS Management Console and open the Amazon RDS console at https://console.aws.amazon.com/rds/. In the navigation pane, choose Databases, and then choose the DB instance that you want to reboot. For Actions, choose Reboot. The Reboot DB instance page appears.
-
-
-### **FOR GCP CloudSQL INSTANCES**
-
-#### 1. Compute Engine VM instance  lacks required permissions to apply.
-This issue occurs if there are not enough permissions to apply with restarting.
-Enable Full Api Access to Cloud SQL and Stackdriver Monitoring API for the Compute Engine VM instance on which Releem Agent will be running.
-
-#### 2. Other errors applying without restart
-Agent stopped unexpectedly during applying configuration and unable to send information about task to Releem Platform.
-
-**User Action**: send us please the [Releem Agent logs](https://docs.releem.com/installation/manage-the-releem-agent/logs) to hello@releem.com
-
-
-### **FOR AZURE DATABASE FOR MYSQL INSTANCES**
-
-#### 1. Azure identity lacks permissions to read the server
-This issue occurs when the identity used by Releem Agent does not have permission to call `Microsoft.DBforMySQL/flexibleServers/read`.
-
-Grant `Reader` on the Azure MySQL server or its resource group:
-
-```bash
-az role assignment create \
-  --assignee-object-id "[OBJECT_ID]" \
-  --assignee-principal-type ServicePrincipal \
-  --role Reader \
-  --scope "/subscriptions/[SUBSCRIPTION_ID]/resourceGroups/[RESOURCE_GROUP]/providers/Microsoft.DBforMySQL/flexibleServers/[MYSQL_SERVER]"
-```
-
-Restart Releem Agent after granting access.
-
-#### 2. Azure identity lacks permissions to apply configuration
-This issue occurs when the identity can read the server but cannot update Flexible Server configurations or restart the server.
-
-Grant `Contributor` on the Azure MySQL server or use a custom role that allows configuration update and restart actions:
-
-```bash
-az role assignment create \
-  --assignee-object-id "[OBJECT_ID]" \
-  --assignee-principal-type ServicePrincipal \
-  --role Contributor \
-  --scope "/subscriptions/[SUBSCRIPTION_ID]/resourceGroups/[RESOURCE_GROUP]/providers/Microsoft.DBforMySQL/flexibleServers/[MYSQL_SERVER]"
-```
-
-#### 3. The latest recommended configuration is partially applied
-Some Azure MySQL parameters require a restart. Click **Apply** and then **Apply and Restart** in the Releem Portal to finish applying the configuration.
-
-#### 4. Azure MySQL server is not Ready
-Check the Azure MySQL Flexible Server status in the Azure Portal. Wait until the server state is `Ready`, then apply the configuration again.
+If a managed-instance change fails, do not retry while the instance is unhealthy. Restore the recorded parameter group or flag values through the applicable provider recovery procedure. If no verified recovery procedure exists, do not proceed; contact Releem Support and the provider administrator. Do not broaden an identity role from this troubleshooting page.

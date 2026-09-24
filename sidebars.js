@@ -122,20 +122,86 @@ const sidebars = {
         {
           type: 'category',
           label: 'Configuration Tuning',
+          link: {
+            type: 'doc',
+            id: 'recommendations/configuration-tuning/mysql-tuning-process',
+          },
           items: [
-            'recommendations/configuration-tuning/mysql-tuning-process',
-            'recommendations/configuration-tuning/initial-mysql-configuration',
-            'recommendations/configuration-tuning/apply-using-portal',
-            'recommendations/configuration-tuning/apply-using-agent',
-            'recommendations/configuration-tuning/apply-using-cron',
-            'recommendations/configuration-tuning/apply-manually/linux',
-            'recommendations/configuration-tuning/apply-manually/windows',
-            'recommendations/configuration-tuning/apply-manually/docker',
-            'recommendations/configuration-tuning/apply-manually/aws-rds',
-            'recommendations/configuration-tuning/apply-manually/gcp-cloud-sql',
-            'recommendations/configuration-tuning/rollback',
-            'recommendations/configuration-tuning/limit-mysql-memory',
-            'recommendations/configuration-tuning/configuration-example',
+            {
+              type: 'link',
+              label: 'Overview',
+              href: '/recommendations/configuration-tuning/mysql-tuning-process',
+            },
+            {
+              type: 'doc',
+              id: 'recommendations/configuration-tuning/initial-mysql-configuration',
+              label: 'Initial configuration',
+            },
+            {
+              type: 'category',
+              label: 'Apply configuration',
+              link: {
+                type: 'doc',
+                id: 'recommendations/configuration-tuning/apply-configuration',
+              },
+              items: [
+                {
+                  type: 'doc',
+                  id: 'recommendations/configuration-tuning/apply-using-portal',
+                  label: 'Using the Portal',
+                },
+                {
+                  type: 'doc',
+                  id: 'recommendations/configuration-tuning/apply-using-agent',
+                  label: 'Using the Agent',
+                },
+                {
+                  type: 'category',
+                  label: 'Manually',
+                  link: {
+                    type: 'doc',
+                    id: 'recommendations/configuration-tuning/apply-manually/index',
+                  },
+                  items: [
+                    {
+                      type: 'doc',
+                      id: 'recommendations/configuration-tuning/apply-manually/mysql',
+                      label: 'MySQL',
+                    },
+                    {
+                      type: 'doc',
+                      id: 'recommendations/configuration-tuning/apply-manually/mariadb',
+                      label: 'MariaDB',
+                    },
+                    {
+                      type: 'doc',
+                      id: 'recommendations/configuration-tuning/apply-manually/postgresql',
+                      label: 'PostgreSQL',
+                    },
+                  ],
+                },
+                {
+                  type: 'doc',
+                  id: 'recommendations/configuration-tuning/apply-using-cron',
+                  label: 'On a Schedule',
+                },
+              ],
+            },
+            {
+              type: 'doc',
+              id: 'recommendations/configuration-tuning/rollback',
+              label: 'Rollback',
+            },
+            {
+              type: 'doc',
+              id: 'recommendations/configuration-tuning/limit-mysql-memory',
+              label: 'Memory limit',
+            },
+            {
+              type: 'doc',
+              id: 'recommendations/configuration-tuning/configuration-example',
+              label: 'Configuration example',
+            },
           ],
         },
         {

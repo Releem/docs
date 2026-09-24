@@ -15,14 +15,14 @@ Start with the Releem Score and data freshness. Then open the block that matches
 ## 1. [Releem Score](https://releem.com/docs/releem-score)
 The Releem Score block displays the server's status and Releem Score, representing the best practices (health checks) for maintaining servers. The score provides a quick overview of your server's health, allowing you to assess its performance at a glance.
 
-## 2. [Configuration Tuning](/recommendations)
-The **Recommended Configuration** block summarizes proposed configuration changes. Follow its link to review the proposal and the applicable procedure before you make a change. The Releem MySQL tuning process uses a systematic approach to prepare configuration recommendations.
+## 2. [Configuration Tuning](/recommendations/configuration-tuning/mysql-tuning-process)
+The **Recommended Configuration** block summarizes proposed configuration changes. Open Configuration Tuning to understand the recommendation workflow, then review the proposal and choose an application method before you make a change.
 
 ## 3. Performance Monitoring
 The Performance Metrics block displays key instance metrics, such as CPU usage, Memory Usage, Swap usage, and IOPS. Monitoring these metrics helps you keep a close eye on your server's performance. Clicking on a metric displays a daily graph, offering a visual representation of the metric's performance over time. 
 
-The MySQL Metrics consists of several charts, including:
-- Latency: This graph shows the P95 MySQL Latency, indicating the query execution time.
+The Database Metrics consists of several charts, including:
+- Latency: This graph shows the P95 Latency, indicating the query execution time.
 - QPS (Queries Per Second): A measure of the number of queries processed per second.
 - Slow Log Queries: This graph displays the number of slow queries, helping you identify performance bottlenecks.
 
@@ -33,10 +33,10 @@ The MySQL Metrics consists of several charts, including:
 
 ## 5. Processes & Locks
 - [Deadlock Monitoring](/dashboard/deadlocks) continuously monitors your MySQL database for deadlocks, providing instant notifications with complete transaction details to help you quickly identify and resolve locking conflicts.
-- [Process List](/dashboard/process-list) offers real-time visibility into all active MySQL connections and running queries, allowing you to identify long-running queries, detect stuck processes, and troubleshoot bottlenecks directly from your dashboard.
+- [Process List](/dashboard/process-list) offers real-time visibility into all active database connections and running queries, allowing you to identify long-running queries, detect stuck processes, and troubleshoot bottlenecks directly from your dashboard.
 
 ## 6. [Health Checks](/dashboard/health-checks)
-MySQL Health Checks are diagnostic tests that evaluate a server's health, performance, and stability. Regular MySQL Health Checks are essential for ensuring optimal server operation and meeting business requirements. Releem performs health checks twice a day, providing users with up-to-date insights into their database's current state.
+Health Checks are diagnostic tests that evaluate a server's health, performance, and stability. Regular Health Checks are essential for ensuring optimal database server operation and meeting business requirements. Releem performs health checks twice a day, providing users with up-to-date insights into their database's current state.
 
 ## 7. [Security Checks](/dashboard/security-checks)
 Releem's Security Checks continuously monitor your MySQL database for security vulnerabilities and misconfigurations. This feature detects critical issues such as weak authentication, excessive privileges, anonymous users, remote root access, and insecure configurations, helping you maintain a secure database environment and comply with security best practices.

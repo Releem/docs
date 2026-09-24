@@ -1,20 +1,18 @@
 ---
 id: configuration-example
 slug: /recommendations/configuration-tuning/configuration-example
-title: Example of Configuration
+title: Recommended MySQL configuration example
 ---
 
-# Example of Recommended Configuration
+# Recommended MySQL configuration example
 
-Use this page to understand how a recommended MySQL configuration can appear in Releem.
-
-This example is illustrative only. Do not copy or apply it to a database server.
+Use this example to recognize how Releem presents a recommended MySQL configuration. The variables and values are version-sensitive and illustrative only. Do not copy or apply this example to a database server.
 
 ![Releem Dashboard example of Configuration](../../../assets/images/releem-dashboard-recommended-configuration.png)
 
-Each line shows an example recommended value, followed by the `Previous value` paired with that setting in this example.
+Each line shows an example recommended value followed by the `Previous value` displayed with that setting. Review the recommendation generated for your own server instead.
 
-```
+```ini
 [mysqld]
 query_cache_type = 1 ### Previous value : ON
 query_cache_size = 128M ### Previous value : 134217728
@@ -42,4 +40,3 @@ innodb_file_per_table = 1 ### Previous value : ON
 innodb_flush_method = O_DIRECT ### Previous value :
 innodb_thread_concurrency = 0 ### Previous value : 0
 ```
-

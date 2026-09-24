@@ -16,6 +16,7 @@ import path from 'node:path';
 import test from 'node:test';
 import {fileURLToPath, pathToFileURL} from 'node:url';
 import GithubSlugger from 'github-slugger';
+import {expectedConfigurationTuningSidebar} from './fixtures/configuration-tuning-contract.mjs';
 
 const projectRoot = fileURLToPath(new URL('../', import.meta.url));
 const baselineManifestPath = path.join(
@@ -38,6 +39,10 @@ const preservationManifestPath = path.join(
 const engineFirstManifestPath = path.join(
   projectRoot,
   '.agent/analysis/2026-09-10-engine-first-installation-manifest.json',
+);
+const configurationTuningManifestPath = path.join(
+  projectRoot,
+  '.agent/analysis/2026-09-12-configuration-tuning-migration.json',
 );
 
 const expectedEngineFirstInstallationSidebar = {
@@ -210,25 +215,7 @@ const expectedFinalSidebar = {
         id: 'recommendations/overview',
       },
       items: [
-        {
-          type: 'category',
-          label: 'Configuration Tuning',
-          items: [
-            'recommendations/configuration-tuning/mysql-tuning-process',
-            'recommendations/configuration-tuning/initial-mysql-configuration',
-            'recommendations/configuration-tuning/apply-using-portal',
-            'recommendations/configuration-tuning/apply-using-agent',
-            'recommendations/configuration-tuning/apply-using-cron',
-            'recommendations/configuration-tuning/apply-manually/linux',
-            'recommendations/configuration-tuning/apply-manually/windows',
-            'recommendations/configuration-tuning/apply-manually/docker',
-            'recommendations/configuration-tuning/apply-manually/aws-rds',
-            'recommendations/configuration-tuning/apply-manually/gcp-cloud-sql',
-            'recommendations/configuration-tuning/rollback',
-            'recommendations/configuration-tuning/limit-mysql-memory',
-            'recommendations/configuration-tuning/configuration-example',
-          ],
-        },
+        expectedConfigurationTuningSidebar,
         {
           type: 'category',
           label: 'Query Optimization',
@@ -1085,22 +1072,39 @@ function referencedImagePaths(sourcePath, contents) {
 }
 
 async function currentDocuments() {
-  const [migrationMap, consolidation, preservationManifest, engineFirstManifest] = await Promise.all([
+  const [
+    migrationMap,
+    consolidation,
+    preservationManifest,
+    engineFirstManifest,
+    configurationTuningManifest,
+  ] = await Promise.all([
     migrationMapPromise,
     consolidationPromise,
     preservationManifestPromise,
     loadEngineFirstManifest(),
+    loadConfigurationTuningManifest(),
   ]);
   const migrationByFinalSource = new Map(
     migrationMap.records.map((record) => [record.finalSource, record]),
   );
   const approvedEditorialSources = new Set(
-    preservationManifest.editorialExceptions
-      .filter(({status}) => status === 'approved')
-      .map(({sourcePath}) => sourcePath),
+    [
+      ...preservationManifest.editorialExceptions
+        .filter(({status}) => status === 'approved')
+        .map(({sourcePath}) => sourcePath),
+      ...configurationTuningManifest.authorizedExistingPageChanges.map(
+        ({sourcePath}) => sourcePath,
+      ),
+    ],
   );
   const engineFirstSources = new Set(
     engineFirstManifest.installationDocuments.map(({sourcePath}) => sourcePath),
+  );
+  const configurationTuningSources = new Set(
+    configurationTuningManifest.currentDocuments.addedDocuments.map(
+      ({sourcePath}) => sourcePath,
+    ),
   );
   const markdownFiles = await listFiles(
     path.join(projectRoot, 'docs'),
@@ -1115,7 +1119,8 @@ async function currentDocuments() {
       assert.ok(
         migrationRecord ||
           consolidation.addedSources.includes(sourcePath) ||
-          engineFirstSources.has(sourcePath),
+          engineFirstSources.has(sourcePath) ||
+          configurationTuningSources.has(sourcePath),
         `Migration overlays are missing ${sourcePath}`,
       );
       const baselineSourcePath = migrationRecord
@@ -1214,6 +1219,8 @@ const preservationManifestPromise = readFile(
 ).then(JSON.parse);
 const loadEngineFirstManifest = () =>
   readFile(engineFirstManifestPath, 'utf8').then(JSON.parse);
+const loadConfigurationTuningManifest = () =>
+  readFile(configurationTuningManifestPath, 'utf8').then(JSON.parse);
 
 const packageJson = JSON.parse(
   await readFile(path.join(projectRoot, 'package.json'), 'utf8'),
@@ -1372,14 +1379,15 @@ test('baseline manifest records exactly 54 unique documents, routes, IDs, and ap
   }
 });
 
-test('engine-first overlay has 63 unique current routes and exact database-first Installation ownership', async () => {
+test('current overlays have 63 unique routes and exact Installation and Configuration Tuning ownership', async () => {
   assert.equal(
     existsSync(engineFirstManifestPath),
     true,
     'Create .agent/analysis/2026-09-10-engine-first-installation-manifest.json',
   );
-  const [overlay, documents, sidebars] = await Promise.all([
+  const [overlay, tuningOverlay, documents, sidebars] = await Promise.all([
     loadEngineFirstManifest(),
+    loadConfigurationTuningManifest(),
     currentDocuments(),
     loadSidebars(),
   ]);
@@ -1387,6 +1395,15 @@ test('engine-first overlay has 63 unique current routes and exact database-first
   assert.equal(overlay.historicalBaselinePageCount, 54);
   assert.equal(overlay.currentPageCount, 63);
   assert.equal(overlay.installationDocuments.length, 18);
+  assert.equal(tuningOverlay.currentDocuments.basePageCount, overlay.currentPageCount);
+  assert.deepEqual(
+    tuningOverlay.currentDocuments.retiredSourcePaths,
+    tuningOverlay.retiredSources,
+  );
+  assert.deepEqual(
+    tuningOverlay.currentDocuments.addedDocuments,
+    tuningOverlay.documents,
+  );
   assert.equal(documents.length, 63);
   assert.equal(new Set(documents.map(({effectiveId}) => effectiveId)).size, 63);
   assert.equal(new Set(documents.map(({route}) => route)).size, 63);
@@ -1394,6 +1411,21 @@ test('engine-first overlay has 63 unique current routes and exact database-first
     sidebars.docs.find(({label}) => label === 'Installation'),
     expectedEngineFirstInstallationSidebar,
   );
+  assert.deepEqual(
+    sidebars.docs.find(({label}) => label === 'Recommendations').items.find(
+      ({label}) => label === 'Configuration Tuning',
+    ),
+    expectedConfigurationTuningSidebar,
+  );
+  const currentSources = new Set(documents.map(({sourcePath}) => sourcePath));
+  for (const sourcePath of tuningOverlay.currentDocuments.retiredSourcePaths) {
+    assert.equal(currentSources.has(sourcePath), false, `Retired source remains: ${sourcePath}`);
+  }
+  for (const {sourcePath, route} of tuningOverlay.currentDocuments.addedDocuments) {
+    const document = documents.find((candidate) => candidate.sourcePath === sourcePath);
+    assert.ok(document, `Missing configuration-tuning document: ${sourcePath}`);
+    assert.equal(document.route, route, `${sourcePath} route drifted`);
+  }
   for (const route of overlay.blockedRoutes) {
     assert.equal(documents.some((document) => document.route === route), false);
     assert.equal(JSON.stringify(sidebars).includes(route.slice(1)), false);
@@ -1945,11 +1977,19 @@ test('every internal Markdown and MDX link resolves directly to a canonical rout
 });
 
 test('mirrored documents resolve every image from the final source location without path or hash drift', async () => {
-  const [manifest, migrationMap, consolidation, engineFirstManifest, documents] = await Promise.all([
+  const [
+    manifest,
+    migrationMap,
+    consolidation,
+    engineFirstManifest,
+    configurationTuningManifest,
+    documents,
+  ] = await Promise.all([
     manifestPromise,
     migrationMapPromise,
     consolidationPromise,
     loadEngineFirstManifest(),
+    loadConfigurationTuningManifest(),
     currentDocuments(),
   ]);
   const baselineByPath = new Map(
@@ -1962,7 +2002,8 @@ test('mirrored documents resolve every image from the final source location with
   for (const record of migrationMap.records) {
     if (
       consolidation.retiredSources.includes(record.finalSource) ||
-      engineFirstManifest.retiredSources.includes(record.finalSource)
+      engineFirstManifest.retiredSources.includes(record.finalSource) ||
+      configurationTuningManifest.retiredSources.includes(record.finalSource)
     ) continue;
     const baselinePath = baselineSourcePathFor(record.currentSource);
     const finalPath = record.finalSource;

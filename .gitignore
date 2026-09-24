@@ -6,6 +6,7 @@ dist/
 .docusaurus
 .cache-loader
 .astro/
+
 .agent/
 
 # dependencies

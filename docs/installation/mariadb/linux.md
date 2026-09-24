@@ -85,7 +85,7 @@ The installer writes the Agent's ongoing configuration, including secret values,
 
 - `RELEEM_API_KEY` identifies the server in Releem.
 - `RELEEM_HOSTNAME` overrides the name displayed in the Dashboard.
-- `RELEEM_DB_MEMORY_LIMIT` reserves memory for other software; `0` lets Releem consider all memory. See [Limit MySQL Memory](/recommendations/configuration-tuning/limit-mysql-memory).
+- `RELEEM_DB_MEMORY_LIMIT` is accepted by the installer. This documentation does not establish how it affects MariaDB configuration tuning; the examples keep it at `0`.
 - `RELEEM_CRON_ENABLE=0` disables scheduled Agent updates. `RELEEM_CRON_ENABLE=1` creates a daily auto-update at midnight; review the dedicated [Update guide](/installation/manage-the-releem-agent/update) before enabling it.
 - `RELEEM_MYSQL_TYPE=1` explicitly selects the MySQL-family path. MySQL is already the default.
 - `RELEEM_MYSQL_HOST` defaults to `127.0.0.1`, `RELEEM_MYSQL_PORT` defaults to `3306`, and `RELEEM_MYSQL_LOGIN` and `RELEEM_MYSQL_PASSWORD` configure the MySQL-family monitoring connection.

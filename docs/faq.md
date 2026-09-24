@@ -21,7 +21,7 @@ For account tasks, see [Users and Roles](/account/access/users-and-roles), [Paym
 Follow [Troubleshoot the Releem Agent](/get-started/troubleshoot-releem-agent) to check its Dashboard state, service status, and logs.
 
 ## Why does high latency occur after applying the recommended configuration?
-Releem restarts MySQL to apply recommended configurations. Latency often spikes due to the database operating with cold caches. [Learn more](https://releem.com/docs/mysql-latency)
+Some recommended settings require a database restart before they become effective; other settings do not. If a restart occurred, temporarily cold caches can be one cause of higher latency. Confirm the restart state, effective settings, database health, and current metrics before attributing the change to a single cause. [Learn more](https://releem.com/docs/mysql-latency)
 
 ## I applied all recommendations, but Releem Score is not 100%. How can I improve it?
 This indicates that certain [Health Checks](/dashboard/health-checks) differ from best practices. Avoid taking any action, Releem will consistently seek to enhance it.
@@ -30,9 +30,9 @@ This indicates that certain [Health Checks](/dashboard/health-checks) differ fro
 Review [Health Checks](/dashboard/health-checks) to see which checks differ from best practices. Avoid taking any action, Releem will consistently seek to enhance it.
 
 ## Would Releem automatically change MySQL configuration without my approval?
-Rest assured, Releem does not automatically implement any configurations without your explicit action. Configurations are applied only when you select [**Apply Now**](/recommendations/configuration-tuning/apply-using-portal) or follow the [Releem Agent application guide](/recommendations/configuration-tuning/apply-using-agent). Before making any changes, you have the opportunity to review and compare the proposed configurations with your current settings.
+The documented Portal and Agent workflows require you to start the application. Review the proposed settings and choose an available method: [apply using the Portal](/recommendations/configuration-tuning/apply-using-portal) or [apply using the Agent](/recommendations/configuration-tuning/apply-using-agent). Availability depends on the database and environment.
 
-Additionally, for those who prefer, there's an option to [automate the application of configurations during the maintenance window](/recommendations/configuration-tuning/apply-using-cron) by setting up a dedicated cron job.
+A verified procedure for scheduled configuration application is not currently published. See [On a Schedule](/recommendations/configuration-tuning/apply-using-cron) for the current limitation; do not create a configuration-application cron job from older instructions.
 
 ## How do I add my business details and the VAT number?
 You have the option to include your business address and VAT identification on the payment page. Additionally, you can access any of your past invoices and select the Add Address & VAT Number link to accomplish this. See [Payment Information](/account/billing/payment-information) for the account task.

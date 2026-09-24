@@ -5,6 +5,7 @@ import {lstat, readdir, readFile} from 'node:fs/promises';
 import path from 'node:path';
 import test from 'node:test';
 import {fileURLToPath, pathToFileURL} from 'node:url';
+import {expectedConfigurationTuningSidebar} from './fixtures/configuration-tuning-contract.mjs';
 
 const projectRoot = fileURLToPath(new URL('../', import.meta.url));
 const manifestPath = path.join(
@@ -27,6 +28,10 @@ const consolidationPath = path.join(
 const engineFirstManifestPath = path.join(
   projectRoot,
   '.agent/analysis/2026-09-10-engine-first-installation-manifest.json',
+);
+const configurationTuningManifestPath = path.join(
+  projectRoot,
+  '.agent/analysis/2026-09-12-configuration-tuning-migration.json',
 );
 const approvedTopLevelDirectories = [
   'get-started',
@@ -148,25 +153,7 @@ const expectedFinalSidebar = {
       label: 'Recommendations',
       link: {type: 'doc', id: 'recommendations/overview'},
       items: [
-        {
-          type: 'category',
-          label: 'Configuration Tuning',
-          items: [
-            'recommendations/configuration-tuning/mysql-tuning-process',
-            'recommendations/configuration-tuning/initial-mysql-configuration',
-            'recommendations/configuration-tuning/apply-using-portal',
-            'recommendations/configuration-tuning/apply-using-agent',
-            'recommendations/configuration-tuning/apply-using-cron',
-            'recommendations/configuration-tuning/apply-manually/linux',
-            'recommendations/configuration-tuning/apply-manually/windows',
-            'recommendations/configuration-tuning/apply-manually/docker',
-            'recommendations/configuration-tuning/apply-manually/aws-rds',
-            'recommendations/configuration-tuning/apply-manually/gcp-cloud-sql',
-            'recommendations/configuration-tuning/rollback',
-            'recommendations/configuration-tuning/limit-mysql-memory',
-            'recommendations/configuration-tuning/configuration-example',
-          ],
-        },
+        expectedConfigurationTuningSidebar,
         {
           type: 'category',
           label: 'Query Optimization',
@@ -577,6 +564,41 @@ const expectedEngineFirstRedirects = [
     .map((redirect) => engineFirstRedirectBySource.get(redirect.from) ?? redirect),
   ...engineFirstRedirectChanges.filter(({from}) => !priorRedirectSources.has(from)),
 ];
+const configurationTuningPlatforms = [
+  'linux',
+  'windows',
+  'docker',
+  'aws-rds',
+  'gcp-cloud-sql',
+];
+const configurationTuningRedirectChanges = [
+  ...configurationTuningPlatforms.map((platform) => ({
+    from: `/configuration-tuning/how-to-apply-configuration-manually/${platform}`,
+    to: `/recommendations/configuration-tuning/apply-manually/mysql?platform=${platform}`,
+  })),
+  ...configurationTuningPlatforms.map((platform) => ({
+    from: `/recommendations/configuration-tuning/apply-manually/${platform}`,
+    to: `/recommendations/configuration-tuning/apply-manually/mysql?platform=${platform}`,
+  })),
+];
+const configurationTuningRedirectBySource = new Map(
+  configurationTuningRedirectChanges.map((redirect) => [redirect.from, redirect]),
+);
+const engineFirstRedirectSources = new Set(
+  expectedEngineFirstRedirects.map(({from}) => from),
+);
+const configurationTuningNewRedirects = configurationTuningRedirectChanges.filter(
+  ({from}) => !engineFirstRedirectSources.has(from),
+);
+const expectedConfigurationTuningRedirects = [
+  ...expectedEngineFirstRedirects.flatMap((redirect) => {
+    const currentRedirect = configurationTuningRedirectBySource.get(redirect.from) ?? redirect;
+    return redirect.from ===
+      '/configuration-tuning/how-to-apply-configuration-manually/gcp-cloud-sql'
+      ? [currentRedirect, ...configurationTuningNewRedirects]
+      : [currentRedirect];
+  }),
+];
 
 test('migration map freezes the exact 54-row path, ID, route, hash, and token contract', async () => {
   assert.equal(manifest.schemaVersion, 1);
@@ -695,16 +717,33 @@ test('all image and static assets retain their paths and hashes', async () => {
   );
 });
 
-test('engine-first overlay owns the exact 63-page corpus, database-first sidebar, canonical links, and direct redirects', async () => {
+test('current overlays own the exact 63-page corpus, nested sidebar, canonical links, and direct redirects', async () => {
   assert.equal(
     existsSync(engineFirstManifestPath),
     true,
     'Create .agent/analysis/2026-09-10-engine-first-installation-manifest.json',
   );
-  const overlay = JSON.parse(await readFile(engineFirstManifestPath, 'utf8'));
+  const overlaySource = await readFile(engineFirstManifestPath);
+  const overlay = JSON.parse(overlaySource);
+  const tuningOverlay = JSON.parse(await readFile(configurationTuningManifestPath, 'utf8'));
   assert.equal(overlay.historicalBaselinePageCount, 54);
   assert.equal(overlay.currentPageCount, 63);
   assert.equal(overlay.installationDocuments.length, 18);
+  assert.deepEqual(tuningOverlay.baseOverlay, {
+    manifestPath: '.agent/analysis/2026-09-10-engine-first-installation-manifest.json',
+    sha256: sha256(overlaySource),
+    currentPageCount: overlay.currentPageCount,
+    sourceRevision: '3d00a8f062caac194f81282293ec03889a46aede',
+  });
+  assert.equal(tuningOverlay.currentDocuments.basePageCount, overlay.currentPageCount);
+  assert.deepEqual(
+    tuningOverlay.currentDocuments.retiredSourcePaths,
+    tuningOverlay.retiredSources,
+  );
+  assert.deepEqual(
+    tuningOverlay.currentDocuments.addedDocuments,
+    tuningOverlay.documents,
+  );
 
   const markdownFiles = await listFiles(
     path.join(projectRoot, 'docs'),
@@ -728,6 +767,14 @@ test('engine-first overlay owns the exact 63-page corpus, database-first sidebar
   const documentsBySource = new Map(
     documents.map((document) => [document.sourcePath, document]),
   );
+  for (const sourcePath of tuningOverlay.currentDocuments.retiredSourcePaths) {
+    assert.equal(documentsBySource.has(sourcePath), false, `Retired tuning source remains: ${sourcePath}`);
+  }
+  for (const expected of tuningOverlay.currentDocuments.addedDocuments) {
+    const actual = documentsBySource.get(expected.sourcePath);
+    assert.ok(actual, `Missing configuration-tuning document: ${expected.sourcePath}`);
+    assert.equal(actual.route, expected.route, `${expected.sourcePath} route drifted`);
+  }
   for (const expected of overlay.installationDocuments) {
     const actual = documentsBySource.get(expected.sourcePath);
     assert.ok(actual, `Missing engine-first document: ${expected.sourcePath}`);
@@ -747,13 +794,14 @@ test('engine-first overlay owns the exact 63-page corpus, database-first sidebar
   assert.deepEqual(
     overlay.directRedirects,
     expectedEngineFirstRedirects,
-    'The engine-first overlay must retain every unrelated prior redirect and apply only explicit removals, overrides, and additions',
+    'The frozen engine-first overlay must retain its exact installation redirect contract',
   );
+  assert.deepEqual(tuningOverlay.directRedirects, configurationTuningRedirectChanges);
   const redirectModule = await loadRedirectsModule();
-  assert.deepEqual(redirectModule.redirects, expectedEngineFirstRedirects);
+  assert.deepEqual(redirectModule.redirects, expectedConfigurationTuningRedirects);
   const docusaurusConfig = await loadDocusaurusConfig();
   assert.deepEqual(docusaurusConfig.plugins, [
-    ['@docusaurus/plugin-client-redirects', {redirects: expectedEngineFirstRedirects}],
+    ['@docusaurus/plugin-client-redirects', {redirects: expectedConfigurationTuningRedirects}],
   ]);
   assertUnique(redirectModule.redirects.map(({from}) => from), 'redirect sources');
   const redirectSources = new Set(redirectModule.redirects.map(({from}) => from));
@@ -769,6 +817,12 @@ test('engine-first overlay owns the exact 63-page corpus, database-first sidebar
     );
   }
   for (const redirect of engineFirstRedirectChanges) {
+    assert.deepEqual(
+      redirectModule.redirects.find(({from}) => from === redirect.from),
+      redirect,
+    );
+  }
+  for (const redirect of configurationTuningRedirectChanges) {
     assert.deepEqual(
       redirectModule.redirects.find(({from}) => from === redirect.from),
       redirect,
@@ -881,7 +935,7 @@ test('Security Checks and Schema Checks remain aggregate pages only', () => {
 });
 
 if (process.env.RELEEM_VERIFY_REDIRECT_BUILD === '1') {
-  test('engine-first built redirect artifacts and Linux compatibility page are distinct canonical outputs', async () => {
+  test('built redirect artifacts and compatibility pages are distinct canonical outputs', async () => {
     const buildDirectory = path.join(projectRoot, 'build');
     assert.equal(
       existsSync(buildDirectory),
@@ -904,7 +958,7 @@ if (process.env.RELEEM_VERIFY_REDIRECT_BUILD === '1') {
     );
     const overlay = JSON.parse(await readFile(engineFirstManifestPath, 'utf8'));
     assert.deepEqual(overlay.directRedirects, expectedEngineFirstRedirects);
-    const expectedRedirects = expectedEngineFirstRedirects;
+    const expectedRedirects = expectedConfigurationTuningRedirects;
     const expectedRedirectArtifacts = expectedRedirects.map(({from}) =>
       redirectArtifactPath(from),
     );

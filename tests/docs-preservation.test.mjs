@@ -24,10 +24,18 @@ const engineFirstExcludedInstructionsPath = path.join(
   projectRoot,
   '.agent/analysis/2026-09-10-engine-first-excluded-instructions.md',
 );
+const configurationTuningManifestPath = path.join(
+  projectRoot,
+  '.agent/analysis/2026-09-12-configuration-tuning-migration.json',
+);
 const baselineRevision = '9ad7ce3';
 const expectedPageCount = 54;
 const expectedAssetCount = 31;
 const consolidation = JSON.parse(await readFile(consolidationPath, 'utf8'));
+const configurationTuningMigration = JSON.parse(
+  await readFile(configurationTuningManifestPath, 'utf8'),
+);
+const engineFirstManifest = JSON.parse(await readFile(engineFirstManifestPath, 'utf8'));
 const engineFirstRetiredSources = [
   'docs/installation/linux.md',
   'docs/installation/installation-methods/windows.md',
@@ -134,8 +142,15 @@ const lifecycleSourceOverlayHashes = new Map([
 const retiredSources = new Set([
   ...consolidation.retiredSources,
   ...engineFirstRetiredSources,
+  ...configurationTuningMigration.retiredSources,
 ]);
 const rewrittenSources = new Set(consolidation.rewrittenSources);
+const configurationTuningChangeBySource = new Map(
+  configurationTuningMigration.authorizedExistingPageChanges.map((change) => [
+    change.sourcePath,
+    change,
+  ]),
+);
 
 const engineFirstConnectLinkChanges = [
   {
@@ -334,6 +349,181 @@ function reverseConsolidationLinks(text, sourcePath) {
 const sha256 = (value) =>
   createHash('sha256').update(value).digest('hex');
 const normalizeLineEndings = (value) => value.replace(/\r\n?/gu, '\n');
+
+function configurationTuningBaselineHash(change) {
+  if (change.baselineEvidence === 'preservationPage') {
+    const page = manifest.pages.find(({sourcePath}) => sourcePath === change.sourcePath);
+    assert.ok(page, `Missing frozen preservation page: ${change.sourcePath}`);
+    return page.sourceSha256;
+  }
+  if (change.baselineEvidence === 'preservationEditorialException') {
+    const exception = manifest.editorialExceptions.find(
+      ({sourcePath}) => sourcePath === change.sourcePath,
+    );
+    assert.ok(exception, `Missing frozen editorial exception: ${change.sourcePath}`);
+    return exception.approvedCurrent.sourceSha256;
+  }
+  if (change.baselineEvidence === 'engineFirstDocumentAtSourceRevision') {
+    assert.ok(
+      engineFirstManifest.installationDocuments.some(
+        ({sourcePath}) => sourcePath === change.sourcePath,
+      ),
+      `Engine-first manifest does not own ${change.sourcePath}`,
+    );
+    return sha256(execFileSync(
+      'git',
+      ['show', `${configurationTuningMigration.baseOverlay.sourceRevision}:${change.sourcePath}`],
+      {cwd: projectRoot},
+    ));
+  }
+  assert.fail(`Unknown Configuration Tuning baseline evidence: ${change.baselineEvidence}`);
+}
+
+function codeFenceContentSnapshots(page) {
+  return page.codeFences.map(({language, contentSha256}) => ({language, contentSha256}));
+}
+
+async function assertConfigurationTuningChange(sourcePath, input = null) {
+  const change = configurationTuningChangeBySource.get(sourcePath);
+  assert.ok(change, `Missing authorized Configuration Tuning change: ${sourcePath}`);
+  assert.equal(change.status, 'approved');
+  assert.equal(change.approvedBy, 'user');
+  assert.equal(change.approvedOn, '2026-09-12');
+  assert.match(change.approvalEvidence, /User-authorized Configuration Tuning implementation, Task [34]/u);
+  assert.ok(change.permittedFields.length > 0);
+  assert.equal(new Set(change.permittedFields).size, change.permittedFields.length);
+  assert.ok(change.bodyChangeScope.length > 0);
+  assert.ok(change.preservedFields.length > 0);
+  assert.ok(typeof change.rationale === 'string' && change.rationale.length >= 24);
+  assert.equal(configurationTuningBaselineHash(change), change.baselineSourceSha256);
+
+  const baselineContents = execFileSync(
+    'git',
+    ['show', `${configurationTuningMigration.baseOverlay.sourceRevision}:${sourcePath}`],
+    {cwd: projectRoot, encoding: 'utf8'},
+  );
+  assert.equal(
+    sha256(baselineContents),
+    change.baselineSourceSha256,
+    `${sourcePath} baseline differs from the frozen source revision`,
+  );
+  const currentInput = input ?? await readFile(path.join(projectRoot, sourcePath));
+  const currentContents = Buffer.isBuffer(currentInput)
+    ? currentInput.toString('utf8')
+    : currentInput;
+  assert.equal(
+    sha256(currentContents),
+    change.currentSourceSha256,
+    `${sourcePath} changed beyond its approved current hash`,
+  );
+
+  const baselinePage = parseDocument(sourcePath, baselineContents);
+  const currentPage = parseDocument(sourcePath, currentContents);
+  for (const field of ['explicitId', 'effectiveId', 'slug', 'publicRoute']) {
+    assert.equal(currentPage[field], baselinePage[field], `${sourcePath} changed ${field}`);
+  }
+  if (change.preservedFields.includes('frontMatter')) {
+    assert.equal(currentPage.frontMatter, baselinePage.frontMatter, `${sourcePath} changed front matter`);
+  } else {
+    assert.deepEqual(change.permittedFields, ['frontMatter.title', 'body']);
+    assert.equal(
+      currentPage.frontMatter.replace(/^title:.*$/mu, frontMatterLine(baselinePage.frontMatter, 'title')),
+      baselinePage.frontMatter,
+      `${sourcePath} changed front matter beyond title`,
+    );
+  }
+  if (change.preservedFields.includes('codeFences')) {
+    assert.deepEqual(
+      codeFenceContentSnapshots(currentPage),
+      codeFenceContentSnapshots(baselinePage),
+      `${sourcePath} changed preserved code fences`,
+    );
+  }
+  assert.deepEqual(
+    currentPage.images.map(imagePlacementKey),
+    baselinePage.images.map(imagePlacementKey),
+    `${sourcePath} changed preserved image placements`,
+  );
+  if (change.preservedFields.includes('sidebarOwnership')) {
+    const baselineSidebarSource = execFileSync(
+      'git',
+      ['show', `${configurationTuningMigration.baseOverlay.sourceRevision}:sidebars.js`],
+      {cwd: projectRoot, encoding: 'utf8'},
+    );
+    const baselineSidebarUrl = `data:text/javascript;base64,${Buffer.from(baselineSidebarSource).toString('base64')}`;
+    const baselineOwnership = collectSidebarOwnership((await import(baselineSidebarUrl)).default);
+    const currentOwnership = collectSidebarOwnership(await loadSidebars());
+    assert.deepEqual(
+      currentOwnership.get(currentPage.effectiveId),
+      baselineOwnership.get(baselinePage.effectiveId),
+      `${sourcePath} changed preserved sidebar ownership`,
+    );
+  }
+  return {change, baselinePage, currentPage};
+}
+
+function assertConfigurationTuningCodeFenceChange(change, baselinePage, currentPage) {
+  const baselineHashes = baselinePage.codeFences.map(({contentSha256}) => contentSha256);
+  const currentHashes = currentPage.codeFences.map(({contentSha256}) => contentSha256);
+  if (change.sourcePath.endsWith('/apply-using-portal.md')) {
+    assert.ok(baselineHashes.length > 0, 'Portal baseline must contain the removed command fences');
+    assert.deepEqual(currentHashes, []);
+    assert.ok(change.bodyChangeScope.includes('remove unverified commands'));
+  } else if (change.sourcePath.endsWith('/apply-using-cron.md')) {
+    assert.equal(baselineHashes.length, 3);
+    assert.equal(currentHashes.length, 4);
+    for (const baselineHash of baselineHashes) {
+      assert.ok(currentHashes.includes(baselineHash), 'Cron restoration must retain every original command fence');
+    }
+    assert.ok(change.bodyChangeScope.includes('restore scheduled application command'));
+  } else if (
+    change.sourcePath.endsWith('/initial-mysql-configuration.md') ||
+    change.sourcePath.endsWith('/rollback.md') ||
+    change.sourcePath.endsWith('/configuration-example.md')
+  ) {
+    assert.ok(
+      change.bodyChangeScope.includes(
+        change.sourcePath.endsWith('/initial-mysql-configuration.md')
+          ? 'code-fence ordering'
+          : 'code-fence language annotation',
+      ),
+      `${change.sourcePath} needs an explicit code-fence exception scope`,
+    );
+    assert.deepEqual(
+      currentHashes.slice().sort(),
+      baselineHashes.slice().sort(),
+      `${change.sourcePath} changed executable code-fence contents`,
+    );
+  } else {
+    assert.deepEqual(
+      codeFenceContentSnapshots(currentPage),
+      codeFenceContentSnapshots(baselinePage),
+      `${change.sourcePath} changed code fences without a narrow exception`,
+    );
+  }
+}
+
+function assertRetiredConfigurationTuningProcedure(sourcePath) {
+  assert.equal(
+    configurationTuningMigration.retiredSources.includes(sourcePath),
+    true,
+    `${sourcePath} is not an explicitly retired Configuration Tuning source`,
+  );
+  assert.equal(existsSync(path.join(projectRoot, sourcePath)), false);
+  const procedure = configurationTuningMigration.retiredManualProcedures.find(
+    (candidate) => candidate.sourcePath === sourcePath,
+  );
+  assert.ok(procedure, `Missing retired procedure inventory: ${sourcePath}`);
+  assert.match(procedure.sourceSha256, /^[a-f0-9]{64}$/u);
+  assert.equal(
+    procedure.destination.route,
+    '/recommendations/configuration-tuning/apply-manually/mysql',
+  );
+  assert.equal(
+    existsSync(path.join(projectRoot, 'docs/recommendations/configuration-tuning/apply-manually/mysql.md')),
+    true,
+  );
+}
 const lineNumberAt = (text, offset) =>
   text.slice(0, offset).split('\n').length;
 
@@ -1049,7 +1239,11 @@ test('package directly composes every legacy and preservation test file', async 
   );
   assert.equal(
     packageJson.scripts['docs:check'],
-    'node --test tests/docs-structure.test.mjs tests/docs-directory-mirror.test.mjs tests/docs-preservation.test.mjs tests/docs-linux-installation.test.mjs',
+    'node --test tests/docs-structure.test.mjs tests/docs-directory-mirror.test.mjs tests/docs-preservation.test.mjs tests/docs-linux-installation.test.mjs tests/docs-configuration-tuning.test.mjs',
+  );
+  assert.equal(
+    packageJson.scripts['docs:configuration-tuning:check'],
+    'node --test tests/docs-configuration-tuning.test.mjs',
   );
   assert.equal(Object.hasOwn(packageJson.scripts, 'docs:legacy-compatible:check'), false);
   assert.doesNotMatch(packageJson.scripts['docs:check'], /--test-name-pattern/u);
@@ -1057,6 +1251,104 @@ test('package directly composes every legacy and preservation test file', async 
     packageJson.scripts['docs:check'],
     /--test-skip-pattern|'/u,
   );
+});
+
+test('Configuration Tuning preservation overlay layers on frozen engine-first history', async () => {
+  const engineFirstBytes = await readFile(engineFirstManifestPath);
+  const engineFirst = JSON.parse(engineFirstBytes);
+  const expectedRetiredSources = [
+    'docs/recommendations/configuration-tuning/apply-manually/linux.md',
+    'docs/recommendations/configuration-tuning/apply-manually/windows.md',
+    'docs/recommendations/configuration-tuning/apply-manually/docker.md',
+    'docs/recommendations/configuration-tuning/apply-manually/aws-rds.md',
+    'docs/recommendations/configuration-tuning/apply-manually/gcp-cloud-sql.md',
+  ];
+  const expectedAddedSources = [
+    'docs/recommendations/configuration-tuning/apply-configuration.md',
+    'docs/recommendations/configuration-tuning/apply-manually/index.md',
+    'docs/recommendations/configuration-tuning/apply-manually/mysql.md',
+    'docs/recommendations/configuration-tuning/apply-manually/mariadb.md',
+    'docs/recommendations/configuration-tuning/apply-manually/postgresql.md',
+  ];
+  const expectedChangedSources = [
+    'docs/recommendations/configuration-tuning/mysql-tuning-process.md',
+    'docs/recommendations/configuration-tuning/initial-mysql-configuration.md',
+    'docs/recommendations/configuration-tuning/apply-using-portal.md',
+    'docs/recommendations/configuration-tuning/apply-using-agent.md',
+    'docs/recommendations/configuration-tuning/apply-using-cron.md',
+    'docs/recommendations/configuration-tuning/rollback.md',
+    'docs/recommendations/configuration-tuning/limit-mysql-memory.md',
+    'docs/recommendations/configuration-tuning/configuration-example.md',
+    'docs/dashboard/overview.md',
+    'docs/recommendations/overview.md',
+    'docs/faq.md',
+    'docs/installation/mariadb/linux.md',
+  ];
+  const preservationBytes = await readFile(manifestPath);
+  for (const manifestSourcePath of [
+    '.agent/analysis/2026-09-10-engine-first-installation-manifest.json',
+    '.agent/analysis/2026-09-12-configuration-tuning-migration.json',
+  ]) {
+    const tracked = execFileSync('git', ['ls-files', '--', manifestSourcePath], {
+      cwd: projectRoot,
+      encoding: 'utf8',
+    }).trim();
+    const unignored = execFileSync(
+      'git',
+      ['ls-files', '--others', '--exclude-standard', '--', manifestSourcePath],
+      {cwd: projectRoot, encoding: 'utf8'},
+    ).trim();
+    assert.equal(
+      tracked || unignored,
+      manifestSourcePath,
+      `${manifestSourcePath} must be tracked or available to track`,
+    );
+  }
+
+  assert.deepEqual(configurationTuningMigration.baseOverlay, {
+    manifestPath: '.agent/analysis/2026-09-10-engine-first-installation-manifest.json',
+    sha256: sha256(engineFirstBytes),
+    currentPageCount: engineFirst.currentPageCount,
+    sourceRevision: '3d00a8f062caac194f81282293ec03889a46aede',
+  });
+  assert.deepEqual(configurationTuningMigration.preservationBaseline, {
+    manifestPath: '.agent/analysis/2026-09-03-committed-content-preservation.json',
+    sha256: sha256(preservationBytes),
+  });
+  assert.equal(configurationTuningMigration.historicalPageCount, engineFirst.currentPageCount);
+  assert.equal(configurationTuningMigration.currentPageCount, engineFirst.currentPageCount);
+  assert.deepEqual(configurationTuningMigration.retiredSources, expectedRetiredSources);
+  assert.deepEqual(
+    configurationTuningMigration.currentDocuments.retiredSourcePaths,
+    expectedRetiredSources,
+  );
+  assert.deepEqual(
+    configurationTuningMigration.currentDocuments.addedDocuments.map(({sourcePath}) => sourcePath),
+    expectedAddedSources,
+  );
+  assert.deepEqual(
+    configurationTuningMigration.currentDocuments.addedDocuments,
+    configurationTuningMigration.documents,
+  );
+  assert.equal(configurationTuningMigration.currentDocuments.basePageCount, 63);
+  assert.equal(expectedRetiredSources.length, expectedAddedSources.length);
+  assert.equal(new Set(expectedRetiredSources).size, expectedRetiredSources.length);
+  assert.equal(new Set(expectedAddedSources).size, expectedAddedSources.length);
+  assert.deepEqual(
+    configurationTuningMigration.authorizedExistingPageChanges.map(({sourcePath}) => sourcePath),
+    expectedChangedSources,
+  );
+  assert.equal(
+    new Set(configurationTuningMigration.authorizedExistingPageChanges.map(({sourcePath}) => sourcePath)).size,
+    expectedChangedSources.length,
+  );
+  assert.equal(configurationTuningChangeBySource.has('docs/installation/mysql/linux.md'), false);
+  for (const sourcePath of expectedRetiredSources) {
+    assertRetiredConfigurationTuningProcedure(sourcePath);
+  }
+  for (const sourcePath of expectedChangedSources) {
+    await assertConfigurationTuningChange(sourcePath);
+  }
 });
 
 test('route exceptions preserve body and undeclared front matter', () => {
@@ -1565,10 +1857,11 @@ test('supersedes legacy whole-file checks with exact content identity outside ap
     );
     const currentSourcePath =
       routeException?.currentSourcePath ?? baselinePage.sourcePath;
-    const currentText = reverseConsolidationLinks(await readFile(
-      path.join(projectRoot, currentSourcePath),
-      'utf8',
-    ), currentSourcePath);
+    const currentBytes = await readFile(path.join(projectRoot, currentSourcePath));
+    const currentText = reverseConsolidationLinks(
+      currentBytes.toString('utf8'),
+      currentSourcePath,
+    );
     const currentPage = parseDocument(
       currentSourcePath,
       currentText,
@@ -1577,17 +1870,17 @@ test('supersedes legacy whole-file checks with exact content identity outside ap
       ({sourcePath}) => sourcePath === baselinePage.sourcePath,
     );
 
-    if (!exception) {
+    if (configurationTuningChangeBySource.has(currentSourcePath)) {
+      await assertConfigurationTuningChange(currentSourcePath, currentBytes);
+    } else if (!exception) {
       assertPageContentIdentity({
         baselinePage,
         currentPage,
         routeException,
         safetyExceptions: manifest.safetyExceptions,
       });
-      continue;
-    }
-
-    assert.equal(exception.status, 'approved');
+    } else {
+      assert.equal(exception.status, 'approved');
     assert.equal(exception.approvedBy, 'user');
     const isOverviewPilot =
       exception.sourcePath === 'docs/get-started/releem-overview.md';
@@ -1704,6 +1997,7 @@ test('supersedes legacy whole-file checks with exact content identity outside ap
         exception.approvedCurrent[field],
         `${exception.sourcePath} drifted beyond its approved editorial snapshot: ${field}`,
       );
+    }
     }
   }
 });
@@ -2641,717 +2935,112 @@ test('agent logs routes readers by environment and preserves every inspection co
   assert.equal(page.sourceSha256, exception.approvedCurrent.sourceSha256);
 });
 
-test('AWS RDS configuration application records current state and makes timing an operator decision', async () => {
-  const sourcePath = 'docs/recommendations/configuration-tuning/apply-manually/aws-rds.md';
-  const source = await readFile(path.join(projectRoot, sourcePath), 'utf8');
-  const page = parseDocument(sourcePath, source);
-  const baselinePage = manifest.pages.find(
-    ({sourcePath: candidatePath}) => candidatePath === sourcePath,
-  );
-  const exception = manifest.editorialExceptions.find(
-    ({sourcePath: candidatePath}) => candidatePath === sourcePath,
-  );
-
-  assert.ok(baselinePage, 'AWS RDS configuration baseline record is missing');
-  assert.equal(page.frontMatter, baselinePage.frontMatter);
-  assert.equal(page.explicitId, 'aws-rds');
-  assert.equal(
-    page.effectiveId,
-    'recommendations/configuration-tuning/apply-manually/aws-rds',
-  );
-  assert.equal(
-    page.slug,
-    '/recommendations/configuration-tuning/apply-manually/aws-rds',
-  );
-  assert.equal(
-    page.publicRoute,
-    '/recommendations/configuration-tuning/apply-manually/aws-rds',
-  );
-  assert.equal(
-    page.h1.text,
-    'How to apply the Recommended Configuration for AWS RDS',
-  );
-  assert.deepEqual(page.codeFences, baselinePage.codeFences);
-  assert.deepEqual(page.images, baselinePage.images);
-
-  assert.match(
-    source,
-    /Before you begin, record the parameter group assigned to your RDS instance and its current parameter values\./u,
-  );
-  assert.match(
-    source,
-    /Use this record to compare the configuration after the change and to plan recovery if needed\. Recording it does not guarantee that a change can be reversed\./u,
-  );
-  assert.match(
-    source,
-    /Before you save, choose whether to apply the changes immediately or during the next maintenance window\./u,
-  );
-  assert.match(
-    source,
-    /Coordinate the reboot with the application timing you chose in Step 2\./u,
-  );
-
-  const retainedFactsInOrder = [
-    'Log in to the AWS Management Console.',
-    'Navigate to the RDS Dashboard.',
-    'Select **Parameter Groups** from the left-hand menu under Databases.',
-    'Identify the parameter group assigned to your RDS instance',
-    'Select your parameter group and click **Edit Parameters**.',
-    'Update the parameters based on the recommended configuration from **Releem Dashboard**.',
-    'Save the changes.',
-    'Go back to the RDS Dashboard and select your database instance.',
-    'Click on the **Modify** button.',
-    'In the Database options section, select the updated parameter group.',
-    'Before you save, choose whether to apply the changes immediately or during the next maintenance window.',
-    '5. Save the changes.',
-    'Coordinate the reboot with the application timing you chose in Step 2.',
-    'In the RDS Dashboard, select your instance.',
-    'Click **Actions → Reboot**.',
-    'This will apply the new parameter settings.',
-    'You should see event **Applied recommended configuration** on the MySQL Metrics graph.',
-    'For additional help, feel free to contact **Releem support**.',
-  ];
-  let previousOffset = -1;
-  for (const retainedFact of retainedFactsInOrder) {
-    const offset = source.indexOf(retainedFact);
-    assert.ok(offset > previousOffset, `Missing or reordered AWS RDS fact: ${retainedFact}`);
-    previousOffset = offset;
+test('retired manual platform pages remain fully accounted for in the tuning migration', () => {
+  for (const sourcePath of configurationTuningMigration.retiredSources) {
+    assertRetiredConfigurationTuningProcedure(sourcePath);
   }
-
-  assert.doesNotMatch(
-    source,
-    /(?:guaranteed|without downtime|no downtime|safe to apply|automatically reversible|automatic rollback|improves? performance)/iu,
-  );
-
-  assert.ok(exception, 'AWS RDS configuration requires an exact editorial exception');
-  assert.equal(exception.status, 'approved');
-  assert.equal(exception.approvedBy, 'user');
-  assert.equal(exception.approvedOn, '2026-09-05');
-  assert.equal(page.sourceSha256, exception.approvedCurrent.sourceSha256);
 });
 
-test('Docker configuration application identifies the target file and container before restart', async () => {
-  const sourcePath = 'docs/recommendations/configuration-tuning/apply-manually/docker.md';
-  const source = await readFile(path.join(projectRoot, sourcePath), 'utf8');
-  const page = parseDocument(sourcePath, source);
-  const baselinePage = manifest.pages.find(
-    ({sourcePath: candidatePath}) => candidatePath === sourcePath,
-  );
-  const exception = manifest.editorialExceptions.find(
-    ({sourcePath: candidatePath}) => candidatePath === sourcePath,
-  );
-
-  assert.ok(baselinePage, 'Docker configuration baseline record is missing');
-  assert.equal(page.frontMatter, baselinePage.frontMatter);
-  assert.equal(page.explicitId, 'docker');
-  assert.equal(
-    page.effectiveId,
-    'recommendations/configuration-tuning/apply-manually/docker',
-  );
-  assert.equal(
-    page.slug,
-    '/recommendations/configuration-tuning/apply-manually/docker',
-  );
-  assert.equal(
-    page.publicRoute,
-    '/recommendations/configuration-tuning/apply-manually/docker',
-  );
-  assert.equal(
-    page.h1.text,
-    'How to apply the Recommended Configuration for MySQL in Docker',
-  );
-  assert.deepEqual(
-    page.codeFences.map(fenceSnapshot),
-    baselinePage.codeFences.map(fenceSnapshot),
-  );
-  assert.deepEqual(page.images, baselinePage.images);
-
-  assert.match(
-    source,
-    /Identify the `my\.cnf` file used by the target MySQL container\./u,
-  );
-  assert.match(
-    source,
-    /Paste the copied configuration at the end of that file\./u,
-  );
-  assert.match(
-    source,
-    /Before restarting, review the pasted settings and confirm that `<container_name_or_id>` identifies the MySQL container you intend to restart\./u,
-  );
-
-  const retainedFactsInOrder = [
-    'Follow these steps to apply the recommended configuration for MySQL in Docker:',
-    '## Step 1: Copy the Recommended Configuration',
-    '1. Log in to the Releem dashboard.',
-    '2. Open **Configuration** in the **Recommended Configuration** block.',
-    '3. Click the **Copy** icon to copy the recommended configuration.',
-    '## Step 2: Modify the my.cnf file',
-    '## Step 3: Restart Docker container',
-    'Restart your MySQL Docker container to apply the new configuration:',
-    'docker restart <container_name_or_id>',
-    '## Step 4: Verify the Applied Configuration',
-    'You should see event **Applied recommended configuration** on the MySQL Metrics graph.',
-    'For additional help, feel free to contact **Releem support**.',
-  ];
-  let previousOffset = -1;
-  for (const retainedFact of retainedFactsInOrder) {
-    const offset = source.indexOf(retainedFact);
-    assert.ok(offset > previousOffset, `Missing or reordered Docker fact: ${retainedFact}`);
-    previousOffset = offset;
-  }
-
-  assert.doesNotMatch(
-    source,
-    /(?:automatically discovers?|mounted at|persist(?:s|ed|ence)|without downtime|no downtime|safe to apply|automatically reversible|automatic rollback|improves? performance)/iu,
-  );
-
-  assert.ok(exception, 'Docker configuration requires an exact editorial exception');
-  assert.equal(exception.status, 'approved');
-  assert.equal(exception.approvedBy, 'user');
-  assert.equal(exception.approvedOn, '2026-09-05');
-  assert.equal(page.sourceSha256, exception.approvedCurrent.sourceSha256);
-});
-
-test('GCP Cloud SQL configuration separates provider confirmation from Releem verification', async () => {
-  const sourcePath = 'docs/recommendations/configuration-tuning/apply-manually/gcp-cloud-sql.md';
-  const source = await readFile(path.join(projectRoot, sourcePath), 'utf8');
-  const page = parseDocument(sourcePath, source);
-  const baselinePage = manifest.pages.find(
-    ({sourcePath: candidatePath}) => candidatePath === sourcePath,
-  );
-  const exception = manifest.editorialExceptions.find(
-    ({sourcePath: candidatePath}) => candidatePath === sourcePath,
-  );
-
-  assert.ok(baselinePage, 'GCP Cloud SQL configuration baseline record is missing');
-  assert.equal(page.frontMatter, baselinePage.frontMatter);
-  assert.equal(page.explicitId, 'gcp-cloud-sql');
-  assert.equal(
-    page.effectiveId,
-    'recommendations/configuration-tuning/apply-manually/gcp-cloud-sql',
-  );
-  assert.equal(
-    page.slug,
-    '/recommendations/configuration-tuning/apply-manually/gcp-cloud-sql',
-  );
-  assert.equal(
-    page.publicRoute,
-    '/recommendations/configuration-tuning/apply-manually/gcp-cloud-sql',
-  );
-  assert.equal(
-    page.h1.text,
-    'How to apply the Recommended Configuration for GCP Cloud SQL',
-  );
-  assert.deepEqual(page.codeFences, baselinePage.codeFences);
-  assert.deepEqual(page.images, baselinePage.images);
-
-  assert.match(
-    source,
-    /Before you change the instance, decide whether to apply the changes immediately or during the next maintenance window \(if this option is available for your instance\)\./u,
-  );
-  assert.ok(
-    source.indexOf('Before you change the instance') < source.indexOf('Click **Save**'),
-    'The application-timing decision must appear before the reader saves changes',
-  );
-  assert.match(
-    source,
-    /In the Google Cloud Console, before you click \*\*Save\*\*, choose one of the timing options available for your instance:[\s\S]*\*\*Apply immediately\*\*\.[\s\S]*\*\*Schedule during the next maintenance window\*\*, if this option is available for your instance\./u,
-  );
-  assert.match(
-    source,
-    /For either timing choice, Cloud SQL may automatically restart the instance if required, as described in Step 3\./u,
-  );
-  assert.match(source, /### Confirm the flags in Google Cloud/u);
-  assert.match(source, /### Verify the application event in Releem/u);
-  assert.ok(
-    source.indexOf('### Confirm the flags in Google Cloud') <
-      source.indexOf('### Verify the application event in Releem'),
-    'Provider confirmation must precede Releem verification',
-  );
-
-  const retainedFactsInOrder = [
-    'Use Database Flags to apply the recommended configuration.',
-    '## Step 1: Get the Recommended Configuration',
-    '1. Log in to the Releem dashboard.',
-    '2. Open **Configuration** in the **Recommended Configuration** block.',
-    '3. Review the recommended parameters that need to be applied as database flags.',
-    '## Step 2: Configure Database Flags in GCP Cloud SQL',
-    '1. Log in to the **Google Cloud Console**.',
-    '2. Navigate to the **Cloud SQL Instances** page.',
-    '3. Select the project that contains your Cloud SQL instance.',
-    '4. Click on your MySQL instance name to open the **Instance Overview** page.',
-    '5. Click the **Edit** button at the top of the page.',
-    '6. Scroll down to the **Flags** section.',
-    '7. Configure the database flags:',
-    'To set a new flag: Click **Add item**, choose the flag from the drop-down menu, and set its value based on the Releem recommendations.',
-    'To modify an existing flag: Update its value according to the Releem recommendations.',
-    '8. In the Google Cloud Console, before you click **Save**, choose one of the timing options available for your instance:',
-    '**Apply immediately**.',
-    '**Schedule during the next maintenance window**, if this option is available for your instance.',
-    'For either timing choice, Cloud SQL may automatically restart the instance if required, as described in Step 3.',
-    '9. Click **Save** to apply your changes.',
-    '## Step 3: Apply the Changes',
-    'At the timing you selected, GCP Cloud SQL will automatically restart your instance if required to apply the configuration changes.',
-    'Wait for the instance to complete the restart process.',
-    '## Step 4: Verify the Applied Configuration',
-    'On the **Instance Overview** page, check the **Database flags** section to confirm the flags have been applied.',
-    '1. You should see event **Applied recommended configuration** on the MySQL Metrics graph in the Releem Dashboard.',
-    'Database flags are persisted for the instance until you manually remove them. Some flags may require the instance to be restarted for changes to take effect.',
-    'For additional help, feel free to contact **Releem support**.',
-  ];
-  let previousOffset = -1;
-  for (const retainedFact of retainedFactsInOrder) {
-    const offset = source.indexOf(retainedFact);
-    assert.ok(offset > previousOffset, `Missing or reordered GCP Cloud SQL fact: ${retainedFact}`);
-    previousOffset = offset;
-  }
-
-  assert.doesNotMatch(
-    source,
-    /(?:guaranteed|without downtime|no downtime|safe to apply|automatically reversible|automatic rollback|propagation time|improves? performance)/iu,
-  );
-
-  assert.ok(exception, 'GCP Cloud SQL configuration requires an exact editorial exception');
-  assert.equal(exception.status, 'approved');
-  assert.equal(exception.approvedBy, 'user');
-  assert.equal(exception.approvedOn, '2026-09-05');
-  assert.equal(page.sourceSha256, exception.approvedCurrent.sourceSha256);
-});
-
-test('Windows configuration application identifies the active file and reviews settings before saving', async () => {
-  const sourcePath = 'docs/recommendations/configuration-tuning/apply-manually/windows.md';
-  const source = await readFile(path.join(projectRoot, sourcePath), 'utf8');
-  const page = parseDocument(sourcePath, source);
-  const baselinePage = manifest.pages.find(
-    (candidate) => candidate.sourcePath === sourcePath,
-  );
-  const exception = manifest.editorialExceptions.find(
-    (candidate) => candidate.sourcePath === sourcePath,
-  );
-
-  assert.ok(baselinePage, 'Windows configuration baseline record is missing');
-  assert.equal(page.frontMatter, baselinePage.frontMatter);
-  assert.equal(page.explicitId, 'windows');
-  assert.equal(
-    page.effectiveId,
-    'recommendations/configuration-tuning/apply-manually/windows',
-  );
-  assert.equal(
-    page.slug,
-    '/recommendations/configuration-tuning/apply-manually/windows',
-  );
-  assert.equal(
-    page.publicRoute,
-    '/recommendations/configuration-tuning/apply-manually/windows',
-  );
-  assert.equal(
-    page.h1.text,
-    'How to apply the Recommended Configuration for Windows',
-  );
-  assert.deepEqual(page.codeFences, baselinePage.codeFences);
-  assert.deepEqual(page.images, baselinePage.images);
-
-  assert.match(source, /## Before you begin/u);
-  assert.match(
-    source,
-    /Do not continue until you have confirmed which `my\.ini` file the selected MySQL service uses\./u,
-  );
-  assert.match(
-    source,
-    /Review the exact recommended settings in Releem before you copy them\. After you paste them into `my\.ini`, check them again before you save the file\./u,
-  );
-  assert.ok(
-    source.indexOf('## Before you begin') <
-      source.indexOf('## Step 1: Copy the Recommended Configuration'),
-    'Windows prerequisites must precede the procedure',
-  );
-  assert.ok(
-    source.indexOf('check them again before you save the file') <
-      source.indexOf('4. Save the file using the **ANSI charset**:'),
-    'The settings review must precede the save action',
-  );
-
-  const retainedFactsInOrder = [
-    'Follow these steps to apply the recommended configuration for MySQL on Windows:',
-    '## Step 1: Copy the Recommended Configuration',
-    '1. Log in to the **Releem dashboard**.',
-    '2. Open **Configuration** in the **Recommended Configuration** block.',
-    '3. Click the **Copy** icon to copy the recommended configuration.',
-    '## Step 2: Modify the my.ini File',
-    '1. Locate the my.ini file on your system:',
-    'Typically located in the MySQL installation directory (e.g., `C:\\Program Files\\MySQL\\MySQL Server X.X\\my.ini`) or under `C:\\ProgramData\\MySQL\\my.ini`.',
-    '2. Open the my.ini file using a text editor like **Notepad**.',
-    '3. Paste the copied configuration at the end of the file.',
-    '4. Save the file using the **ANSI charset**:',
-    'In Notepad, go to **File → Save As**.',
-    'In the "Encoding" dropdown, select **ANSI**, then click **Save**.',
-    '## Step 3: Restart the MySQL Database Service',
-    '1. Open the **Services** application in Windows:',
-    'Press `Win + R`, type `services.msc`, and press Enter.',
-    '2. Find the MySQL service in the list (e.g., MySQL or MySQL80).',
-    '3. Right-click on the service and select **Restart**.',
-    '## Step 4: Verify the Applied Configuration',
-    'You should see the event **Configuration was applied successfully** on the MySQL Metrics graph.',
-    'For additional help, feel free to contact **Releem support**.',
-  ];
-  let previousOffset = -1;
-  for (const retainedFact of retainedFactsInOrder) {
-    const offset = source.indexOf(retainedFact);
-    assert.ok(offset > previousOffset, `Missing or reordered Windows fact: ${retainedFact}`);
-    previousOffset = offset;
-  }
-
-  assert.doesNotMatch(
-    source,
-    /(?:automatically (?:find|detect|back up)|guaranteed|without downtime|no downtime|safe to apply|automatically reversible|automatic rollback|improves? performance)/iu,
-  );
-
-  assert.ok(exception, 'Windows configuration requires an exact editorial exception');
-  assert.equal(exception.status, 'approved');
-  assert.equal(exception.approvedBy, 'user');
-  assert.equal(exception.approvedOn, '2026-09-05');
-  assert.equal(page.sourceSha256, exception.approvedCurrent.sourceSha256);
-});
-
-test('Agent configuration application defines preflight and a bounded expected result', async () => {
+test('Agent configuration application retains commands with shared support and bounded outcome semantics', async () => {
   const sourcePath = 'docs/recommendations/configuration-tuning/apply-using-agent.md';
   const source = await readFile(path.join(projectRoot, sourcePath), 'utf8');
-  const page = parseDocument(sourcePath, source);
-  const baselinePage = manifest.pages.find(
-    (candidate) => candidate.sourcePath === sourcePath,
-  );
-  const exception = manifest.editorialExceptions.find(
-    (candidate) => candidate.sourcePath === sourcePath,
-  );
+  const {currentPage} = await assertConfigurationTuningChange(sourcePath, source);
 
-  assert.ok(baselinePage, 'Agent configuration baseline record is missing');
-  assert.equal(page.frontMatter, baselinePage.frontMatter);
-  assert.equal(page.explicitId, 'apply-using-agent');
-  assert.equal(
-    page.effectiveId,
-    'recommendations/configuration-tuning/apply-using-agent',
-  );
-  assert.equal(
-    page.slug,
-    '/recommendations/configuration-tuning/apply-using-agent',
-  );
-  assert.equal(
-    page.publicRoute,
-    '/recommendations/configuration-tuning/apply-using-agent',
-  );
-  assert.equal(page.h1.text, 'How to Apply Configuration Using Agent');
-  assert.deepEqual(
-    page.codeFences.map(fenceSnapshot),
-    baselinePage.codeFences.map(fenceSnapshot),
-  );
-  assert.deepEqual(page.images, baselinePage.images);
-
-  assert.match(source, /## Before you begin/u);
-  assert.match(
-    source,
-    /Confirm that the database server is self-managed, uses MySQL, MariaDB, or Percona, and has Releem Agent installed directly on the database host\./u,
-  );
-  assert.ok(
-    source.indexOf('## Before you begin') < source.indexOf('## Apply the configuration'),
-    'Agent preflight must precede the application commands',
-  );
-  assert.match(source, /## Expected result/u);
-  assert.match(
-    source,
-    /When the command completes successfully, Releem Agent has applied the recommended configuration\./u,
-  );
-  assert.match(
-    source,
-    /If you need to return to the previous configuration, follow \[How to Rollback to Previous Configuration\]\(\/recommendations\/configuration-tuning\/rollback\)\./u,
-  );
-
-  const retainedFactsInOrder = [
-    'Use this method for self-managed MySQL, MariaDB, or Percona servers where Releem Agent is installed directly on the database host.',
-    'bash /opt/releem/mysqlconfigurer.sh -s auto',
-    "& 'C:\\Program Files\\ReleemAgent\\mysqlconfigurer.ps1' -a",
-    '## Expected result',
-    '## Cloud-Managed Databases',
-    'For AWS RDS, GCP Cloud SQL, and Azure Database for MySQL, apply recommended configuration from the Releem Portal.',
-    'The agent receives the task from the portal and uses the cloud provider API to update database parameters.',
-  ];
-  let previousOffset = -1;
-  for (const retainedFact of retainedFactsInOrder) {
-    const offset = source.indexOf(retainedFact);
-    assert.ok(offset > previousOffset, `Missing or reordered Agent fact: ${retainedFact}`);
-    previousOffset = offset;
-  }
-
-  assert.doesNotMatch(
-    source,
-    /(?:issues arise|smartly revert|guaranteed|without downtime|no downtime|safe to apply|automatically reversible|automatic rollback|restart required|no restart|improves? performance)/iu,
-  );
-
-  assert.ok(exception, 'Agent configuration requires an exact editorial exception');
-  assert.equal(exception.status, 'approved');
-  assert.equal(exception.approvedBy, 'user');
-  assert.equal(exception.approvedOn, '2026-09-05');
-  assert.equal(page.sourceSha256, exception.approvedCurrent.sourceSha256);
+  assert.equal(currentPage.h1.text, 'Apply configuration using the Agent');
+  const prose = source.replace(/^\s*(`{3,}|~{3,})[^\n]*\n[\s\S]*?^\s*\1\s*$/gmu, '');
+  assert.match(prose, /self-managed database server/iu);
+  assert.doesNotMatch(prose, /\b(?:MySQL|MariaDB|PostgreSQL|Percona)\b/u);
+  assert.match(source, /bash \/opt\/releem\/mysqlconfigurer\.sh -s auto/u);
+  assert.match(source, /mysqlconfigurer\.ps1' -a/u);
+  assert.match(source, /successful exit means the request was submitted/iu);
+  assert.match(source, /restart-pending/iu);
+  assert.match(source, /effective database settings/iu);
+  assert.match(source, /database service health/iu);
+  assert.match(source, /application connectivity/iu);
+  assert.match(source, /current metrics/iu);
+  assert.match(source, /restore the known-good configuration artifact/iu);
+  assert.doesNotMatch(source, /automatically reversible|automatic rollback|guaranteed/iu);
 });
 
-test('configuration example is explicitly illustrative while preserving the sample', async () => {
+test('configuration example remains illustrative and retains its sample and image', async () => {
   const sourcePath = 'docs/recommendations/configuration-tuning/configuration-example.md';
   const source = await readFile(path.join(projectRoot, sourcePath), 'utf8');
-  const page = parseDocument(sourcePath, source);
-  const baselinePage = manifest.pages.find(
-    (candidate) => candidate.sourcePath === sourcePath,
-  );
-  const exception = manifest.editorialExceptions.find(
-    (candidate) => candidate.sourcePath === sourcePath,
-  );
+  const {baselinePage, currentPage} = await assertConfigurationTuningChange(sourcePath, source);
 
-  assert.ok(baselinePage, 'Configuration example baseline record is missing');
-  assert.equal(page.frontMatter, baselinePage.frontMatter);
-  assert.equal(page.explicitId, 'configuration-example');
-  assert.equal(
-    page.effectiveId,
-    'recommendations/configuration-tuning/configuration-example',
-  );
-  assert.equal(
-    page.slug,
-    '/recommendations/configuration-tuning/configuration-example',
-  );
-  assert.equal(
-    page.publicRoute,
-    '/recommendations/configuration-tuning/configuration-example',
-  );
-  assert.equal(page.h1.text, 'Example of Recommended Configuration');
+  assert.equal(currentPage.h1.text, 'Recommended MySQL configuration example');
+  assert.match(source, /illustrative only/iu);
+  assert.match(source, /Do not copy or apply/iu);
+  assert.match(source, /`Previous value`/u);
+  assert.match(source, /\[mysqld\]/u);
   assert.deepEqual(
-    page.codeFences.map(fenceSnapshot),
-    baselinePage.codeFences.map(fenceSnapshot),
+    currentPage.images.map(imagePlacementKey),
+    baselinePage.images.map(imagePlacementKey),
   );
-  const imageContract = ({syntax, reference, assetPath, altText}) => ({
-    syntax,
-    reference,
-    assetPath,
-    altText,
-  });
-  assert.deepEqual(
-    page.images.map(imageContract),
-    baselinePage.images.map(imageContract),
-  );
-
-  assert.match(
-    source,
-    /This example is illustrative only\. Do not copy or apply it to a database server\./u,
-  );
-  assert.match(
-    source,
-    /Each line shows an example recommended value, followed by the `Previous value` paired with that setting in this example\./u,
-  );
-  assert.ok(
-    source.indexOf('This example is illustrative only.') <
-      source.indexOf('releem-dashboard-recommended-configuration.png'),
-    'The non-runnable label must appear before the example screenshot',
-  );
-  assert.ok(
-    source.indexOf('`Previous value`') < source.indexOf('```\n[mysqld]'),
-    'The Previous value explanation must appear before the sample',
-  );
-  assert.doesNotMatch(
-    source,
-    /(?:collected from|captured from|applies to every|use this in production|run this configuration|copy this configuration|safe to apply|automatically reversible|guaranteed|improves? performance|optimizes? performance)/iu,
-  );
-
-  assert.ok(exception, 'Configuration example requires an exact editorial exception');
-  assert.equal(exception.status, 'approved');
-  assert.equal(exception.approvedBy, 'user');
-  assert.equal(exception.approvedOn, '2026-09-05');
-  assert.equal(page.sourceSha256, exception.approvedCurrent.sourceSha256);
+  assert.doesNotMatch(source, /use this in production|safe to apply|guaranteed/iu);
 });
 
-test('MySQL memory limit is explained as a tuning target rather than an enforced cap', async () => {
+test('MySQL memory limit remains a target with observable saved-state verification', async () => {
   const sourcePath = 'docs/recommendations/configuration-tuning/limit-mysql-memory.md';
   const source = await readFile(path.join(projectRoot, sourcePath), 'utf8');
-  const page = parseDocument(sourcePath, source);
-  const baselinePage = manifest.pages.find(
-    (candidate) => candidate.sourcePath === sourcePath,
-  );
-  const exception = manifest.editorialExceptions.find(
-    (candidate) => candidate.sourcePath === sourcePath,
-  );
+  const {baselinePage, currentPage} = await assertConfigurationTuningChange(sourcePath, source);
 
-  assert.ok(baselinePage, 'MySQL memory-limit baseline record is missing');
-  assert.equal(page.frontMatter, baselinePage.frontMatter);
-  assert.equal(page.explicitId, 'limit-mysql-memory');
-  assert.equal(
-    page.effectiveId,
-    'recommendations/configuration-tuning/limit-mysql-memory',
-  );
-  assert.equal(
-    page.slug,
-    '/recommendations/configuration-tuning/limit-mysql-memory',
-  );
-  assert.equal(
-    page.publicRoute,
-    '/recommendations/configuration-tuning/limit-mysql-memory',
-  );
-  assert.equal(page.h1.text, 'Limit Memory for MySQL');
-  assert.deepEqual(page.codeFences, baselinePage.codeFences);
-  const imageContract = ({syntax, reference, assetPath, altText}) => ({
-    syntax,
-    reference,
-    assetPath,
-    altText,
-  });
+  assert.equal(currentPage.h1.text, 'Set a MySQL memory target');
+  assert.match(source, /This page applies to MySQL/iu);
+  assert.match(source, /tuning target, not an enforced process or system memory cap/iu);
+  assert.match(source, /Dashboard.*Recommended Configuration.*Settings/iu);
+  assert.match(source, /confirm that the saved value is shown/iu);
+  assert.match(source, /does not immediately prove that active MySQL settings or process memory changed/iu);
   assert.deepEqual(
-    page.images.map(imageContract),
-    baselinePage.images.map(imageContract),
+    currentPage.images.map(imagePlacementKey),
+    baselinePage.images.map(imagePlacementKey),
   );
-
-  assert.match(
-    source,
-    /The Memory Limit setting is a tuning target, not an enforced process or system memory cap\./u,
-  );
-  assert.ok(
-    source.indexOf('The Memory Limit setting is a tuning target') <
-      source.indexOf('To set the memory limit follow the steps below:'),
-    'The target-versus-cap explanation must precede the steps',
-  );
-
-  const retainedFactsInOrder = [
-    '1. Open the Dashboard->Recommended Configuration->Settings',
-    '![Releem Dashboard Recommended Configuration Settings](/img/dashboard-settings.png)',
-    '2. Set new Memory Limit in Megabytes',
-    '3. Click Save Changes button',
-    'It takes up to 12 hours to update limit in the dashboard and up to 4 days to get first recommendations.',
-    '## FAQ',
-    '### I’ve set the MySQL Memory Limit to 6144 MB, but MySQL is using about 11 GB of 16 GB RAM (≈67%). Shouldn’t it be capped at 40%?',
-    'The Memory Limit isn’t a hard cap - it’s a target for tuning. Releem adjusts MySQL settings to keep memory usage near this value under normal load, but actual usage depends on active connections and per-query buffers. When many queries run, MySQL can use more memory.',
-    'If usage stays high, try lowering the limit or reviewing connection counts.',
-  ];
-  let previousOffset = -1;
-  for (const retainedFact of retainedFactsInOrder) {
-    const offset = source.indexOf(retainedFact);
-    assert.ok(offset > previousOffset, `Missing or reordered memory-limit fact: ${retainedFact}`);
-    previousOffset = offset;
-  }
-
-  assert.doesNotMatch(
-    source,
-    /(?:enforced (?:process|system) cap|operating-system cap|guaranteed|ensures?|cannot exceed|will not exceed|always stays|restart required|no restart|improves? performance|optimizes? performance)/iu,
-  );
-
-  assert.ok(exception, 'MySQL memory limit requires an exact editorial exception');
-  assert.equal(exception.status, 'approved');
-  assert.equal(exception.approvedBy, 'user');
-  assert.equal(exception.approvedOn, '2026-09-05');
-  assert.equal(page.sourceSha256, exception.approvedCurrent.sourceSha256);
+  assert.doesNotMatch(source, /cannot exceed|will not exceed|guaranteed/iu);
 });
 
-test('MySQL tuning process separates analysis from application and retains all five stages', async () => {
+test('Configuration Tuning retains the shared evidence-qualified six-stage workflow', async () => {
   const sourcePath = 'docs/recommendations/configuration-tuning/mysql-tuning-process.md';
   const source = await readFile(path.join(projectRoot, sourcePath), 'utf8');
-  const page = parseDocument(sourcePath, source);
-  const exception = manifest.editorialExceptions.find(
-    (candidate) => candidate.sourcePath === sourcePath,
-  );
+  const {currentPage} = await assertConfigurationTuningChange(sourcePath, source);
 
-  const retainedStagesInOrder = [
-    '### Stage 1: Collecting Baseline',
-    '### Stage 2: Searching for Opportunities',
-    '### Stage 3: Expert System Evaluation',
-    '### Stage 4: Preparing New Configuration',
-    '### Stage 5: Applying Recommended Configuration',
-  ];
-  let previousOffset = -1;
-  for (const stage of retainedStagesInOrder) {
-    const offset = source.indexOf(stage);
-    assert.ok(offset > previousOffset, `Missing or reordered tuning stage: ${stage}`);
-    previousOffset = offset;
+  assert.equal(currentPage.h1.text, 'Configuration Tuning');
+  assert.match(source, /^## How the tuning workflow works$/imu);
+  assert.doesNotMatch(source, /\b(?:MySQL|MariaDB|PostgreSQL|Percona)\b/u);
+  for (const stage of [
+    '### 1. Create a complete recommendation',
+    '### 2. Observe the result of an applied configuration',
+    '### 3. Compare similar workloads',
+    '### 4. Evaluate the adjustment',
+    '### 5. Build the proposal',
+    '### 6. Review, apply, and verify',
+  ]) {
+    assert.ok(source.includes(stage), `Missing tuning stage: ${stage}`);
   }
-
-  for (const retainedFact of [
-    'baseline data over several days',
-    'different controlled workloads',
-    'Free plan, Releem tunes only 10 MySQL variables',
-    'Premium plan offers tuning of more variables',
-    "platform's expert system",
-    'Recommended Configuration block',
-    'manually or using the Releem Agent',
-    'server type and installation method',
-    'up to 12 hours',
-    'unapplied recommendations count',
-  ]) assert.ok(source.includes(retainedFact), `Missing tuning-process fact: ${retainedFact}`);
-
-  assert.match(source, /separates analysis from application/iu);
-  assert.match(source, /identifies candidates; it does not apply them/iu);
-  assert.match(source, /proposal for you to review/iu);
-  assert.match(source, /Review the recommended configuration and decide how to apply it/iu);
-  assert.doesNotMatch(
-    source,
-    /(?:ensures? that|verified the safety|optimized safely|maintain peak performance|zero risk|guaranteed)/iu,
-  );
-
-  assert.ok(exception, 'MySQL tuning process requires an exact editorial exception');
-  assert.equal(exception.status, 'approved');
-  assert.equal(exception.approvedBy, 'user');
-  assert.equal(exception.approvedOn, '2026-09-05');
-  assert.equal(page.sourceSha256, exception.approvedCurrent.sourceSha256);
+  assert.match(source, /similar controlled workloads/iu);
+  assert.match(source, /candidate can be rejected or suppressed/iu);
+  assert.match(source, /Displaying it does not modify the active configuration/iu);
+  assert.match(source, /restart-pending|pending until/iu);
+  assert.match(source, /effective database values/iu);
+  assert.match(source, /\/recommendations\/configuration-tuning\/apply-configuration/u);
+  assert.doesNotMatch(source, /guarantee|zero risk|optimized safely/iu);
 });
 
-test('configuration rollback defines its bounded scope and a failure path', async () => {
+test('configuration rollback keeps the qualified command and complete recovery verification', async () => {
   const sourcePath = 'docs/recommendations/configuration-tuning/rollback.md';
   const source = await readFile(path.join(projectRoot, sourcePath), 'utf8');
-  const page = parseDocument(sourcePath, source);
-  const baselinePage = manifest.pages.find(
-    (candidate) => candidate.sourcePath === sourcePath,
-  );
-  const exception = manifest.editorialExceptions.find(
-    (candidate) => candidate.sourcePath === sourcePath,
-  );
+  const {currentPage} = await assertConfigurationTuningChange(sourcePath, source);
 
-  assert.ok(baselinePage, 'Configuration rollback baseline record is missing');
-  assert.equal(page.frontMatter, baselinePage.frontMatter);
-  assert.equal(page.explicitId, 'rollback');
-  assert.equal(
-    page.effectiveId,
-    'recommendations/configuration-tuning/rollback',
-  );
-  assert.equal(page.slug, '/recommendations/configuration-tuning/rollback');
-  assert.equal(page.publicRoute, '/recommendations/configuration-tuning/rollback');
-  assert.equal(page.h1.text, 'How to Rollback to Previous Configuration');
-  assert.deepEqual(
-    page.codeFences.map(fenceSnapshot),
-    baselinePage.codeFences.map(fenceSnapshot),
-  );
-  assert.deepEqual(page.images, baselinePage.images);
-
-  assert.match(
-    source,
-    /Use this command to roll back to the previous configuration\. This page does not define the exact settings or values in that previous configuration\./u,
-  );
-  assert.match(source, /## Run the rollback command/u);
-  assert.match(source, /## If the rollback fails/u);
-  assert.match(
-    source,
-    /review the \[Releem Agent logs\]\(\/installation\/manage-the-releem-agent\/logs\) and contact Releem support with the relevant log details\./u,
-  );
-
-  const retainedCommand = '/bin/bash /opt/releem/mysqlconfigurer.sh -r';
-  assert.equal(source.split(retainedCommand).length - 1, 1);
-  assert.ok(
-    source.indexOf('## Run the rollback command') < source.indexOf(retainedCommand),
-    'The rollback command must remain in its action context',
-  );
-  assert.ok(
-    source.indexOf(retainedCommand) < source.indexOf('## If the rollback fails'),
-    'The failure path must follow the rollback command',
-  );
-  assert.doesNotMatch(
-    source,
-    /(?:all settings|exact state|fully restores?|complete rollback|automatically rolls? back|guaranteed|without downtime|no downtime|safe to apply|automatically reversible|improves? performance)/iu,
-  );
-
-  assert.ok(exception, 'Configuration rollback requires an exact editorial exception');
-  assert.equal(exception.status, 'approved');
-  assert.equal(exception.approvedBy, 'user');
-  assert.equal(exception.approvedOn, '2026-09-05');
-  assert.equal(page.sourceSha256, exception.approvedCurrent.sourceSha256);
+  assert.equal(currentPage.h1.text, 'Roll back a configuration');
+  assert.match(source, /self-managed MySQL or MariaDB server on Linux/iu);
+  assert.match(source, /Do not use this procedure for PostgreSQL or a managed database/iu);
+  assert.equal(source.split('/bin/bash /opt/releem/mysqlconfigurer.sh -r').length - 1, 1);
+  assert.match(source, /Command success does not confirm/iu);
+  assert.match(source, /restart-pending/iu);
+  assert.match(source, /effective database settings/iu);
+  assert.match(source, /database service health/iu);
+  assert.match(source, /application connectivity/iu);
+  assert.match(source, /current metrics/iu);
+  assert.match(source, /restore the known-good pre-application backup/iu);
+  assert.doesNotMatch(source, /fully restores?|complete rollback|automatically rolls? back|guaranteed/iu);
 });
 
 test('disabling Query Optimization has an observable check and explicit unresolved boundaries', async () => {
@@ -4326,7 +4015,17 @@ test('baseline code fences remain byte-for-byte unless a safety exception is app
         ? reverseEngineFirstLinks(currentText, currentSourcePath)
         : currentText,
     );
-    if (lifecycleExclusions.length > 0 || lifecycleRewrites.length > 0) {
+    if (configurationTuningChangeBySource.has(currentSourcePath)) {
+      const tuningChange = await assertConfigurationTuningChange(
+        currentSourcePath,
+        currentText,
+      );
+      assertConfigurationTuningCodeFenceChange(
+        tuningChange.change,
+        tuningChange.baselinePage,
+        tuningChange.currentPage,
+      );
+    } else if (lifecycleExclusions.length > 0 || lifecycleRewrites.length > 0) {
       assert.equal(
         manifest.safetyExceptions.some(
           ({pageSourcePath, status}) =>
@@ -4341,13 +4040,13 @@ test('baseline code fences remain byte-for-byte unless a safety exception is app
         lifecycleExclusions,
         lifecycleRewrites,
       );
-      continue;
+    } else {
+      assertCodeFenceIdentity(
+        baselinePage,
+        currentPage,
+        manifest.safetyExceptions,
+      );
     }
-    assertCodeFenceIdentity(
-      baselinePage,
-      currentPage,
-      manifest.safetyExceptions,
-    );
   }
 });
 
@@ -4396,19 +4095,37 @@ test('specialist pages retain exact sidebar ownership unless explicitly excepted
     const consolidationOverride = consolidation.sidebarOwnershipOverrides.find(
       ({sourcePath}) => sourcePath === page.sourcePath,
     );
-    if (consolidationOverride) {
+    const tuningChange = configurationTuningChangeBySource.get(page.sourcePath);
+    if (tuningChange && !tuningChange.preservedFields.includes('sidebarOwnership')) {
+      const nestedApplyPage = /\/apply-using-(?:portal|agent|cron)\.md$/u.test(
+        page.sourcePath,
+      );
+      assert.deepEqual(ownership.get(expectedId), [
+        {
+          sidebar: 'docs',
+          categories: [
+            'Recommendations',
+            'Configuration Tuning',
+            ...(nestedApplyPage ? ['Apply configuration'] : []),
+          ],
+          placement: page.sourcePath.endsWith('/mysql-tuning-process.md')
+            ? 'category-link'
+            : 'item',
+        },
+      ]);
+    } else if (consolidationOverride) {
       assert.deepEqual(
         ownership.get(expectedId),
         consolidationOverride.currentOwnership,
         `${page.sourcePath} drifted from the consolidation sidebar override`,
       );
-      continue;
+    } else {
+      assertSidebarOwnership(
+        page,
+        ownership,
+        manifest.sidebarExceptions,
+        expectedId,
+      );
     }
-    assertSidebarOwnership(
-      page,
-      ownership,
-      manifest.sidebarExceptions,
-      expectedId,
-    );
   }
 });

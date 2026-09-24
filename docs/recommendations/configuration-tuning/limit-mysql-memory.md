@@ -1,25 +1,29 @@
 ---
 id: limit-mysql-memory
 slug: /recommendations/configuration-tuning/limit-mysql-memory
-title: "Limit Memory for MySQL"
+title: Set a MySQL memory target
 ---
 
-# Limit Memory for MySQL
+# Set a MySQL memory target
 
-If this server runs MySQL alongside other software, such as a web server, use the `memory_limit` option in Releem Agent configuration to set the memory target that Releem uses when preparing MySQL settings. The Memory Limit setting is a tuning target, not an enforced process or system memory cap. MySQL can use more than this value, as explained in the FAQ below.
+If MySQL shares a server with other software, set the **Memory Limit** that Releem uses when preparing MySQL recommendations. This page applies to MySQL. Applicability to MariaDB and PostgreSQL is not documented here.
 
-To set the memory limit follow the steps below:
-1. Open the Dashboard->Recommended Configuration->Settings
+The Memory Limit setting is a tuning target, not an enforced process or system memory cap. MySQL can use more than the target because connection and per-query buffers also consume memory.
+
+## Set the target
+
+1. Open **Dashboard → Recommended Configuration → Settings**.
+2. Enter the new **Memory Limit** in megabytes.
+3. Select **Save Changes**.
+
 ![Releem Dashboard Recommended Configuration Settings](/img/dashboard-settings.png)
-2. Set new Memory Limit in Megabytes
-3. Click Save Changes button
 
-It takes up to 12 hours to update limit in the dashboard and up to 4 days to get first recommendations.
+## Check the result
 
-## FAQ
+Return to **Recommended Configuration → Settings** and confirm that the saved value is shown. Review later recommendations against the new target and monitor current memory use. The saved target does not immediately prove that active MySQL settings or process memory changed.
 
-### I’ve set the MySQL Memory Limit to 6144 MB, but MySQL is using about 11 GB of 16 GB RAM (≈67%). Shouldn’t it be capped at 40%?
+## Why can MySQL use more than the target?
 
-The Memory Limit isn’t a hard cap - it’s a target for tuning. Releem adjusts MySQL settings to keep memory usage near this value under normal load, but actual usage depends on active connections and per-query buffers. When many queries run, MySQL can use more memory.
+The target informs configuration tuning; it does not constrain the MySQL process at the operating-system level. Actual use depends on the active configuration, concurrent connections, and per-query buffers.
 
-If usage stays high, try lowering the limit or reviewing connection counts.
+If memory use remains above your operational limit, review connection counts and workload behavior before changing the target again. Verify any resulting recommendation through the normal [application checks](/recommendations/configuration-tuning/apply-configuration#restart-pending-state-and-effective-database-values).
