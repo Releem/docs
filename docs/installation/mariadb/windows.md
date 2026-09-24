@@ -14,15 +14,10 @@ Run PowerShell as Administrator. Make sure `mysql.exe` is available in `PATH`, a
 
 ## Automatic installation {#automatic-installation}
 
-Download and run the Releem installer. It detects MariaDB and asks for your Releem API key and the database administrator password when required.
+Run the installer in PowerShell. Replace the bracketed placeholders with your Releem API key and MariaDB administrator password. The installer detects MariaDB but retains the shared `RELEEM_MYSQL_*` variable names.
 
 ```powershell
-$installer = Join-Path $env:TEMP 'releem-install.ps1'
-Invoke-WebRequest -UseBasicParsing `
-  -Uri 'https://releem.s3.us-east-1.amazonaws.com/v2/install.ps1' `
-  -OutFile $installer
-& $installer
-Remove-Item $installer
+$env:RELEEM_DB_MEMORY_LIMIT=0; $env:RELEEM_API_KEY="[RELEEM_API_KEY]"; $env:RELEEM_MYSQL_ROOT_PASSWORD="[MARIADB_ROOT_PASSWORD]"; $env:RELEEM_CRON_ENABLE=1; $env:RELEEM_QUERY_OPTIMIZATION="true"; iwr -useb https://releem.s3.amazonaws.com/v2/install.ps1 | iex
 ```
 
 ## Installer parameters

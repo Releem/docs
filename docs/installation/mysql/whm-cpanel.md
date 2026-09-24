@@ -18,14 +18,10 @@ Use the Releem WHM/cPanel module on a MySQL server managed through WHM.
 
 ## Automatic installation {#automatic-installation}
 
-Run the installer as `root`. If you omit `--api-key`, the installer asks for the key interactively.
+Run the installer as `root`. Replace the bracketed placeholder with your Releem API key. If you omit `--api-key`, the installer asks for the key interactively.
 
 ```bash
-installer=$(mktemp)
-curl --fail --location --proto '=https' --tlsv1.2 \
-  --output "$installer" https://releem.s3.amazonaws.com/v2/whm/whm-install.sh
-bash "$installer"
-rm -f "$installer"
+bash -c "$(curl -L https://releem.s3.amazonaws.com/v2/whm/whm-install.sh)" --api-key=[RELEEM_API_KEY]
 ```
 
 The installer detects local database credentials, installs or starts the Agent, registers **WHM > Plugins > Releem Database Advisor**, and disables cPanel database auto-adjust settings that can conflict with Releem-managed values.
@@ -45,11 +41,7 @@ Use [Agent logs](/installation/manage-the-releem-agent/logs) for runtime diagnos
 Record the cPanel database auto-adjust settings before removal. Then run:
 
 ```bash
-installer=$(mktemp)
-curl --fail --location --proto '=https' --tlsv1.2 \
-  --output "$installer" https://releem.s3.amazonaws.com/v2/whm/whm-install.sh
-bash "$installer" --uninstall
-rm -f "$installer"
+bash -c "$(curl -L https://releem.s3.amazonaws.com/v2/whm/whm-install.sh)" --uninstall
 ```
 
 After removal, restore any cPanel settings that your hosting policy requires.

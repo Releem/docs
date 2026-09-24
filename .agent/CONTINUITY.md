@@ -1,4 +1,5 @@
 [PLANS]
+- 2026-09-25T00:20:00+0300 [USER] Simplify Windows and WHM/cPanel installation commands to the original one-command forms.
 - 2026-09-25T00:05:00+0300 [USER] Remove the `Configuration-changing account authority` warning from installation documentation.
 - 2026-09-24T23:55:00+0300 [USER] Remove generic `Next steps` sections from Installation because they duplicate surrounding Docusaurus navigation and make procedure endings feel unnatural.
 - 2026-09-24T23:40:00+0300 [USER] Remove manual back-navigation links because Docusaurus already supplies breadcrumbs, sidebar navigation, and pagination; retain only meaningful workflow links and add the rule to `AGENTS.md`.
@@ -30,6 +31,7 @@
 - 2026-08-18T11:30:23+03:00 [USER] Supplied the current internal ML recommendation workflow and requested a documentation-improvement plan; no documentation implementation is yet authorized.
 
 [DECISIONS]
+- 2026-09-25T00:20:00+0300 [CODE] Windows automatic installation uses the original single PowerShell environment-and-download pipeline for both MySQL and MariaDB; WHM/cPanel installation and removal use the original single `bash -c` installer commands. Detailed Windows manual installation remains separate.
 - 2026-09-25T00:05:00+0300 [CODE] MySQL and MariaDB privilege details remain canonical in their Required Permissions pages; Linux installation links to those pages instead of repeating configuration-authority warning callouts.
 - 2026-09-24T23:55:00+0300 [CODE] Installation procedures end with their task-specific verification or troubleshooting content; a next action is included only when it is necessary to complete the installation itself.
 - 2026-09-24T23:40:00+0300 [CODE] Standalone installation-hub back links are removed; end-of-page lifecycle links remain under `Next steps` without redundant parent-navigation links or “Return to” wording.
@@ -82,6 +84,7 @@
 - 2026-08-18T21:43:55+03:00 [USER] The main page should explain the role of internal ML models and data from different controlled workloads without exposing implementation-level model details.
 
 [PROGRESS]
+- 2026-09-25T00:20:00+0300 [CODE] Replaced temporary-installer Windows and WHM/cPanel command sequences with their original one-command forms and recorded the platform-specific rule in `AGENTS.md`.
 - 2026-09-25T00:05:00+0300 [CODE] Removed the duplicate `Configuration-changing account authority` warnings from both MySQL and MariaDB Linux installation procedures and added the content-boundary rule to `AGENTS.md`.
 - 2026-09-24T23:55:00+0300 [CODE] Removed generic Agent configuration/update/uninstall `Next steps` footers from all 14 engine/environment installation procedures and recorded the rule in `AGENTS.md`.
 - 2026-09-24T23:40:00+0300 [CODE] Removed redundant back-navigation from MySQL, MariaDB, and PostgreSQL installation pages, rewrote retained workflow and lifecycle links as direct actions, and added the Docusaurus-navigation rule to `AGENTS.md`.
@@ -215,6 +218,7 @@
 - 2026-08-18T20:20:25+03:00 [CODE] The Docusaurus site has no Mermaid plugin; a public workflow visual should use an accessible repo asset or native prose/table instead of adding a diagram dependency solely for this page.
 
 [OUTCOMES]
+- 2026-09-25T00:20:00+0300 [TOOL] Windows and WHM/cPanel command simplification passes `npm run typecheck`, `npm run build`, and `git diff --check`; both Windows automatic-install pages render one PowerShell command, and WHM/cPanel renders one install and one removal command. No documentation tests were added or modified.
 - 2026-09-25T00:05:00+0300 [TOOL] Permission-warning cleanup passes `npm run typecheck`, `npm run build`, and `git diff --check`; the warning title no longer appears in public documentation, while the canonical MySQL and MariaDB permission details remain intact. No documentation tests were added or modified.
 - 2026-09-24T23:55:00+0300 [TOOL] Installation-footer cleanup passes `npm run typecheck`, `npm run build`, and `git diff --check`; no `Next steps` heading remains under `docs/installation/`. No documentation tests were added or modified.
 - 2026-09-24T23:40:00+0300 [TOOL] Redundant-navigation cleanup passes `npm run typecheck`, `npm run build`, and `git diff --check`; source search finds no remaining `Back to` or `Return to` documentation links. Remaining “return to its expected state” phrases describe operational recovery, not navigation. No documentation tests were added or modified.
