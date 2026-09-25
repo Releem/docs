@@ -70,6 +70,7 @@ const sidebars = {
             'installation/mariadb/windows',
             'installation/mariadb/docker',
             'installation/mariadb/kubernetes',
+            'installation/mariadb/aws-rds',
             'installation/mariadb/clusters',
           ],
         },

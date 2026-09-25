@@ -12,6 +12,8 @@ Replace `AGENT_SOURCE_HOST` with the exact host from which the Agent connects, s
 
 Performance Schema coverage and administrative privileges vary by MariaDB version and managed service. Validate every statement against the actual version and deployment before applying it.
 
+For Amazon RDS for MariaDB, create an account that accepts connections from the Agent security group or exact Agent address. AWS controls administrative privileges and parameter changes through the RDS service, so use the [MariaDB on AWS RDS installation guide](/installation/mariadb/aws-rds) together with the grants supported by the selected RDS version.
+
 For a remote MariaDB connection, the current automatic installer creates a wildcard account host when `RELEEM_MYSQL_HOST` is not `127.0.0.1` or a local socket. If you require an exact-source account, use a DBA-created account and the manual installation configuration instead. That avoids wildcard account creation, but it does not remove the installer's separately documented child-process argument and log-upload risks.
 
 ## Monitoring and query visibility

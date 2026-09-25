@@ -1,4 +1,6 @@
 [PLANS]
+- 2026-09-25T23:53:24+0300 [USER] MariaDB is supported on Amazon RDS; complete the previously evidence-gated MariaDB AWS RDS installation path.
+- 2026-09-25T23:38:57+0300 [USER] Team review reports lost AWS RDS EC2 Docker and Azure Docker variants, an unverified MariaDB RDS gap, obsolete PostgreSQL 12/13 query-optimization grants, and missing Windows database preparation.
 - 2026-09-25T00:20:00+0300 [USER] Simplify Windows and WHM/cPanel installation commands to the original one-command forms.
 - 2026-09-25T00:05:00+0300 [USER] Remove the `Configuration-changing account authority` warning from installation documentation.
 - 2026-09-24T23:55:00+0300 [USER] Remove generic `Next steps` sections from Installation because they duplicate surrounding Docusaurus navigation and make procedure endings feel unnatural.
@@ -31,6 +33,8 @@
 - 2026-08-18T11:30:23+03:00 [USER] Supplied the current internal ML recommendation workflow and requested a documentation-improvement plan; no documentation implementation is yet authorized.
 
 [DECISIONS]
+- 2026-09-25T23:53:24+0300 [USER] SUPERSEDES the 2026-09-25T23:38:57 and 2026-09-10 MariaDB AWS RDS evidence-gate decisions: MariaDB on Amazon RDS is a supported Releem deployment and receives its own installation route and navigation context.
+- 2026-09-25T23:38:57+0300 [CODE] Restore confirmed AWS RDS and Azure Docker paths from `main`, restore Windows database preparation from preserved/current Agent behavior, and align PostgreSQL query-optimization grants to the public 15–18 support range. Do not create MariaDB AWS RDS documentation without a verified Releem installation workflow.
 - 2026-09-25T00:20:00+0300 [CODE] Windows automatic installation uses the original single PowerShell environment-and-download pipeline for both MySQL and MariaDB; WHM/cPanel installation and removal use the original single `bash -c` installer commands. Detailed Windows manual installation remains separate.
 - 2026-09-25T00:05:00+0300 [CODE] MySQL and MariaDB privilege details remain canonical in their Required Permissions pages; Linux installation links to those pages instead of repeating configuration-authority warning callouts.
 - 2026-09-24T23:55:00+0300 [CODE] Installation procedures end with their task-specific verification or troubleshooting content; a next action is included only when it is necessary to complete the installation itself.
@@ -84,6 +88,8 @@
 - 2026-08-18T21:43:55+03:00 [USER] The main page should explain the role of internal ML models and data from different controlled workloads without exposing implementation-level model details.
 
 [PROGRESS]
+- 2026-09-25T23:53:24+0300 [CODE] Added `/installation/mariadb/aws-rds` with CloudFormation, direct EC2, Docker, and Compose paths; linked it from Installation, MariaDB, Connect, troubleshooting, permissions, and the sidebar. Generic historical AWS RDS redirects now open the engine chooser because they covered both MySQL and MariaDB.
+- 2026-09-25T23:38:57+0300 [CODE] Restored AWS RDS Docker and Compose, Azure Docker, MySQL/MariaDB Windows database preparation, and PostgreSQL 15–18-only query-optimization permissions in both repeated permission sections; added a tab-migration completeness rule to `AGENTS.md`.
 - 2026-09-25T00:20:00+0300 [CODE] Replaced temporary-installer Windows and WHM/cPanel command sequences with their original one-command forms and recorded the platform-specific rule in `AGENTS.md`.
 - 2026-09-25T00:05:00+0300 [CODE] Removed the duplicate `Configuration-changing account authority` warnings from both MySQL and MariaDB Linux installation procedures and added the content-boundary rule to `AGENTS.md`.
 - 2026-09-24T23:55:00+0300 [CODE] Removed generic Agent configuration/update/uninstall `Next steps` footers from all 14 engine/environment installation procedures and recorded the rule in `AGENTS.md`.
@@ -218,6 +224,8 @@
 - 2026-08-18T20:20:25+03:00 [CODE] The Docusaurus site has no Mermaid plugin; a public workflow visual should use an accessible repo asset or native prose/table instead of adding a diagram dependency solely for this page.
 
 [OUTCOMES]
+- 2026-09-25T23:54:22+0300 [TOOL] SUPERSEDES the MariaDB AWS RDS blocker in the 2026-09-25T23:50:41+0300 outcome: MariaDB on AWS RDS is now documented at its own engine-first route with CloudFormation, EC2, Docker, permissions, navigation, troubleshooting, and verification context. Typecheck, production build, diff check, built-page content checks, and direct generic-redirect target checks pass; no documentation tests were added or modified.
+- 2026-09-25T23:50:41+0300 [TOOL] Team-review remediation is complete for the four repository-backed gaps: AWS RDS and Azure MySQL again document their Docker variants, MySQL and MariaDB Windows manual installation again prepares data collection before starting the Agent, and Query Optimization now uses only the public PostgreSQL 15–18 scope. `npm run typecheck`, `npm run build`, `git diff --check`, and production-build HTTP/content checks pass. Interactive desktop/375 px browser QA is UNCONFIRMED because the computer-use environment denied Chrome access. MariaDB on AWS RDS remains UNCONFIRMED and no route was published.
 - 2026-09-25T00:20:00+0300 [TOOL] Windows and WHM/cPanel command simplification passes `npm run typecheck`, `npm run build`, and `git diff --check`; both Windows automatic-install pages render one PowerShell command, and WHM/cPanel renders one install and one removal command. No documentation tests were added or modified.
 - 2026-09-25T00:05:00+0300 [TOOL] Permission-warning cleanup passes `npm run typecheck`, `npm run build`, and `git diff --check`; the warning title no longer appears in public documentation, while the canonical MySQL and MariaDB permission details remain intact. No documentation tests were added or modified.
 - 2026-09-24T23:55:00+0300 [TOOL] Installation-footer cleanup passes `npm run typecheck`, `npm run build`, and `git diff --check`; no `Next steps` heading remains under `docs/installation/`. No documentation tests were added or modified.

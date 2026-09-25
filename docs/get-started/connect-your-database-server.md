@@ -31,6 +31,7 @@ Choose the type of database server you are adding:
 - [MySQL on Windows](/installation/mysql/windows)
 - [MariaDB on Windows](/installation/mariadb/windows)
 - [MySQL on AWS RDS](/installation/mysql/aws-rds)
+- [MariaDB on AWS RDS](/installation/mariadb/aws-rds)
 - [MySQL on GCP Cloud SQL](/installation/mysql/gcp-cloud-sql)
 - [Azure Database for MySQL](/installation/mysql/azure-database-for-mysql)
 - [MariaDB in Kubernetes](/installation/mariadb/kubernetes)

@@ -49,7 +49,16 @@ interval_read_config_seconds=3600
 query_optimization=false
 ```
 
-5. Install and start the service:
+5. Add these settings to the active MariaDB configuration file, then restart MariaDB. Performance Schema requires a restart:
+
+```ini
+performance_schema=ON
+performance-schema-consumer-events-statements-current=ON
+performance-schema-consumer-events-statements-history=ON
+slow_query_log=ON
+```
+
+6. Install and start the service:
 
 ```powershell
 & 'C:\Program Files\ReleemAgent\releem-agent.exe' -f

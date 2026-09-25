@@ -51,7 +51,7 @@ Please exclude "releem" user from MySQLGovernor.
 Open **WHM > Plugins > Releem Database Advisor** and check the Agent service status. If it is stopped, inspect `/var/log/releem/whm-install.log`, start `releem-agent`, and confirm that cPanel database auto-adjust is disabled. Use the [MySQL WHM/cPanel guide](/installation/mysql/whm-cpanel) to reinstall or remove the module.
 
 ### AWS RDS
-[Troubleshoot MySQL on AWS RDS](/installation/mysql/aws-rds#troubleshooting)
+[Troubleshoot MySQL on AWS RDS](/installation/mysql/aws-rds#troubleshooting) or [MariaDB on AWS RDS](/installation/mariadb/aws-rds#troubleshooting).
 
 
 ## Releem Agent Installation Errors

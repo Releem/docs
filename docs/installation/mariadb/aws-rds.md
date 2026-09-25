@@ -1,46 +1,45 @@
 ---
 id: aws-rds
-slug: /installation/mysql/aws-rds
-title: Install Releem for MySQL on AWS RDS
+slug: /installation/mariadb/aws-rds
+title: Install Releem for MariaDB on AWS RDS
 ---
 
-# Install Releem for MySQL on AWS RDS
+# Install Releem for MariaDB on AWS RDS
 
-Connect the Releem Agent to Amazon RDS for MySQL.
+Connect the Releem Agent to Amazon RDS for MariaDB.
 
 ## Prerequisites
 
-Review [MySQL permissions](/supported-databases/mysql/required-permissions). Enhanced Monitoring supplies system metrics. Performance Schema and the slow query log supply database and query data when those features are enabled:
+Use an RDS for MariaDB version within Releem's supported MariaDB range. Review [MariaDB permissions](/supported-databases/mariadb/required-permissions). Enhanced Monitoring supplies system metrics. Performance Schema and the slow query log supply database and query data when those features are enabled in the RDS parameter group:
 
-   ```ini
-   performance_schema=ON
-   slow_query_log=ON
-   ```
+```ini
+performance_schema=ON
+slow_query_log=ON
+```
 
-### Separate monitoring from configuration authority
-
-Monitoring can use read actions such as `logs:Get*`, `rds:Describe*`, and `cloudwatch:Get*`. Applying a database configuration requires separate state-changing authority and an approved parameter group. Do not add configuration-changing authority to a monitoring-only role.
+Monitoring can use read actions such as `logs:Get*`, `rds:Describe*`, and `cloudwatch:Get*`. Add `rds:ModifyDBParameterGroup` only when you want Releem to apply approved configuration changes through the selected parameter group.
 
 ## Automatic installation {#automatic-installation}
 
 Use the Releem CloudFormation template to run the Agent in AWS Fargate:
 
-1. Create the `releem` database account.
+1. Create the `releem` database account for the Agent.
 2. Open the [Releem CloudFormation Quick Create page](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateUrl=https://releem.s3.amazonaws.com/v2/releem-agent-cloudformation.yml&stackName=releem-agent).
 3. Select the same AWS Region as the RDS instance.
-4. Enter the RDS instance ID, database user, security groups, subnets, and a current `releem/releem-agent:[VERSION]` image.
-5. Supply the API key and database password through AWS Secrets Manager ARNs when available.
-6. Create the stack and wait for `CREATE_COMPLETE`.
+4. Keep **DatabaseType** set to `mysql`. The Agent uses its MySQL-compatible collector for MariaDB.
+5. Enter the RDS instance ID, database user, security groups, subnets, parameter group, and a current `releem/releem-agent:[VERSION]` image.
+6. Supply the API key and database password through AWS Secrets Manager ARNs when available.
+7. Create the stack and wait for `CREATE_COMPLETE`.
 
 The Agent security group needs outbound HTTPS and access to the RDS endpoint on its database port. The RDS security group must accept that database connection from the Agent security group.
 
 ## Manual installation {#manual-installation}
 
-Install the Agent on an EC2 instance that can reach RDS. Attach an IAM role with the read actions required for RDS, CloudWatch, and logs. Add `rds:ModifyDBParameterGroup` only when you want Releem to apply approved configuration changes. You can install the Agent directly on EC2 or run it in Docker.
+Install the Agent on an EC2 instance that can reach RDS. Attach an IAM role with the read actions required for RDS, CloudWatch, and logs. You can install the Agent directly on EC2 or run it in Docker.
 
 ### Install directly on EC2
 
-Run the command in a private administrative session and enter secrets at the masked prompts:
+Run the command in a private administrative session and enter secrets at the masked prompts. The shared installer uses `RELEEM_MYSQL_*` variable names for MariaDB connections:
 
 ```bash
 sudo bash -c '
@@ -66,7 +65,7 @@ bash "$installer"
 - `RELEEM_AWS_REGION` is the RDS Region.
 - `RELEEM_AWS_RDS_DB` is the RDS instance identifier.
 - `RELEEM_AWS_RDS_PARAMETER_GROUP` is the parameter group used for approved configuration changes.
-- `RELEEM_MYSQL_LOGIN` and `RELEEM_MYSQL_PASSWORD` configure the database connection.
+- `RELEEM_MYSQL_LOGIN` and `RELEEM_MYSQL_PASSWORD` configure the MariaDB connection.
 - `RELEEM_QUERY_OPTIMIZATION=true` enables query collection after you grant the required database permissions.
 
 ### Run on EC2 with Docker {#ec2-docker}
@@ -116,7 +115,7 @@ Use a version listed on [Docker Hub](https://hub.docker.com/r/releem/releem-agen
 
 ## Expected result
 
-After you complete a supported installation method, the Dashboard should show **Agent Status: Connected** and current metrics or a current data timestamp.
+After installation, the Dashboard should show **Agent Status: Connected** and current metrics or a current data timestamp.
 
 ## Verify the installation
 
@@ -124,4 +123,4 @@ Confirm both the Agent connection and current metrics in the Dashboard. If eithe
 
 ## Troubleshooting
 
-Use [Troubleshoot the Releem Agent](/get-started/troubleshoot-releem-agent). Correct the reported permission, network, or configuration issue before you re-run or restart the supported procedure.
+Use [Troubleshoot the Releem Agent](/get-started/troubleshoot-releem-agent). Correct the reported permission, network, or configuration issue before you re-run or restart the procedure.

@@ -66,6 +66,25 @@ bash "$installer"
 - `RELEEM_MYSQL_LOGIN` and `RELEEM_MYSQL_PASSWORD` configure the database connection.
 - `RELEEM_QUERY_OPTIMIZATION=true` enables query collection after you grant the required database permissions.
 
+## Run the Agent in Docker {#docker}
+
+Run the container on a host that can reach the Azure MySQL endpoint:
+
+```bash
+docker run -d --name releem-agent \
+  -e RELEEM_API_KEY="[RELEEM_API_KEY]" \
+  -e DB_USER="releem" \
+  -e DB_PASSWORD="[MONITORING_PASSWORD]" \
+  -e INSTANCE_TYPE="azure/mysql" \
+  -e RELEEM_AZURE_SUBSCRIPTION_ID="[SUBSCRIPTION_ID]" \
+  -e RELEEM_AZURE_RESOURCE_GROUP="[RESOURCE_GROUP]" \
+  -e RELEEM_AZURE_MYSQL_SERVER="[MYSQL_SERVER]" \
+  -e RELEEM_QUERY_OPTIMIZATION=true \
+  releem/releem-agent:[VERSION_FROM_DOCKER_HUB]
+```
+
+Use a version listed on [Docker Hub](https://hub.docker.com/r/releem/releem-agent/tags). A managed identity available to the container can supply Azure credentials. If you use a service principal, inject the `AZURE_TENANT_ID`, `AZURE_CLIENT_ID`, and `AZURE_CLIENT_SECRET` environment variables through your approved secret-management method.
+
 ## Verify connectivity and current metrics
 
 Use these local checks to diagnose the Agent service:

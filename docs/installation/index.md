@@ -16,7 +16,7 @@ Choose your database and installation environment.
 
 ## [MariaDB](/installation/mariadb)
 
-[Linux](/installation/mariadb/linux) · [Windows](/installation/mariadb/windows) · [Docker](/installation/mariadb/docker) · [Kubernetes](/installation/mariadb/kubernetes) · [Clusters](/installation/mariadb/clusters)
+[Linux](/installation/mariadb/linux) · [Windows](/installation/mariadb/windows) · [Docker](/installation/mariadb/docker) · [Kubernetes](/installation/mariadb/kubernetes) · [AWS RDS](/installation/mariadb/aws-rds) · [Clusters](/installation/mariadb/clusters)
 
 [View MariaDB installation options](/installation/mariadb)
 
