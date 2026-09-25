@@ -1,0 +1,1632 @@
+{
+  "schemaVersion": 1,
+  "expectedPageCount": 54,
+  "approvedTopLevelDirectories": [
+    "get-started",
+    "supported-databases",
+    "installation",
+    "dashboard",
+    "recommendations",
+    "account"
+  ],
+  "approvedRootDocuments": [
+    "docs/faq.md"
+  ],
+  "allowedFrontMatterKeys": [
+    "id",
+    "slug"
+  ],
+  "records": [
+    {
+      "number": 1,
+      "currentSource": "docs/releem-overview.md",
+      "finalSource": "docs/get-started/releem-overview.md",
+      "currentRoute": "/",
+      "finalRoute": "/get-started",
+      "currentId": "releem-overview",
+      "finalId": "get-started/releem-overview",
+      "finalExplicitId": "releem-overview",
+      "finalSlug": "/get-started",
+      "originalWholeFileSha256": "8f7de3e5abc16fd351df7bc89ee00907b9ad981942f3b64d1df464e5688e553c",
+      "originalFrontMatterSha256": "0e11941e555e7850ac6366d11ca72e478918cb45704b986052611abfd2bcd9a3",
+      "originalFrontMatter": "slug: /\ntitle: Welcome to Releem\nsidebar_label: Welcome",
+      "originalBodySha256": "9415285e9a811860b18e4ea60812731b7241eb9fe307357ad11c028b7da856a2",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [],
+      "allowedRelativeAssetReplacements": [
+        {
+          "from": "../assets/images/releem_dashboard.png",
+          "to": "../../assets/images/releem_dashboard.png",
+          "occurrences": 1
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "currentSource": "docs/getting-started/step-1-register-for-an-account.md",
+      "finalSource": "docs/get-started/register-for-an-account.md",
+      "currentRoute": "/getting-started/step-1-register-for-an-account",
+      "finalRoute": "/get-started/register-for-an-account",
+      "currentId": "getting-started/step-1-register-for-an-account",
+      "finalId": "get-started/register-for-an-account",
+      "finalExplicitId": "register-for-an-account",
+      "finalSlug": "/get-started/register-for-an-account",
+      "originalWholeFileSha256": "da706909adcf66e95a671fa0c3e2c53e22ec6fef13d694423282da91a38e8837",
+      "originalFrontMatterSha256": "4ac9407b6b9dd3b73b9edacf06e90b366c19d98bcf3876b39b52d7e79103555d",
+      "originalFrontMatter": "id: step-1-register-for-an-account\ntitle: Register for an Account",
+      "originalBodySha256": "5ab007ad3f4ee6d9ab1730c329f055bd7919d0bfe03a8c4e5d0004c38b01a6a5",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 3,
+      "currentSource": "docs/getting-started/connect-your-database-server.md",
+      "finalSource": "docs/get-started/connect-your-database-server.md",
+      "currentRoute": "/getting-started/step-2-add-server",
+      "finalRoute": "/get-started/connect-your-database-server",
+      "currentId": "getting-started/step-2-add-server",
+      "finalId": "get-started/connect-your-database-server",
+      "finalExplicitId": "connect-your-database-server",
+      "finalSlug": "/get-started/connect-your-database-server",
+      "originalWholeFileSha256": "7f1b39f9487a3e9526f673758afa31af1614fd215feb9292025bcff74566b768",
+      "originalFrontMatterSha256": "a9c7ba32d594e8920531c077136becc428488acf4ec6a9fa4486b43013e18b33",
+      "originalFrontMatter": "id: step-2-add-server\ntitle: Add Server",
+      "originalBodySha256": "3b3e9bba0038e97445cfa236cb4cd30c60e0ee01d6b326270363d04ebf4629da",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [
+        {
+          "from": "/getting-started/how-to-check-if-releem-agent-is-working",
+          "to": "/get-started/troubleshoot-releem-agent",
+          "occurrences": 1
+        },
+        {
+          "from": "/releem-agent/installation-guides/cloud-managed-aws-rds-automatic-installation",
+          "to": "/installation/installation-methods/aws-rds",
+          "occurrences": 1
+        },
+        {
+          "from": "/releem-agent/installation-guides/cloud-managed-gcp-cloud-sql-automatic-installation",
+          "to": "/installation/installation-methods/gcp-cloud-sql",
+          "occurrences": 1
+        },
+        {
+          "from": "/releem-agent/installation-guides/installation-in-kubernetes",
+          "to": "/installation/installation-methods/kubernetes",
+          "occurrences": 1
+        },
+        {
+          "from": "/releem-agent/installation-guides/postgresql-manual-linux",
+          "to": "/supported-databases/postgresql/install-on-linux",
+          "occurrences": 1
+        },
+        {
+          "from": "/releem-agent/installation-guides/self-managed-servers-automatic-installation",
+          "to": "/installation",
+          "occurrences": 1
+        },
+        {
+          "from": "/releem-agent/installation-guides/self-managed-servers-docker-installation",
+          "to": "/installation/installation-methods/docker",
+          "occurrences": 1
+        },
+        {
+          "from": "/releem-agent/installation-guides/self-managed-servers-manual-installation-linux",
+          "to": "/installation/installation-methods/linux-manual",
+          "occurrences": 1
+        },
+        {
+          "from": "/releem-agent/installation-guides/self-managed-servers-manual-installation-windows",
+          "to": "/installation/installation-methods/windows",
+          "occurrences": 1
+        },
+        {
+          "from": "/releem-agent/installation-guides/whm-cpanel",
+          "to": "/installation/installation-methods/whm-cpanel",
+          "occurrences": 1
+        }
+      ],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 4,
+      "currentSource": "docs/getting-started/how-to-check-if-releem-agent-is-working.md",
+      "finalSource": "docs/get-started/troubleshoot-releem-agent.md",
+      "currentRoute": "/getting-started/how-to-check-if-releem-agent-is-working",
+      "finalRoute": "/get-started/troubleshoot-releem-agent",
+      "currentId": "getting-started/how-to-check-if-releem-agent-is-working",
+      "finalId": "get-started/troubleshoot-releem-agent",
+      "finalExplicitId": "troubleshoot-releem-agent",
+      "finalSlug": "/get-started/troubleshoot-releem-agent",
+      "originalWholeFileSha256": "7424a87277f2f8d9c9d2c0d07067371bd65ab932b52339f2a74320af347fca54",
+      "originalFrontMatterSha256": "061860cf41de9a439aa6972edc62615f56abce1735e0b531fb62e799233a0d42",
+      "originalFrontMatter": "id: how-to-check-if-releem-agent-is-working\ntitle: How to Check if Releem Agent is Working",
+      "originalBodySha256": "fe0b10b369a8d467fcf1ffd948b8e4d3650d159c94233e1294c652913b65ca61",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [
+        {
+          "from": "/releem-agent/how-to-check-logs",
+          "to": "/installation/manage-the-releem-agent/logs",
+          "occurrences": 1
+        },
+        {
+          "from": "/releem-agent/installation-guides/cloud-managed-aws-rds-automatic-installation#common-issues-for-aws-rds",
+          "to": "/installation/installation-methods/aws-rds#common-issues-for-aws-rds",
+          "occurrences": 1
+        },
+        {
+          "from": "/releem-agent/installation-guides/whm-cpanel",
+          "to": "/installation/installation-methods/whm-cpanel",
+          "occurrences": 1
+        }
+      ],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 5,
+      "currentSource": "docs/releem-agent/mysql-permissions.md",
+      "finalSource": "docs/supported-databases/mysql/required-permissions.md",
+      "currentRoute": "/releem-agent/mysql-permissions",
+      "finalRoute": "/supported-databases/mysql/required-permissions",
+      "currentId": "releem-agent/mysql-permissions",
+      "finalId": "supported-databases/mysql/required-permissions",
+      "finalExplicitId": "required-permissions",
+      "finalSlug": "/supported-databases/mysql/required-permissions",
+      "originalWholeFileSha256": "50a233d239d5f0bb49195a7e791a0bc1668b65c7516f63b3c0951712338456fd",
+      "originalFrontMatterSha256": "8af81217c9d1b31125fe336f742eb031d765cec1853f709424f34f90a8930aac",
+      "originalFrontMatter": "id: \"mysql-permissions\"\ntitle: \"MySQL Permissions for Releem Agent\"",
+      "originalBodySha256": "69a54d9de3710c62613038b9be66f6533bf9186d8d2ef0ee2fcfe9183b2fee2a",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 6,
+      "currentSource": "docs/releem-agent/installation-guides/postgresql-manual-installation-linux.md",
+      "finalSource": "docs/supported-databases/postgresql/install-on-linux.md",
+      "currentRoute": "/releem-agent/installation-guides/postgresql-manual-linux",
+      "finalRoute": "/supported-databases/postgresql/install-on-linux",
+      "currentId": "releem-agent/installation-guides/postgresql-manual-linux",
+      "finalId": "supported-databases/postgresql/install-on-linux",
+      "finalExplicitId": "install-on-linux",
+      "finalSlug": "/supported-databases/postgresql/install-on-linux",
+      "originalWholeFileSha256": "2edcce165b2fa9635b8175eca24cf20fb34763676eee46ac45e68d116ade11eb",
+      "originalFrontMatterSha256": "10f32c3cdde59c65d9f9a0331df4d6cb02a70b23b9eb49d0f18d90ad8e9772be",
+      "originalFrontMatter": "id: \"postgresql-manual-linux\"\ntitle: \"PostgreSQL\"",
+      "originalBodySha256": "962ef1bb70a3dcd4d0e4263e6a9c5883276a005c8e02b9b306eac20f29befe29",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [
+        {
+          "from": "/releem-agent/configuration",
+          "to": "/installation/manage-the-releem-agent/configuration",
+          "occurrences": 2
+        }
+      ],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 7,
+      "currentSource": "docs/releem-agent/installation-guides/self-managed-servers-automatic-installation.md",
+      "finalSource": "docs/installation/linux-automatic.md",
+      "currentRoute": "/releem-agent/installation-guides/self-managed-servers-automatic-installation",
+      "finalRoute": "/installation",
+      "currentId": "releem-agent/installation-guides/self-managed-servers-automatic-installation",
+      "finalId": "installation/linux-automatic",
+      "finalExplicitId": "linux-automatic",
+      "finalSlug": "/installation",
+      "originalWholeFileSha256": "462ae9499bbaa6818ef3932933ef1515858d5beb771a0412638b9ddc9d15df5c",
+      "originalFrontMatterSha256": "e18af9f4a5d01f6478031c9d2983e9d834c274b484322d0646b307d81b5f0481",
+      "originalFrontMatter": "id: \"self-managed-servers-automatic-installation\"\ntitle: \"Linux (Automatic)\"",
+      "originalBodySha256": "f7aca2c1480da38b14e6db2dfc97c50b724b48cba8ced6eb0e499254d0fec32d",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [
+        {
+          "from": "/getting-started/how-to-check-if-releem-agent-is-working#cloudlinux",
+          "to": "/get-started/troubleshoot-releem-agent#cloudlinux",
+          "occurrences": 1
+        }
+      ],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 8,
+      "currentSource": "docs/releem-agent/installation-guides/self-managed-servers-manual-installation-linux.md",
+      "finalSource": "docs/installation/installation-methods/linux-manual.md",
+      "currentRoute": "/releem-agent/installation-guides/self-managed-servers-manual-installation-linux",
+      "finalRoute": "/installation/installation-methods/linux-manual",
+      "currentId": "releem-agent/installation-guides/self-managed-servers-manual-installation-linux",
+      "finalId": "installation/installation-methods/linux-manual",
+      "finalExplicitId": "linux-manual",
+      "finalSlug": "/installation/installation-methods/linux-manual",
+      "originalWholeFileSha256": "16ba8bfbc0c000ca68bd776e543d6e49d03b3154f805a583385e84d9dd555dc3",
+      "originalFrontMatterSha256": "ffcdfbd5b1c59dd88b3263856bb89df5352ef7ec001f9030c1b84c6f0cca3def",
+      "originalFrontMatter": "id: \"self-managed-servers-manual-installation-linux\"\ntitle: \"Linux (Manual)\"",
+      "originalBodySha256": "24a6076b6acda765bed399dda26c10d90bbc4a2031ee2a03c198e2fcf6b530a6",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [
+        {
+          "from": "/configuration-tuning/limit-memory-for-mysql",
+          "to": "/recommendations/configuration-tuning/limit-mysql-memory",
+          "occurrences": 1
+        },
+        {
+          "from": "/getting-started/how-to-check-if-releem-agent-is-working#cloudlinux",
+          "to": "/get-started/troubleshoot-releem-agent#cloudlinux",
+          "occurrences": 1
+        },
+        {
+          "from": "/releem-agent/mysql-permissions",
+          "to": "/supported-databases/mysql/required-permissions",
+          "occurrences": 1
+        },
+        {
+          "from": "/releem-agent/mysql-permissions#additional-database-permissions-required",
+          "to": "/supported-databases/mysql/required-permissions#additional-database-permissions-required",
+          "occurrences": 1
+        }
+      ],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 9,
+      "currentSource": "docs/releem-agent/installation-guides/self-managed-servers-manual-installation-windows.md",
+      "finalSource": "docs/installation/installation-methods/windows.md",
+      "currentRoute": "/releem-agent/installation-guides/self-managed-servers-manual-installation-windows",
+      "finalRoute": "/installation/installation-methods/windows",
+      "currentId": "releem-agent/installation-guides/self-managed-servers-manual-installation-windows",
+      "finalId": "installation/installation-methods/windows",
+      "finalExplicitId": "windows",
+      "finalSlug": "/installation/installation-methods/windows",
+      "originalWholeFileSha256": "8b25852b06d8f7e1796d1e7831e1ea46c4f0bd39fed515449de51e083e9d8800",
+      "originalFrontMatterSha256": "fc7c91152271d185ebcc9cce9db7b87ce15def5c6ea97117a39649cb62c13df9",
+      "originalFrontMatter": "id: \"self-managed-servers-manual-installation-windows\"\ntitle: \"Windows\"",
+      "originalBodySha256": "ed3863b80aba3c52bc01689c6e10314c1fa6327947e904ff2a38b719a3fee768",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [
+        {
+          "from": "/configuration-tuning/limit-memory-for-mysql",
+          "to": "/recommendations/configuration-tuning/limit-mysql-memory",
+          "occurrences": 1
+        },
+        {
+          "from": "/releem-agent/configuration",
+          "to": "/installation/manage-the-releem-agent/configuration",
+          "occurrences": 1
+        },
+        {
+          "from": "/releem-agent/mysql-permissions",
+          "to": "/supported-databases/mysql/required-permissions",
+          "occurrences": 1
+        },
+        {
+          "from": "/releem-agent/mysql-permissions#additional-database-permissions-required",
+          "to": "/supported-databases/mysql/required-permissions#additional-database-permissions-required",
+          "occurrences": 1
+        }
+      ],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 10,
+      "currentSource": "docs/releem-agent/installation-guides/self-managed-servers-docker-installation.md",
+      "finalSource": "docs/installation/installation-methods/docker.md",
+      "currentRoute": "/releem-agent/installation-guides/self-managed-servers-docker-installation",
+      "finalRoute": "/installation/installation-methods/docker",
+      "currentId": "releem-agent/installation-guides/self-managed-servers-docker-installation",
+      "finalId": "installation/installation-methods/docker",
+      "finalExplicitId": "docker",
+      "finalSlug": "/installation/installation-methods/docker",
+      "originalWholeFileSha256": "1f34a63493d95793f24877113084f40b93eaad570d8e16eb706367b2ccdfd4d8",
+      "originalFrontMatterSha256": "af9e73e8d597d30dc23b0eb59abd94cfd241a1b1dc82a0f2dfe8e4a3092fedfd",
+      "originalFrontMatter": "id: \"self-managed-servers-docker-installation\"\ntitle: \"Docker\"",
+      "originalBodySha256": "7906e2ab735b02b3ae53375eb412de2c84a83a9021db865419b6aca6f365f63d",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [
+        {
+          "from": "/releem-agent/mysql-permissions",
+          "to": "/supported-databases/mysql/required-permissions",
+          "occurrences": 1
+        }
+      ],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 11,
+      "currentSource": "docs/releem-agent/installation-guides/installation-in-kubernetes.md",
+      "finalSource": "docs/installation/installation-methods/kubernetes.md",
+      "currentRoute": "/releem-agent/installation-guides/installation-in-kubernetes",
+      "finalRoute": "/installation/installation-methods/kubernetes",
+      "currentId": "releem-agent/installation-guides/installation-in-kubernetes",
+      "finalId": "installation/installation-methods/kubernetes",
+      "finalExplicitId": "kubernetes",
+      "finalSlug": "/installation/installation-methods/kubernetes",
+      "originalWholeFileSha256": "5dbb3138d551805f5b62ef4b513cc52712867b49c398b1919cee0f550dae18dd",
+      "originalFrontMatterSha256": "40ae9377ff1f57fa02f7d19bbee6e0c1382bb49156d9d73f2ed2a34515a93db4",
+      "originalFrontMatter": "id: \"installation-in-kubernetes\"\ntitle: \"Kubernetes\"",
+      "originalBodySha256": "a406ab21529b5ca9bc476c2e9075ebc56fd4356937250b0aafe29374dfa26cff",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 12,
+      "currentSource": "docs/releem-agent/installation-guides/cloud-managed-aws-rds-automatic-installation.md",
+      "finalSource": "docs/installation/installation-methods/aws-rds.md",
+      "currentRoute": "/releem-agent/installation-guides/cloud-managed-aws-rds-automatic-installation",
+      "finalRoute": "/installation/installation-methods/aws-rds",
+      "currentId": "releem-agent/installation-guides/cloud-managed-aws-rds-automatic-installation",
+      "finalId": "installation/installation-methods/aws-rds",
+      "finalExplicitId": "aws-rds",
+      "finalSlug": "/installation/installation-methods/aws-rds",
+      "originalWholeFileSha256": "4a9c107b2c8a87f9cb4e0e1dc90947147ba93a7342404634325791752cde407b",
+      "originalFrontMatterSha256": "944d36c26fbe11ac0aa56c33013dcd92ae25c95ebffa9cc4c08b723c880b618e",
+      "originalFrontMatter": "id: cloud-managed-aws-rds-automatic-installation\ntitle: AWS RDS",
+      "originalBodySha256": "0bc3e1c8ffc810a309e07c6551c7aa1b29057f3916353c8b72705d1b1472f9cf",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [
+        {
+          "from": "/releem-agent/mysql-permissions",
+          "to": "/supported-databases/mysql/required-permissions",
+          "occurrences": 4
+        },
+        {
+          "from": "/releem-agent/mysql-permissions#additional-database-permissions-required",
+          "to": "/supported-databases/mysql/required-permissions#additional-database-permissions-required",
+          "occurrences": 4
+        }
+      ],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 13,
+      "currentSource": "docs/releem-agent/installation-guides/cloud-managed-gcp-cloud-sql-automatic-installation.md",
+      "finalSource": "docs/installation/installation-methods/gcp-cloud-sql.md",
+      "currentRoute": "/releem-agent/installation-guides/cloud-managed-gcp-cloud-sql-automatic-installation",
+      "finalRoute": "/installation/installation-methods/gcp-cloud-sql",
+      "currentId": "releem-agent/installation-guides/cloud-managed-gcp-cloud-sql-automatic-installation",
+      "finalId": "installation/installation-methods/gcp-cloud-sql",
+      "finalExplicitId": "gcp-cloud-sql",
+      "finalSlug": "/installation/installation-methods/gcp-cloud-sql",
+      "originalWholeFileSha256": "92aa49e80d1921d102967ebac8a2d9ba9bbd866c3eb3805d4c4ce82f4d5fc880",
+      "originalFrontMatterSha256": "71222edaaf4ee0b9c6798390008419b37367d4e89d78a5d0ae7190d464165c14",
+      "originalFrontMatter": "id: cloud-managed-gcp-cloud-sql-automatic-installation\ntitle: GCP Cloud SQL",
+      "originalBodySha256": "d4a55a841891516e27c3b0ca573e98c34b360eb08e8eda0d0cdca2c94290f955",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [
+        {
+          "from": "/releem-agent/mysql-permissions",
+          "to": "/supported-databases/mysql/required-permissions",
+          "occurrences": 3
+        },
+        {
+          "from": "/releem-agent/mysql-permissions#additional-database-permissions-required",
+          "to": "/supported-databases/mysql/required-permissions#additional-database-permissions-required",
+          "occurrences": 2
+        }
+      ],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 14,
+      "currentSource": "docs/releem-agent/installation-guides/cloud-managed-azure-mysql-automatic-installation.md",
+      "finalSource": "docs/installation/installation-methods/azure-database-for-mysql.md",
+      "currentRoute": "/releem-agent/installation-guides/cloud-managed-azure-mysql-automatic-installation",
+      "finalRoute": "/installation/installation-methods/azure-database-for-mysql",
+      "currentId": "releem-agent/installation-guides/cloud-managed-azure-mysql-automatic-installation",
+      "finalId": "installation/installation-methods/azure-database-for-mysql",
+      "finalExplicitId": "azure-database-for-mysql",
+      "finalSlug": "/installation/installation-methods/azure-database-for-mysql",
+      "originalWholeFileSha256": "6ebe3d9ebf2ce3c4634a91c377dc8a87bf4afc67980c793cb3454bc002e679b7",
+      "originalFrontMatterSha256": "21d0784cd52f7bb16afa66fb51374626bb8ab14f2b537f2ea973617021c12367",
+      "originalFrontMatter": "id: cloud-managed-azure-mysql-automatic-installation\ntitle: Azure Database for MySQL",
+      "originalBodySha256": "ab3deff9fa7478d06e8ec4ba1c654e00b1e7b1ba1d0e05931becce4f6ddb1e35",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [
+        {
+          "from": "/releem-agent/mysql-permissions",
+          "to": "/supported-databases/mysql/required-permissions",
+          "occurrences": 1
+        },
+        {
+          "from": "/releem-agent/mysql-permissions#additional-database-permissions-required",
+          "to": "/supported-databases/mysql/required-permissions#additional-database-permissions-required",
+          "occurrences": 1
+        }
+      ],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 15,
+      "currentSource": "docs/releem-agent/installation-guides/clusters.md",
+      "finalSource": "docs/installation/installation-methods/clusters.md",
+      "currentRoute": "/releem-agent/installation-guides/clusters",
+      "finalRoute": "/installation/installation-methods/clusters",
+      "currentId": "releem-agent/installation-guides/clusters",
+      "finalId": "installation/installation-methods/clusters",
+      "finalExplicitId": "clusters",
+      "finalSlug": "/installation/installation-methods/clusters",
+      "originalWholeFileSha256": "15da19f0538abe57de41bf3ddd66f35b7559c94a58d21ba0499e9bf21cd06bc2",
+      "originalFrontMatterSha256": "22ba714f76a8b13831f88dd2d89dd9f1b4f5c2bd26eeb08c33c84a9e372a31e4",
+      "originalFrontMatter": "id: clusters\ntitle: Clusters",
+      "originalBodySha256": "2db744c008f392cd2ed0a2c9220b3f293d7176bd1d7de263828c31448433d81f",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [
+        {
+          "from": "/releem-agent/installation-guides/self-managed-servers-manual-installation-linux",
+          "to": "/installation/installation-methods/linux-manual",
+          "occurrences": 1
+        },
+        {
+          "from": "/releem-agent/mysql-permissions",
+          "to": "/supported-databases/mysql/required-permissions",
+          "occurrences": 1
+        },
+        {
+          "from": "/releem-agent/mysql-permissions#additional-database-permissions-required",
+          "to": "/supported-databases/mysql/required-permissions#additional-database-permissions-required",
+          "occurrences": 1
+        }
+      ],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 16,
+      "currentSource": "docs/releem-agent/installation-guides/whm-cpanel.md",
+      "finalSource": "docs/installation/installation-methods/whm-cpanel.md",
+      "currentRoute": "/releem-agent/installation-guides/whm-cpanel",
+      "finalRoute": "/installation/installation-methods/whm-cpanel",
+      "currentId": "releem-agent/installation-guides/whm-cpanel",
+      "finalId": "installation/installation-methods/whm-cpanel",
+      "finalExplicitId": "whm-cpanel",
+      "finalSlug": "/installation/installation-methods/whm-cpanel",
+      "originalWholeFileSha256": "0dcb6cfd57b125eb7af3b86aecb6c6cbe94f1c17291c6896faacb0d28d7e57c1",
+      "originalFrontMatterSha256": "0fe20f63917d7aa722a24f83469e163553a218d34948e610d108901667087992",
+      "originalFrontMatter": "id: \"whm-cpanel\"\ntitle: \"WHM/cPanel\"",
+      "originalBodySha256": "cb8dca55f8d92317d977074aed061727950834a013786a0de10128e6a9a42e6f",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [
+        {
+          "from": "/getting-started/how-to-check-if-releem-agent-is-working",
+          "to": "/get-started/troubleshoot-releem-agent",
+          "occurrences": 1
+        },
+        {
+          "from": "/releem-agent/how-to-check-logs",
+          "to": "/installation/manage-the-releem-agent/logs",
+          "occurrences": 1
+        }
+      ],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 17,
+      "currentSource": "docs/releem-agent/configuration-settings.md",
+      "finalSource": "docs/installation/manage-the-releem-agent/configuration.md",
+      "currentRoute": "/releem-agent/configuration",
+      "finalRoute": "/installation/manage-the-releem-agent/configuration",
+      "currentId": "releem-agent/configuration",
+      "finalId": "installation/manage-the-releem-agent/configuration",
+      "finalExplicitId": "configuration",
+      "finalSlug": "/installation/manage-the-releem-agent/configuration",
+      "originalWholeFileSha256": "33bf961a338cb8b04d5f802a0a83b969caf17424743baa66a6706c0d36d763bc",
+      "originalFrontMatterSha256": "a421059c66a35c77c92bf6c6e966d66d650982d0a275af4cf45b23b62a1a7a55",
+      "originalFrontMatter": "id: \"configuration\"\ntitle: \"Configuration\"",
+      "originalBodySha256": "e915a8e5462aac02103663d67420bce310dc96aed74aeda5167957d761e77b19",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 18,
+      "currentSource": "docs/releem-agent/how-to-check-logs.md",
+      "finalSource": "docs/installation/manage-the-releem-agent/logs.md",
+      "currentRoute": "/releem-agent/how-to-check-logs",
+      "finalRoute": "/installation/manage-the-releem-agent/logs",
+      "currentId": "releem-agent/how-to-check-logs",
+      "finalId": "installation/manage-the-releem-agent/logs",
+      "finalExplicitId": "logs",
+      "finalSlug": "/installation/manage-the-releem-agent/logs",
+      "originalWholeFileSha256": "a7e63d9d08866f01fe5f7c4f2c5f346d35d7aa9984dc4d662b70ad3b97af6db2",
+      "originalFrontMatterSha256": "479489b9ca0dea238ba83a39fdba7781b30f8e91be97ca00b8195402c6911fea",
+      "originalFrontMatter": "id: how-to-check-logs\ntitle: How to Check Releem Agent Logs?",
+      "originalBodySha256": "d39ebbfba3f7f1b0fee088606f7ade1570a564a48bc6f43ce4d402348e306e71",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 19,
+      "currentSource": "docs/releem-agent/migration.md",
+      "finalSource": "docs/installation/manage-the-releem-agent/migrate.md",
+      "currentRoute": "/releem-agent/migration",
+      "finalRoute": "/installation/manage-the-releem-agent/migrate",
+      "currentId": "releem-agent/migration",
+      "finalId": "installation/manage-the-releem-agent/migrate",
+      "finalExplicitId": "migrate",
+      "finalSlug": "/installation/manage-the-releem-agent/migrate",
+      "originalWholeFileSha256": "a48e51a9389cb990f1f997d4577c213657b847564555459f66dc2581fb1e15d9",
+      "originalFrontMatterSha256": "8fc913f22a4ce9612845856366e8ccde7622619deeca373ea2976d37d63ebace",
+      "originalFrontMatter": "id: \"migration\"\ntitle: \"Migration to the new server\"",
+      "originalBodySha256": "c0ddff703fd2237f1ff9f87433ef9a40f4e09baffc4a1b57b57f2c5b7fc0d8e0",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [
+        {
+          "from": "/docs/releem-agent/uninstallation.md",
+          "to": "/installation/manage-the-releem-agent/uninstall",
+          "occurrences": 1
+        }
+      ],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 20,
+      "currentSource": "docs/releem-agent/update.md",
+      "finalSource": "docs/installation/manage-the-releem-agent/update.md",
+      "currentRoute": "/releem-agent/update",
+      "finalRoute": "/installation/manage-the-releem-agent/update",
+      "currentId": "releem-agent/update",
+      "finalId": "installation/manage-the-releem-agent/update",
+      "finalExplicitId": "update",
+      "finalSlug": "/installation/manage-the-releem-agent/update",
+      "originalWholeFileSha256": "7369c1f3b1f96e59f3b6307e5a3f64af2c6bd8363cd2e21e09209738e2363761",
+      "originalFrontMatterSha256": "661059c1251260fe94fb2ac681f2d56fde4734a54830f74281658a0c2855582e",
+      "originalFrontMatter": "id: update\ntitle: Update Releem Agent",
+      "originalBodySha256": "edd2f13dedac66e60db207a2b008703570fbfe5fdff521d7e8d5aa7051a79bac",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 21,
+      "currentSource": "docs/releem-agent/uninstallation.md",
+      "finalSource": "docs/installation/manage-the-releem-agent/uninstall.md",
+      "currentRoute": "/releem-agent/uninstallation",
+      "finalRoute": "/installation/manage-the-releem-agent/uninstall",
+      "currentId": "releem-agent/uninstallation",
+      "finalId": "installation/manage-the-releem-agent/uninstall",
+      "finalExplicitId": "uninstall",
+      "finalSlug": "/installation/manage-the-releem-agent/uninstall",
+      "originalWholeFileSha256": "eae1d490d1c746193475ce3e908d78e8d09926afe547c30f782d441ffec09a3c",
+      "originalFrontMatterSha256": "fc9f89c69d20812582e9e8b5205f1e35f4641058ff8dc90a56591012d4b0dc93",
+      "originalFrontMatter": "id: uninstallation\ntitle: Uninstallation",
+      "originalBodySha256": "7ebacf05602169c182dd952fda52ff46a460ce260d9572648cec3346229ac56e",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 22,
+      "currentSource": "docs/getting-started/dashboard-overview.md",
+      "finalSource": "docs/dashboard/overview.md",
+      "currentRoute": "/getting-started/step-4-dashboard",
+      "finalRoute": "/dashboard",
+      "currentId": "getting-started/step-4-dashboard",
+      "finalId": "dashboard/overview",
+      "finalExplicitId": "overview",
+      "finalSlug": "/dashboard",
+      "originalWholeFileSha256": "782afa1650245133bab296efb70cabdf0cedb9590410b8102402bf293c4ed711",
+      "originalFrontMatterSha256": "23ec30eb32458a31ec2cf84e183042b9239fd4d86ae5b4911eb46b7b86d6d26c",
+      "originalFrontMatter": "id: step-4-dashboard\ntitle: Dashboard",
+      "originalBodySha256": "e71ee8a617661ccc0f4eb825e02824a96fd4b173a7033158e3b0c187abfde255",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [
+        {
+          "from": "/getting-started/deadlock-monitoring",
+          "to": "/dashboard/deadlocks",
+          "occurrences": 1
+        },
+        {
+          "from": "/getting-started/process-list",
+          "to": "/dashboard/process-list",
+          "occurrences": 1
+        },
+        {
+          "from": "/getting-started/query-analytics",
+          "to": "/dashboard/query-analytics",
+          "occurrences": 1
+        },
+        {
+          "from": "/getting-started/query-optimization",
+          "to": "/recommendations/query-optimization",
+          "occurrences": 1
+        },
+        {
+          "from": "/getting-started/schema-optimization",
+          "to": "/dashboard/schema-checks",
+          "occurrences": 1
+        },
+        {
+          "from": "/getting-started/security-checks",
+          "to": "/dashboard/security-checks",
+          "occurrences": 1
+        },
+        {
+          "from": "/getting-started/step-3-getting-and-applying-recommendations",
+          "to": "/recommendations",
+          "occurrences": 1
+        },
+        {
+          "from": "/getting-started/step-5-health-checks",
+          "to": "/dashboard/health-checks",
+          "occurrences": 1
+        }
+      ],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 23,
+      "currentSource": "docs/getting-started/query-analytics.md",
+      "finalSource": "docs/dashboard/query-analytics.md",
+      "currentRoute": "/getting-started/query-analytics",
+      "finalRoute": "/dashboard/query-analytics",
+      "currentId": "getting-started/query-analytics",
+      "finalId": "dashboard/query-analytics",
+      "finalExplicitId": "query-analytics",
+      "finalSlug": "/dashboard/query-analytics",
+      "originalWholeFileSha256": "d14d6c22a63fef5fe8df57c0f3d0c4ca21223bd619327a91049d80da598dee46",
+      "originalFrontMatterSha256": "8db8a57ec30f769b82a3a15ad4cda5b6e953f308725e3935b7d64e20c0a34f2d",
+      "originalFrontMatter": "id: query-analytics\ntitle: Query Analytics",
+      "originalBodySha256": "702a0f2ea05c8abb8eee88681d8506d81d4b91c3415efc950789fd255e7c512e",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 24,
+      "currentSource": "docs/getting-started/schema-checks.md",
+      "finalSource": "docs/dashboard/schema-checks.md",
+      "currentRoute": "/getting-started/schema-optimization",
+      "finalRoute": "/dashboard/schema-checks",
+      "currentId": "getting-started/schema-optimization",
+      "finalId": "dashboard/schema-checks",
+      "finalExplicitId": "schema-checks",
+      "finalSlug": "/dashboard/schema-checks",
+      "originalWholeFileSha256": "728b52aa1cc19683d4973537c4937a0f4b430dbe370db24384a9feabc2ce1e6e",
+      "originalFrontMatterSha256": "4095784795df6d8fcbdd44b335f9c8355e6348711ca2d346b1d7e2e2c001e14b",
+      "originalFrontMatter": "id: schema-optimization\ntitle: Schema Optimization",
+      "originalBodySha256": "7c7584fa003791acdb0bb528a9b6dffef88f9716084ec7ea1a8d8529918fbe7b",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [
+        {
+          "from": "/query-optimization/automatic-schema-changes",
+          "to": "/recommendations/query-optimization/automatic-schema-changes",
+          "occurrences": 1
+        },
+        {
+          "from": "/query-optimization/schema-change-troubleshooting",
+          "to": "/recommendations/query-optimization/schema-change-troubleshooting",
+          "occurrences": 1
+        }
+      ],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 25,
+      "currentSource": "docs/getting-started/deadlock-monitoring.md",
+      "finalSource": "docs/dashboard/deadlocks.md",
+      "currentRoute": "/getting-started/deadlock-monitoring",
+      "finalRoute": "/dashboard/deadlocks",
+      "currentId": "getting-started/deadlock-monitoring",
+      "finalId": "dashboard/deadlocks",
+      "finalExplicitId": "deadlocks",
+      "finalSlug": "/dashboard/deadlocks",
+      "originalWholeFileSha256": "5000e163878d54a65a8372dd73c2d4d4d9ee4ca8fc39bdfc605d97fe53b99025",
+      "originalFrontMatterSha256": "de23616bd45fea81cf521c6edf098c74d787263c4bcfd6a4fd8ddd28a6164c79",
+      "originalFrontMatter": "id: deadlock-monitoring\ntitle: Deadlock Monitoring",
+      "originalBodySha256": "89e47e115a16d3e1d206887d5196efad40cc5ebc2e24be0793dd582889c834a8",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 26,
+      "currentSource": "docs/getting-started/health-checks.md",
+      "finalSource": "docs/dashboard/health-checks.md",
+      "currentRoute": "/getting-started/step-5-health-checks",
+      "finalRoute": "/dashboard/health-checks",
+      "currentId": "getting-started/step-5-health-checks",
+      "finalId": "dashboard/health-checks",
+      "finalExplicitId": "health-checks",
+      "finalSlug": "/dashboard/health-checks",
+      "originalWholeFileSha256": "941d76ae7b25c25527637192f7244999f376720fada43f5c6677d22eac5b17e2",
+      "originalFrontMatterSha256": "1fb6f78f1f490bfc0a66ac3ec3ea4a3309394f5b485fd0cc218bfd2986c3add1",
+      "originalFrontMatter": "id: step-5-health-checks\ntitle: Health Checks",
+      "originalBodySha256": "1ac578be62e938d5ee838d144814198c6675bb41a7a260dce40a13fc136b5850",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 27,
+      "currentSource": "docs/getting-started/security-checks.md",
+      "finalSource": "docs/dashboard/security-checks.md",
+      "currentRoute": "/getting-started/security-checks",
+      "finalRoute": "/dashboard/security-checks",
+      "currentId": "getting-started/security-checks",
+      "finalId": "dashboard/security-checks",
+      "finalExplicitId": "security-checks",
+      "finalSlug": "/dashboard/security-checks",
+      "originalWholeFileSha256": "d236ba13652f188db75680e2560cc8c43725c69d78b986641d5ffcbc01d09062",
+      "originalFrontMatterSha256": "8013e725158cf89641e90b4ecc8144d83a9f9044dddcd7fb0eebce8fa65ec616",
+      "originalFrontMatter": "id: security-checks\ntitle: Security Checks",
+      "originalBodySha256": "19749f513c2d01296ed15f0ae7ed2a9873db6cc887c21dbe6d18391ef7ae9244",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 28,
+      "currentSource": "docs/getting-started/process-list.md",
+      "finalSource": "docs/dashboard/process-list.md",
+      "currentRoute": "/getting-started/process-list",
+      "finalRoute": "/dashboard/process-list",
+      "currentId": "getting-started/process-list",
+      "finalId": "dashboard/process-list",
+      "finalExplicitId": "process-list",
+      "finalSlug": "/dashboard/process-list",
+      "originalWholeFileSha256": "32df4dbb1d75ccca48ae9a5cfc6e1b0dbe9b8c9a5d6758176602ca4b0376e979",
+      "originalFrontMatterSha256": "697abfbcb419bfd228e8b58285593c1ecd7995d204ee3bd5d496bc63c1144032",
+      "originalFrontMatter": "id: process-list\ntitle: Process List",
+      "originalBodySha256": "8365ad009acc2514934200883d81a7fee26b56125799f171a9af30f598b32c8e",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 29,
+      "currentSource": "docs/getting-started/reports.md",
+      "finalSource": "docs/dashboard/reports.md",
+      "currentRoute": "/getting-started/step-7-weekly-reports",
+      "finalRoute": "/dashboard/reports",
+      "currentId": "getting-started/step-7-weekly-reports",
+      "finalId": "dashboard/reports",
+      "finalExplicitId": "reports",
+      "finalSlug": "/dashboard/reports",
+      "originalWholeFileSha256": "b841e766b1a31bd6d5b4422b71b1dd34d93fc9f7ce2402eb903ad9ce319bb3f9",
+      "originalFrontMatterSha256": "1c8f81b3a73ec632368f8309e23a61ebdfb84c179d1d7077a143fafea580a8f0",
+      "originalFrontMatter": "id: step-7-weekly-reports\ntitle: Weekly Reports",
+      "originalBodySha256": "c50221c23b56dca577686d283f01a61ffc00a48688de5498a2b25259df613e01",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 30,
+      "currentSource": "docs/getting-started/configuration-tuning.md",
+      "finalSource": "docs/recommendations/overview.md",
+      "currentRoute": "/getting-started/step-3-getting-and-applying-recommendations",
+      "finalRoute": "/recommendations",
+      "currentId": "getting-started/step-3-getting-and-applying-recommendations",
+      "finalId": "recommendations/overview",
+      "finalExplicitId": "overview",
+      "finalSlug": "/recommendations",
+      "originalWholeFileSha256": "5bf5c0d4bf31454cad1b008e43ae3839b4065047d81f3ad830fb08deadbe3f42",
+      "originalFrontMatterSha256": "b71b75c1eaf8325acd511a1955e8fd5655ddb9b75567ba267204eedf7818f0fc",
+      "originalFrontMatter": "id: step-3-getting-and-applying-recommendations\ntitle: Configuration Tuning",
+      "originalBodySha256": "1d234f563bc5346a4b4cb659788208eb00b50a9e241737ff450956d75455db34",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [
+        {
+          "from": "/configuration-tuning/example-of-configuration",
+          "to": "/recommendations/configuration-tuning/configuration-example",
+          "occurrences": 1
+        },
+        {
+          "from": "/configuration-tuning/how-to-apply-configuration-using-portal",
+          "to": "/recommendations/configuration-tuning/apply-using-portal",
+          "occurrences": 1
+        },
+        {
+          "from": "/configuration-tuning/how-to-rollback-to-previous-configuration",
+          "to": "/recommendations/configuration-tuning/rollback",
+          "occurrences": 1
+        }
+      ],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 31,
+      "currentSource": "docs/configuration-tuning/mysql-tuning-process.md",
+      "finalSource": "docs/recommendations/configuration-tuning/mysql-tuning-process.md",
+      "currentRoute": "/configuration-tuning/mysql-tuning-process",
+      "finalRoute": "/recommendations/configuration-tuning/mysql-tuning-process",
+      "currentId": "configuration-tuning/mysql-tuning-process",
+      "finalId": "recommendations/configuration-tuning/mysql-tuning-process",
+      "finalExplicitId": "mysql-tuning-process",
+      "finalSlug": "/recommendations/configuration-tuning/mysql-tuning-process",
+      "originalWholeFileSha256": "c6f826999750be86766486395a537f6e51cb6a3b2bf39f776d43598a8b3fccfe",
+      "originalFrontMatterSha256": "0d5b6fc838cd327b93e2fe778363861f5f474aed9dd5f6338dfae200d50c0523",
+      "originalFrontMatter": "id: mysql-tuning-process\ntitle: MySQL Tuning Process",
+      "originalBodySha256": "3ecd1ecf61ad0c0e5aa9cf2bf4915823e163ff97d6da57675c3b9015f06d911e",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 32,
+      "currentSource": "docs/configuration-tuning/initial-mysql-configuration.md",
+      "finalSource": "docs/recommendations/configuration-tuning/initial-mysql-configuration.md",
+      "currentRoute": "/configuration-tuning/initial-mysql-configuration",
+      "finalRoute": "/recommendations/configuration-tuning/initial-mysql-configuration",
+      "currentId": "configuration-tuning/initial-mysql-configuration",
+      "finalId": "recommendations/configuration-tuning/initial-mysql-configuration",
+      "finalExplicitId": "initial-mysql-configuration",
+      "finalSlug": "/recommendations/configuration-tuning/initial-mysql-configuration",
+      "originalWholeFileSha256": "9a7bb7a2143f51c529324f4371b35bf247ddd44d320add2c3a942287307f007d",
+      "originalFrontMatterSha256": "6fe2f4413b3511f8666808a412c89cbaa70596fc3bfd565effa2d4b01366bc6c",
+      "originalFrontMatter": "id: initial-mysql-configuration\ntitle: Initial Configuration",
+      "originalBodySha256": "4d8af22eb2bd9749a5c7f005f7f49cef5d53fb774e07ee19a1ba100e3e99d607",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 33,
+      "currentSource": "docs/configuration-tuning/how-to-apply-configuration-using-portal.md",
+      "finalSource": "docs/recommendations/configuration-tuning/apply-using-portal.md",
+      "currentRoute": "/configuration-tuning/how-to-apply-configuration-using-portal",
+      "finalRoute": "/recommendations/configuration-tuning/apply-using-portal",
+      "currentId": "configuration-tuning/how-to-apply-configuration-using-portal",
+      "finalId": "recommendations/configuration-tuning/apply-using-portal",
+      "finalExplicitId": "apply-using-portal",
+      "finalSlug": "/recommendations/configuration-tuning/apply-using-portal",
+      "originalWholeFileSha256": "f86b43ede515ca678fd38340dcc00a48a16827e3de79ce2715a3ef5f0e8b5e64",
+      "originalFrontMatterSha256": "f39b21abb450902787ddc66f5c910d488a44180812a9e962fc6aa1b5bdbec23c",
+      "originalFrontMatter": "id: how-to-apply-configuration-using-portal\ntitle: How to Apply Configuration Using Portal",
+      "originalBodySha256": "9c054d441b2a25163bc20aa6ac84452be957320fd52e70dbc6cfb38598c29254",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [
+        {
+          "from": "https://docs.releem.com/releem-agent/how-to-check-logs",
+          "to": "https://docs.releem.com/installation/manage-the-releem-agent/logs",
+          "occurrences": 1
+        }
+      ],
+      "allowedRelativeAssetReplacements": [
+        {
+          "from": "../../assets/images/releem-dashboard-apply.png",
+          "to": "../../../assets/images/releem-dashboard-apply.png",
+          "occurrences": 1
+        }
+      ]
+    },
+    {
+      "number": 34,
+      "currentSource": "docs/configuration-tuning/how-to-apply-configuration-using-agent.md",
+      "finalSource": "docs/recommendations/configuration-tuning/apply-using-agent.md",
+      "currentRoute": "/configuration-tuning/how-to-apply-configuration-using-agent",
+      "finalRoute": "/recommendations/configuration-tuning/apply-using-agent",
+      "currentId": "configuration-tuning/how-to-apply-configuration-using-agent",
+      "finalId": "recommendations/configuration-tuning/apply-using-agent",
+      "finalExplicitId": "apply-using-agent",
+      "finalSlug": "/recommendations/configuration-tuning/apply-using-agent",
+      "originalWholeFileSha256": "b0cd21d3846f0aa19d50e050ed1d6b6754781ce70c1481b8c4c2be299dd43826",
+      "originalFrontMatterSha256": "78872d8a601cdc68a3ac91785b4dbe368a18a63f4f73087f246b2dea051bc80d",
+      "originalFrontMatter": "id: how-to-apply-configuration-using-agent\ntitle: How to Apply Configuration Using Agent",
+      "originalBodySha256": "20e140a6a72465260cb811cce3d64e736f1b8264b8f9ba98ec8f83b4d5a7f66f",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 35,
+      "currentSource": "docs/configuration-tuning/how-to-apply-configuration-using-cron.md",
+      "finalSource": "docs/recommendations/configuration-tuning/apply-using-cron.md",
+      "currentRoute": "/configuration-tuning/how-to-apply-configuration-using-cron",
+      "finalRoute": "/recommendations/configuration-tuning/apply-using-cron",
+      "currentId": "configuration-tuning/how-to-apply-configuration-using-cron",
+      "finalId": "recommendations/configuration-tuning/apply-using-cron",
+      "finalExplicitId": "apply-using-cron",
+      "finalSlug": "/recommendations/configuration-tuning/apply-using-cron",
+      "originalWholeFileSha256": "be318bd17598a173a81971fb942fe6911a88b985affba6d8cbdf2daae082b1e6",
+      "originalFrontMatterSha256": "41fa23b333881040d3ea1744349bef17b4024c30ea8df4da8b1709aa7480ffc7",
+      "originalFrontMatter": "id: how-to-apply-configuration-using-cron\ntitle: How to Apply Configuration Using Cron",
+      "originalBodySha256": "5ef5f5f5e7e0c0d93f3b94e02d3a0e5ef3b1c3d1612b471e7535d95477f5c38d",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 36,
+      "currentSource": "docs/configuration-tuning/how-to-apply-configuration-manually/linux.md",
+      "finalSource": "docs/recommendations/configuration-tuning/apply-manually/linux.md",
+      "currentRoute": "/configuration-tuning/how-to-apply-configuration-manually/linux",
+      "finalRoute": "/recommendations/configuration-tuning/apply-manually/linux",
+      "currentId": "configuration-tuning/how-to-apply-configuration-manually/linux",
+      "finalId": "recommendations/configuration-tuning/apply-manually/linux",
+      "finalExplicitId": "linux",
+      "finalSlug": "/recommendations/configuration-tuning/apply-manually/linux",
+      "originalWholeFileSha256": "4ef90837c230584facbd1afef34a1f15d5c408af8343941cb815d6cec2f8b929",
+      "originalFrontMatterSha256": "0634e780ad40d1d988bee892c70088dc54aca38c48b1e8dc98b02d9ffef64c40",
+      "originalFrontMatter": "title: How to apply the Recommended Configuration for Linux\nsidebar_label: Linux",
+      "originalBodySha256": "d8f1f7cfab4c6ba379bbefb1ad9a061b9a83c8759682fb765cf550e27b0149a8",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 37,
+      "currentSource": "docs/configuration-tuning/how-to-apply-configuration-manually/windows.md",
+      "finalSource": "docs/recommendations/configuration-tuning/apply-manually/windows.md",
+      "currentRoute": "/configuration-tuning/how-to-apply-configuration-manually/windows",
+      "finalRoute": "/recommendations/configuration-tuning/apply-manually/windows",
+      "currentId": "configuration-tuning/how-to-apply-configuration-manually/windows",
+      "finalId": "recommendations/configuration-tuning/apply-manually/windows",
+      "finalExplicitId": "windows",
+      "finalSlug": "/recommendations/configuration-tuning/apply-manually/windows",
+      "originalWholeFileSha256": "05081c9d1b0a95d9051e948734448b540100c5737b49d66fd449c49211fdc9da",
+      "originalFrontMatterSha256": "f7beb4262f464509f5b7dd1b98916b2b30abd51ef20cc1e57b6683ac04abeb12",
+      "originalFrontMatter": "title: How to apply the Recommended Configuration for Windows\nsidebar_label: Windows",
+      "originalBodySha256": "8680c63a8a439ea3092587e8a590aab71129983829fa228d55aeeb8bf1413bbd",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 38,
+      "currentSource": "docs/configuration-tuning/how-to-apply-configuration-manually/docker.md",
+      "finalSource": "docs/recommendations/configuration-tuning/apply-manually/docker.md",
+      "currentRoute": "/configuration-tuning/how-to-apply-configuration-manually/docker",
+      "finalRoute": "/recommendations/configuration-tuning/apply-manually/docker",
+      "currentId": "configuration-tuning/how-to-apply-configuration-manually/docker",
+      "finalId": "recommendations/configuration-tuning/apply-manually/docker",
+      "finalExplicitId": "docker",
+      "finalSlug": "/recommendations/configuration-tuning/apply-manually/docker",
+      "originalWholeFileSha256": "6c7cd5c3d7dc96a226a2cd251c0779ec74604f3d14bb21822ff253c5c637ca30",
+      "originalFrontMatterSha256": "8d5c9f1742384dc6dbccfc165d3e962913841bc3e9dbd163533e07a7a373c741",
+      "originalFrontMatter": "title: How to apply the Recommended Configuration for MySQL in Docker\nsidebar_label: Docker",
+      "originalBodySha256": "234d4ab3c53571b0199580f6c583d860e676dc174ec38dfb98f4a6c523908018",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 39,
+      "currentSource": "docs/configuration-tuning/how-to-apply-configuration-manually/aws-rds.md",
+      "finalSource": "docs/recommendations/configuration-tuning/apply-manually/aws-rds.md",
+      "currentRoute": "/configuration-tuning/how-to-apply-configuration-manually/aws-rds",
+      "finalRoute": "/recommendations/configuration-tuning/apply-manually/aws-rds",
+      "currentId": "configuration-tuning/how-to-apply-configuration-manually/aws-rds",
+      "finalId": "recommendations/configuration-tuning/apply-manually/aws-rds",
+      "finalExplicitId": "aws-rds",
+      "finalSlug": "/recommendations/configuration-tuning/apply-manually/aws-rds",
+      "originalWholeFileSha256": "3d5b2fa944f3960bd8c17360b9cdd2039be871bcebe2aa6279ff89762a2a319c",
+      "originalFrontMatterSha256": "6b526dbb6802bf4a640f90c2abbdea3db6b36775b962f6bf5380183776005698",
+      "originalFrontMatter": "title: How to apply the Recommended Configuration for AWS RDS\nsidebar_label: AWS RDS",
+      "originalBodySha256": "253e7a64198429ab63623ae2d111f9299efca539037fc7805338ca818071e3e0",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 40,
+      "currentSource": "docs/configuration-tuning/how-to-apply-configuration-manually/gcp-cloud-sql.md",
+      "finalSource": "docs/recommendations/configuration-tuning/apply-manually/gcp-cloud-sql.md",
+      "currentRoute": "/configuration-tuning/how-to-apply-configuration-manually/gcp-cloud-sql",
+      "finalRoute": "/recommendations/configuration-tuning/apply-manually/gcp-cloud-sql",
+      "currentId": "configuration-tuning/how-to-apply-configuration-manually/gcp-cloud-sql",
+      "finalId": "recommendations/configuration-tuning/apply-manually/gcp-cloud-sql",
+      "finalExplicitId": "gcp-cloud-sql",
+      "finalSlug": "/recommendations/configuration-tuning/apply-manually/gcp-cloud-sql",
+      "originalWholeFileSha256": "5177da6bfa7816f2150eccc4abb5dcd41c7a83b3343f25bb4d27f4801ffb867c",
+      "originalFrontMatterSha256": "d384a0c81ae3546f81bc49589e592841da25604955338b87d2d0fba7e47be838",
+      "originalFrontMatter": "title: How to apply the Recommended Configuration for GCP Cloud SQL\nsidebar_label: GCP Cloud SQL",
+      "originalBodySha256": "e3d12c4fa86eabc8958eeb3c67bdc0377870b7e590a6bfdb98bd63d3699cec82",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 41,
+      "currentSource": "docs/configuration-tuning/how-to-rollback-to-previous-configuration.md",
+      "finalSource": "docs/recommendations/configuration-tuning/rollback.md",
+      "currentRoute": "/configuration-tuning/how-to-rollback-to-previous-configuration",
+      "finalRoute": "/recommendations/configuration-tuning/rollback",
+      "currentId": "configuration-tuning/how-to-rollback-to-previous-configuration",
+      "finalId": "recommendations/configuration-tuning/rollback",
+      "finalExplicitId": "rollback",
+      "finalSlug": "/recommendations/configuration-tuning/rollback",
+      "originalWholeFileSha256": "ecaede076d229dc9f180724dfc408527bf430e991c3f7a95c42587d43bbbc735",
+      "originalFrontMatterSha256": "c0395a4264d1380a001d482e27c9b7cdf60e2a2c4b34450d835867cb1db46021",
+      "originalFrontMatter": "id: how-to-rollback-to-previous-configuration\ntitle: How to Rollback to Previous Configuration",
+      "originalBodySha256": "ca3bf9dd2b91a431f3e360e3c1a3866abb7b58be7da3d6126dc12f38159d8f46",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 42,
+      "currentSource": "docs/configuration-tuning/limit-memory-for-mysql.md",
+      "finalSource": "docs/recommendations/configuration-tuning/limit-mysql-memory.md",
+      "currentRoute": "/configuration-tuning/limit-memory-for-mysql",
+      "finalRoute": "/recommendations/configuration-tuning/limit-mysql-memory",
+      "currentId": "configuration-tuning/limit-memory-for-mysql",
+      "finalId": "recommendations/configuration-tuning/limit-mysql-memory",
+      "finalExplicitId": "limit-mysql-memory",
+      "finalSlug": "/recommendations/configuration-tuning/limit-mysql-memory",
+      "originalWholeFileSha256": "9aa025bb0387e713f594a2191fc44c8b490d59dbefece869bd6b572241979c3a",
+      "originalFrontMatterSha256": "6e775f3fed8d7adbfc7351b01893ce72ff4f2e499722910dfd9d766a65edda23",
+      "originalFrontMatter": "id: \"limit-memory-for-mysql\"\ntitle: \"Limit Memory for MySQL\"",
+      "originalBodySha256": "6e3c37b963e6e9ec1d3417843a62ee3d50c5ef72069803ddb99215df0b3ac03d",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 43,
+      "currentSource": "docs/configuration-tuning/example-of-configuration.md",
+      "finalSource": "docs/recommendations/configuration-tuning/configuration-example.md",
+      "currentRoute": "/configuration-tuning/example-of-configuration",
+      "finalRoute": "/recommendations/configuration-tuning/configuration-example",
+      "currentId": "configuration-tuning/example-of-configuration",
+      "finalId": "recommendations/configuration-tuning/configuration-example",
+      "finalExplicitId": "configuration-example",
+      "finalSlug": "/recommendations/configuration-tuning/configuration-example",
+      "originalWholeFileSha256": "cc4a8270f52cd7f4a4f4008592159ae51f3e2ca4d1dffb467489cd9396ffb890",
+      "originalFrontMatterSha256": "eae483bb6595fbc7259abc46da7ea8a4943dea6b49e3c004a439c5d3a3adb9fa",
+      "originalFrontMatter": "id: example-of-configuration\ntitle: Example of Configuration",
+      "originalBodySha256": "507b77b1e6419ae28abe622865c9d83819610df5fd79ed241a3c178c00e8ad0e",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [],
+      "allowedRelativeAssetReplacements": [
+        {
+          "from": "../../assets/images/releem-dashboard-recommended-configuration.png",
+          "to": "../../../assets/images/releem-dashboard-recommended-configuration.png",
+          "occurrences": 1
+        }
+      ]
+    },
+    {
+      "number": 44,
+      "currentSource": "docs/getting-started/query-optimization.md",
+      "finalSource": "docs/recommendations/query-optimization/overview.md",
+      "currentRoute": "/getting-started/query-optimization",
+      "finalRoute": "/recommendations/query-optimization",
+      "currentId": "getting-started/query-optimization",
+      "finalId": "recommendations/query-optimization/overview",
+      "finalExplicitId": "overview",
+      "finalSlug": "/recommendations/query-optimization",
+      "originalWholeFileSha256": "cd7232137aee58bfee4b75e7505986a776de6bd6b2e8cce7aa9c64fbb0e27158",
+      "originalFrontMatterSha256": "869b518d259280941c8e8b741d0cd6d44c8b70f254285cc2693341d5844b360e",
+      "originalFrontMatter": "id: query-optimization\ntitle: SQL Query Optimization",
+      "originalBodySha256": "f0c03dd37fb8c5058baa32d5762670af8d73340605f26fd022f8e76e436a00cd",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [],
+      "allowedRelativeAssetReplacements": [
+        {
+          "from": "../../assets/images/releem-query-optimization-details.png",
+          "to": "../../../assets/images/releem-query-optimization-details.png",
+          "occurrences": 1
+        },
+        {
+          "from": "../../assets/images/releem-query-optimization.png",
+          "to": "../../../assets/images/releem-query-optimization.png",
+          "occurrences": 1
+        }
+      ]
+    },
+    {
+      "number": 45,
+      "currentSource": "docs/query-optimization/enable-sql-query-optimization.md",
+      "finalSource": "docs/recommendations/query-optimization/enable.md",
+      "currentRoute": "/query-optimization/enable-sql-query-optimization",
+      "finalRoute": "/recommendations/query-optimization/enable",
+      "currentId": "query-optimization/enable-sql-query-optimization",
+      "finalId": "recommendations/query-optimization/enable",
+      "finalExplicitId": "enable",
+      "finalSlug": "/recommendations/query-optimization/enable",
+      "originalWholeFileSha256": "d2c49ef6bc5dfca47b3ae587bbed545f36bb00f0b4b712becf5ff25a7bc4662e",
+      "originalFrontMatterSha256": "c9a196c7a2873c833448918a4433b8f2845a32b8f7e8046d229a263c08b5e326",
+      "originalFrontMatter": "id: \"enable-sql-query-optimization\"\ntitle: \"Enable SQL Query Optimization\"",
+      "originalBodySha256": "f76a32ac97e0c74b24a677c78bd852780d39028cd17f51c9c4a0108c5fb4a3aa",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [
+        {
+          "from": "/releem-agent/mysql-permissions",
+          "to": "/supported-databases/mysql/required-permissions",
+          "occurrences": 5
+        },
+        {
+          "from": "/releem-agent/mysql-permissions#additional-database-permissions-required",
+          "to": "/supported-databases/mysql/required-permissions#additional-database-permissions-required",
+          "occurrences": 2
+        }
+      ],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 46,
+      "currentSource": "docs/query-optimization/disable-sql-query-optimization.md",
+      "finalSource": "docs/recommendations/query-optimization/disable.md",
+      "currentRoute": "/query-optimization/disable-sql-query-optimization",
+      "finalRoute": "/recommendations/query-optimization/disable",
+      "currentId": "query-optimization/disable-sql-query-optimization",
+      "finalId": "recommendations/query-optimization/disable",
+      "finalExplicitId": "disable",
+      "finalSlug": "/recommendations/query-optimization/disable",
+      "originalWholeFileSha256": "11083c4f2fed2d1a39e4958e97a24edae3c362ad7c5248402ced946fb53015b9",
+      "originalFrontMatterSha256": "76d4f07ef480ae8227697e3286c4afca0ce2d17b17bfbb1d9d81cf583623de7e",
+      "originalFrontMatter": "id: \"disable-sql-query-optimization\"\ntitle: \"Disable SQL Query Optimization\"",
+      "originalBodySha256": "d99d52b6c4f3a7aab4135156c4a39bcda61ceb7ed036f20b77dc299caa78f833",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 47,
+      "currentSource": "docs/query-optimization/prepared-statements.md",
+      "finalSource": "docs/recommendations/query-optimization/prepared-statements.md",
+      "currentRoute": "/query-optimization/prepared-statements-issue",
+      "finalRoute": "/recommendations/query-optimization/prepared-statements",
+      "currentId": "query-optimization/prepared-statements-issue",
+      "finalId": "recommendations/query-optimization/prepared-statements",
+      "finalExplicitId": "prepared-statements",
+      "finalSlug": "/recommendations/query-optimization/prepared-statements",
+      "originalWholeFileSha256": "8b16f67ad9c3535c6cf9f726f046a9e8f86e08a8d2e4d7e9f27945f26248ca3a",
+      "originalFrontMatterSha256": "66c6638afc96157dc3d4622c19eaab1deb12499077f3873d2bce526949405636",
+      "originalFrontMatter": "id: \"prepared-statements-issue\"\ntitle: \"How to Fix Prepared Statements Issue\"",
+      "originalBodySha256": "d490d70dec7142e703893b75b50e8a5cc09c568da158e9073a9e30bc040c5af7",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 48,
+      "currentSource": "docs/query-optimization/automatic-schema-changes.md",
+      "finalSource": "docs/recommendations/query-optimization/automatic-schema-changes.md",
+      "currentRoute": "/query-optimization/automatic-schema-changes",
+      "finalRoute": "/recommendations/query-optimization/automatic-schema-changes",
+      "currentId": "query-optimization/automatic-schema-changes",
+      "finalId": "recommendations/query-optimization/automatic-schema-changes",
+      "finalExplicitId": "automatic-schema-changes",
+      "finalSlug": "/recommendations/query-optimization/automatic-schema-changes",
+      "originalWholeFileSha256": "b992cb93c485cc8d0f4343c12a448b90f1baa6fdab9ac0f48f90807274eed49f",
+      "originalFrontMatterSha256": "8400c2bcf656fccaa1b5d1c2443808321ff9cdce2b07ce30f7bbd024c2d078e3",
+      "originalFrontMatter": "id: automatic-schema-changes\ntitle: Automatic Schema Changes",
+      "originalBodySha256": "dfc80494a0b1c41de97fee3d19fd47a9cb10108c24149dbc89b4b3441cfede8d",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [
+        {
+          "from": "/query-optimization/enable-sql-query-optimization",
+          "to": "/recommendations/query-optimization/enable",
+          "occurrences": 1
+        },
+        {
+          "from": "/query-optimization/schema-change-troubleshooting",
+          "to": "/recommendations/query-optimization/schema-change-troubleshooting",
+          "occurrences": 2
+        }
+      ],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 49,
+      "currentSource": "docs/query-optimization/schema-change-troubleshooting.md",
+      "finalSource": "docs/recommendations/query-optimization/schema-change-troubleshooting.md",
+      "currentRoute": "/query-optimization/schema-change-troubleshooting",
+      "finalRoute": "/recommendations/query-optimization/schema-change-troubleshooting",
+      "currentId": "query-optimization/schema-change-troubleshooting",
+      "finalId": "recommendations/query-optimization/schema-change-troubleshooting",
+      "finalExplicitId": "schema-change-troubleshooting",
+      "finalSlug": "/recommendations/query-optimization/schema-change-troubleshooting",
+      "originalWholeFileSha256": "06358550566aa195ed5cd9a574212497bcaa2cc8d43c0a88abad9d598a5fb32d",
+      "originalFrontMatterSha256": "2ff3639512abde3d00111319bc66f1864417cef1fcadf1a299c7c05e428382eb",
+      "originalFrontMatter": "id: schema-change-troubleshooting\ntitle: Schema Change Troubleshooting",
+      "originalBodySha256": "07a3d16f9f62e1387baba06312986e6cc4befe98b6c8c850dab53f49cdd05b30",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [
+        {
+          "from": "/query-optimization/automatic-schema-changes",
+          "to": "/recommendations/query-optimization/automatic-schema-changes",
+          "occurrences": 1
+        },
+        {
+          "from": "/query-optimization/automatic-schema-changes#grant-permissions-for-pt-online-schema-change",
+          "to": "/recommendations/query-optimization/automatic-schema-changes#grant-permissions-for-pt-online-schema-change",
+          "occurrences": 1
+        },
+        {
+          "from": "/releem-agent/how-to-check-logs",
+          "to": "/installation/manage-the-releem-agent/logs",
+          "occurrences": 1
+        }
+      ],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 50,
+      "currentSource": "docs/server-settings/your-server-settings.md",
+      "finalSource": "docs/account/overview.md",
+      "currentRoute": "/server-settings/your-server-settings",
+      "finalRoute": "/account",
+      "currentId": "server-settings/your-server-settings",
+      "finalId": "account/overview",
+      "finalExplicitId": "overview",
+      "finalSlug": "/account",
+      "originalWholeFileSha256": "761f1bc1ff4eab4d05d00efd65b1a60a89d7d5cb4f3f4f499e8fa5caf6248342",
+      "originalFrontMatterSha256": "8c21bf5dea9695567396a08f4a7c5284e2f83b1a582a82a982e364b5705122dd",
+      "originalFrontMatter": "title: Your server settings\nsidebar_label: Your server settings",
+      "originalBodySha256": "3d6d9eea9e9a27c19e5be2c5fddac1e5d885dcea4ae76335c207b734c230169f",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 51,
+      "currentSource": "docs/server-settings/invite-users-and-assign-roles.md",
+      "finalSource": "docs/account/access/users-and-roles.md",
+      "currentRoute": "/server-settings/invite-users-and-assign-roles",
+      "finalRoute": "/account/access/users-and-roles",
+      "currentId": "server-settings/invite-users-and-assign-roles",
+      "finalId": "account/access/users-and-roles",
+      "finalExplicitId": "users-and-roles",
+      "finalSlug": "/account/access/users-and-roles",
+      "originalWholeFileSha256": "7022e3b0622525d293382f3d3aa4b4a9fad0b405501246494a80320b91227b00",
+      "originalFrontMatterSha256": "9a38d7ff80d9cdc0be4de3c2c7cef244b1af81373322c1a77062887c70e18ae9",
+      "originalFrontMatter": "title: Invite users and assign roles\nsidebar_label: Invite users and assign roles",
+      "originalBodySha256": "f24dba8b38979da856bca71decefc4d427e716280cb38474c66054c8d02593e1",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [],
+      "allowedRelativeAssetReplacements": [
+        {
+          "from": "../../assets/images/dashboard-settings-invitation-popup.png",
+          "to": "../../../assets/images/dashboard-settings-invitation-popup.png",
+          "occurrences": 1
+        },
+        {
+          "from": "../../assets/images/dashboard-settings-invitation.png",
+          "to": "../../../assets/images/dashboard-settings-invitation.png",
+          "occurrences": 1
+        }
+      ]
+    },
+    {
+      "number": 52,
+      "currentSource": "docs/billing/update-payment-information.md",
+      "finalSource": "docs/account/billing/payment-information.md",
+      "currentRoute": "/billing/update-payment-information",
+      "finalRoute": "/account/billing/payment-information",
+      "currentId": "billing/update-payment-information",
+      "finalId": "account/billing/payment-information",
+      "finalExplicitId": "payment-information",
+      "finalSlug": "/account/billing/payment-information",
+      "originalWholeFileSha256": "1678a5831b12e7a22034a1a2197da7d216a67e4aac70f467d3fca75bed7fbc47",
+      "originalFrontMatterSha256": "107c2af8dcfece9bfdb9660241e93a8541d762a4ce4da3eb570ec57da3f60a2d",
+      "originalFrontMatter": "id: update-payment-information\ntitle: Update Payment Information",
+      "originalBodySha256": "92139568e91b7d167d42bed84f1815438494b501e4473022a5a4ca796281da3b",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 53,
+      "currentSource": "docs/billing/cancellation.md",
+      "finalSource": "docs/account/billing/cancel-subscription.md",
+      "currentRoute": "/billing/cancellation",
+      "finalRoute": "/account/billing/cancel-subscription",
+      "currentId": "billing/cancellation",
+      "finalId": "account/billing/cancel-subscription",
+      "finalExplicitId": "cancel-subscription",
+      "finalSlug": "/account/billing/cancel-subscription",
+      "originalWholeFileSha256": "c8c274f2f02274d8bc9ce3d67a1f10e7b3871a0ddf6bbbac10c9ed6f97accf79",
+      "originalFrontMatterSha256": "9491b8629cae6338adec9ec8415008c3cb209e5e7cc74eb6ad9498dba930ea32",
+      "originalFrontMatter": "id: cancellation\ntitle: Cancellation",
+      "originalBodySha256": "450e954776361ac800c80e92a99d6cd6fcca8ba1750373eff58d631f7a2c98a1",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [],
+      "allowedRelativeAssetReplacements": []
+    },
+    {
+      "number": 54,
+      "currentSource": "docs/frequently-asked-questions.md",
+      "finalSource": "docs/faq.md",
+      "currentRoute": "/frequently-asked-questions",
+      "finalRoute": "/faq",
+      "currentId": "frequently-asked-questions",
+      "finalId": "faq",
+      "finalExplicitId": "faq",
+      "finalSlug": "/faq",
+      "originalWholeFileSha256": "9ce52113f1c688473e4ed632ee246ba2a7e9182cf0c25ec510ffb2c93fcdf9a3",
+      "originalFrontMatterSha256": "39156cab333fe2c394b3e6c255fab2a436fff3f1590d9ade0b691bbc678c5b44",
+      "originalFrontMatter": "id: frequently-asked-questions\ntitle: Frequently Asked Questions",
+      "originalBodySha256": "fbe56c5a3c6ceee9832b1e8901095c8a3cbca4e81799d37c9ec31f5592c6f441",
+      "allowedFrontMatterKeys": [
+        "id",
+        "slug"
+      ],
+      "allowedInternalLinkReplacements": [
+        {
+          "from": "/getting-started/how-to-check-if-releem-agent-is-working.md",
+          "to": "/get-started/troubleshoot-releem-agent",
+          "occurrences": 1
+        }
+      ],
+      "allowedRelativeAssetReplacements": []
+    }
+  ],
+  "assets": [
+    {
+      "path": "assets/images/dashboard-add-server.png",
+      "sha256": "7730e8df48d331df009df52f78e93556d719b5e53c58b9abc6c2d198d586550a"
+    },
+    {
+      "path": "assets/images/dashboard-settings-invitation-popup.png",
+      "sha256": "7fb37f33e9e2ce28d88a450fce6d8af5015b82c124d3b599eb97a7a456b30e4a"
+    },
+    {
+      "path": "assets/images/dashboard-settings-invitation.png",
+      "sha256": "ae6809c6edf64afb80c2e4f3c0a17423eb05b14bdc20eb70f4b91d9d5f3defab"
+    },
+    {
+      "path": "assets/images/dashboard-settings.png",
+      "sha256": "4cf7af1035ecf29085e9ef856853dca210c08b491bbcbfba21ae6722285a6e19"
+    },
+    {
+      "path": "assets/images/releem-applying-click.gif",
+      "sha256": "f52545690cf7606ae4d6c88205d22212145065e7746ace9304672c0fc05b165e"
+    },
+    {
+      "path": "assets/images/releem-applying.gif",
+      "sha256": "53935f48e1aba707482aa5cecb03a4f7aac16c41ba3b48ea0581fefc4000f4e1"
+    },
+    {
+      "path": "assets/images/releem-dashboard-apply.png",
+      "sha256": "071ee319506f8662ff0885e0bdd82b89da1853e8a1741de2f2413c12dbcc2d6a"
+    },
+    {
+      "path": "assets/images/releem-dashboard-conf-tuning.png",
+      "sha256": "79c7256b8b3fb85293850dfb563c77aac318f013bb759ab963b76bc8d8e7f5ef"
+    },
+    {
+      "path": "assets/images/releem-dashboard-health-checks.png",
+      "sha256": "a20e26b5cae21517d02e8ec92d49458228c9a4537f8a63323a74964425aeebc7"
+    },
+    {
+      "path": "assets/images/releem-dashboard-query-analytics-inspection.png",
+      "sha256": "6ee431f7c65c857494d6fc22e343d1cd80a5299768b5566b09e21bee8506b3e4"
+    },
+    {
+      "path": "assets/images/releem-dashboard-query-analytics.gif",
+      "sha256": "d0a980817c3d65f57da97cade30824d7b141b8a543168b021aac400a69935eda"
+    },
+    {
+      "path": "assets/images/releem-dashboard-query-analytics.png",
+      "sha256": "8003d90f0a4b251da26469e396a94bc9c23767d0d20e2d1910a39268cedc3772"
+    },
+    {
+      "path": "assets/images/releem-dashboard-recommended-configuration.png",
+      "sha256": "7010c6664bdd8636621ac4f05cc571da79727d193458b49b79b94ddcf7b8f221"
+    },
+    {
+      "path": "assets/images/releem-deadlock-monitoring-details.png",
+      "sha256": "1d9176176cb3adc038ff4543be7a111deee7317bd1ca236f4645b41b9b133dfb"
+    },
+    {
+      "path": "assets/images/releem-deadlock-monitoring.png",
+      "sha256": "c534f0ceb24b2dcd548240a3911c6df703c14c0d21b35ce80f556fcc9f34934e"
+    },
+    {
+      "path": "assets/images/releem-icon-top.png",
+      "sha256": "0a0f42450e276a2d9441b91ec4ce7682c5b47ed849f638cfb765415c1592e9e3"
+    },
+    {
+      "path": "assets/images/releem-process-list.png",
+      "sha256": "ecbff5c982e77512f7a38d0de5ff22935c0a6686869d4877ebd9692819ba660e"
+    },
+    {
+      "path": "assets/images/releem-query-optimization-details.png",
+      "sha256": "dff7e815b9e943de9fc5a9ee5ec20fa3c9d7dba0d539908da2d9bf6a033fc0b6"
+    },
+    {
+      "path": "assets/images/releem-query-optimization.png",
+      "sha256": "61e378a7de5198c5e32861f240b55ce05123aee82af79b7f74306ac846b66064"
+    },
+    {
+      "path": "assets/images/releem-schema-optimization.png",
+      "sha256": "810ef06f1c9c2aa4c53c638aef6a406b71ff6c104294a4b16f36a7646118990b"
+    },
+    {
+      "path": "assets/images/releem-security-checks.png",
+      "sha256": "ac5672987903b5f128cbc406884612649448d1f58735274c3c85a1c41f6c7c47"
+    },
+    {
+      "path": "assets/images/releem-weekly-report.png",
+      "sha256": "f6758f1691a27c50ad4b0fa1d4541be3d7565becc846359a3ebaabf331c8f30f"
+    },
+    {
+      "path": "assets/images/releem_dashboard.png",
+      "sha256": "7f612f68133b0f517735cb87d3a17237fc1b3e6a13f1ef5e4befd478db235628"
+    },
+    {
+      "path": "static/img/dashboard-releem-score.png",
+      "sha256": "0ef79814da55cdd011ad8fe2da1a3db26d8e15218f0ffbcad7f55a45b6f9bef1"
+    },
+    {
+      "path": "static/img/dashboard-settings.png",
+      "sha256": "8e17642cab07d2a7238d85efe63adebaf25d86d2aa6e3589cc08305afd499254"
+    },
+    {
+      "path": "static/img/favicon.ico",
+      "sha256": "b499e6bf95c524321f22221a199272ffaccecbfbb6f87c66282d1e7001f259be"
+    },
+    {
+      "path": "static/img/releem-applying-click.gif",
+      "sha256": "f52545690cf7606ae4d6c88205d22212145065e7746ace9304672c0fc05b165e"
+    },
+    {
+      "path": "static/img/releem-applying.gif",
+      "sha256": "53935f48e1aba707482aa5cecb03a4f7aac16c41ba3b48ea0581fefc4000f4e1"
+    },
+    {
+      "path": "static/img/releem-dashboard-agent-automatic-installation.png",
+      "sha256": "807fefdd2c7ac7a486826b4e3f21c75caef2be0ee4dc67bce40803d3425450d3"
+    },
+    {
+      "path": "static/img/releem-icon-top.png",
+      "sha256": "0a0f42450e276a2d9441b91ec4ce7682c5b47ed849f638cfb765415c1592e9e3"
+    },
+    {
+      "path": "static/img/releem_dashboard.png",
+      "sha256": "9fd1d430421ce83a883fe8388af6e9859a4372fd89dc7196f62600e0c410a600"
+    }
+  ]
+}

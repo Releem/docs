@@ -1,0 +1,94 @@
+---
+id: disable
+slug: /recommendations/query-optimization/disable
+title: "Disable SQL Query Optimization"
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Disable SQL Query Optimization
+
+Choose your installation type. These steps change the Query Optimization setting and then restart or recreate the Releem Agent.
+
+<Tabs>
+  <TabItem value="linux" label="Linux" default>
+
+1. Edit the Releem Agent configuration file:
+
+```bash
+nano /opt/releem/releem.conf
+```
+
+2. Change the setting:
+
+```ini
+query_optimization=false
+```
+
+3. Restart the agent:
+
+```bash
+systemctl restart releem-agent
+```
+
+  </TabItem>
+  <TabItem value="docker" label="Docker">
+
+Recreate the container with query optimization disabled:
+
+```bash
+docker rm -f releem-agent
+docker run -d --name releem-agent \
+  -e RELEEM_QUERY_OPTIMIZATION=false \
+  ... \
+  releem/releem-agent:[version]
+```
+
+For Docker Compose, set:
+
+```yaml
+environment:
+  RELEEM_QUERY_OPTIMIZATION: false
+```
+
+Then recreate the service:
+
+```bash
+docker compose up -d
+```
+
+  </TabItem>
+  <TabItem value="aws-rds" label="AWS RDS">
+
+If the agent is managed by CloudFormation, update the `releem-agent` stack and set `QueryOptimization` to `false`.
+
+If the agent runs on EC2, set `query_optimization=false` in `/opt/releem/releem.conf` and restart the agent:
+
+```bash
+systemctl restart releem-agent
+```
+
+  </TabItem>
+  <TabItem value="gcp-cloudsql" label="GCP Cloud SQL">
+
+Set `query_optimization=false` in the agent configuration or recreate the Docker container with `RELEEM_QUERY_OPTIMIZATION=false`, then restart the agent.
+
+  </TabItem>
+  <TabItem value="azure-mysql" label="Azure MySQL">
+
+Set `query_optimization=false` in the agent configuration or recreate the Docker container with `RELEEM_QUERY_OPTIMIZATION=false`, then restart the agent.
+
+  </TabItem>
+  <TabItem value="windows" label="Windows">
+
+Set `query_optimization=false` in `C:\ProgramData\ReleemAgent\releem.conf`, then restart the Releem Agent Windows service.
+
+  </TabItem>
+</Tabs>
+
+## Verify the change
+
+Confirm that the Releem Agent service or container is running after the restart or recreation. Then verify that the active configuration uses `query_optimization=false`, `RELEEM_QUERY_OPTIMIZATION=false`, or `QueryOptimization` set to `false`, depending on your installation type.
+
+This procedure does not establish whether disabling Query Optimization deletes previously collected query data or revokes database permissions. Do not assume that either action occurs. Review database access separately, and contact Releem support if you need a data-retention or access-removal procedure.

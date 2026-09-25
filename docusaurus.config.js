@@ -1,4 +1,5 @@
 import {themes as prismThemes} from 'prism-react-renderer';
+import {redirects} from './redirects.mjs';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -16,6 +17,8 @@ const config = {
     defaultLocale: 'en',
     locales: ['en'],
   },
+
+  plugins: [['@docusaurus/plugin-client-redirects', {redirects}]],
 
   presets: [
     [
@@ -54,6 +57,7 @@ const config = {
         logo: {
           alt: 'Releem Logo',
           src: 'img/releem-icon-top.png',
+          href: '/get-started',
         },
         items: [
           {
@@ -144,7 +148,7 @@ const config = {
               },
               {
                 label: 'Study the documentation',
-                to: '/',
+                to: '/get-started',
               },
               {
                 href: 'https://releem.com',
