@@ -26,6 +26,7 @@ Choose the type of database server you are adding:
 - [PostgreSQL on Linux: Automatic installation](/installation/postgresql/linux#automatic-installation) – Create the database user during installation.
 - [PostgreSQL on Linux: Manual installation](/installation/postgresql/linux#manual-installation) – Use an existing monitoring account.
 - [MySQL on WHM/cPanel](/installation/mysql/whm-cpanel)
+- [MySQL in Kubernetes](/installation/mysql/kubernetes)
 - [MySQL in Docker](/installation/mysql/docker)
 - [MariaDB in Docker](/installation/mariadb/docker)
 - [MySQL on Windows](/installation/mysql/windows)
@@ -35,6 +36,7 @@ Choose the type of database server you are adding:
 - [MySQL on GCP Cloud SQL](/installation/mysql/gcp-cloud-sql)
 - [Azure Database for MySQL](/installation/mysql/azure-database-for-mysql)
 - [MariaDB in Kubernetes](/installation/mariadb/kubernetes)
+- [MariaDB on WHM/cPanel](/installation/mariadb/whm-cpanel)
 - [MySQL clusters](/installation/mysql/clusters) or [MariaDB clusters](/installation/mariadb/clusters) – Install one Agent for each database node.
 
 

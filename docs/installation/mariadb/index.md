@@ -14,5 +14,6 @@ Choose where you want to run the Releem Agent.
 - [Kubernetes](/installation/mariadb/kubernetes)
 - [AWS RDS](/installation/mariadb/aws-rds)
 - [Clusters](/installation/mariadb/clusters)
+- [WHM/cPanel](/installation/mariadb/whm-cpanel)
 
 Review [MariaDB permissions](/supported-databases/mariadb/required-permissions) before installation. For guided setup, use [Connect Your Database Server](/get-started/connect-your-database-server). To select a different engine, open [Install Releem](/installation).

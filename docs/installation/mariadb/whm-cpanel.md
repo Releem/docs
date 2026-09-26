@@ -1,19 +1,19 @@
 ---
 id: whm-cpanel
-slug: /installation/mysql/whm-cpanel
-title: Install Releem for MySQL on WHM/cPanel
+slug: /installation/mariadb/whm-cpanel
+title: Install Releem for MariaDB on WHM/cPanel
 ---
 
-# Install Releem for MySQL on WHM/cPanel
+# Install Releem for MariaDB on WHM/cPanel
 
-Use the Releem WHM/cPanel module on a MySQL server managed through WHM.
+Use the Releem WHM/cPanel module on a MariaDB server managed through WHM.
 
 ## Prerequisites
 
 - cPanel/WHM installed and running
 - Root SSH access
 - AlmaLinux 8/9, Rocky Linux 8/9, CentOS 7/8, Ubuntu 20.04/22.04/24.04, or Debian 10/11/12, with cPanel/WHM already installed
-- [MySQL permissions](/supported-databases/mysql/required-permissions)
+- [MariaDB permissions](/supported-databases/mariadb/required-permissions)
 - A Releem API key
 
 ## Automatic installation {#automatic-installation}
@@ -33,6 +33,8 @@ The installer:
 5. Registers **WHM > Plugins > Releem Database Advisor**.
 
 Keep the database's configuration and service paths managed by cPanel. The WHM installer delegates database detection and Agent configuration to the Linux Agent installer; you do not need to rename the database service or move its configuration files.
+
+The Agent uses `RELEEM_MYSQL_*` installer variable names for MariaDB too. Keep those names unchanged. The cPanel auto-adjust settings also retain their MySQL names when your server runs MariaDB.
 
 ## Logs
 

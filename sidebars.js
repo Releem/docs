@@ -54,6 +54,7 @@ const sidebars = {
             'installation/mysql/linux',
             'installation/mysql/windows',
             'installation/mysql/docker',
+            'installation/mysql/kubernetes',
             'installation/mysql/aws-rds',
             'installation/mysql/gcp-cloud-sql',
             'installation/mysql/azure-database-for-mysql',
@@ -72,6 +73,7 @@ const sidebars = {
             'installation/mariadb/kubernetes',
             'installation/mariadb/aws-rds',
             'installation/mariadb/clusters',
+            'installation/mariadb/whm-cpanel',
           ],
         },
         {
