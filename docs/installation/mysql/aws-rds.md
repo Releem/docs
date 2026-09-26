@@ -124,4 +124,34 @@ Confirm both the Agent connection and current metrics in the Dashboard. If eithe
 
 ## Troubleshooting
 
-Use [Troubleshoot the Releem Agent](/get-started/troubleshoot-releem-agent). Correct the reported permission, network, or configuration issue before you re-run or restart the supported procedure.
+For a CloudFormation deployment, open **CloudWatch → Log groups** and select the Releem Agent log group. For an EC2 deployment, review the [Agent logs](/installation/manage-the-releem-agent/logs).
+
+### `Failed to read log stream ... RDSOSMetrics`
+
+Enable **Enhanced Monitoring** for the RDS instance. Confirm that the Agent identity has the documented CloudWatch Logs read access and that the instance is publishing the `RDSOSMetrics` stream. Restart only the Agent after correcting its AWS access.
+
+### The Dashboard has no latency data
+
+Enable **Performance Insights** and set `performance_schema=ON` in the DB parameter group assigned to the instance. Apply the parameter-group change, reboot when RDS marks it as pending reboot, and confirm that current metrics arrive after the instance returns to **Available**.
+
+### `Error 1045 (28000): Access denied for user 'releem'`
+
+Confirm the database endpoint, user name, password, and the exact host from which the Agent connects. Compare the account with [MySQL Required Permissions](/supported-databases/mysql/required-permissions) and verify its effective host-specific grants. Update the credential in the Agent configuration or secret, then restart the Agent. Do not create an unrestricted `'releem'@'%'` account as a shortcut.
+
+### `Connect: connection timed out`
+
+Confirm that the RDS security group accepts the database port from the Agent security group or exact Agent address. Check the Agent subnet route, network ACLs, DNS resolution, and the selected RDS endpoint. Do not open the database port to all sources.
+
+### The CloudFormation stack remains `CREATE_IN_PROGRESS`
+
+Open the stack's **Events** tab and resolve the first failed or waiting resource. Confirm the selected subnets and security groups, Secrets Manager references, Fargate task startup, outbound HTTPS access, RDS connectivity, Enhanced Monitoring, and Performance Insights. Review the ECS service and stopped-task reason before retrying or replacing the stack.
+
+### `Error 1142 (42000): SELECT command denied ... events_statements_history`
+
+The Agent account cannot read the Performance Schema statement history required for the selected feature. Compare its effective grants with [MySQL query permissions](/supported-databases/mysql/required-permissions#additional-database-permissions-required). Apply only the permissions required for the enabled feature and exact Agent source, then restart the Agent.
+
+### `performance_schema_*` settings are not applied
+
+Set `performance_schema=1` explicitly in the DB parameter group assigned to the instance. Save the parameter group and reboot the instance when RDS reports a pending reboot. After the instance returns to **Available**, confirm that the parameter group is **In sync** and verify the effective database setting.
+
+For other failures, use [Troubleshoot the Releem Agent](/get-started/troubleshoot-releem-agent). Correct the reported permission, network, or configuration issue before retrying the installation.
