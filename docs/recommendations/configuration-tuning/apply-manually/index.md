@@ -9,7 +9,7 @@ title: Apply configuration manually
 Choose your database to find the manual application procedure and its documented environments.
 
 - [MySQL](/recommendations/configuration-tuning/apply-manually/mysql) — Linux, Windows, Docker, AWS RDS, and GCP Cloud SQL.
-- [MariaDB](/recommendations/configuration-tuning/apply-manually/mariadb) — the manual procedure is awaiting verification.
-- [PostgreSQL](/recommendations/configuration-tuning/apply-manually/postgresql) — the manual procedure is awaiting verification.
+- [MariaDB](/recommendations/configuration-tuning/apply-manually/mariadb) — Linux, Windows, Docker, and AWS RDS.
+- [PostgreSQL](/recommendations/configuration-tuning/apply-manually/postgresql) — self-managed Linux.
 
 Before applying any change, review the shared [application checks](/recommendations/configuration-tuning/apply-configuration#before-you-apply).

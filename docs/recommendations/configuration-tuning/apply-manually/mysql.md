@@ -32,17 +32,52 @@ CentOS uses the alternate directory `/etc/my.cnf.d/`. Confirm the active include
 
 ## Step 2: Restart MySQL to apply configuration {#linux-restart-mysql}
 
-Review the copied settings, then restart the database during the planned maintenance window:
+Review the copied settings, then restart the database during the planned maintenance window. If you use MySQL 5.6.7 or earlier and the recommendation changes `innodb_log_file_size`, follow the special procedure below instead of this restart command.
 
 ```bash
 service mysqld restart
 ```
 
-If a recommendation changes the redo-log size on MySQL 5.6.7 or earlier, stop. Do not move redo-log files with a generic procedure. Contact Releem support and your database owner for a version-specific recovery plan.
+### Special case: MySQL 5.6.7 or earlier with an innodb_log_file_size change {#linux-legacy-redo-log-size}
+
+InnoDB redo logs store changes used during crash recovery. For this version range, changing their size requires a clean shutdown and moving the old files before startup. See [Changing the Number or Size of Redo Log Files in the MySQL 5.6 manual](https://downloads.mysql.com/docs/refman-5.6-en.pdf).
+
+Before you begin, have a recoverable database backup and the previous configuration. Confirm the service name, log directory (`innodb_log_group_home_dir`, or `datadir` when unset), and number of log files (`innodb_log_files_in_group`). The examples use the `mysql` service and two files in `/var/lib/mysql`; use your actual service, directory, and complete file list.
+
+1. Set the shutdown mode so MySQL flushes pending changes:
+
+```bash
+mysql -e "SET GLOBAL innodb_fast_shutdown = 1"
+```
+
+Use your administrator account. If it requires a password, open `mysql -u root -p` and run the same `SET GLOBAL` statement at the MySQL prompt.
+
+2. Stop MySQL:
+
+```bash
+service mysql stop
+```
+
+Confirm that the server has stopped and its error log reports shutdown without errors. Do not move log files after a failed or forced shutdown.
+
+3. Move the old log files into an existing, empty backup directory outside the data directory. Replace the placeholder with its absolute path:
+
+```bash
+mv /var/lib/mysql/ib_logfile0 /var/lib/mysql/ib_logfile1 [BACKUP_DIRECTORY]/
+```
+
+4. Start MySQL with the recommended configuration:
+
+```bash
+service mysql start
+```
+
+MySQL creates new redo logs at the configured size. Keep the old files until verification completes. If startup fails, inspect the error log before retrying; do not overwrite newly created logs with old ones. Use your database backup and recovery procedure if required.
 
 ## Step 3: Verify the Applied Configuration {#linux-verify-applied-configuration}
 
 1. Check whether any settings remain restart-pending and confirm the effective database settings in MySQL.
+   For the redo-log change above, check `SHOW GLOBAL VARIABLES LIKE 'innodb_log_file_size';` and inspect the error log for startup errors.
 2. Confirm the database service is running and review application connectivity and errors.
 3. Confirm the **Applied recommended configuration** event on the **MySQL Metrics graph**, then review current metrics.
 

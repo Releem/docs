@@ -12,7 +12,7 @@ Choose how to apply the configuration recommended by Releem.
 |---|---|---|
 | [Using the Portal](/recommendations/configuration-tuning/apply-using-portal) | Review and apply configuration from the Releem web interface. | Available options depend on the deployment and its approved configuration-changing access. |
 | [Using the Agent](/recommendations/configuration-tuning/apply-using-agent) | Run the application command on your database server. | Use this method only when the Agent runs directly on the self-managed database host. Managed environments use the Portal. |
-| [Manually](/recommendations/configuration-tuning/apply-manually) | Update configuration files or cloud settings yourself. | A procedure is currently documented only for MySQL. |
+| [Manually](/recommendations/configuration-tuning/apply-manually) | Update configuration files or cloud settings yourself. | Choose the procedure for your database and environment. |
 | [On a Schedule](/recommendations/configuration-tuning/apply-using-cron) | Configure recurring application using cron. | A scheduled run can apply a future recommendation without a person reviewing it at execution time. |
 
 ## Before you apply
