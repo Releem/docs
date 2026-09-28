@@ -65,9 +65,11 @@ CREATE EXTENSION IF NOT EXISTS pg_stat_statements;
 
 Confirm that the monitoring role can read the required statistics views without granting ownership or broad write access.
 
-## Optional schema and query capabilities
+## Query and schema capabilities
 
-Features that inspect schema objects or support query-optimization workflows can require permissions beyond baseline monitoring. Those permissions depend on the selected databases, schemas, extensions, and operational policy. Do not grant broad schema, DDL, or write privileges from a generic template. Have a DBA review and approve each optional capability before enabling `RELEEM_QUERY_OPTIMIZATION=true`.
+The standard PostgreSQL Linux command enables query data collection with `RELEEM_QUERY_OPTIMIZATION=true`. Complete the `pg_stat_statements` setup above. If you create the monitoring role manually, verify its statistics access before installation. If the installer creates it, verify that access after installation. Collecting query data does not authorize Releem to apply query or schema changes.
+
+Applying query or schema changes can require permissions beyond baseline monitoring. Those permissions depend on the selected databases, schemas, extensions, and operational policy. Do not grant broad schema, DDL, or write privileges from a generic template. Have a DBA review the exact change and required access before enabling an application workflow.
 
 ## Restrict pg_hba.conf
 

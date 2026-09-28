@@ -19,7 +19,9 @@ slow_query_log=ON
 
 ### Separate monitoring from configuration authority
 
-Use a Google Cloud identity with Cloud SQL and Cloud Monitoring read access. Applying database configuration requires separate state-changing authority; add it only when you want Releem to apply approved changes.
+Attach a service account to the Compute Engine VM. Grant it [Cloud SQL Viewer (`roles/cloudsql.viewer`)](https://docs.cloud.google.com/iam/docs/roles-permissions/cloudsql) on the project containing the Cloud SQL instance. This role includes `cloudsql.instances.get` for instance discovery and `monitoring.timeSeries.list` for system metrics—the read operations used by the Agent. Enable the [Cloud SQL Admin API](https://docs.cloud.google.com/sql/docs/mysql/admin-api) and [Cloud Monitoring API](https://docs.cloud.google.com/monitoring/api/enable-api) in that project.
+
+Give the VM the [`cloud-platform` access scope](https://docs.cloud.google.com/compute/docs/access/service-accounts), then use the service account's IAM role to limit access. Applying database configuration requires separate state-changing authority; the Viewer role does not provide it.
 
 ## Automatic installation {#automatic-installation}
 
@@ -80,6 +82,8 @@ docker compose logs --tail=100 releem-agent
 
 Keep a Compose file containing credentials out of version control.
 
+To monitor another Cloud SQL instance from the same VM, duplicate the Compose service. Give the second service and container unique names, then set its own `RELEEM_HOSTNAME`, project, Region, instance ID, and database credentials. Start both services with `docker compose up -d`; each Agent should appear as a separate server in the Dashboard.
+
 ## Installer parameters
 
 - `RELEEM_GCP_PROJECT_ID` is the Google Cloud project ID.
@@ -98,6 +102,10 @@ After you complete a supported installation method, the Dashboard should show **
 Confirm both the Agent connection and current metrics in the Dashboard. If either is missing, check the [Agent logs](/installation/manage-the-releem-agent/logs).
 
 ## Troubleshooting
+
+### Cloud API access denied
+
+If the Agent logs `Failed to get Cloud SQL instance details`, check its VM service account, project ID, Cloud SQL Admin API, and `cloudsql.instances.get` permission. If it logs `Failed to collect GCP metrics`, check the Cloud Monitoring API and `monitoring.timeSeries.list` permission. Also confirm that the VM access scope allows the APIs. Restart the Agent after correcting its access.
 
 ### The Dashboard has no latency data
 

@@ -1,7 +1,7 @@
 ---
 id: connect-your-database-server
 slug: /get-started/connect-your-database-server
-title: Add Server
+title: Connect Your Database Server
 ---
 
 # Connect Your Database Server
@@ -14,7 +14,7 @@ Install the Releem Agent to connect your database server. Choose the exact datab
 4. Choose the database and deployment that match your server.
 5. Follow the linked installation guide.
 
-The **Add Server** workflow provides the settings required by the selected installation method.
+If **Add Server** provides a command for your selected database and environment, use that command. Otherwise, use the one-command example in the matching installation guide and replace its placeholders. Do not combine parameters from different database options.
 
 <img src={require('../../assets/images/dashboard-add-server.png').default} alt="Releem Add Server popup" className="shadow-img" />
 

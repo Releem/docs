@@ -10,7 +10,7 @@ Install one Agent for every MySQL or Percona cluster node.
 
 ## Prerequisites
 
-Create the monitoring account with [MySQL permissions](/supported-databases/mysql/required-permissions). Review the additional permissions only when you enable the corresponding query or schema feature.
+Create the monitoring account with the [MySQL monitoring and query-visibility permissions](/supported-databases/mysql/required-permissions#monitoring-and-query-visibility) before installing the Agent on each node. The linked Linux command enables query collection. Review separate schema-change permissions only if you plan to apply schema changes.
 
 ## Manual installation {#manual-installation}
 

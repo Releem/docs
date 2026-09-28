@@ -49,6 +49,22 @@ Choose how the Agent was installed. The Linux shell-installer commands in these 
   **Docker run:** Keep the original `docker run` command, environment options, mounts, restart options, and previous image tag. Pull the new image with `docker pull releem/releem-agent:[NEW_VERSION]`. Stop the existing `releem-agent` container and rename it `releem-agent-previous`; do not remove it or its host directories. Rerun the original installation command with the new tag and the same options. If the replacement fails, remove only the new container, rename `releem-agent-previous` back to `releem-agent`, and start it. Remove the previous container only after the new one passes verification.
 
   Confirm that the replacement container is running, the Dashboard shows the intended Agent version, and current metrics continue to arrive. For Compose, review `docker compose logs --tail=100 releem-agent` if the update fails; for Docker run, review `docker logs --tail=100 releem-agent`.
+
+  **Scheduled Compose updates:** If you want unattended Docker updates, keep the Agent's environment and mounts in `compose.yaml` and change its image to `releem/releem-agent:latest`. [Docker Hub lists the `latest` tag](https://hub.docker.com/r/releem/releem-agent/tags). Keep the previous versioned tag so you can restore it.
+
+  First run the update command yourself from the host. Replace the Compose-file path with its actual absolute path:
+
+  ```bash
+  docker compose -f /path/to/compose.yaml pull releem-agent && docker compose -f /path/to/compose.yaml up -d --no-deps releem-agent
+  ```
+
+  Confirm the Agent version and current metrics. Then add this line to the crontab of an account authorized to run Docker, replacing the Docker executable and Compose-file paths with their actual absolute paths:
+
+  ```cron
+  0 0 * * * /usr/bin/docker compose -f /path/to/compose.yaml pull releem-agent && /usr/bin/docker compose -f /path/to/compose.yaml up -d --no-deps releem-agent
+  ```
+
+  This checks for an updated image daily; [Compose recreates the named service when its image changes](https://docs.docker.com/reference/cli/docker/compose/up/). For multiple Agents in one Compose file, schedule each Agent service by name. To stop scheduled updates, remove the cron entry. If an update fails verification, pin the previous versioned tag in `compose.yaml` and run the same pull-and-up command. Docker-run installations remain on the manual update path above.
   </TabItem>
   <TabItem value="windows" label="Windows">
 

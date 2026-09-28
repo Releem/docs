@@ -110,6 +110,8 @@ docker compose up -d
 
 Use a version listed on [Docker Hub](https://hub.docker.com/r/releem/releem-agent/tags). Keep a Compose file containing credentials out of version control. The container uses the EC2 instance profile for AWS access, so attach the required IAM role to the EC2 instance.
 
+To monitor another RDS instance from the same EC2 VM, duplicate the Compose service. Give the second service and container unique names, then set its own `RELEEM_HOSTNAME`, `AWS_RDS_DB`, assigned parameter group, and database credentials. Start both services with `docker compose up -d`; each Agent should appear as a separate server in the Dashboard.
+
 ## Expected result
 
 After installation, the Dashboard should show **Agent Status: Connected**, current metrics, and latency data.
