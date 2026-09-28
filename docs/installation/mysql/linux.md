@@ -18,8 +18,6 @@ After installation, complete the [CloudLinux-specific CageFS and MySQLGovernor s
 
 ## Prerequisites
 
-MySQL is the installer's default database path. Before you begin, confirm that the database version is MySQL 5.5–8.0, that the host has outbound HTTPS access, and that you can open a private root shell. Review the [MySQL permissions](/supported-databases/mysql/required-permissions) before deciding whether the installer or your DBA will create the monitoring account.
-
 Use these task links for the complete flow: [requirements](#prerequisites), [permissions](/supported-databases/mysql/required-permissions), [automatic installation](#automatic-installation), [manual installation](#manual-installation), [parameters](#installer-parameters), [expected result](#expected-result), [verification](#verify-installation), [troubleshooting](#troubleshooting), [update](/installation/manage-the-releem-agent/update), and [uninstall](/installation/manage-the-releem-agent/uninstall).
 
 ## Automatic installation {#automatic-installation}
@@ -27,7 +25,7 @@ Use these task links for the complete flow: [requirements](#prerequisites), [per
 Use this path when the installer may create the `releem` monitoring user. The installer asks for the MySQL administrative password if it needs one.
 
 ```bash
-RELEEM_MYSQL_TYPE=1 RELEEM_DB_MEMORY_LIMIT=0 RELEEM_API_KEY='[RELEEM_API_KEY]' RELEEM_CRON_ENABLE=1 bash -c "$(curl -L https://releem.s3.amazonaws.com/v2/install.sh)"
+RELEEM_MYSQL_TYPE=1 RELEEM_DB_MEMORY_LIMIT=[MYSQL_MEMORY_LIMIT_MB] RELEEM_API_KEY='[RELEEM_API_KEY]' RELEEM_CRON_ENABLE=1 RELEEM_QUERY_OPTIMIZATION=true bash -c "$(curl -L https://releem.s3.amazonaws.com/v2/install.sh)"
 ```
 
 Do not add an administrative password to the command. Continue with the [expected result](#expected-result).
@@ -37,7 +35,7 @@ Do not add an administrative password to the command. Continue with the [expecte
 Use this path when a DBA has already created the monitoring user according to the [MySQL permissions guide](/supported-databases/mysql/required-permissions):
 
 ```bash
-RELEEM_MYSQL_TYPE=1 RELEEM_MYSQL_PASSWORD='[MONITORING_PASSWORD]' RELEEM_MYSQL_LOGIN='releem' RELEEM_DB_MEMORY_LIMIT=0 RELEEM_API_KEY='[RELEEM_API_KEY]' RELEEM_CRON_ENABLE=1 bash -c "$(curl -L https://releem.s3.amazonaws.com/v2/install.sh)"
+RELEEM_MYSQL_TYPE=1 RELEEM_MYSQL_PASSWORD='[MONITORING_PASSWORD]' RELEEM_MYSQL_LOGIN='releem' RELEEM_DB_MEMORY_LIMIT=[MYSQL_MEMORY_LIMIT_MB] RELEEM_API_KEY='[RELEEM_API_KEY]' RELEEM_CRON_ENABLE=1 RELEEM_QUERY_OPTIMIZATION=true bash -c "$(curl -L https://releem.s3.amazonaws.com/v2/install.sh)"
 ```
 
 Add `RELEEM_MYSQL_HOST` or `RELEEM_MYSQL_PORT` before `bash -c` only when the database does not use the local default connection.
@@ -53,7 +51,7 @@ The installer writes the Agent configuration to `/opt/releem/releem.conf`. Keep 
 - `RELEEM_MYSQL_TYPE=1` explicitly selects the MySQL-family path. MySQL is already the default.
 - `RELEEM_MYSQL_HOST` defaults to `127.0.0.1`, `RELEEM_MYSQL_PORT` defaults to `3306`, and `RELEEM_MYSQL_LOGIN` and `RELEEM_MYSQL_PASSWORD` configure the MySQL-family monitoring connection.
 - `RELEEM_MYSQL_ROOT_LOGIN` sets the MySQL-family administrative login and defaults to `root`. Do not put a root-password variable in a reusable example; use the installer's masked prompt.
-- Omit `RELEEM_QUERY_OPTIMIZATION` to disable query-optimization collection. Set it to exactly `RELEEM_QUERY_OPTIMIZATION=true` to enable collection after granting the engine-specific permissions.
+- `RELEEM_QUERY_OPTIMIZATION=true` enables query collection after you grant the [required query permissions](/supported-databases/mysql/required-permissions#monitoring-and-query-visibility). Remove this flag for baseline monitoring only.
 
 For the installed Agent's settings, see [Configure the Releem Agent](/installation/manage-the-releem-agent/configuration).
 

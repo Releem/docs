@@ -10,7 +10,7 @@ Run the Releem Agent in a Docker container for MySQL.
 
 ## Prerequisites
 
-Create the monitoring account from [MySQL permissions](/supported-databases/mysql/required-permissions). Install Docker, and make sure the Agent container can reach MySQL. Install Docker Compose only if you want to use the Compose method below.
+Create the monitoring account from [MySQL permissions](/supported-databases/mysql/required-permissions), including query visibility if you use the example below. Install Docker, and make sure the Agent container can reach MySQL. Install Docker Compose only if you want to use the Compose method below. Choose a memory limit in MB for MySQL; use `0` only when MySQL can use the host's full memory budget.
 
 ## Manual installation {#manual-installation}
 
@@ -24,7 +24,8 @@ DB_HOST=[MYSQL_HOST]
 DB_PORT=3306
 DB_USER=releem
 DB_PASSWORD=[MONITORING_PASSWORD]
-MEMORY_LIMIT=0
+MEMORY_LIMIT=[MYSQL_MEMORY_LIMIT_MB]
+RELEEM_QUERY_OPTIMIZATION=true
 ```
 
 2. Restrict the file before starting the container:
@@ -116,7 +117,7 @@ Restart the MySQL container after changing its configuration. Confirm that the s
 - `DB_HOST`, `DB_PORT`, `DB_USER`, and `DB_PASSWORD` configure the MySQL connection.
 - `RELEEM_API_KEY` connects the Agent to your Releem account.
 - `MEMORY_LIMIT` limits the memory considered for MySQL recommendations; `0` uses the host total.
-- Add `RELEEM_QUERY_OPTIMIZATION=true` only after granting the required query permissions.
+- `RELEEM_QUERY_OPTIMIZATION=true` enables query collection. Remove the line for baseline monitoring only; review the [query permissions](/supported-databases/mysql/required-permissions#monitoring-and-query-visibility) before enabling it.
 
 ## Expected result
 

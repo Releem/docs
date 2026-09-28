@@ -9,12 +9,12 @@ import TabItem from '@theme/TabItem';
 
 # Update Releem Agent
 
-Choose how the Agent was installed. The documented Linux installation command uses `RELEEM_CRON_ENABLE=1`, which enables the automatic daily update.
+Choose how the Agent was installed. The Linux shell-installer commands in these guides use `RELEEM_CRON_ENABLE=1` for daily updates. CloudFormation and containers have separate update procedures below.
 
 <Tabs>
   <TabItem value="linux" label="Linux">
 
-  The documented installation command enables automatic daily updates with `RELEEM_CRON_ENABLE=1`. Set the value to `0` during installation when you do not want scheduled updates.
+  The Linux shell-installer commands enable automatic daily updates with `RELEEM_CRON_ENABLE=1`. Set the value to `0` during installation when you do not want scheduled updates.
 
   To update manually, run one command:
 

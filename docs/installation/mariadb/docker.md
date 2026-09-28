@@ -10,7 +10,7 @@ Run the Releem Agent in a Docker container for MariaDB.
 
 ## Prerequisites
 
-Create the monitoring account from [MariaDB permissions](/supported-databases/mariadb/required-permissions). Install Docker, and make sure the Agent container can reach MariaDB. Install Docker Compose only if you want to use the Compose method below. The Agent uses MySQL-compatible `DB_*` setting names for MariaDB connections.
+Create the monitoring account from [MariaDB permissions](/supported-databases/mariadb/required-permissions), including query visibility if you use the example below. Install Docker, and make sure the Agent container can reach MariaDB. Install Docker Compose only if you want to use the Compose method below. The Agent uses MySQL-compatible `DB_*` setting names for MariaDB connections. Choose a memory limit in MB for MariaDB; use `0` only when MariaDB can use the host's full memory budget.
 
 ## Manual installation {#manual-installation}
 
@@ -24,7 +24,8 @@ DB_HOST=[MARIADB_HOST]
 DB_PORT=3306
 DB_USER=releem
 DB_PASSWORD=[MONITORING_PASSWORD]
-MEMORY_LIMIT=0
+MEMORY_LIMIT=[MARIADB_MEMORY_LIMIT_MB]
+RELEEM_QUERY_OPTIMIZATION=true
 ```
 
 2. Restrict the file before starting the container:
@@ -116,7 +117,7 @@ Restart the MariaDB container after changing its configuration. Confirm that the
 - `DB_HOST`, `DB_PORT`, `DB_USER`, and `DB_PASSWORD` configure the MariaDB connection.
 - `RELEEM_API_KEY` connects the Agent to your Releem account.
 - `MEMORY_LIMIT` limits the memory considered for recommendations; `0` uses the host total.
-- Add `RELEEM_QUERY_OPTIMIZATION=true` only after granting the required query permissions.
+- `RELEEM_QUERY_OPTIMIZATION=true` enables query collection. Remove the line for baseline monitoring only. Review the [query permissions](/supported-databases/mariadb/required-permissions#monitoring-and-query-visibility) before enabling it.
 
 ## Expected result
 

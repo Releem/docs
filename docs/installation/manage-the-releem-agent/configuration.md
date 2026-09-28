@@ -10,7 +10,7 @@ This document describes the available configuration settings for the Releem Agen
 
 ## Configuration File
 
-All Releem Agent settings are stored in `/opt/releem/releem.conf`. The following example shows the common settings for MySQL and PostgreSQL monitoring:
+All Releem Agent settings are stored in `/opt/releem/releem.conf`. The following example shows common settings, not the result of every installation command. If you selected a memory limit or enabled query collection during installation, check that the installed `memory_limit` and `query_optimization` values reflect those choices:
 
 ```ini
 # API key for Releem Platform

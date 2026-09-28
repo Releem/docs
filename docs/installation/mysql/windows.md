@@ -10,7 +10,7 @@ Install the Releem Agent on a Windows server that runs MySQL.
 
 ## Prerequisites
 
-Run PowerShell as Administrator. Make sure `mysql.exe` is available in `PATH`, and review [MySQL permissions](/supported-databases/mysql/required-permissions).
+Run PowerShell as Administrator. Make sure `mysql.exe` is available in `PATH`, and review [MySQL permissions](/supported-databases/mysql/required-permissions). Both methods enable query collection. For manual installation, grant query visibility before starting the Agent; for automatic installation, verify the created account's grants afterward.
 
 ## Automatic installation {#automatic-installation}
 
@@ -48,7 +48,7 @@ mysql_user="releem"
 mysql_password="[MONITORING_PASSWORD]"
 interval_seconds=60
 interval_read_config_seconds=3600
-query_optimization=false
+query_optimization=true
 ```
 
 5. Add these settings to the active MySQL configuration file, then restart MySQL:

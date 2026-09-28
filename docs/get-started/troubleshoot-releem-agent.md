@@ -8,7 +8,7 @@ title: How to Check if Releem Agent is Working
 
 Use this guide when the Releem Agent is disconnected or the Dashboard does not show current data. First confirm the Dashboard state, then check the service and its logs.
 
-On the Releem Score block, **Agent Status: Connected / Monitoring** indicates that the Releem platform receives metrics from the Releem Agent. Also confirm that the Dashboard shows a current data timestamp or recently updated metrics.
+On the Releem Score block, **Agent Status: Connected** indicates that the Agent has connected to Releem. Also confirm that the Dashboard shows a current data timestamp or recently updated metrics; a connection alone does not confirm current collection.
 
 <img src="/img/dashboard-releem-score.png" alt="Releem Score block" className="shadow-img" />
 
@@ -81,7 +81,7 @@ You can specify “dummy” in the DBParameterGroup parameter if you do not plan
 
 **How to fix:** Run /opt/releem/mysqlconfigurer.sh -p command and agree to the database service restart.
 
-**How to fix for AWS RDS:** Enable Performance Insights and Performance Schema for your RDS instance.
+**How to fix for AWS RDS:** Check CloudWatch Database Insights (formerly Performance Insights) and verify that Performance Schema is active for your RDS instance. Use the [MySQL](/installation/mysql/aws-rds#the-dashboard-has-no-latency-data) or [MariaDB](/installation/mariadb/aws-rds#the-dashboard-has-no-latency-data) RDS guide for the parameter-group and reboot checks.
 
 **How to fix for GCP Cloud SQL:** Enable Performance Schema for your Cloud SQL instance.
 

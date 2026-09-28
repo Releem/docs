@@ -10,7 +10,7 @@ Connect the Releem Agent to Azure Database for MySQL Flexible Server.
 
 ## Prerequisites
 
-Review [MySQL permissions](/supported-databases/mysql/required-permissions). Enable Performance Schema and the slow query log when those data sources are required:
+Review [MySQL permissions](/supported-databases/mysql/required-permissions), including query visibility for the examples below. Enable Performance Schema and the slow query log for the related database and query data:
 
 ```ini
 performance_schema=ON
@@ -38,7 +38,7 @@ Run the Agent on a Linux VM that can reach the Azure MySQL endpoint. Configure `
 Open a private root shell and run this command. Replace the bracketed placeholders with your values.
 
 ```bash
-RELEEM_INSTANCE_TYPE="azure/mysql" RELEEM_AZURE_SUBSCRIPTION_ID="[SUBSCRIPTION_ID]" RELEEM_AZURE_RESOURCE_GROUP="[RESOURCE_GROUP]" RELEEM_AZURE_MYSQL_SERVER="[MYSQL_SERVER]" RELEEM_MYSQL_PASSWORD='[MONITORING_PASSWORD]' RELEEM_MYSQL_LOGIN='releem' RELEEM_DB_MEMORY_LIMIT=0 RELEEM_API_KEY='[RELEEM_API_KEY]' RELEEM_CRON_ENABLE=0 bash -c "$(curl -L https://releem.s3.amazonaws.com/v2/install.sh)"
+RELEEM_INSTANCE_TYPE="azure/mysql" RELEEM_AZURE_SUBSCRIPTION_ID="[SUBSCRIPTION_ID]" RELEEM_AZURE_RESOURCE_GROUP="[RESOURCE_GROUP]" RELEEM_AZURE_MYSQL_SERVER="[MYSQL_SERVER]" RELEEM_MYSQL_PASSWORD='[MONITORING_PASSWORD]' RELEEM_MYSQL_LOGIN='releem' RELEEM_DB_MEMORY_LIMIT=0 RELEEM_API_KEY='[RELEEM_API_KEY]' RELEEM_CRON_ENABLE=1 RELEEM_QUERY_OPTIMIZATION=true bash -c "$(curl -L https://releem.s3.amazonaws.com/v2/install.sh)"
 ```
 
 ## Installer parameters
@@ -47,7 +47,8 @@ RELEEM_INSTANCE_TYPE="azure/mysql" RELEEM_AZURE_SUBSCRIPTION_ID="[SUBSCRIPTION_I
 - `RELEEM_AZURE_RESOURCE_GROUP` identifies the resource group.
 - `RELEEM_AZURE_MYSQL_SERVER` is the Flexible Server resource name, not its full hostname.
 - `RELEEM_MYSQL_LOGIN` and `RELEEM_MYSQL_PASSWORD` configure the database connection.
-- `RELEEM_QUERY_OPTIMIZATION=true` enables query collection after you grant the required database permissions.
+- `RELEEM_CRON_ENABLE=1` enables daily Agent updates on the VM. Set it to `0` if you do not want scheduled updates.
+- `RELEEM_QUERY_OPTIMIZATION=true` enables query collection after you grant the [query permissions](/supported-databases/mysql/required-permissions#monitoring-and-query-visibility). Remove it from the VM command or Docker example for baseline monitoring only.
 
 ## Run the Agent in Docker {#docker}
 
