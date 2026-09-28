@@ -21,13 +21,13 @@ Dashboard latency is required for a complete installation. Confirm that Performa
 
 ### Prepare the DB parameter group
 
-For CloudFormation installation, create a custom DB parameter group for the instance's engine family and assign it to the RDS instance. The template requires that group's name. Set the required Performance Schema values, reboot if RDS reports a pending reboot, and confirm the group is **In sync**. A default group cannot be modified.
+Create a custom DB parameter group for the instance's engine family and assign it to the RDS instance. Both CloudFormation and EC2 installations need this group to apply recommended configuration; the CloudFormation template requires its name. Set the required Performance Schema values, reboot if RDS reports a pending reboot, and confirm the group is **In sync**. A default group cannot be modified.
 
-For a monitoring-only EC2 installation, you can use the group already assigned to the instance if the required settings are active. Applying Releem configuration later requires an assigned custom group and separate state-changing IAM access.
+If you intentionally use EC2 for monitoring only, the assigned group can remain unchanged when the required settings are active. Releem can show recommendations, but it cannot apply them through that installation until a custom group and the access below are in place.
 
-### Separate monitoring from configuration authority
+### Give the EC2 Agent access to the parameter group
 
-Monitoring can use read actions such as `logs:Get*`, `rds:Describe*`, and `cloudwatch:Get*`. Applying a database configuration requires separate state-changing authority and an approved parameter group. Do not add configuration-changing authority to a monitoring-only role.
+Attach an IAM role to the EC2 instance with `logs:Get*`, `rds:Describe*`, and `cloudwatch:Get*` for monitoring. To make Releem's **Apply** action available, also grant [`rds:ModifyDBParameterGroup`](https://docs.aws.amazon.com/service-authorization/latest/reference/list_rds.html) on the ARN of the assigned custom DB parameter group (`arn:aws:rds:[REGION]:[ACCOUNT_ID]:pg:[ASSIGNED_PARAMETER_GROUP]`). Granting this permission does not apply a recommendation; you still choose and approve the change in Releem. Omit the write action only when you intend to use a monitoring-only Agent and apply changes manually.
 
 ## Automatic installation {#automatic-installation}
 
@@ -46,7 +46,7 @@ The linked CloudFormation template's Agent task role includes `rds:ModifyDBParam
 
 ## Manual installation {#manual-installation}
 
-Install the Agent on an EC2 instance that can reach RDS. Attach an IAM role with the read actions required for RDS, CloudWatch, and logs. Add `rds:ModifyDBParameterGroup` only when you want Releem to apply approved configuration changes. You can install the Agent directly on EC2 or run it in Docker.
+Install the Agent on an EC2 instance that can reach RDS. Attach the [IAM role described above](#give-the-ec2-agent-access-to-the-parameter-group) so the Agent can collect metrics and apply a configuration when you approve it. You can install the Agent directly on EC2 or run it in Docker.
 
 ### Install directly on EC2
 

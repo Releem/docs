@@ -17,11 +17,13 @@ performance_schema=ON
 slow_query_log=ON
 ```
 
-### Separate monitoring from configuration authority
+### Give the Agent access to Cloud SQL
 
 Attach a service account to the Compute Engine VM. Grant it [Cloud SQL Viewer (`roles/cloudsql.viewer`)](https://docs.cloud.google.com/iam/docs/roles-permissions/cloudsql) on the project containing the Cloud SQL instance. This role includes `cloudsql.instances.get` for instance discovery and `monitoring.timeSeries.list` for system metrics—the read operations used by the Agent. Enable the [Cloud SQL Admin API](https://docs.cloud.google.com/sql/docs/mysql/admin-api) and [Cloud Monitoring API](https://docs.cloud.google.com/monitoring/api/enable-api) in that project.
 
-Give the VM the [`cloud-platform` access scope](https://docs.cloud.google.com/compute/docs/access/service-accounts), then use the service account's IAM role to limit access. Applying database configuration requires separate state-changing authority; the Viewer role does not provide it.
+To make Releem's **Apply** action available, also grant the VM service account [`cloudsql.instances.update`](https://docs.cloud.google.com/sql/docs/mysql/iam-permissions) in that project through a [custom role](https://docs.cloud.google.com/iam/docs/creating-custom-roles). The Agent uses Cloud SQL `instances.patch`, viewer alone cannot submit that change.
+
+Give the VM the [`cloud-platform` access scope](https://docs.cloud.google.com/compute/docs/access/service-accounts), then use its IAM roles to limit access. The same service account and scope are needed when the Agent runs in Docker on that VM.
 
 ## Automatic installation {#automatic-installation}
 

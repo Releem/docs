@@ -14,7 +14,7 @@ Supported versions are PostgreSQL 15–18. Install the Agent on the database hos
 
 ## Prerequisites
 
-Use these task links for the complete flow: [requirements](#prerequisites), [permissions](/supported-databases/postgresql/required-permissions), [automatic installation](#automatic-installation), [manual installation](#manual-installation), [parameters](#installer-parameters), [expected result](#expected-result), [verification](#verify-installation), [troubleshooting](#troubleshooting), [update](/installation/manage-the-releem-agent/update), and [uninstall](/installation/manage-the-releem-agent/uninstall).
+Make sure the `postgresql-contrib` package for your PostgreSQL version is installed before running either command. It supplies `pg_stat_statements`, which the standard installation uses for query data. The automatic installer can create the monitoring user and attempt to create the extension, but it cannot install a missing PostgreSQL package. See [PostgreSQL Required Permissions](/supported-databases/postgresql/required-permissions#query-metrics-with-pg_stat_statements) for the extension and restart requirements.
 
 ## Automatic installation {#automatic-installation}
 

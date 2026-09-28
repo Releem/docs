@@ -112,7 +112,7 @@ Some parameters remain pending until RDS reboots the instance. Review the pendin
 
 ### `Compute Engine VM instance lacks required permissions to apply`
 
-Confirm that the Agent's Google Cloud identity has the Cloud SQL and Cloud Monitoring access documented in [Install Releem for MySQL on GCP Cloud SQL](/installation/mysql/gcp-cloud-sql). Keep monitoring access separate from configuration-changing access and add only the approved actions required by the application workflow.
+Confirm that the Agent's Google Cloud identity has `cloudsql.instances.get` and `cloudsql.instances.update` in the project containing the instance, as documented in [Install Releem for MySQL on GCP Cloud SQL](/installation/mysql/gcp-cloud-sql). Viewer access alone can collect metrics but cannot submit an Apply change.
 
 ### `Other errors applying without restart`
 
