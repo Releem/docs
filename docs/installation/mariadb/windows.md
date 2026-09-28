@@ -40,10 +40,14 @@ mysql_host="127.0.0.1"
 mysql_port="3306"
 mysql_user="releem"
 mysql_password="[MONITORING_PASSWORD]"
+mysql_restart_service=""
+mysql_cnf_dir=""
 interval_seconds=60
 interval_read_config_seconds=3600
 query_optimization=true
 ```
+
+Set `mysql_restart_service` and `mysql_cnf_dir` for the selected MariaDB service before applying a recommended configuration with the Agent.
 
 5. Add these settings to the active MariaDB configuration file, then restart MariaDB. Performance Schema requires a restart:
 

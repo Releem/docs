@@ -56,6 +56,8 @@ To enable the SQL Query Optimization feature, please select your installation ty
 
   #### PostgreSQL Servers
 
+  This procedure covers the documented PostgreSQL 15–18 range. The previous PostgreSQL 12/13 grants are kept as a [historical reference](/supported-databases/postgresql/required-permissions#legacy-postgresql-query-grants), not as a current installation path.
+
   1. Grant additional permissions to the `releem` user as a PostgreSQL superuser:
      ```sql
      -- PostgreSQL 15–18

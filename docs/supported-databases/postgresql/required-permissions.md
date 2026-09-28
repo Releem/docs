@@ -18,7 +18,10 @@ Create the login through your approved credential-management process. Do not put
 CREATE USER releem;
 GRANT pg_monitor TO releem;
 GRANT SELECT ON pg_hba_file_rules TO releem;
+GRANT EXECUTE ON FUNCTION pg_catalog.pg_hba_file_rules() TO releem;
 ```
+
+PostgreSQL exposes HBA rules through a view backed by a function. The Agent needs access to both to read those rules.
 
 Before creating or rotating the password, inspect the effective password-encryption setting:
 
@@ -70,6 +73,21 @@ Confirm that the monitoring role can read the required statistics views without 
 The standard PostgreSQL Linux command enables query data collection with `RELEEM_QUERY_OPTIMIZATION=true`. Complete the `pg_stat_statements` setup above. If you create the monitoring role manually, verify its statistics access before installation. If the installer creates it, verify that access after installation. Collecting query data does not authorize Releem to apply query or schema changes.
 
 Applying query or schema changes can require permissions beyond baseline monitoring. Those permissions depend on the selected databases, schemas, extensions, and operational policy. Do not grant broad schema, DDL, or write privileges from a generic template. Have a DBA review the exact change and required access before enabling an application workflow.
+
+## PostgreSQL 12/13 query grants {#legacy-postgresql-query-grants}
+
+Releem's documented PostgreSQL support is 15–18. These grants from the earlier guide are retained for reference; PostgreSQL 12 and 13 are [end-of-life](https://www.postgresql.org/support/versioning/) and this is not a supported Releem installation path.
+
+For a legacy migration, have a database administrator approve read access to the named database and schema. Replace the placeholders and connect to that database before running the schema grants:
+
+```sql
+GRANT CONNECT ON DATABASE "[DATABASE_NAME]" TO releem;
+GRANT USAGE ON SCHEMA "[SCHEMA_NAME]" TO releem;
+GRANT SELECT ON ALL TABLES IN SCHEMA "[SCHEMA_NAME]" TO releem;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA "[SCHEMA_NAME]" TO releem;
+```
+
+These grants cover existing objects in the selected schema, not objects created later. See the [PostgreSQL 13 GRANT reference](https://www.postgresql.org/docs/13/sql-grant.html) for their scope.
 
 ## Restrict pg_hba.conf
 
