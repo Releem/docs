@@ -23,26 +23,10 @@ Use a Google Cloud identity with Cloud SQL and Cloud Monitoring read access. App
 
 ## Automatic installation {#automatic-installation}
 
-Install the Agent on a Compute Engine VM that can reach Cloud SQL. Run the command in a private administrative session and enter secrets at the masked prompts:
+Install the Agent on a Compute Engine VM that can reach Cloud SQL. Open a private root shell and run this command. Replace the bracketed placeholders with your values.
 
 ```bash
-sudo bash -c '
-set -euo pipefail
-installer=$(mktemp)
-trap "rm -f \"$installer\"" EXIT
-read -r -s -p "Releem API key: " RELEEM_API_KEY
-printf "\n"
-read -r -s -p "Monitoring database password: " RELEEM_MYSQL_PASSWORD
-printf "\n"
-export RELEEM_API_KEY RELEEM_MYSQL_PASSWORD RELEEM_MYSQL_LOGIN="releem"
-export RELEEM_INSTANCE_TYPE="gcp/cloudsql"
-export RELEEM_GCP_PROJECT_ID="[PROJECT_ID]" RELEEM_GCP_REGION="[REGION]"
-export RELEEM_GCP_CLOUDSQL_INSTANCE="[INSTANCE_ID]"
-export RELEEM_DB_MEMORY_LIMIT=0 RELEEM_CRON_ENABLE=0
-curl --fail --location --proto "=https" --tlsv1.2 \
-  --output "$installer" https://releem.s3.amazonaws.com/v2/install.sh
-bash "$installer"
-'
+RELEEM_INSTANCE_TYPE="gcp/cloudsql" RELEEM_GCP_PROJECT_ID="[PROJECT_ID]" RELEEM_GCP_REGION="[REGION]" RELEEM_GCP_CLOUDSQL_INSTANCE="[INSTANCE_ID]" RELEEM_MYSQL_PASSWORD='[MONITORING_PASSWORD]' RELEEM_MYSQL_LOGIN='releem' RELEEM_DB_MEMORY_LIMIT=0 RELEEM_API_KEY='[RELEEM_API_KEY]' RELEEM_CRON_ENABLE=0 bash -c "$(curl -L https://releem.s3.amazonaws.com/v2/install.sh)"
 ```
 
 ## Manual installation {#manual-installation}

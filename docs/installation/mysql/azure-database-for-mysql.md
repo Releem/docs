@@ -35,27 +35,10 @@ az role assignment create \
 
 Run the Agent on a Linux VM that can reach the Azure MySQL endpoint. Configure `DefaultAzureCredential` for that VM by using a managed identity or another Azure-supported identity source.
 
-Run this command in a private administrative session and enter secrets at the masked prompts:
+Open a private root shell and run this command. Replace the bracketed placeholders with your values.
 
 ```bash
-sudo bash -c '
-set -euo pipefail
-installer=$(mktemp)
-trap "rm -f \"$installer\"" EXIT
-read -r -s -p "Releem API key: " RELEEM_API_KEY
-printf "\n"
-read -r -s -p "Monitoring database password: " RELEEM_MYSQL_PASSWORD
-printf "\n"
-export RELEEM_API_KEY RELEEM_MYSQL_PASSWORD RELEEM_MYSQL_LOGIN="releem"
-export RELEEM_INSTANCE_TYPE="azure/mysql"
-export RELEEM_AZURE_SUBSCRIPTION_ID="[SUBSCRIPTION_ID]"
-export RELEEM_AZURE_RESOURCE_GROUP="[RESOURCE_GROUP]"
-export RELEEM_AZURE_MYSQL_SERVER="[MYSQL_SERVER]"
-export RELEEM_DB_MEMORY_LIMIT=0 RELEEM_CRON_ENABLE=0
-curl --fail --location --proto "=https" --tlsv1.2 \
-  --output "$installer" https://releem.s3.amazonaws.com/v2/install.sh
-bash "$installer"
-'
+RELEEM_INSTANCE_TYPE="azure/mysql" RELEEM_AZURE_SUBSCRIPTION_ID="[SUBSCRIPTION_ID]" RELEEM_AZURE_RESOURCE_GROUP="[RESOURCE_GROUP]" RELEEM_AZURE_MYSQL_SERVER="[MYSQL_SERVER]" RELEEM_MYSQL_PASSWORD='[MONITORING_PASSWORD]' RELEEM_MYSQL_LOGIN='releem' RELEEM_DB_MEMORY_LIMIT=0 RELEEM_API_KEY='[RELEEM_API_KEY]' RELEEM_CRON_ENABLE=0 bash -c "$(curl -L https://releem.s3.amazonaws.com/v2/install.sh)"
 ```
 
 ## Installer parameters
