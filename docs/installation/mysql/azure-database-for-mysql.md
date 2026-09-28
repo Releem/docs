@@ -31,9 +31,19 @@ az role assignment create \
   --scope "/subscriptions/[SUBSCRIPTION_ID]/resourceGroups/[RESOURCE_GROUP]/providers/Microsoft.DBforMySQL/flexibleServers/[MYSQL_SERVER]"
 ```
 
+If you intend to apply a recommended configuration through the Portal, grant the Agent identity approved change access on that server. `Contributor` permits more than configuration changes, so review that authority before using this server-scoped assignment:
+
+```text
+az role assignment create \
+  --assignee-object-id "[OBJECT_ID]" \
+  --assignee-principal-type ServicePrincipal \
+  --role Contributor \
+  --scope "/subscriptions/[SUBSCRIPTION_ID]/resourceGroups/[RESOURCE_GROUP]/providers/Microsoft.DBforMySQL/flexibleServers/[MYSQL_SERVER]"
+```
+
 ## Install the Agent
 
-Run the Agent on a Linux VM that can reach the Azure MySQL endpoint. Configure `DefaultAzureCredential` for that VM by using a managed identity or another Azure-supported identity source.
+Run the Agent on a Linux VM that can reach the Azure MySQL endpoint. A starting VM or container-host size is 2 vCPUs and 4 GB of memory; adjust it for your workload. Configure `DefaultAzureCredential` for that VM by using a managed identity or another Azure-supported identity source.
 
 Open a private root shell and run this command. Replace the bracketed placeholders with your values.
 
@@ -71,11 +81,17 @@ Use a version listed on [Docker Hub](https://hub.docker.com/r/releem/releem-agen
 
 ## Verify connectivity and current metrics
 
-Use these local checks to diagnose the Agent service:
+For a VM installation, use these local checks to diagnose the Agent service:
 
 ```bash
 /opt/releem/releem-agent -f
 systemctl status releem-agent
+```
+
+For a Docker installation, inspect the container instead:
+
+```bash
+docker logs --tail=100 releem-agent
 ```
 
 Then open the Dashboard and confirm **Agent Status: Connected** and current metrics or a current data timestamp.
@@ -86,4 +102,12 @@ After you complete a supported installation method, the Agent connects and curre
 
 ## Troubleshooting
 
-Use [Troubleshoot the Releem Agent](/get-started/troubleshoot-releem-agent) and [Agent logs](/installation/manage-the-releem-agent/logs). Resolve Azure authorization, network, TLS, or MySQL permission errors before restarting the supported deployment.
+### `AuthorizationFailed`
+
+If the Agent reports `AuthorizationFailed` for `Microsoft.DBforMySQL/flexibleServers/read`, its Azure identity cannot read the server. Confirm the identity selected by `DefaultAzureCredential` and grant it `Reader` on the intended MySQL server or resource group. Configuration application or server restart requires separately approved `Contributor` or a custom role with the required actions. Restart the Agent after the identity or role changes.
+
+### Server not found
+
+Use the Flexible Server resource name in `RELEEM_AZURE_MYSQL_SERVER`, not its full `.mysql.database.azure.com` hostname. Confirm the subscription and resource group in the Agent settings.
+
+For other failures, use [Troubleshoot the Releem Agent](/get-started/troubleshoot-releem-agent) and [Agent logs](/installation/manage-the-releem-agent/logs). Resolve network, TLS, or MySQL permission errors before restarting the deployment.

@@ -49,4 +49,4 @@ After installation, verify each stage separately:
 - **Agent Status: Connected** confirms that the Releem Agent has connected to the platform.
 - A current data timestamp or recently updated metrics confirms that current database data has arrived.
 
-If the Agent is disconnected or current data does not appear, use [Troubleshoot the Releem Agent](/get-started/troubleshoot-releem-agent). If you still need help, open chat in the [Releem Dashboard](https://app.releem.com). After verification, open the [Dashboard](/dashboard) to review observed state and [Recommendations](/recommendations) to review proposed actions.
+If the Agent is disconnected or current data does not appear, use [Troubleshoot the Releem Agent](/get-started/troubleshoot-releem-agent). If you still need help, open chat in the [Releem Dashboard](https://app.releem.com). Open the [Dashboard](/dashboard) to review observed state and [Recommendations](/recommendations) to review proposed actions.

@@ -10,7 +10,7 @@ export const redirects = [
   {from: '/releem-agent/installation-guides/self-managed-servers-manual-installation-windows', to: '/installation/mysql/windows'},
   {from: '/releem-agent/installation-guides/self-managed-servers-docker-installation', to: '/installation/mysql/docker'},
   {from: '/releem-agent/installation-guides/installation-in-kubernetes', to: '/installation/mariadb/kubernetes'},
-  {from: '/releem-agent/installation-guides/cloud-managed-aws-rds-automatic-installation', to: '/installation'},
+  {from: '/releem-agent/installation-guides/cloud-managed-aws-rds-automatic-installation', to: '/installation/mysql/aws-rds'},
   {from: '/releem-agent/installation-guides/cloud-managed-gcp-cloud-sql-automatic-installation', to: '/installation/mysql/gcp-cloud-sql'},
   {from: '/releem-agent/installation-guides/cloud-managed-azure-mysql-automatic-installation', to: '/installation/mysql/azure-database-for-mysql'},
   {from: '/releem-agent/installation-guides/clusters', to: '/installation'},

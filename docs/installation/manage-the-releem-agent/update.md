@@ -38,13 +38,17 @@ Choose how the Agent was installed. The Linux shell-installer commands in these 
   </TabItem>
   <TabItem value="docker" label="Docker">
 
-  Set `AGENT_VERSION` in the protected `.env` file to the version you want to install. Keep the previous image tag until verification is complete, then update the container with one command:
+  Docker installations do not use the Linux scheduled update. Update the image using the method you used to install the Agent.
+
+  **Docker Compose:** Change the `image` tag in `compose.yaml` to the version you want to install. Keep the previous tag, then update with one command:
 
   ```bash
   docker compose pull releem-agent && docker compose up -d releem-agent
   ```
 
-  Confirm that the replacement container is running, the Dashboard shows the intended Agent version, and current metrics continue to arrive. Review `docker compose logs --tail=100 releem-agent` if the update fails. Keep the previous image reference and configuration until you complete those checks.
+  **Docker run:** Keep the original `docker run` command, environment options, mounts, restart options, and previous image tag. Pull the new image with `docker pull releem/releem-agent:[NEW_VERSION]`. Stop the existing `releem-agent` container and rename it `releem-agent-previous`; do not remove it or its host directories. Rerun the original installation command with the new tag and the same options. If the replacement fails, remove only the new container, rename `releem-agent-previous` back to `releem-agent`, and start it. Remove the previous container only after the new one passes verification.
+
+  Confirm that the replacement container is running, the Dashboard shows the intended Agent version, and current metrics continue to arrive. For Compose, review `docker compose logs --tail=100 releem-agent` if the update fails; for Docker run, review `docker logs --tail=100 releem-agent`.
   </TabItem>
   <TabItem value="windows" label="Windows">
 

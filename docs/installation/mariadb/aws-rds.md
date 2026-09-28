@@ -21,7 +21,9 @@ Confirm that Performance Schema is active and the Agent can read `performance_sc
 
 ### Prepare the DB parameter group
 
-Use the name of the DB parameter group actually assigned to this RDS instance in the installation settings below. If you need to change Performance Schema settings or apply Releem configuration, create a custom group for the instance's engine family, set the required parameters, assign it to the instance, and reboot when RDS reports a pending reboot. A default group cannot be modified. Confirm that the group reports **In sync** before relying on its settings.
+For CloudFormation installation, create a custom DB parameter group for the instance's engine family and assign it to the RDS instance. The template requires that group's name. Set the required Performance Schema values, reboot if RDS reports a pending reboot, and confirm the group is **In sync**. A default group cannot be modified.
+
+For a monitoring-only EC2 installation, you can use the group already assigned to the instance if the required settings are active. Applying Releem configuration later requires an assigned custom group and separate state-changing IAM access.
 
 Monitoring can use read actions such as `logs:Get*`, `rds:Describe*`, and `cloudwatch:Get*`. Add `rds:ModifyDBParameterGroup` only when you want Releem to apply approved configuration changes through the selected parameter group.
 
@@ -64,30 +66,22 @@ RELEEM_INSTANCE_TYPE="aws/rds" RELEEM_AWS_REGION="[AWS_REGION]" RELEEM_AWS_RDS_D
 
 ### Run on EC2 with Docker {#ec2-docker}
 
-Create a private `.env` file on the EC2 instance. Replace every bracketed value:
-
-```text
-RELEEM_API_KEY=[RELEEM_API_KEY]
-RELEEM_HOSTNAME=[SERVER_NAME]
-DB_USER=releem
-DB_PASSWORD=[MONITORING_PASSWORD]
-INSTANCE_TYPE=aws/rds
-AWS_REGION=[AWS_REGION]
-AWS_RDS_DB=[RDS_INSTANCE_ID]
-AWS_RDS_PARAMETER_GROUP=[ASSIGNED_PARAMETER_GROUP]
-RELEEM_QUERY_OPTIMIZATION=true
-```
-
-Restrict the file, then choose Docker or Docker Compose.
-
-```bash
-chmod 600 .env
-```
+Choose Docker or Docker Compose on the EC2 instance. Replace every bracketed value.
 
 **Docker**
 
 ```bash
-docker run -d --name releem-agent --env-file .env releem/releem-agent:[VERSION_FROM_DOCKER_HUB]
+docker run -d --name releem-agent \
+  -e RELEEM_API_KEY="[RELEEM_API_KEY]" \
+  -e RELEEM_HOSTNAME="[SERVER_NAME]" \
+  -e DB_USER="releem" \
+  -e DB_PASSWORD="[MONITORING_PASSWORD]" \
+  -e INSTANCE_TYPE="aws/rds" \
+  -e AWS_REGION="[AWS_REGION]" \
+  -e AWS_RDS_DB="[RDS_INSTANCE_ID]" \
+  -e AWS_RDS_PARAMETER_GROUP="[ASSIGNED_PARAMETER_GROUP]" \
+  -e RELEEM_QUERY_OPTIMIZATION="true" \
+  releem/releem-agent:[VERSION_FROM_DOCKER_HUB]
 ```
 
 **Docker Compose**
@@ -95,9 +89,18 @@ docker run -d --name releem-agent --env-file .env releem/releem-agent:[VERSION_F
 ```yaml
 services:
   releem-agent:
-    image: releem/releem-agent:[VERSION_FROM_DOCKER_HUB]
+    image: "releem/releem-agent:[VERSION_FROM_DOCKER_HUB]"
     container_name: releem-agent
-    env_file: .env
+    environment:
+      RELEEM_API_KEY: "[RELEEM_API_KEY]"
+      RELEEM_HOSTNAME: "[SERVER_NAME]"
+      DB_USER: "releem"
+      DB_PASSWORD: "[MONITORING_PASSWORD]"
+      INSTANCE_TYPE: "aws/rds"
+      AWS_REGION: "[AWS_REGION]"
+      AWS_RDS_DB: "[RDS_INSTANCE_ID]"
+      AWS_RDS_PARAMETER_GROUP: "[ASSIGNED_PARAMETER_GROUP]"
+      RELEEM_QUERY_OPTIMIZATION: "true"
     restart: unless-stopped
 ```
 
@@ -105,7 +108,7 @@ services:
 docker compose up -d
 ```
 
-Use a version listed on [Docker Hub](https://hub.docker.com/r/releem/releem-agent/tags). Keep `.env` out of version control. The container uses the EC2 instance profile for AWS access, so attach the required IAM role to the EC2 instance.
+Use a version listed on [Docker Hub](https://hub.docker.com/r/releem/releem-agent/tags). Keep a Compose file containing credentials out of version control. The container uses the EC2 instance profile for AWS access, so attach the required IAM role to the EC2 instance.
 
 ## Expected result
 
@@ -113,7 +116,7 @@ After installation, the Dashboard should show **Agent Status: Connected**, curre
 
 ## Verify the installation
 
-Confirm the Agent connection, current metrics, and a populated **Latency** graph in the Dashboard. If any is missing, check the [Agent logs](/installation/manage-the-releem-agent/logs) and the troubleshooting steps below.
+Confirm the Agent connection, current metrics, and a populated **Latency** graph in the Dashboard. If you intend to apply a recommended configuration, also confirm that the assigned DB parameter group is custom and **In sync** and that the Agent has the approved parameter-group permissions. If any check fails, review the [Agent logs](/installation/manage-the-releem-agent/logs) and the troubleshooting steps below.
 
 ## Troubleshooting
 

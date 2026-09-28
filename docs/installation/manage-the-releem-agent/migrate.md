@@ -18,7 +18,7 @@ Before starting the migration process, ensure you have:
 
 ## Migration Steps
 
-1. Review the [uninstall guide](/installation/manage-the-releem-agent/uninstall) and contact Releem Support for the current source-server removal procedure.
+1. Review the [uninstall guide](/installation/manage-the-releem-agent/uninstall) for the source server. Keep the source Agent available until you have checked the destination.
 
 2. [Choose an installation guide](/installation) for the destination server and install the Releem Agent.
 
@@ -26,17 +26,15 @@ You have two options for installation:
 
 **Option A: Preserve Historical Metrics**
 
-To preserve the Dashboard identity used by historical metrics, record the exact hostname shown for the old server. In the destination server's canonical one-step Linux command, add this environment-variable line immediately before the `curl` line:
-
-```bash
-export RELEEM_HOSTNAME="[OLD_SERVER_HOSTNAME]"
-```
+To preserve the Dashboard identity used by historical metrics, record the exact hostname shown for the old server. Prefix the destination server's one-line Linux installation command with `RELEEM_HOSTNAME="[OLD_SERVER_HOSTNAME]"`, before the other `RELEEM_` settings. Keep it in the same command; do not run the assignment separately.
 
 Replace `[OLD_SERVER_HOSTNAME]` with the exact recorded Dashboard hostname. After installation, confirm that the expected server identity is shown and that current metrics arrive. If a duplicate server appears or history is not associated as expected, stop and contact Releem Support before removing either record.
 
 **Option B: Fresh Start**
 
 If you want to start with a clean slate and new metrics just install Releem agent to the new server using "+Add new server" link in the Dashboard.
+
+When the destination shows the intended server identity and current metrics, remove the source Agent with the [uninstall guide](/installation/manage-the-releem-agent/uninstall). If the identity or historical data is wrong, resolve that before removing the source.
 
 ## Important Notes
 

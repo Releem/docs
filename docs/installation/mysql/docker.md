@@ -14,35 +14,22 @@ Create the monitoring account from [MySQL permissions](/supported-databases/mysq
 
 ## Manual installation {#manual-installation}
 
-1. Create a private working directory and an `.env` file. Replace every bracketed value and keep the file out of version control.
-
-```text
-AGENT_VERSION=[VERSION_FROM_DOCKER_HUB]
-RELEEM_API_KEY=[RELEEM_API_KEY]
-RELEEM_HOSTNAME=[SERVER_NAME]
-DB_HOST=[MYSQL_HOST]
-DB_PORT=3306
-DB_USER=releem
-DB_PASSWORD=[MONITORING_PASSWORD]
-MEMORY_LIMIT=[MYSQL_MEMORY_LIMIT_MB]
-RELEEM_QUERY_OPTIMIZATION=true
-```
-
-2. Restrict the file before starting the container:
-
-```bash
-chmod 600 .env
-```
-
-3. Choose Docker or Docker Compose to start the Agent.
+Choose Docker or Docker Compose. Replace every bracketed value before starting the Agent.
 
 ### Docker
 
-Run the container with the protected environment file and persistent configuration directories:
+Run the container with persistent configuration directories:
 
 ```bash
 docker run -d --name releem-agent \
-  --env-file .env \
+  -e RELEEM_API_KEY="[RELEEM_API_KEY]" \
+  -e RELEEM_HOSTNAME="[SERVER_NAME]" \
+  -e DB_HOST="[MYSQL_HOST]" \
+  -e DB_PORT="3306" \
+  -e DB_USER="releem" \
+  -e DB_PASSWORD="[MONITORING_PASSWORD]" \
+  -e MEMORY_LIMIT="[MYSQL_MEMORY_LIMIT_MB]" \
+  -e RELEEM_QUERY_OPTIMIZATION="true" \
   --restart unless-stopped \
   -v /tmp/.mysqlconfigurer/:/tmp/.mysqlconfigurer/ \
   -v /etc/mysql/releem.conf.d/:/etc/mysql/releem.conf.d/ \
@@ -62,9 +49,17 @@ Create `compose.yaml`:
 ```yaml
 services:
   releem-agent:
-    image: releem/releem-agent:${AGENT_VERSION}
+    image: "releem/releem-agent:[VERSION_FROM_DOCKER_HUB]"
     container_name: releem-agent
-    env_file: .env
+    environment:
+      RELEEM_API_KEY: "[RELEEM_API_KEY]"
+      RELEEM_HOSTNAME: "[SERVER_NAME]"
+      DB_HOST: "[MYSQL_HOST]"
+      DB_PORT: "3306"
+      DB_USER: "releem"
+      DB_PASSWORD: "[MONITORING_PASSWORD]"
+      MEMORY_LIMIT: "[MYSQL_MEMORY_LIMIT_MB]"
+      RELEEM_QUERY_OPTIMIZATION: "true"
     restart: unless-stopped
     volumes:
       - /tmp/.mysqlconfigurer/:/tmp/.mysqlconfigurer/
@@ -78,7 +73,7 @@ docker compose up -d
 docker compose logs --tail=100 releem-agent
 ```
 
-Use a version shown on [Releem Agent tags on Docker Hub](https://hub.docker.com/r/releem/releem-agent/tags).
+Use a version shown on [Releem Agent tags on Docker Hub](https://hub.docker.com/r/releem/releem-agent/tags). Keep a Compose file containing credentials out of version control.
 
 ## Connect the generated configuration to MySQL
 
