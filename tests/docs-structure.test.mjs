@@ -526,7 +526,7 @@ function documentAnchorIds(contents) {
       .replace(/!\[([^\]]*)\]\([^)]*\)/g, '$1')
       .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
       .replace(/<[^>]+>/g, '')
-      .replace(/[`*_~]/g, '')
+      .replace(/[`*~]|(?<![\p{L}\p{N}])_+(?=[\p{L}\p{N}])|(?<=[\p{L}\p{N}])_+(?![\p{L}\p{N}])/gu, '')
       .replace(/&amp;/g, '&');
     anchors.add(slugger.slug(headingText));
   }
@@ -1834,6 +1834,25 @@ test('same-document hash links resolve against local anchors and reject missing 
       ),
     /fragment.*missing-local-section.*not present/i,
   );
+});
+
+test('heading anchors preserve intraword underscores and omit emphasis markers', () => {
+  const document = {
+    sourcePath: 'docs/guide/reference.md',
+    route: '/guide/reference',
+    contents: '# Reference\n\n## Query metrics with pg_stat_statements\n\n## _Emphasized_ heading\n',
+  };
+  const inventory = documentLinkInventory([document]);
+
+  for (const fragment of [
+    'query-metrics-with-pg_stat_statements',
+    'emphasized-heading',
+  ]) {
+    assert.equal(
+      resolveInternalDocumentLink(`#${fragment}`, document, inventory)?.fragment,
+      fragment,
+    );
+  }
 });
 
 test('public route links reject normalization aliases but allow canonical percent encoding', () => {

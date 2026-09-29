@@ -70,7 +70,13 @@ Confirm that the monitoring role can read the required statistics views without 
 
 ## Query and schema capabilities
 
-The standard PostgreSQL Linux command enables query data collection with `RELEEM_QUERY_OPTIMIZATION=true`. Complete the `pg_stat_statements` setup above. If you create the monitoring role manually, verify its statistics access before installation. If the installer creates it, verify that access after installation. Collecting query data does not authorize Releem to apply query or schema changes.
+The standard PostgreSQL Linux command enables query data collection with `RELEEM_QUERY_OPTIMIZATION=true`. Complete the `pg_stat_statements` setup above. When you create the monitoring role manually, run the following command as a PostgreSQL superuser before installing the Agent:
+
+```sql
+GRANT pg_read_all_data TO releem;
+```
+
+This role grants read access to data across all schemas. Have a DBA approve that scope for the monitored server. The installer grants query read access when it creates the monitoring role automatically, but it does not grant this access when you supply an existing monitoring login and password. If the grant cannot be approved, remove `RELEEM_QUERY_OPTIMIZATION=true` from the manual installation command until the required access is configured. Collecting query data does not authorize Releem to apply query or schema changes.
 
 Applying query or schema changes can require permissions beyond baseline monitoring. Those permissions depend on the selected databases, schemas, extensions, and operational policy. Do not grant broad schema, DDL, or write privileges from a generic template. Have a DBA review the exact change and required access before enabling an application workflow.
 
