@@ -29,22 +29,22 @@ If you intentionally use EC2 for monitoring only, the assigned group can remain 
 
 Attach IAM role releem-agent-role and apply it to the EC2 instance:
   ```
-  { 
-  "Version": "2012-10-17", 
-  "Statement": [ 
-      { 
-        "Action": [ 
-        "rds:Describe*", 
-        "cloudwatch:Get*", 
-        "logs:Get*", 
+  {
+  "Version": "2012-10-17",
+  "Statement": [
+      {
+        "Action": [
+        "rds:Describe*",
+        "cloudwatch:Get*",
+        "logs:Get*",
         "ec2:Describe*",
         "rds:ModifyDBParameterGroup",
         "rds:ModifyDBClusterParameterGroup"
-        ], 
-        "Resource": "*", 
-        "Effect": "Allow" 
-      } 
-  ] 
+        ],
+        "Resource": "*",
+        "Effect": "Allow"
+      }
+  ]
   }
   ```
 
