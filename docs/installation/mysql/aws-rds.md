@@ -27,7 +27,28 @@ If you intentionally use EC2 for monitoring only, the assigned group can remain 
 
 ### Give the EC2 Agent access to the parameter group
 
-Attach an IAM role to the EC2 instance with `logs:Get*`, `rds:Describe*`, and `cloudwatch:Get*` for monitoring. To make Releem's **Apply** action available, also grant [`rds:ModifyDBParameterGroup`](https://docs.aws.amazon.com/service-authorization/latest/reference/list_rds.html) on the ARN of the assigned custom DB parameter group (`arn:aws:rds:[REGION]:[ACCOUNT_ID]:pg:[ASSIGNED_PARAMETER_GROUP]`). Granting this permission does not apply a recommendation; you still choose and approve the change in Releem. Omit the write action only when you intend to use a monitoring-only Agent and apply changes manually.
+Attach IAM role releem-agent-role and apply it to the EC2 instance:
+  ```
+  { 
+  "Version": "2012-10-17", 
+  "Statement": [ 
+      { 
+        "Action": [ 
+        "rds:Describe*", 
+        "cloudwatch:Get*", 
+        "logs:Get*", 
+        "ec2:Describe*",
+        "rds:ModifyDBParameterGroup",
+        "rds:ModifyDBClusterParameterGroup"
+        ], 
+        "Resource": "*", 
+        "Effect": "Allow" 
+      } 
+  ] 
+  }
+  ```
+
+Attach IAM action `logs:Get*`, `rds:Describe*`, `ec2:Describe*` and `cloudwatch:Get*` for monitoring. To make Releem's **Apply** action available, also grant [`rds:ModifyDBParameterGroup`](https://docs.aws.amazon.com/service-authorization/latest/reference/list_rds.html). Granting this permission does not apply a recommendation; you still choose and approve the change in Releem. Omit the write action only when you intend to use a monitoring-only Agent and apply changes manually.
 
 ## Automatic installation {#automatic-installation}
 
@@ -42,7 +63,18 @@ Use the Releem CloudFormation template to run the Agent in AWS Fargate:
 
 The Agent security group needs outbound HTTPS and access to the RDS endpoint on its database port. The RDS security group must accept that database connection from the Agent security group.
 
-The linked CloudFormation template's Agent task role includes `rds:ModifyDBParameterGroup` and `rds:ModifyDBClusterParameterGroup` with `Resource: *`. Review those change permissions before creating the stack. If the Agent must have monitoring-only AWS access, use the EC2 method with a read-only IAM role instead.
+The CloudFormation template will create roles to run Releem Agent with the following permissions:
+- logs:Get*
+- rds:Describe*
+- cloudwatch:Get*
+- ecr:GetAuthorizationToken
+- ecr:BatchCheckLayerAvailability
+- ecr:GetDownloadUrlForLayer
+- ecr:BatchGetImage
+- rds:ModifyDBParameterGroup
+- rds:ModifyDBClusterParameterGroup
+
+Review those change permissions before creating the stack. If the Agent must have monitoring-only AWS access, use the EC2 method with a read-only IAM role instead.
 
 ## Manual installation {#manual-installation}
 
