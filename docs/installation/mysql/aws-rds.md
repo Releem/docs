@@ -153,6 +153,8 @@ After installation, the Dashboard should show **Agent Status: Connected**, curre
 
 Confirm the Agent connection, current metrics, and a populated **Latency** graph in the Dashboard. If you intend to apply a recommended configuration, also confirm that the assigned DB parameter group is custom and **In sync** and that the Agent has the approved parameter-group permissions. If any check fails, review the [Agent logs](/installation/manage-the-releem-agent/logs) and the troubleshooting steps below.
 
+<span id="common-issues-for-aws-rds"></span>
+
 ## Troubleshooting
 
 For a CloudFormation deployment, open **CloudWatch → Log groups** and select the Releem Agent log group. For an EC2 deployment, review the [Agent logs](/installation/manage-the-releem-agent/logs).

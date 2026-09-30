@@ -66,7 +66,7 @@ export const redirects = [
   {from: '/installation/installation-methods/windows', to: '/installation/mysql/windows'},
   {from: '/installation/installation-methods/docker', to: '/installation/mysql/docker'},
   {from: '/installation/installation-methods/kubernetes', to: '/installation/mariadb/kubernetes'},
-  {from: '/installation/installation-methods/aws-rds', to: '/installation'},
+  {from: '/installation/installation-methods/aws-rds', to: '/installation/mysql/aws-rds'},
   {from: '/installation/installation-methods/gcp-cloud-sql', to: '/installation/mysql/gcp-cloud-sql'},
   {from: '/installation/installation-methods/azure-database-for-mysql', to: '/installation/mysql/azure-database-for-mysql'},
   {from: '/installation/installation-methods/clusters', to: '/installation'},
