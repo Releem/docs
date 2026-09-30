@@ -53,6 +53,20 @@ Open **WHM > Plugins > Releem Database Advisor** and check the Agent service sta
 ### AWS RDS
 [Troubleshoot MySQL on AWS RDS and Aurora MySQL](/installation/mysql/aws-rds#troubleshooting), [MariaDB on AWS RDS](/installation/mariadb/aws-rds#troubleshooting), or [PostgreSQL on AWS RDS and Aurora PostgreSQL](/installation/postgresql/aws-rds#troubleshooting).
 
+### AWS credentials for Docker on EC2 {#docker-on-ec2-aws-credentials}
+
+When the Agent runs in Docker on EC2, it gets AWS credentials from the EC2 instance profile through the instance metadata service (IMDS). If the instance requires IMDSv2 and its metadata response hop limit is `1`, the token response does not reach a container on Docker's default bridge network. The Agent then cannot call CloudWatch or RDS, even though the IAM role is attached. Use one of these options:
+
+- **Raise the hop limit to `2`.** This keeps the container on the bridge network. Replace the instance ID and run the command with AWS credentials that can modify the instance's metadata options, or change **Instance metadata options** in the EC2 console:
+
+  ```bash
+  aws ec2 modify-instance-metadata-options --instance-id [EC2_INSTANCE_ID] --http-endpoint enabled --http-put-response-hop-limit 2
+  ```
+
+- **Use host networking.** Start the container with `--network host`, or set `network_mode: host` for the Compose service. The container then reaches IMDS without the extra network hop. It also shares the host's network interfaces, so use this only when that is acceptable on the EC2 instance.
+
+Do not put static AWS access keys in the Docker command or Compose file. See [AWS's instructions for configuring instance metadata options](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-IMDS-existing-instances.html). After the change, restart the Agent container and confirm that the Dashboard shows current system metrics from CloudWatch.
+
 
 ## Releem Agent Installation Errors
 ### Failed to determine service to restart. The automatic applying configuration will not work.

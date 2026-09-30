@@ -16,7 +16,7 @@ const destinations = new Map([
   ['prerequisites-1', `${linux}#prerequisites`],
   ['installation-in-a-docker-container-on-self-managed-postgresql-servers', docker],
   ['cloud-managed-aws-rds-and-aurora-postgresql-installation', aws],
-  ['parameter-groups', `${aws}#parameter-groups`],
+  ['parameter-groups', `${aws}#prepare-the-db-parameter-group`],
   ['common-issues-for-aws-rds-and-aurora-postgresql', `${aws}#troubleshooting`],
   ['notes', `${linux}#installer-parameters`],
 ]);

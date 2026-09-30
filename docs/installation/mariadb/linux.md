@@ -22,7 +22,7 @@ Use these task links for the complete flow: [requirements](#prerequisites), [per
 
 ## Automatic installation {#automatic-installation}
 
-Use this path when the installer may create the monitoring user. The installer asks for the MariaDB administrative password if it needs one.
+Use this path when the installer may create the `releem` monitoring user. The installer asks for the MariaDB administrative password if it needs one.
 
 ```bash
 RELEEM_MYSQL_TYPE=1 RELEEM_DB_MEMORY_LIMIT=0 RELEEM_API_KEY='[RELEEM_API_KEY]' RELEEM_CRON_ENABLE=1 RELEEM_QUERY_OPTIMIZATION=true bash -c "$(curl -L https://releem.s3.amazonaws.com/v2/install.sh)"

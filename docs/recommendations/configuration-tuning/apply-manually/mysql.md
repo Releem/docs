@@ -159,14 +159,14 @@ If the container does not return to its expected state, restore the backup or sn
 
 Record the parameter group assigned to your RDS instance and its current parameter values. Confirm whether that group is shared by other instances. If it is shared, stop until the change is approved for every affected instance, or use a dedicated parameter group for the target instance. Plan the application timing and recovery path. Recording it does not guarantee that every change can be reversed.
 
-For Aurora MySQL, record both the attached custom DB instance parameter group and custom DB cluster parameter group. Check all instances and clusters that share either group and approve that full scope. A recommended setting can belong to either group. Both groups must be attached before applying recommendations, and default groups cannot be modified. If you use Releem's Agent application instead of this manual procedure, only the writer Agent modifies cluster parameters and it needs `rds:ModifyDBClusterParameterGroup` access. See [Aurora installation](/installation/mysql/aws-rds#prepare-the-db-parameter-group).
+For Aurora MySQL, record both the attached custom DB instance parameter group and custom DB cluster parameter group. Check all instances and clusters that share either group and approve that full scope. A recommended setting can belong to either group. Both groups must be attached before applying recommendations, and default groups cannot be modified. If you use Releem's Agent application instead of this manual procedure, only the writer Agent modifies cluster parameters and it needs `rds:ModifyDBClusterParameterGroup` access. See [Aurora installation](/installation/mysql/aws-rds#aurora-mysql-parameter-groups).
 
 ## Step 1: Modify the Parameter Group in AWS RDS {#aws-rds-modify-parameter-group}
 
 1. Log in to the AWS Management Console.
 2. Navigate to the RDS Dashboard.
 3. Select **Parameter Groups** from the left-hand menu under Databases.
-4. Select your parameter group and choose **Edit Parameters**.
+4. Select your parameter group (the custom instance or cluster group targeted by the recommendation) and choose **Edit Parameters**.
 5. Update the parameters based on the recommended configuration from the Releem Dashboard.
 6. Save the changes.
 
@@ -180,11 +180,18 @@ For Aurora MySQL, edit each recommended setting in the applicable instance or cl
 4. Choose whether to apply the changes immediately or during the next maintenance window.
 5. Save the changes.
 
-For Aurora, confirm both the instance group and cluster group are attached to the intended resources. Coordinate timing for all affected cluster members when changing shared cluster settings.
+These steps attach the instance group. For Aurora MySQL, the DB cluster parameter group is attached to the cluster, not to an instance:
+
+1. In the RDS Dashboard, open **Databases** and select the DB cluster (the regional cluster row above its instances).
+2. Choose **Modify**.
+3. Under **Additional configuration**, select the updated custom group as the **DB cluster parameter group**.
+4. Choose whether to apply the change immediately or during the next maintenance window, and save it.
+
+Confirm both the instance group and cluster group are attached to the intended resources. Coordinate timing for all affected cluster members when changing shared cluster settings.
 
 ## Step 3: Reboot the RDS Instance {#aws-rds-reboot-instance}
 
-Coordinate the reboot with the application timing you chose in Step 2. At the planned time, select the instance and choose **Actions → Reboot**.
+Check for **pending-reboot** on the affected instance or cluster parameters; dynamic changes to an attached group may take effect without a reboot. When a reboot is required, coordinate the reboot with the application timing you chose in Step 2. At the planned time, select each affected instance and choose **Actions → Reboot**. For an Aurora cluster parameter, that includes the writer and every reader in the cluster.
 
 ## Step 4: Verify the Applied Configuration {#aws-rds-verify-applied-configuration}
 

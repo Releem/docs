@@ -31,7 +31,6 @@ docker run -d --name releem-agent \
   -e MEMORY_LIMIT="[MARIADB_MEMORY_LIMIT_MB]" \
   -e RELEEM_QUERY_OPTIMIZATION="true" \
   --restart unless-stopped \
-  -v /tmp/.mysqlconfigurer/:/tmp/.mysqlconfigurer/ \
   -v /etc/mysql/releem.conf.d/:/etc/mysql/releem.conf.d/ \
   releem/releem-agent:[VERSION_FROM_DOCKER_HUB]
 ```
@@ -62,7 +61,6 @@ services:
       RELEEM_QUERY_OPTIMIZATION: "true"
     restart: unless-stopped
     volumes:
-      - /tmp/.mysqlconfigurer/:/tmp/.mysqlconfigurer/
       - /etc/mysql/releem.conf.d/:/etc/mysql/releem.conf.d/
 ```
 
@@ -111,8 +109,9 @@ Restart the MariaDB container after changing its configuration. Confirm that the
 
 - `DB_HOST`, `DB_PORT`, `DB_USER`, and `DB_PASSWORD` configure the MariaDB connection.
 - `RELEEM_API_KEY` connects the Agent to your Releem account.
-- `MEMORY_LIMIT` limits the memory considered for recommendations; `0` uses the host total.
-- `RELEEM_QUERY_OPTIMIZATION=true` enables query collection. Remove the line for baseline monitoring only. Review the [query permissions](/supported-databases/mariadb/required-permissions#monitoring-and-query-visibility) before enabling it.
+- `RELEEM_HOSTNAME` sets the server name displayed in the Dashboard.
+- `MEMORY_LIMIT` limits the memory considered for MariaDB recommendations; `0` uses the host total.
+- `RELEEM_QUERY_OPTIMIZATION=true` enables query collection. Remove the line for baseline monitoring only; review the [query permissions](/supported-databases/mariadb/required-permissions#monitoring-and-query-visibility) before enabling it.
 
 ## Expected result
 

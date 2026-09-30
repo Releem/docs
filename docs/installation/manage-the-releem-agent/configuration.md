@@ -148,7 +148,7 @@ releem_region=""
 - For Aurora, set `aws_rds_cluster_parameter_group` to the custom DB cluster parameter group attached in AWS. Leave it empty for non-Aurora RDS. The configured instance and cluster group names must match the groups attached in AWS.
 - Only the Agent targeting the Aurora writer modifies cluster parameters. Review the [MySQL](/installation/mysql/aws-rds) or [PostgreSQL](/installation/postgresql/aws-rds) AWS installation guide for the required IAM access.
 - `pg_ssl_mode=true` uses `sslmode=require`; it does not provide `verify-full` certificate and hostname verification.
-- Confirm that `pg_restart_service` controls the intended self-managed PostgreSQL instance and that `pg_cnf_dir` is an existing directory included by its active configuration. For Docker, shared configuration mounts do not grant control of the database container's restart; use the [Docker procedure](/installation/postgresql/docker#share-recommended-configuration-with-postgresql).
+- Confirm that `pg_restart_service` controls the intended self-managed PostgreSQL instance and that `pg_cnf_dir` is an existing directory included by its active configuration. For Docker, shared configuration mounts do not grant control of the database container's restart; use the [Docker procedure](/installation/postgresql/docker#connect-the-generated-configuration-to-postgresql).
 - Set `query_optimization=true` to enable SQL query optimization features where supported.
 - Use `databases_query_optimization` to specify which databases to monitor for query optimization (leave empty for all databases).
 - The `releem_region` field can be set to `EU` for European data storage or left empty for default storage.

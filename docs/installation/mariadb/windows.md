@@ -8,6 +8,10 @@ title: Install Releem for MariaDB on Windows
 
 Install the Releem Agent on a Windows server that runs MariaDB.
 
+## Prerequisites
+
+Run PowerShell as Administrator. Make sure the MariaDB command-line client (`mysql.exe` or `mariadb.exe`) is available in `PATH`, and review [MariaDB permissions](/supported-databases/mariadb/required-permissions). Both methods enable query collection. For manual installation, grant query visibility before starting the Agent; for automatic installation, verify the created account's grants afterward.
+
 ## Automatic installation {#automatic-installation}
 
 Run the installer in PowerShell. Replace the bracketed placeholders with your Releem API key and MariaDB administrator password. The installer detects MariaDB but retains the shared `RELEEM_MYSQL_*` variable names.
@@ -15,6 +19,8 @@ Run the installer in PowerShell. Replace the bracketed placeholders with your Re
 ```powershell
 $env:RELEEM_DB_MEMORY_LIMIT=0; $env:RELEEM_API_KEY="[RELEEM_API_KEY]"; $env:RELEEM_MYSQL_ROOT_PASSWORD="[MARIADB_ROOT_PASSWORD]"; $env:RELEEM_CRON_ENABLE=1; $env:RELEEM_QUERY_OPTIMIZATION="true"; iwr -useb https://releem.s3.amazonaws.com/v2/install.ps1 | iex
 ```
+
+Use the manual method when you already have a `releem` database account.
 
 ## Installer parameters
 

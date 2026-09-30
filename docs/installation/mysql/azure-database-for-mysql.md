@@ -74,6 +74,7 @@ docker run -d --name releem-agent \
   -e RELEEM_AZURE_RESOURCE_GROUP="[RESOURCE_GROUP]" \
   -e RELEEM_AZURE_MYSQL_SERVER="[MYSQL_SERVER]" \
   -e RELEEM_QUERY_OPTIMIZATION=true \
+  --restart unless-stopped \
   releem/releem-agent:[VERSION_FROM_DOCKER_HUB]
 ```
 

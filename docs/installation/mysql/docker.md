@@ -31,7 +31,6 @@ docker run -d --name releem-agent \
   -e MEMORY_LIMIT="[MYSQL_MEMORY_LIMIT_MB]" \
   -e RELEEM_QUERY_OPTIMIZATION="true" \
   --restart unless-stopped \
-  -v /tmp/.mysqlconfigurer/:/tmp/.mysqlconfigurer/ \
   -v /etc/mysql/releem.conf.d/:/etc/mysql/releem.conf.d/ \
   releem/releem-agent:[VERSION_FROM_DOCKER_HUB]
 ```
@@ -62,7 +61,6 @@ services:
       RELEEM_QUERY_OPTIMIZATION: "true"
     restart: unless-stopped
     volumes:
-      - /tmp/.mysqlconfigurer/:/tmp/.mysqlconfigurer/
       - /etc/mysql/releem.conf.d/:/etc/mysql/releem.conf.d/
 ```
 
@@ -111,6 +109,7 @@ Restart the MySQL container after changing its configuration. Confirm that the s
 
 - `DB_HOST`, `DB_PORT`, `DB_USER`, and `DB_PASSWORD` configure the MySQL connection.
 - `RELEEM_API_KEY` connects the Agent to your Releem account.
+- `RELEEM_HOSTNAME` sets the server name displayed in the Dashboard.
 - `MEMORY_LIMIT` limits the memory considered for MySQL recommendations; `0` uses the host total.
 - `RELEEM_QUERY_OPTIMIZATION=true` enables query collection. Remove the line for baseline monitoring only; review the [query permissions](/supported-databases/mysql/required-permissions#monitoring-and-query-visibility) before enabling it.
 

@@ -1,42 +1,50 @@
 ---
 id: docker
 slug: /installation/postgresql/docker
-title: Install Releem for PostgreSQL in Docker
+title: Install Releem for PostgreSQL on Docker
 ---
 
-# Install Releem for PostgreSQL in Docker
+# Install Releem for PostgreSQL on Docker
 
-Run the Releem Agent in Docker against a self-managed PostgreSQL 15–18 server. The Agent collects database and query metrics and recommends configuration.
+Run the Releem Agent in a Docker container for PostgreSQL.
 
-## Before you begin
+## Prerequisites
 
-Create the monitoring account and configure `pg_stat_statements` using [PostgreSQL Required Permissions](/supported-databases/postgresql/required-permissions). Keep the extension available in `postgres`, which the Agent uses for its statistics connection. For a remote connection, enable TLS on PostgreSQL and use the documented `hostssl` rule for the exact Agent source. Complete the preload and restart steps before expecting query data.
+Create the monitoring account and configure `pg_stat_statements` from [PostgreSQL permissions](/supported-databases/postgresql/required-permissions), including query read access if you use the example below. Keep the extension available in `postgres`, which the Agent uses for its statistics connection. Install Docker, and make sure the Agent container can reach PostgreSQL. With Docker's default bridge network, `127.0.0.1` inside the Agent container does not identify a separate PostgreSQL container or the Docker host. For a remote connection, enable TLS on PostgreSQL and use the documented `hostssl` rule for the exact Agent source. Install Docker Compose only if you want to use the Compose method below. Choose a memory limit in MB for PostgreSQL; use `0` only when PostgreSQL can use the host's full memory budget.
 
-Choose an Agent image version from [Docker Hub](https://hub.docker.com/r/releem/releem-agent/tags). Replace the bracketed placeholders in the examples. Create `/etc/postgresql/releem.conf.d/` on the Docker host for recommended configuration and `/tmp/.mysqlconfigurer/` for Agent state. Keep files containing credentials accessible only to authorized administrators and out of version control.
+## Manual installation {#manual-installation}
 
-## Run the Agent
+Choose Docker or Docker Compose. Replace every bracketed value before starting the Agent.
 
-Choose Docker or Docker Compose. Both examples mount the same host directories into the Agent.
+### Docker
 
-**Docker**
+Run the container with persistent configuration directories:
 
 ```bash
 docker run -d --name releem-agent \
+  -e RELEEM_API_KEY="[RELEEM_API_KEY]" \
   -e RELEEM_HOSTNAME="[SERVER_NAME]" \
   -e PG_HOST="[POSTGRESQL_HOST]" \
   -e PG_PORT="5432" \
   -e PG_SSL="true" \
-  -e PG_PASSWORD="[MONITORING_PASSWORD]" \
   -e PG_USER="releem" \
-  -e RELEEM_API_KEY="[RELEEM_API_KEY]" \
-  -e MEMORY_LIMIT="[MEMORY_LIMIT_MB]" \
+  -e PG_PASSWORD="[MONITORING_PASSWORD]" \
+  -e MEMORY_LIMIT="[MEMORY_LIMIT]" \
   -e RELEEM_QUERY_OPTIMIZATION="true" \
-  -v /tmp/.mysqlconfigurer/:/tmp/.mysqlconfigurer/ \
+  --restart unless-stopped \
   -v /etc/postgresql/releem.conf.d/:/etc/postgresql/releem.conf.d/ \
   releem/releem-agent:[VERSION_FROM_DOCKER_HUB]
 ```
 
-**Docker Compose**
+Check the startup log:
+
+```bash
+docker logs --tail=100 releem-agent
+```
+
+### Docker Compose
+
+Create `compose.yaml`:
 
 ```yaml
 services:
@@ -44,61 +52,75 @@ services:
     image: "releem/releem-agent:[VERSION_FROM_DOCKER_HUB]"
     container_name: releem-agent
     environment:
-      RELEEM_HOSTNAME: "[SERVER_NAME]"
-      MEMORY_LIMIT: "[MEMORY_LIMIT_MB]"
-      PG_USER: "releem"
       RELEEM_API_KEY: "[RELEEM_API_KEY]"
-      PG_PASSWORD: "[MONITORING_PASSWORD]"
+      RELEEM_HOSTNAME: "[SERVER_NAME]"
+      PG_HOST: "[POSTGRESQL_HOST]"
       PG_PORT: "5432"
       PG_SSL: "true"
-      PG_HOST: "[POSTGRESQL_HOST]"
+      PG_USER: "releem"
+      PG_PASSWORD: "[MONITORING_PASSWORD]"
+      MEMORY_LIMIT: "[MEMORY_LIMIT]"
       RELEEM_QUERY_OPTIMIZATION: "true"
     restart: unless-stopped
     volumes:
-      - /tmp/.mysqlconfigurer/:/tmp/.mysqlconfigurer/
       - /etc/postgresql/releem.conf.d/:/etc/postgresql/releem.conf.d/
 ```
 
+Start the Agent:
+
 ```bash
 docker compose up -d
+docker compose logs --tail=100 releem-agent
 ```
 
-### Connection parameters
+Use a version shown on [Releem Agent tags on Docker Hub](https://hub.docker.com/r/releem/releem-agent/tags). Keep a Compose file containing credentials out of version control.
 
-- `RELEEM_HOSTNAME` is the server name displayed in the Dashboard.
-- `RELEEM_API_KEY` is available on the Releem Portal Profile page.
-- `PG_USER` / `RELEEM_PG_LOGIN` and `PG_PASSWORD` / `RELEEM_PG_PASSWORD` select the monitoring account.
-- `PG_HOST` / `RELEEM_PG_HOST` select the PostgreSQL host.
-- `PG_PORT` / `RELEEM_PG_PORT` select the PostgreSQL port, default `5432`.
-- `PG_SSL` / `RELEEM_PG_SSL_MODE` are boolean: the standard remote examples use `true` for `sslmode=require`. They do not provide `verify-full` certificate and hostname verification. Set `false` only for an explicitly approved local connection without TLS; omission also disables SSL.
-- `MEMORY_LIMIT` is the RAM allocated to PostgreSQL in MB. Use the database's memory allocation or container limit.
-- `RELEEM_QUERY_OPTIMIZATION=true` enables additional query data collection.
+## Connect the generated configuration to PostgreSQL {#connect-the-generated-configuration-to-postgresql}
 
-PostgreSQL collection starts when `pg_user` and `pg_password` are configured. Do not set MySQL `DB_USER` and `DB_PASSWORD` in the same container when selecting the PostgreSQL collector. See [Agent configuration](/installation/manage-the-releem-agent/configuration) for installed settings.
+Complete this section if you want the PostgreSQL container to load configuration files generated by the Releem Agent. The Agent and PostgreSQL containers must use the same host directory.
 
-## Share recommended configuration with PostgreSQL
-
-For Agent application of configuration, the PostgreSQL container must read the same host configuration directory that the Agent writes. Mount `/etc/postgresql/releem.conf.d/` from this Docker host into the database container at `/etc/postgresql/releem.conf.d/`. For an existing Compose PostgreSQL service, add this volume to its existing volumes:
+1. Mount the host directory in the PostgreSQL service or container:
 
 ```yaml
-volumes:
-  - /etc/postgresql/releem.conf.d/:/etc/postgresql/releem.conf.d/:ro
+services:
+  postgres:
+    volumes:
+      - /etc/postgresql/releem.conf.d/:/etc/postgresql/releem.conf.d/:ro
 ```
 
-In the active `postgresql.conf` for that database container, include the shared directory:
+2. Add this line to the active `postgresql.conf` inside the database container. Preserve existing include entries and make sure PostgreSQL can read the directory and its files:
 
 ```ini
 include_dir = '/etc/postgresql/releem.conf.d'
 ```
 
-You can also use `include_dir = 'conf.d'` when you mount this same host directory at the `conf.d` directory relative to the active `postgresql.conf`. Confirm the actual path before changing the include. Preserve existing include entries and make sure PostgreSQL can read the directory and its files.
+You can also use `include_dir = 'conf.d'` when you mount the same host directory at the `conf.d` directory relative to the active `postgresql.conf`.
 
-You choose when to apply a recommendation. Sharing configuration files does not give the Agent control of the database container's restart. Reload or restart the database container through your container management procedure; the Agent's default systemd restart command does not control that container. For restart-required settings, plan a maintenance window and restart the intended database container, then check its logs and application connectivity. Use the [PostgreSQL configuration-error and effective-value checks](/recommendations/configuration-tuning/apply-manually/postgresql#linux-reload-configuration) in a database administrator session. If you use manual application instead of the shared-directory integration, you still need the standard `pg_stat_statements` preload and extension setup for query collection.
+3. Review the generated configuration, then reload or restart the PostgreSQL container during your approved maintenance window. The Agent does not control the database container's restart. Use the [PostgreSQL configuration-error and effective-value checks](/recommendations/configuration-tuning/apply-manually/postgresql?platform=docker#docker-reload-configuration) in a database administrator session.
+
+The shared directory receives a recommendation only when the Agent applies it, so it can be empty or hold a previous configuration. To apply a recommendation manually, extract the current file from the Agent container as described in [manual application](/recommendations/configuration-tuning/apply-manually/postgresql?platform=docker#docker-extract-recommended-configuration).
+
+If you do not connect the generated configuration directory, add `pg_stat_statements` to `shared_preload_libraries` in the active PostgreSQL configuration and create the extension in `postgres`, as described in [PostgreSQL permissions](/supported-databases/postgresql/required-permissions#query-metrics-with-pg_stat_statements), so Releem can collect query data.
+
+Restart the PostgreSQL container after changing `shared_preload_libraries`. Confirm that the settings are effective before relying on the related metrics or Query Optimization data.
+
+## Installer parameters
+
+- `PG_HOST`, `PG_PORT`, `PG_USER`, and `PG_PASSWORD` configure the PostgreSQL connection. The `RELEEM_PG_HOST`, `RELEEM_PG_PORT`, `RELEEM_PG_LOGIN`, and `RELEEM_PG_PASSWORD` names are also accepted. PostgreSQL collection starts when the user and password are set; do not also set MySQL `DB_USER` and `DB_PASSWORD` for this Agent.
+- `PG_SSL` / `RELEEM_PG_SSL_MODE` set to `true` use `sslmode=require`. They do not provide `verify-full` certificate and hostname verification. Set `false` only for an explicitly approved local connection without TLS; omission also disables SSL.
+- `RELEEM_API_KEY` connects the Agent to your Releem account.
+- `RELEEM_HOSTNAME` sets the server name displayed in the Dashboard.
+- `MEMORY_LIMIT` limits the memory considered for PostgreSQL recommendations; `0` uses the host total.
+- `RELEEM_QUERY_OPTIMIZATION=true` enables query collection. Remove the line for baseline monitoring only; review the [query permissions](/supported-databases/postgresql/required-permissions#query-and-schema-capabilities) before enabling it.
+
+## Expected result
+
+After you start the Agent, the Dashboard should show **Agent Status: Connected** and current metrics or a current data timestamp.
 
 ## Verify the installation
 
-Confirm **Agent Status: Connected**, current metrics, and query data in the Dashboard. Check the Agent logs with `docker logs releem-agent` if data is missing. For an included recommendation, verify the effective PostgreSQL values after the required reload or restart.
+Confirm both the Agent connection and current metrics in the Dashboard. If either is missing, check the [Agent logs](/installation/manage-the-releem-agent/logs). For an included recommendation, verify the effective PostgreSQL values after the required reload or restart.
 
 ## Troubleshooting
 
-Check the monitoring credentials, database host and port, container networking, HBA source rule, and `pg_stat_statements` setup. If recommended settings are absent, check both containers' mounts and the active include path. Use [Troubleshoot the Releem Agent](/get-started/troubleshoot-releem-agent) and the [PostgreSQL recovery procedure](/recommendations/configuration-tuning/apply-manually/postgresql#linux-troubleshooting).
+Use [Troubleshoot the Releem Agent](/get-started/troubleshoot-releem-agent). Check the monitoring credentials, database host and port, container networking, HBA source rule, and `pg_stat_statements` setup. If recommended settings are absent, check both containers' mounts and the active include path, then use the [PostgreSQL recovery procedure](/recommendations/configuration-tuning/apply-manually/postgresql?platform=docker#docker-troubleshooting). Correct the reported permission, network, or configuration issue before you re-run or restart the supported procedure.
