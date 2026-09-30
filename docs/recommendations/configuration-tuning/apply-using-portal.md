@@ -6,9 +6,9 @@ title: Apply configuration using the Portal
 
 # Apply configuration using the Portal
 
-Use the Releem Portal to review and submit a recommended configuration. This page describes the shared Portal sequence for self-managed MySQL and MariaDB, and the shared interface shown for managed MySQL on AWS RDS, GCP Cloud SQL, and Azure Database for MySQL.
+Use the Releem Portal to review and submit a recommended configuration. The Portal sequence is shared across supported databases; the available application options depend on the server's installation and configuration access.
 
-For a managed MySQL deployment, use **Apply** only after Releem Support confirms that Portal application is available for that deployment and the provider administrator approves the exact changes and their scope. Otherwise, do not apply the change. Portal application is not documented for PostgreSQL.
+Before selecting **Apply**, review the [shared application checks](/recommendations/configuration-tuning/apply-configuration#before-you-apply) and confirm the Agent has the configuration access required by your [installation guide](/installation). For a managed database, approve the exact parameter changes and every instance or cluster sharing the affected group. If the required access or application option is unavailable, use the matching [manual procedure](/recommendations/configuration-tuning/apply-manually).
 
 ## Apply the configuration
 
@@ -76,6 +76,8 @@ Confirm that the active database configuration includes the directory configured
 
 ## Troubleshooting AWS RDS
 
+For Aurora MySQL and Aurora PostgreSQL, confirm both custom instance and cluster parameter groups are attached and their names match the Agent settings. Only the Agent targeting the writer modifies cluster parameters. Use the [MySQL AWS guide](/installation/mysql/aws-rds) or [PostgreSQL AWS guide](/installation/postgresql/aws-rds) for the matching installation and troubleshooting steps.
+
 ### `RDS database instance has a status of not available`
 
 Open the RDS console and inspect the instance status and recent events. Correct the provider-reported problem or wait for the instance to return to **Available** before retrying. Do not submit another configuration task while the instance is unhealthy.
@@ -102,7 +104,7 @@ Check the effective parameter values, parameter-group status, RDS events, and [A
 
 ### `IAM role lacks required permissions to apply`
 
-Compare the Agent identity with the monitoring and configuration-access separation documented for [MySQL on AWS RDS](/installation/mysql/aws-rds) or [MariaDB on AWS RDS](/installation/mariadb/aws-rds). Add `rds:ModifyDBParameterGroup` only when configuration application is approved for this Agent and parameter group; do not broaden the monitoring role with unrelated actions.
+Compare the Agent identity with the configuration access documented for [MySQL on AWS RDS and Aurora](/installation/mysql/aws-rds), [MariaDB on AWS RDS](/installation/mariadb/aws-rds), or [PostgreSQL on AWS RDS and Aurora](/installation/postgresql/aws-rds). Grant parameter-group modification only for the approved custom groups. Aurora cluster changes also require the writer Agent's scoped `rds:ModifyDBClusterParameterGroup` access.
 
 ### `The latest recommended configuration is partially applied. To fully apply all parameters, restart the database instance.`
 

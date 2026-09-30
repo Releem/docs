@@ -82,6 +82,8 @@ const sidebars = {
           link: {type: 'doc', id: 'installation/postgresql/index'},
           items: [
             'installation/postgresql/linux',
+            'installation/postgresql/docker',
+            'installation/postgresql/aws-rds',
           ],
         },
         {

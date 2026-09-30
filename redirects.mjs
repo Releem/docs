@@ -4,7 +4,6 @@ export const redirects = [
   {from: '/getting-started/step-2-add-server', to: '/get-started/connect-your-database-server'},
   {from: '/getting-started/how-to-check-if-releem-agent-is-working', to: '/get-started/troubleshoot-releem-agent'},
   {from: '/releem-agent/mysql-permissions', to: '/supported-databases/mysql/required-permissions'},
-  {from: '/releem-agent/installation-guides/postgresql-manual-linux', to: '/installation/postgresql/linux#manual-installation'},
   {from: '/releem-agent/installation-guides/self-managed-servers-automatic-installation', to: '/installation/mysql/linux#automatic-installation'},
   {from: '/releem-agent/installation-guides/self-managed-servers-manual-installation-linux', to: '/installation/mysql/linux#manual-installation'},
   {from: '/releem-agent/installation-guides/self-managed-servers-manual-installation-windows', to: '/installation/mysql/windows'},

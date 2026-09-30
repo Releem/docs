@@ -6,11 +6,13 @@ title: PostgreSQL Permissions for Releem Agent
 
 # PostgreSQL Permissions for Releem Agent
 
-Use this page with the [PostgreSQL Linux installation guide](/installation/postgresql/linux). Releem supports PostgreSQL 15–18. Install the `postgresql-contrib` package that matches the server version before enabling `pg_stat_statements`.
+Use this page with the [PostgreSQL installation guides](/installation/postgresql). Releem supports PostgreSQL 15–18. For self-managed PostgreSQL, install the `postgresql-contrib` package that matches the server version before enabling `pg_stat_statements`.
 
 These grants are not universally least-privilege. Object ownership, managed-service restrictions, extensions, and Releem features vary. A DBA must validate every grant and connection rule for the target database and enabled features.
 
 ## Baseline monitoring role
+
+This section applies to self-managed PostgreSQL. For Amazon RDS and Aurora, use the [managed-service permissions](#aws-rds-and-aurora-postgresql) below.
 
 Create the login through your approved credential-management process. Do not put its password in shell history. Grant the built-in monitoring role and read access needed for HBA-rule diagnostics:
 
@@ -97,6 +99,8 @@ These grants cover existing objects in the selected schema, not objects created 
 
 ## Restrict pg_hba.conf
 
+These file changes apply to self-managed PostgreSQL. Amazon RDS and Aurora manage their own HBA configuration; restrict their security groups to the Agent instead.
+
 PostgreSQL uses the first matching `pg_hba.conf` record. Put a narrowly scoped rule in the correct order and verify the effective rules after reloading the configuration.
 
 For an Agent on the same host, permit only loopback with SCRAM authentication:
@@ -115,6 +119,29 @@ For a remote connection, also set `listen_addresses` to the exact approved datab
 
 After editing `pg_hba.conf`, reload PostgreSQL with your platform's approved procedure and verify that the intended rule—not a broader earlier rule—is the first matching rule.
 
+## AWS RDS and Aurora PostgreSQL {#aws-rds-and-aurora-postgresql}
+
+Use the RDS or Aurora administrative account to create the monitoring login through your approved credential-management process. Set its password with the protected interactive `psql` password prompt, then grant monitoring and query read access:
+
+```psql
+CREATE USER releem;
+\password releem
+GRANT pg_monitor TO releem;
+GRANT pg_read_all_data TO releem;
+```
+
+`pg_read_all_data` grants read access across all schemas. Review that scope for the monitored server. These grants enable data collection; they do not authorize applying query or schema changes. Do not run the self-managed HBA grants: on RDS and Aurora, `pg_hba_file_rules` is owned by the internal `rdsadmin` role and cannot be granted to the customer monitoring role.
+
+Inspect `SHOW shared_preload_libraries;`, then merge `pg_stat_statements` into the existing list in the attached custom instance or cluster parameter group. Preserve every existing library, as in the [query-metrics example](#query-metrics-with-pg_stat_statements). Reboot the affected instance when AWS requires it, verify the effective preload list, and create the extension in `postgres`, which the Agent uses for its statistics connection:
+
+```sql
+CREATE EXTENSION IF NOT EXISTS pg_stat_statements;
+```
+
+Verify that `releem` can read `pg_stat_statements` in `postgres`. Restrict PostgreSQL inbound access to the Agent security group or exact source address. The Agent SSL setting is boolean: `true` uses `sslmode=require`, not certificate and hostname verification equivalent to `verify-full`.
+
 ## Continue installation
 
 Continue with [Install Releem for PostgreSQL on Linux](/installation/postgresql/linux) and choose automatic or manual account creation.
+
+For containers, use [PostgreSQL Docker installation](/installation/postgresql/docker). For a managed database, use [PostgreSQL AWS RDS and Aurora installation](/installation/postgresql/aws-rds).

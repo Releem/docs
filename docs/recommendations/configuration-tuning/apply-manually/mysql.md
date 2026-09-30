@@ -153,11 +153,13 @@ docker restart <container_name_or_id>
 If the container does not return to its expected state, restore the backup or snapshot of the persistent mounted configuration and restart the same container. If that recovery fails, use [Rollback](/recommendations/configuration-tuning/rollback) when applicable and contact Releem support.
 
   </TabItem>
-  <TabItem value="aws-rds" label="AWS RDS">
+  <TabItem value="aws-rds" label="AWS RDS / Aurora">
 
 ## Before you begin {#aws-rds-before-you-begin}
 
 Record the parameter group assigned to your RDS instance and its current parameter values. Confirm whether that group is shared by other instances. If it is shared, stop until the change is approved for every affected instance, or use a dedicated parameter group for the target instance. Plan the application timing and recovery path. Recording it does not guarantee that every change can be reversed.
+
+For Aurora MySQL, record both the attached custom DB instance parameter group and custom DB cluster parameter group. Check all instances and clusters that share either group and approve that full scope. A recommended setting can belong to either group. Both groups must be attached before applying recommendations, and default groups cannot be modified. If you use Releem's Agent application instead of this manual procedure, only the writer Agent modifies cluster parameters and it needs `rds:ModifyDBClusterParameterGroup` access. See [Aurora installation](/installation/mysql/aws-rds#prepare-the-db-parameter-group).
 
 ## Step 1: Modify the Parameter Group in AWS RDS {#aws-rds-modify-parameter-group}
 
@@ -168,6 +170,8 @@ Record the parameter group assigned to your RDS instance and its current paramet
 5. Update the parameters based on the recommended configuration from the Releem Dashboard.
 6. Save the changes.
 
+For Aurora MySQL, edit each recommended setting in the applicable instance or cluster group. Confirm the parameter belongs to that group and record whether AWS requires a reboot.
+
 ## Step 2: Apply the Parameter Group to Your RDS Instance {#aws-rds-assign-parameter-group}
 
 1. Return to the RDS Dashboard and select your database instance.
@@ -176,13 +180,15 @@ Record the parameter group assigned to your RDS instance and its current paramet
 4. Choose whether to apply the changes immediately or during the next maintenance window.
 5. Save the changes.
 
+For Aurora, confirm both the instance group and cluster group are attached to the intended resources. Coordinate timing for all affected cluster members when changing shared cluster settings.
+
 ## Step 3: Reboot the RDS Instance {#aws-rds-reboot-instance}
 
 Coordinate the reboot with the application timing you chose in Step 2. At the planned time, select the instance and choose **Actions → Reboot**.
 
 ## Step 4: Verify the Applied Configuration {#aws-rds-verify-applied-configuration}
 
-1. Check the RDS instance for pending-reboot settings and confirm the effective database settings in MySQL after any required reboot.
+1. Check the RDS or Aurora instance and group status for pending-reboot settings and confirm the effective database settings in MySQL after any required reboot. For Aurora cluster changes, verify the affected writer and readers.
 2. Confirm the database instance health and review application connectivity and errors.
 3. Confirm the **Applied recommended configuration** event on the **MySQL Metrics graph**, then review current metrics.
 

@@ -6,7 +6,7 @@ title: Apply configuration manually for PostgreSQL
 
 # Apply configuration manually for PostgreSQL
 
-Apply Releem's recommended settings to a self-managed PostgreSQL 15–18 server on Linux. The Agent saves the recommendation to `/opt/releem/conf/z_aiops_postgresql.conf`.
+Apply Releem's recommended settings to a self-managed PostgreSQL 15–18 server on Linux or to [AWS RDS and Aurora PostgreSQL](#aws-rds-and-aurora). For Linux, the Agent saves the recommendation to `/opt/releem/conf/z_aiops_postgresql.conf`.
 
 ## Before you begin {#linux-before-you-begin}
 
@@ -92,3 +92,38 @@ Confirm database health, application connectivity, and current metrics in Releem
 - **PostgreSQL does not start:** Inspect its error log. Restore the previous configuration file, or remove the new include entry and move the newly added Releem file outside the include directory. Restart the same instance and verify its previous values and application connectivity.
 
 To reverse an applied change, restore the configuration backup. Reload for reloadable settings and restart for startup-only settings. Repeat the effective-value and health checks after recovery.
+
+## AWS RDS and Aurora PostgreSQL {#aws-rds-and-aurora}
+
+Use AWS parameter groups instead of copying a Linux configuration file. Review the [shared application checks](/recommendations/configuration-tuning/apply-configuration#before-you-apply) and [managed PostgreSQL setup](/installation/postgresql/aws-rds#parameter-groups).
+
+### Before you begin
+
+Record the exact attached custom DB parameter group, current values, and every instance sharing the group. For Aurora, also record the custom DB cluster parameter group and every cluster sharing it. Approve the change for all affected resources or use dedicated groups. Default groups cannot be modified. Plan the application timing, restart window, and restoration of previous values or groups.
+
+If you choose Agent application instead, only the Agent targeting the Aurora writer changes cluster parameters. It requires `rds:ModifyDBClusterParameterGroup` access on the attached cluster group.
+
+### Apply the settings
+
+1. Open the recommended configuration in the Releem Dashboard and review each setting.
+2. In the AWS RDS console, open **Parameter groups**.
+3. Select the attached custom instance group, or the cluster group for an Aurora cluster parameter.
+4. Choose **Edit parameters** and enter the recommended values for that group.
+5. Save the changes and record any pending-reboot status.
+6. Confirm the intended custom groups are attached to the instance and, for Aurora, the cluster. If attachment changes are needed, modify the database and choose the approved application timing.
+7. Reboot affected instances through the AWS procedure during the planned maintenance window when required. Coordinate cluster changes across affected Aurora members; a restart interrupts connections.
+
+### Verify and recover
+
+Check the assigned group status and pending-reboot state in AWS. In a fresh PostgreSQL administrator session, inspect the effective values, units, and restart state:
+
+```sql
+SELECT name, setting, unit, context, source, pending_restart
+FROM pg_settings
+WHERE name IN ('shared_buffers', 'work_mem', 'max_connections')
+ORDER BY name;
+```
+
+Replace the example parameter list with the recommendation's settings. Verify every affected Aurora writer or reader after cluster changes. Confirm database health, application connectivity, and current metrics in Releem; an application event alone does not establish effective values.
+
+If a value differs, check the assigned group, pending restart, and session, role, or database overrides. If database health degrades, restore recorded parameter values or reattach the previous custom groups. Reboot if the restored settings require it, then repeat effective-value and health checks. Contact Releem support if recovery does not restore the expected state.

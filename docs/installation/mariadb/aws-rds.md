@@ -39,6 +39,8 @@ Use the Releem CloudFormation template to run the Agent in AWS Fargate:
 6. Supply the API key and database password through AWS Secrets Manager ARNs when available.
 7. Create the stack and wait for `CREATE_COMPLETE`.
 
+Set **DBID** to the RDS DB instance identifier, **DBUser** and **DBPassword** to the monitoring account, and **DBSSLMode** to `true` when the instance requires SSL. **APIKey** identifies the server in Releem. **DBParameterGroup** must match the attached custom instance group. Leave **DBClusterParameterGroup** empty; this guide uses non-Aurora RDS for MariaDB.
+
 The Agent security group needs outbound HTTPS and access to the RDS endpoint on its database port. The RDS security group must accept that database connection from the Agent security group.
 
 The linked CloudFormation template's Agent task role includes `rds:ModifyDBParameterGroup` and `rds:ModifyDBClusterParameterGroup` with `Resource: *`. Review those change permissions before creating the stack. If the Agent must have monitoring-only AWS access, use the EC2 method with a read-only IAM role instead.
@@ -61,6 +63,8 @@ RELEEM_INSTANCE_TYPE="aws/rds" RELEEM_AWS_REGION="[AWS_REGION]" RELEEM_AWS_RDS_D
 - `RELEEM_AWS_RDS_DB` is the RDS instance identifier.
 - `RELEEM_AWS_RDS_PARAMETER_GROUP` is the parameter group assigned to the instance. Releem can modify a custom group only with separately approved IAM access.
 - `RELEEM_MYSQL_LOGIN` and `RELEEM_MYSQL_PASSWORD` configure the MariaDB connection.
+- `RELEEM_DB_MEMORY_LIMIT` sets the database memory allocation in MB. The default `0` uses all available memory; set a limit when other software shares the server.
+- `RELEEM_API_KEY` is available on the Releem Portal Profile page; `RELEEM_HOSTNAME` overrides the Dashboard server name.
 - `RELEEM_CRON_ENABLE=1` enables daily Agent updates on EC2. Set it to `0` if you do not want scheduled updates.
 - `RELEEM_QUERY_OPTIMIZATION=true` enables query collection. Remove this flag for baseline monitoring only.
 

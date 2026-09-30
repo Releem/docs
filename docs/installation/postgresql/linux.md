@@ -45,11 +45,17 @@ The installer writes the Agent configuration to `/opt/releem/releem.conf`. Keep 
 - `RELEEM_CRON_ENABLE=1` enables the automatic daily update. Set it to `0` to disable scheduled updates. See [Update the Agent](/installation/manage-the-releem-agent/update).
 - `RELEEM_PG_TYPE=1` selects PostgreSQL.
 - `RELEEM_PG_HOST` defaults to `127.0.0.1`, `RELEEM_PG_PORT` defaults to `5432`, and `RELEEM_PG_LOGIN` and `RELEEM_PG_PASSWORD` configure the PostgreSQL monitoring connection.
+- `RELEEM_PG_DATABASE` sets the database used by the installer for account and extension setup and defaults to `postgres`. It does not change the Agent's statistics connection; keep `pg_stat_statements` available in `postgres`.
+- `RELEEM_PG_CONF_DIR` selects the existing directory where the Agent writes recommended PostgreSQL configuration when it cannot detect `postgresql.conf`. Create the directory first and confirm the intended instance includes it; otherwise Agent configuration application is disabled.
+- `RELEEM_DB_MEMORY_LIMIT` sets the database memory limit in MB; `0` uses all available memory. Set a limit when other software shares the server.
 - `RELEEM_PG_ROOT_LOGIN` sets the PostgreSQL administrative login and defaults to `postgres`. Do not put a root-password variable in a reusable example; use the installer's masked prompt.
+- `RELEEM_PG_ROOT_PASSWORD` supplies the administrative password. When omitted, the installer first tries peer/passwordless access and then prompts for it. Use the prompt instead of storing the password in a command.
 - `RELEEM_PG_SSL_MODE=true` maps to `sslmode=require`; `false` or omission maps to `sslmode=disable`. It is not a `verify-full` setting.
 - `RELEEM_QUERY_OPTIMIZATION=true` enables PostgreSQL query data collection after you set up `pg_stat_statements` and grant the required access. Remove the flag only when you intend to disable that collection.
 
 For the installed Agent's settings, see [Configure the Releem Agent](/installation/manage-the-releem-agent/configuration).
+
+Setting `RELEEM_PG_TYPE`, `RELEEM_PG_HOST`, `RELEEM_PG_LOGIN`, `RELEEM_PG_PASSWORD`, `RELEEM_PG_ROOT_LOGIN`, or `RELEEM_PG_ROOT_PASSWORD` selects the PostgreSQL installer path. When you omit the monitoring login and password in the automatic path, the installer creates `releem` and generates its password.
 
 ## Expected result {#expected-result}
 

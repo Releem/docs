@@ -43,6 +43,7 @@ export default function netlifyRedirectsPlugin() {
         '# Generated from redirects.mjs by the Releem Netlify redirects plugin.',
         '# Edit redirects.mjs, then rebuild. Do not edit this generated file.',
         '# /installation/linux retains its query-and-anchor compatibility page.',
+        '# The legacy PostgreSQL installation URL retains its fragment-aware compatibility page.',
         ...rules,
         '',
       ].join('\n'), 'utf8');
