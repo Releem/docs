@@ -12,12 +12,20 @@
     "serve": "docusaurus serve",
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "docs:configuration-tuning:check": "node --test tests/docs-configuration-tuning.test.mjs",
+    "docs:preservation:check": "node --test tests/docs-preservation.test.mjs",
+    "docs:check": "node --test tests/docs-structure.test.mjs tests/docs-directory-mirror.test.mjs tests/docs-preservation.test.mjs tests/docs-linux-installation.test.mjs tests/docs-configuration-tuning.test.mjs",
+    "agent:check": "node --check scripts/agent-loop.mjs && node --test tests/agent-loop.test.mjs",
+    "agent:status": "node scripts/agent-loop.mjs --status",
+    "agent:next": "node scripts/agent-loop.mjs --manual",
+    "agent:loop": "node scripts/agent-loop.mjs"
   },
   "dependencies": {
-    "@docusaurus/core": "^3.9.2",
-    "@docusaurus/preset-classic": "^3.9.2",
-    "@docusaurus/theme-search-algolia": "^3.9.2",
+    "@docusaurus/core": "3.9.2",
+    "@docusaurus/plugin-client-redirects": "3.9.2",
+    "@docusaurus/preset-classic": "3.9.2",
+    "@docusaurus/theme-search-algolia": "3.9.2",
     "@mdx-js/react": "^3.0.0",
     "astro": "^4.16.13",
     "clsx": "^2.0.0",
@@ -26,8 +34,8 @@
     "react-dom": "^18.0.0"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "^3.9.2",
-    "@docusaurus/types": "^3.9.2",
+    "@docusaurus/module-type-aliases": "3.9.2",
+    "@docusaurus/types": "3.9.2",
     "typescript": "~5.2.2"
   },
   "browserslist": {
