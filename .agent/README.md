@@ -129,3 +129,41 @@ user to review the active plan and explicitly authorize changing only `status`
 to `enabled`. All other safety flags remain unchanged. Completion means there
 is no unchecked task and every completed step has fresh verification and the
 required reviewer verdicts. Publication remains separately approval-gated.
+
+## Netlify redirects
+
+`redirects.mjs` is the shared route map. Every `npm run build` runs
+`scripts/netlify-redirects.mjs` through Docusaurus's `postBuild` hook and writes
+`_redirects` into the build output directory (`build/` by default). Publish that
+directory on Netlify. Do not maintain a second redirect list or edit generated
+output. The build rejects duplicate sources, chains, loops, missing target
+routes, and rules that would override a current route.
+
+Each generated rule uses `301!`: Netlify returns a permanent HTTP redirect even
+when a Docusaurus client-redirect page exists at the old path. The client plugin
+remains a fallback for local `npm run serve` previews and other static hosts.
+Local Docusaurus serving does not interpret Netlify's `_redirects` file.
+Destination query parameters and anchors are copied from the shared map.
+
+`/installation/linux` is deliberately excluded. Its existing compatibility page
+selects a database from the query string and translates old method anchors.
+URL fragments are not sent to the server, so a plain Netlify redirect cannot
+perform that translation.
+
+Before a separately authorized release, verify the HTTP status and `Location`
+on a Netlify preview, including destinations with query parameters, then check
+section anchors in a browser. For example:
+
+```bash
+curl -I 'https://<preview-host>/installation/installation-methods/aws-rds'
+curl -I 'https://<preview-host>/configuration-tuning/how-to-apply-configuration-manually/docker'
+```
+
+Expect `301` and the final canonical destination, with no redirect chain. Check
+the old AWS RDS `#common-issues-for-aws-rds` link and Linux database/method links
+on desktop and mobile. Deploying, publishing, or changing Netlify settings
+requires separate authorization.
+
+References: [Netlify redirect syntax](https://docs.netlify.com/manage/routing/redirects/overview/),
+[force and query handling](https://docs.netlify.com/manage/routing/redirects/redirect-options/),
+[Docusaurus postBuild](https://docusaurus.io/docs/api/plugin-methods/lifecycle-apis#postbuildprops).

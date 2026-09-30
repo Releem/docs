@@ -1,5 +1,6 @@
 import {themes as prismThemes} from 'prism-react-renderer';
 import {redirects} from './redirects.mjs';
+import netlifyRedirectsPlugin from './scripts/netlify-redirects.mjs';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -18,7 +19,10 @@ const config = {
     locales: ['en'],
   },
 
-  plugins: [['@docusaurus/plugin-client-redirects', {redirects}]],
+  plugins: [
+    ['@docusaurus/plugin-client-redirects', {redirects}],
+    netlifyRedirectsPlugin,
+  ],
 
   presets: [
     [
