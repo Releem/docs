@@ -5,7 +5,9 @@ sidebar_label: AWS RDS
 
 # How to apply the Recommended Configuration for AWS RDS
 
-Use Parameter Groups to apply the recommended configuration. Follow the steps below:
+Use Parameter Groups to apply the recommended configuration. Follow the steps below.
+
+For Amazon Aurora MySQL or Aurora PostgreSQL, update both the instance DB parameter group and the DB cluster parameter group when Releem recommendations target cluster parameters. AWS-managed default groups cannot be modified.
 
 ## Step 1: Modify the Parameter Group in AWS RDS
 
