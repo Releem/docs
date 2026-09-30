@@ -30,6 +30,9 @@ aws_rds_db="[RDS_INSTANCE_NAME]"
 # AWS RDS parameter group name
 aws_rds_parameter_group="releem-agent"
 
+# AWS RDS / Aurora cluster parameter group name. Required for Aurora; leave empty for non-Aurora RDS
+aws_rds_cluster_parameter_group=""
+
 #GCP project ID for Cloud SQL instance
 gcp_project_id="my-project-123"
 
@@ -77,6 +80,12 @@ pg_port="5432"
 
 # PostgreSQL SSL mode: false = disable, true = require
 pg_ssl_mode=false
+
+# Command to restart PostgreSQL service
+pg_restart_service="/bin/systemctl restart postgresql"
+
+# Path to copy the recommended PostgreSQL config
+pg_cnf_dir="/etc/postgresql/releem.conf.d"
 
 # Command to restart MySQL service
 mysql_restart_service="/bin/systemctl restart mysql"
@@ -134,6 +143,7 @@ releem_region=""
 - For MySQL, the `mysql_password` field should contain the password for the user specified in `mysql_user`.
 - For PostgreSQL, the `pg_password` field should contain the password for the user specified in `pg_user`.
 - PostgreSQL monitoring is enabled when `pg_user` and `pg_password` are configured.
+- For Aurora, set `aws_rds_cluster_parameter_group` to the custom DB cluster parameter group attached in AWS. Leave it empty for non-Aurora RDS. The configured instance and cluster group names must match the groups attached in AWS.
 - Set `query_optimization=true` to enable SQL query optimization features where supported.
 - Use `databases_query_optimization` to specify which databases to monitor for query optimization (leave empty for all databases).
 - The `releem_region` field can be set to `EU` for European data storage or left empty for default storage.
