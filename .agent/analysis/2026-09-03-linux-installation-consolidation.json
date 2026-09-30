@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "status": "approved-consolidation-overlay",
+  "approvedBy": "user",
+  "approvedOn": "2026-09-03",
+  "historicalBaselinePageCount": 54,
+  "currentPageCount": 54,
+  "retiredSources": [
+    "docs/installation/linux-automatic.md",
+    "docs/installation/installation-methods/linux-manual.md",
+    "docs/supported-databases/postgresql/install-on-linux.md"
+  ],
+  "addedSources": [
+    "docs/installation/linux.md",
+    "docs/supported-databases/mariadb/required-permissions.md",
+    "docs/supported-databases/postgresql/required-permissions.md"
+  ],
+  "rewrittenSources": [
+    "docs/supported-databases/mysql/required-permissions.md"
+  ],
+  "sidebarOwnershipOverrides": [
+    {"sourcePath": "docs/installation/installation-methods/windows.md", "currentOwnership": [{"sidebar": "docs", "categories": ["Installation"], "placement": "item"}]},
+    {"sourcePath": "docs/installation/installation-methods/docker.md", "currentOwnership": [{"sidebar": "docs", "categories": ["Installation"], "placement": "item"}]},
+    {"sourcePath": "docs/installation/installation-methods/kubernetes.md", "currentOwnership": [{"sidebar": "docs", "categories": ["Installation"], "placement": "item"}]},
+    {"sourcePath": "docs/installation/installation-methods/aws-rds.md", "currentOwnership": [{"sidebar": "docs", "categories": ["Installation", "Managed databases"], "placement": "item"}]},
+    {"sourcePath": "docs/installation/installation-methods/gcp-cloud-sql.md", "currentOwnership": [{"sidebar": "docs", "categories": ["Installation", "Managed databases"], "placement": "item"}]},
+    {"sourcePath": "docs/installation/installation-methods/azure-database-for-mysql.md", "currentOwnership": [{"sidebar": "docs", "categories": ["Installation", "Managed databases"], "placement": "item"}]},
+    {"sourcePath": "docs/installation/installation-methods/clusters.md", "currentOwnership": [{"sidebar": "docs", "categories": ["Installation"], "placement": "item"}]},
+    {"sourcePath": "docs/installation/installation-methods/whm-cpanel.md", "currentOwnership": [{"sidebar": "docs", "categories": ["Installation"], "placement": "item"}]}
+  ],
+  "canonicalLinuxRoute": "/installation/linux",
+  "internalLinkAdditions": [
+    {"sourcePath": "docs/get-started/connect-your-database-server.md", "content": "- [MariaDB on Linux Server: Automatic Agent Installation](/installation/linux?database=mariadb#mariadb-automatic-installation) – Automatic installation for MariaDB instances running on Linux-based servers."},
+    {"sourcePath": "docs/get-started/connect-your-database-server.md", "content": "- [MariaDB on Linux Server: Manual Agent Installation](/installation/linux?database=mariadb#mariadb-manual-installation) – Manual installation for MariaDB instances when a DBA creates the monitoring account."},
+    {"sourcePath": "docs/get-started/connect-your-database-server.md", "content": "- [PostgreSQL on Linux Server: Automatic Agent Installation](/installation/linux?database=postgresql#postgresql-automatic-installation) – Automatic database-user creation for PostgreSQL instances running on Linux-based servers."}
+  ],
+  "internalLinkReplacements": [
+    {"sourcePath": "docs/get-started/connect-your-database-server.md", "from": "/installation", "to": "/installation/linux?database=mysql#mysql-automatic-installation", "occurrences": 1},
+    {"sourcePath": "docs/get-started/connect-your-database-server.md", "from": "/installation/installation-methods/linux-manual", "to": "/installation/linux?database=mysql#mysql-manual-installation", "occurrences": 1},
+    {"sourcePath": "docs/get-started/connect-your-database-server.md", "from": "/supported-databases/postgresql/install-on-linux", "to": "/installation/linux?database=postgresql#postgresql-manual-installation", "occurrences": 1},
+    {"sourcePath": "docs/installation/installation-methods/clusters.md", "from": "### Step 1: Create MySQL User", "to": "### Step 1: Create a database user", "occurrences": 1},
+    {"sourcePath": "docs/installation/installation-methods/clusters.md", "from": "Follow the [MySQL Permissions for Releem Agent](/supported-databases/mysql/required-permissions) guide to create the required user.", "to": "For MySQL or Percona, follow [MySQL Permissions for Releem Agent](/supported-databases/mysql/required-permissions). For MariaDB, follow [MariaDB Permissions for Releem Agent](/supported-databases/mariadb/required-permissions).", "occurrences": 1},
+    {"sourcePath": "docs/installation/installation-methods/clusters.md", "from": "For enabling Automatic SQL Query Optimization, add the [Additional Permissions](/supported-databases/mysql/required-permissions#additional-database-permissions-required) as well.", "to": "For Automatic SQL Query Optimization, review the [MySQL or Percona additional permissions](/supported-databases/mysql/required-permissions#additional-database-permissions-required) or the [MariaDB additional permissions](/supported-databases/mariadb/required-permissions#additional-database-permissions-required).", "occurrences": 1},
+    {"sourcePath": "docs/installation/installation-methods/clusters.md", "from": "For each node in your cluster, use the [advanced Releem Agent installation](/installation/installation-methods/linux-manual) with the added \"releem\" user.", "to": "For each node, use the [MySQL manual installation](/installation/linux?database=mysql#mysql-manual-installation) for MySQL or Percona, or the [MariaDB manual installation](/installation/linux?database=mariadb#mariadb-manual-installation) for MariaDB.", "occurrences": 1},
+    {"sourcePath": "docs/installation/installation-methods/clusters.md", "from": "If you encounter any issues with your cluster setup, contact Releem support for assistance.\n\n", "to": "If you encounter any issues with your cluster setup, contact Releem support for assistance.\n", "occurrences": 1},
+    {"sourcePath": "docs/recommendations/query-optimization/enable.md", "from": "  1. Grant additional permissions to the `releem` user. The SQL Query Optimization feature requires [Additional Permissions](/supported-databases/mysql/required-permissions#additional-database-permissions-required) for the Releem Agent user.", "to": "  1. Grant additional permissions to the `releem` user. Use the [MySQL or Percona permissions](/supported-databases/mysql/required-permissions#additional-database-permissions-required) or the [MariaDB permissions](/supported-databases/mariadb/required-permissions#additional-database-permissions-required) for the target engine.", "occurrences": 1},
+    {"sourcePath": "docs/recommendations/query-optimization/enable.md", "from": "For MySQL/MariaDB/Percona, the SQL Query Optimization feature requires [Additional Permissions](/supported-databases/mysql/required-permissions#additional-database-permissions-required) for the Releem Agent user.", "to": "For MySQL or Percona, review the [MySQL additional permissions](/supported-databases/mysql/required-permissions#additional-database-permissions-required). For MariaDB, review the [MariaDB additional permissions](/supported-databases/mariadb/required-permissions#additional-database-permissions-required).", "occurrences": 1}
+  ],
+  "removedSensitiveAsset": {
+    "path": "static/img/releem-dashboard-agent-automatic-installation.png",
+    "sha256": "807fefdd2c7ac7a486826b4e3f21c75caef2be0ee4dc67bce40803d3425450d3",
+    "reason": "Removed a published installation screenshot because it visibly contained an API credential.",
+    "rotationRequiredIfEverValid": true
+  },
+  "redirects": [
+    {"from": "/installation", "to": "/installation/linux?database=mysql#mysql-automatic-installation"},
+    {"from": "/installation/linux-automatic", "to": "/installation/linux?database=mysql#mysql-automatic-installation"},
+    {"from": "/installation/installation-methods/linux-manual", "to": "/installation/linux?database=mysql#mysql-manual-installation"},
+    {"from": "/supported-databases/postgresql/install-on-linux", "to": "/installation/linux?database=postgresql#postgresql-installation"},
+    {"from": "/installation/postgresql-on-linux", "to": "/installation/linux?database=postgresql#postgresql-installation"},
+    {"from": "/installation/installation-methods/postgresql-on-linux", "to": "/installation/linux?database=postgresql#postgresql-installation"},
+    {"from": "/releem-agent/installation-guides/self-managed-servers-automatic-installation", "to": "/installation/linux?database=mysql#mysql-automatic-installation"},
+    {"from": "/releem-agent/installation-guides/self-managed-servers-manual-installation-linux", "to": "/installation/linux?database=mysql#mysql-manual-installation"},
+    {"from": "/releem-agent/installation-guides/postgresql-manual-linux", "to": "/installation/linux?database=postgresql#postgresql-installation"}
+  ],
+  "installerEvidence": {
+    "version": "1.25.2",
+    "branch": "master",
+    "commit": "01e1f6e",
+    "observedOn": "2026-09-01",
+    "mutableDownloadDigestPublished": false,
+    "installerLogUploadAndRetention": "UNCONFIRMED"
+  }
+}

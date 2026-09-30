@@ -1,0 +1,857 @@
+{
+  "schemaVersion": 1,
+  "expectedPageCount": 54,
+  "routing": {
+    "baseUrl": "/",
+    "routeBasePath": "/",
+    "trailingSlash": false
+  },
+  "approvedRenames": {
+    "docs/getting-started/schema-optimization.md": "docs/getting-started/schema-checks.md",
+    "docs/getting-started/step-2-add-server.md": "docs/getting-started/connect-your-database-server.md",
+    "docs/getting-started/step-3-getting-and-applying-recommendations.md": "docs/getting-started/configuration-tuning.md",
+    "docs/getting-started/step-4-dashboard.md": "docs/getting-started/dashboard-overview.md",
+    "docs/getting-started/step-5-health-checks.md": "docs/getting-started/health-checks.md",
+    "docs/getting-started/step-7-weekly-reports.md": "docs/getting-started/reports.md",
+    "docs/welcome.md": "docs/releem-overview.md"
+  },
+  "documents": [
+    {
+      "sourcePath": "docs/billing/cancellation.md",
+      "renamedPath": null,
+      "sha256": "c8c274f2f02274d8bc9ce3d67a1f10e7b3871a0ddf6bbbac10c9ed6f97accf79",
+      "frontMatterSha256": "9491b8629cae6338adec9ec8415008c3cb209e5e7cc74eb6ad9498dba930ea32",
+      "bodySha256": "450e954776361ac800c80e92a99d6cd6fcca8ba1750373eff58d631f7a2c98a1",
+      "effectiveId": "billing/cancellation",
+      "route": "/billing/cancellation",
+      "images": []
+    },
+    {
+      "sourcePath": "docs/billing/update-payment-information.md",
+      "renamedPath": null,
+      "sha256": "1678a5831b12e7a22034a1a2197da7d216a67e4aac70f467d3fca75bed7fbc47",
+      "frontMatterSha256": "107c2af8dcfece9bfdb9660241e93a8541d762a4ce4da3eb570ec57da3f60a2d",
+      "bodySha256": "92139568e91b7d167d42bed84f1815438494b501e4473022a5a4ca796281da3b",
+      "effectiveId": "billing/update-payment-information",
+      "route": "/billing/update-payment-information",
+      "images": []
+    },
+    {
+      "sourcePath": "docs/configuration-tuning/example-of-configuration.md",
+      "renamedPath": null,
+      "sha256": "cc4a8270f52cd7f4a4f4008592159ae51f3e2ca4d1dffb467489cd9396ffb890",
+      "frontMatterSha256": "eae483bb6595fbc7259abc46da7ea8a4943dea6b49e3c004a439c5d3a3adb9fa",
+      "bodySha256": "507b77b1e6419ae28abe622865c9d83819610df5fd79ed241a3c178c00e8ad0e",
+      "effectiveId": "configuration-tuning/example-of-configuration",
+      "route": "/configuration-tuning/example-of-configuration",
+      "images": [
+        {
+          "path": "assets/images/releem-dashboard-recommended-configuration.png",
+          "sha256": "7010c6664bdd8636621ac4f05cc571da79727d193458b49b79b94ddcf7b8f221"
+        }
+      ]
+    },
+    {
+      "sourcePath": "docs/configuration-tuning/how-to-apply-configuration-manually/aws-rds.md",
+      "renamedPath": null,
+      "sha256": "3d5b2fa944f3960bd8c17360b9cdd2039be871bcebe2aa6279ff89762a2a319c",
+      "frontMatterSha256": "6b526dbb6802bf4a640f90c2abbdea3db6b36775b962f6bf5380183776005698",
+      "bodySha256": "253e7a64198429ab63623ae2d111f9299efca539037fc7805338ca818071e3e0",
+      "effectiveId": "configuration-tuning/how-to-apply-configuration-manually/aws-rds",
+      "route": "/configuration-tuning/how-to-apply-configuration-manually/aws-rds",
+      "images": []
+    },
+    {
+      "sourcePath": "docs/configuration-tuning/how-to-apply-configuration-manually/docker.md",
+      "renamedPath": null,
+      "sha256": "6c7cd5c3d7dc96a226a2cd251c0779ec74604f3d14bb21822ff253c5c637ca30",
+      "frontMatterSha256": "8d5c9f1742384dc6dbccfc165d3e962913841bc3e9dbd163533e07a7a373c741",
+      "bodySha256": "234d4ab3c53571b0199580f6c583d860e676dc174ec38dfb98f4a6c523908018",
+      "effectiveId": "configuration-tuning/how-to-apply-configuration-manually/docker",
+      "route": "/configuration-tuning/how-to-apply-configuration-manually/docker",
+      "images": []
+    },
+    {
+      "sourcePath": "docs/configuration-tuning/how-to-apply-configuration-manually/gcp-cloud-sql.md",
+      "renamedPath": null,
+      "sha256": "5177da6bfa7816f2150eccc4abb5dcd41c7a83b3343f25bb4d27f4801ffb867c",
+      "frontMatterSha256": "d384a0c81ae3546f81bc49589e592841da25604955338b87d2d0fba7e47be838",
+      "bodySha256": "e3d12c4fa86eabc8958eeb3c67bdc0377870b7e590a6bfdb98bd63d3699cec82",
+      "effectiveId": "configuration-tuning/how-to-apply-configuration-manually/gcp-cloud-sql",
+      "route": "/configuration-tuning/how-to-apply-configuration-manually/gcp-cloud-sql",
+      "images": []
+    },
+    {
+      "sourcePath": "docs/configuration-tuning/how-to-apply-configuration-manually/linux.md",
+      "renamedPath": null,
+      "sha256": "4ef90837c230584facbd1afef34a1f15d5c408af8343941cb815d6cec2f8b929",
+      "frontMatterSha256": "0634e780ad40d1d988bee892c70088dc54aca38c48b1e8dc98b02d9ffef64c40",
+      "bodySha256": "d8f1f7cfab4c6ba379bbefb1ad9a061b9a83c8759682fb765cf550e27b0149a8",
+      "effectiveId": "configuration-tuning/how-to-apply-configuration-manually/linux",
+      "route": "/configuration-tuning/how-to-apply-configuration-manually/linux",
+      "images": []
+    },
+    {
+      "sourcePath": "docs/configuration-tuning/how-to-apply-configuration-manually/windows.md",
+      "renamedPath": null,
+      "sha256": "05081c9d1b0a95d9051e948734448b540100c5737b49d66fd449c49211fdc9da",
+      "frontMatterSha256": "f7beb4262f464509f5b7dd1b98916b2b30abd51ef20cc1e57b6683ac04abeb12",
+      "bodySha256": "8680c63a8a439ea3092587e8a590aab71129983829fa228d55aeeb8bf1413bbd",
+      "effectiveId": "configuration-tuning/how-to-apply-configuration-manually/windows",
+      "route": "/configuration-tuning/how-to-apply-configuration-manually/windows",
+      "images": []
+    },
+    {
+      "sourcePath": "docs/configuration-tuning/how-to-apply-configuration-using-agent.md",
+      "renamedPath": null,
+      "sha256": "b0cd21d3846f0aa19d50e050ed1d6b6754781ce70c1481b8c4c2be299dd43826",
+      "frontMatterSha256": "78872d8a601cdc68a3ac91785b4dbe368a18a63f4f73087f246b2dea051bc80d",
+      "bodySha256": "20e140a6a72465260cb811cce3d64e736f1b8264b8f9ba98ec8f83b4d5a7f66f",
+      "effectiveId": "configuration-tuning/how-to-apply-configuration-using-agent",
+      "route": "/configuration-tuning/how-to-apply-configuration-using-agent",
+      "images": []
+    },
+    {
+      "sourcePath": "docs/configuration-tuning/how-to-apply-configuration-using-cron.md",
+      "renamedPath": null,
+      "sha256": "be318bd17598a173a81971fb942fe6911a88b985affba6d8cbdf2daae082b1e6",
+      "frontMatterSha256": "41fa23b333881040d3ea1744349bef17b4024c30ea8df4da8b1709aa7480ffc7",
+      "bodySha256": "5ef5f5f5e7e0c0d93f3b94e02d3a0e5ef3b1c3d1612b471e7535d95477f5c38d",
+      "effectiveId": "configuration-tuning/how-to-apply-configuration-using-cron",
+      "route": "/configuration-tuning/how-to-apply-configuration-using-cron",
+      "images": []
+    },
+    {
+      "sourcePath": "docs/configuration-tuning/how-to-apply-configuration-using-portal.md",
+      "renamedPath": null,
+      "sha256": "f86b43ede515ca678fd38340dcc00a48a16827e3de79ce2715a3ef5f0e8b5e64",
+      "frontMatterSha256": "f39b21abb450902787ddc66f5c910d488a44180812a9e962fc6aa1b5bdbec23c",
+      "bodySha256": "9c054d441b2a25163bc20aa6ac84452be957320fd52e70dbc6cfb38598c29254",
+      "effectiveId": "configuration-tuning/how-to-apply-configuration-using-portal",
+      "route": "/configuration-tuning/how-to-apply-configuration-using-portal",
+      "images": [
+        {
+          "path": "assets/images/releem-dashboard-apply.png",
+          "sha256": "071ee319506f8662ff0885e0bdd82b89da1853e8a1741de2f2413c12dbcc2d6a"
+        }
+      ]
+    },
+    {
+      "sourcePath": "docs/configuration-tuning/how-to-rollback-to-previous-configuration.md",
+      "renamedPath": null,
+      "sha256": "ecaede076d229dc9f180724dfc408527bf430e991c3f7a95c42587d43bbbc735",
+      "frontMatterSha256": "c0395a4264d1380a001d482e27c9b7cdf60e2a2c4b34450d835867cb1db46021",
+      "bodySha256": "ca3bf9dd2b91a431f3e360e3c1a3866abb7b58be7da3d6126dc12f38159d8f46",
+      "effectiveId": "configuration-tuning/how-to-rollback-to-previous-configuration",
+      "route": "/configuration-tuning/how-to-rollback-to-previous-configuration",
+      "images": []
+    },
+    {
+      "sourcePath": "docs/configuration-tuning/initial-mysql-configuration.md",
+      "renamedPath": null,
+      "sha256": "9a7bb7a2143f51c529324f4371b35bf247ddd44d320add2c3a942287307f007d",
+      "frontMatterSha256": "6fe2f4413b3511f8666808a412c89cbaa70596fc3bfd565effa2d4b01366bc6c",
+      "bodySha256": "4d8af22eb2bd9749a5c7f005f7f49cef5d53fb774e07ee19a1ba100e3e99d607",
+      "effectiveId": "configuration-tuning/initial-mysql-configuration",
+      "route": "/configuration-tuning/initial-mysql-configuration",
+      "images": []
+    },
+    {
+      "sourcePath": "docs/configuration-tuning/limit-memory-for-mysql.md",
+      "renamedPath": null,
+      "sha256": "9aa025bb0387e713f594a2191fc44c8b490d59dbefece869bd6b572241979c3a",
+      "frontMatterSha256": "6e775f3fed8d7adbfc7351b01893ce72ff4f2e499722910dfd9d766a65edda23",
+      "bodySha256": "6e3c37b963e6e9ec1d3417843a62ee3d50c5ef72069803ddb99215df0b3ac03d",
+      "effectiveId": "configuration-tuning/limit-memory-for-mysql",
+      "route": "/configuration-tuning/limit-memory-for-mysql",
+      "images": [
+        {
+          "path": "static/img/dashboard-settings.png",
+          "sha256": "8e17642cab07d2a7238d85efe63adebaf25d86d2aa6e3589cc08305afd499254"
+        }
+      ]
+    },
+    {
+      "sourcePath": "docs/configuration-tuning/mysql-tuning-process.md",
+      "renamedPath": null,
+      "sha256": "c6f826999750be86766486395a537f6e51cb6a3b2bf39f776d43598a8b3fccfe",
+      "frontMatterSha256": "0d5b6fc838cd327b93e2fe778363861f5f474aed9dd5f6338dfae200d50c0523",
+      "bodySha256": "3ecd1ecf61ad0c0e5aa9cf2bf4915823e163ff97d6da57675c3b9015f06d911e",
+      "effectiveId": "configuration-tuning/mysql-tuning-process",
+      "route": "/configuration-tuning/mysql-tuning-process",
+      "images": []
+    },
+    {
+      "sourcePath": "docs/frequently-asked-questions.md",
+      "renamedPath": null,
+      "sha256": "9ce52113f1c688473e4ed632ee246ba2a7e9182cf0c25ec510ffb2c93fcdf9a3",
+      "frontMatterSha256": "39156cab333fe2c394b3e6c255fab2a436fff3f1590d9ade0b691bbc678c5b44",
+      "bodySha256": "fbe56c5a3c6ceee9832b1e8901095c8a3cbca4e81799d37c9ec31f5592c6f441",
+      "effectiveId": "frequently-asked-questions",
+      "route": "/frequently-asked-questions",
+      "images": []
+    },
+    {
+      "sourcePath": "docs/getting-started/deadlock-monitoring.md",
+      "renamedPath": null,
+      "sha256": "5000e163878d54a65a8372dd73c2d4d4d9ee4ca8fc39bdfc605d97fe53b99025",
+      "frontMatterSha256": "de23616bd45fea81cf521c6edf098c74d787263c4bcfd6a4fd8ddd28a6164c79",
+      "bodySha256": "89e47e115a16d3e1d206887d5196efad40cc5ebc2e24be0793dd582889c834a8",
+      "effectiveId": "getting-started/deadlock-monitoring",
+      "route": "/getting-started/deadlock-monitoring",
+      "images": [
+        {
+          "path": "assets/images/releem-deadlock-monitoring-details.png",
+          "sha256": "1d9176176cb3adc038ff4543be7a111deee7317bd1ca236f4645b41b9b133dfb"
+        },
+        {
+          "path": "assets/images/releem-deadlock-monitoring.png",
+          "sha256": "c534f0ceb24b2dcd548240a3911c6df703c14c0d21b35ce80f556fcc9f34934e"
+        }
+      ]
+    },
+    {
+      "sourcePath": "docs/getting-started/how-to-check-if-releem-agent-is-working.md",
+      "renamedPath": null,
+      "sha256": "7424a87277f2f8d9c9d2c0d07067371bd65ab932b52339f2a74320af347fca54",
+      "frontMatterSha256": "061860cf41de9a439aa6972edc62615f56abce1735e0b531fb62e799233a0d42",
+      "bodySha256": "fe0b10b369a8d467fcf1ffd948b8e4d3650d159c94233e1294c652913b65ca61",
+      "effectiveId": "getting-started/how-to-check-if-releem-agent-is-working",
+      "route": "/getting-started/how-to-check-if-releem-agent-is-working",
+      "images": [
+        {
+          "path": "static/img/dashboard-releem-score.png",
+          "sha256": "0ef79814da55cdd011ad8fe2da1a3db26d8e15218f0ffbcad7f55a45b6f9bef1"
+        }
+      ]
+    },
+    {
+      "sourcePath": "docs/getting-started/process-list.md",
+      "renamedPath": null,
+      "sha256": "32df4dbb1d75ccca48ae9a5cfc6e1b0dbe9b8c9a5d6758176602ca4b0376e979",
+      "frontMatterSha256": "697abfbcb419bfd228e8b58285593c1ecd7995d204ee3bd5d496bc63c1144032",
+      "bodySha256": "8365ad009acc2514934200883d81a7fee26b56125799f171a9af30f598b32c8e",
+      "effectiveId": "getting-started/process-list",
+      "route": "/getting-started/process-list",
+      "images": [
+        {
+          "path": "assets/images/releem-process-list.png",
+          "sha256": "ecbff5c982e77512f7a38d0de5ff22935c0a6686869d4877ebd9692819ba660e"
+        }
+      ]
+    },
+    {
+      "sourcePath": "docs/getting-started/query-analytics.md",
+      "renamedPath": null,
+      "sha256": "d14d6c22a63fef5fe8df57c0f3d0c4ca21223bd619327a91049d80da598dee46",
+      "frontMatterSha256": "8db8a57ec30f769b82a3a15ad4cda5b6e953f308725e3935b7d64e20c0a34f2d",
+      "bodySha256": "702a0f2ea05c8abb8eee88681d8506d81d4b91c3415efc950789fd255e7c512e",
+      "effectiveId": "getting-started/query-analytics",
+      "route": "/getting-started/query-analytics",
+      "images": [
+        {
+          "path": "assets/images/releem-dashboard-query-analytics-inspection.png",
+          "sha256": "6ee431f7c65c857494d6fc22e343d1cd80a5299768b5566b09e21bee8506b3e4"
+        },
+        {
+          "path": "assets/images/releem-dashboard-query-analytics.gif",
+          "sha256": "d0a980817c3d65f57da97cade30824d7b141b8a543168b021aac400a69935eda"
+        },
+        {
+          "path": "assets/images/releem-dashboard-query-analytics.png",
+          "sha256": "8003d90f0a4b251da26469e396a94bc9c23767d0d20e2d1910a39268cedc3772"
+        }
+      ]
+    },
+    {
+      "sourcePath": "docs/getting-started/query-optimization.md",
+      "renamedPath": null,
+      "sha256": "cd7232137aee58bfee4b75e7505986a776de6bd6b2e8cce7aa9c64fbb0e27158",
+      "frontMatterSha256": "869b518d259280941c8e8b741d0cd6d44c8b70f254285cc2693341d5844b360e",
+      "bodySha256": "f0c03dd37fb8c5058baa32d5762670af8d73340605f26fd022f8e76e436a00cd",
+      "effectiveId": "getting-started/query-optimization",
+      "route": "/getting-started/query-optimization",
+      "images": [
+        {
+          "path": "assets/images/releem-query-optimization-details.png",
+          "sha256": "dff7e815b9e943de9fc5a9ee5ec20fa3c9d7dba0d539908da2d9bf6a033fc0b6"
+        },
+        {
+          "path": "assets/images/releem-query-optimization.png",
+          "sha256": "61e378a7de5198c5e32861f240b55ce05123aee82af79b7f74306ac846b66064"
+        }
+      ]
+    },
+    {
+      "sourcePath": "docs/getting-started/schema-optimization.md",
+      "renamedPath": "docs/getting-started/schema-checks.md",
+      "sha256": "728b52aa1cc19683d4973537c4937a0f4b430dbe370db24384a9feabc2ce1e6e",
+      "frontMatterSha256": "4095784795df6d8fcbdd44b335f9c8355e6348711ca2d346b1d7e2e2c001e14b",
+      "bodySha256": "7c7584fa003791acdb0bb528a9b6dffef88f9716084ec7ea1a8d8529918fbe7b",
+      "effectiveId": "getting-started/schema-optimization",
+      "route": "/getting-started/schema-optimization",
+      "images": [
+        {
+          "path": "assets/images/releem-schema-optimization.png",
+          "sha256": "810ef06f1c9c2aa4c53c638aef6a406b71ff6c104294a4b16f36a7646118990b"
+        }
+      ]
+    },
+    {
+      "sourcePath": "docs/getting-started/security-checks.md",
+      "renamedPath": null,
+      "sha256": "d236ba13652f188db75680e2560cc8c43725c69d78b986641d5ffcbc01d09062",
+      "frontMatterSha256": "8013e725158cf89641e90b4ecc8144d83a9f9044dddcd7fb0eebce8fa65ec616",
+      "bodySha256": "19749f513c2d01296ed15f0ae7ed2a9873db6cc887c21dbe6d18391ef7ae9244",
+      "effectiveId": "getting-started/security-checks",
+      "route": "/getting-started/security-checks",
+      "images": [
+        {
+          "path": "assets/images/releem-security-checks.png",
+          "sha256": "ac5672987903b5f128cbc406884612649448d1f58735274c3c85a1c41f6c7c47"
+        }
+      ]
+    },
+    {
+      "sourcePath": "docs/getting-started/step-1-register-for-an-account.md",
+      "renamedPath": null,
+      "sha256": "da706909adcf66e95a671fa0c3e2c53e22ec6fef13d694423282da91a38e8837",
+      "frontMatterSha256": "4ac9407b6b9dd3b73b9edacf06e90b366c19d98bcf3876b39b52d7e79103555d",
+      "bodySha256": "5ab007ad3f4ee6d9ab1730c329f055bd7919d0bfe03a8c4e5d0004c38b01a6a5",
+      "effectiveId": "getting-started/step-1-register-for-an-account",
+      "route": "/getting-started/step-1-register-for-an-account",
+      "images": []
+    },
+    {
+      "sourcePath": "docs/getting-started/step-2-add-server.md",
+      "renamedPath": "docs/getting-started/connect-your-database-server.md",
+      "sha256": "7f1b39f9487a3e9526f673758afa31af1614fd215feb9292025bcff74566b768",
+      "frontMatterSha256": "a9c7ba32d594e8920531c077136becc428488acf4ec6a9fa4486b43013e18b33",
+      "bodySha256": "3b3e9bba0038e97445cfa236cb4cd30c60e0ee01d6b326270363d04ebf4629da",
+      "effectiveId": "getting-started/step-2-add-server",
+      "route": "/getting-started/step-2-add-server",
+      "images": [
+        {
+          "path": "assets/images/dashboard-add-server.png",
+          "sha256": "7730e8df48d331df009df52f78e93556d719b5e53c58b9abc6c2d198d586550a"
+        }
+      ]
+    },
+    {
+      "sourcePath": "docs/getting-started/step-3-getting-and-applying-recommendations.md",
+      "renamedPath": "docs/getting-started/configuration-tuning.md",
+      "sha256": "5bf5c0d4bf31454cad1b008e43ae3839b4065047d81f3ad830fb08deadbe3f42",
+      "frontMatterSha256": "b71b75c1eaf8325acd511a1955e8fd5655ddb9b75567ba267204eedf7818f0fc",
+      "bodySha256": "1d234f563bc5346a4b4cb659788208eb00b50a9e241737ff450956d75455db34",
+      "effectiveId": "getting-started/step-3-getting-and-applying-recommendations",
+      "route": "/getting-started/step-3-getting-and-applying-recommendations",
+      "images": [
+        {
+          "path": "assets/images/releem-dashboard-conf-tuning.png",
+          "sha256": "79c7256b8b3fb85293850dfb563c77aac318f013bb759ab963b76bc8d8e7f5ef"
+        }
+      ]
+    },
+    {
+      "sourcePath": "docs/getting-started/step-4-dashboard.md",
+      "renamedPath": "docs/getting-started/dashboard-overview.md",
+      "sha256": "782afa1650245133bab296efb70cabdf0cedb9590410b8102402bf293c4ed711",
+      "frontMatterSha256": "23ec30eb32458a31ec2cf84e183042b9239fd4d86ae5b4911eb46b7b86d6d26c",
+      "bodySha256": "e71ee8a617661ccc0f4eb825e02824a96fd4b173a7033158e3b0c187abfde255",
+      "effectiveId": "getting-started/step-4-dashboard",
+      "route": "/getting-started/step-4-dashboard",
+      "images": [
+        {
+          "path": "assets/images/releem_dashboard.png",
+          "sha256": "7f612f68133b0f517735cb87d3a17237fc1b3e6a13f1ef5e4befd478db235628"
+        }
+      ]
+    },
+    {
+      "sourcePath": "docs/getting-started/step-5-health-checks.md",
+      "renamedPath": "docs/getting-started/health-checks.md",
+      "sha256": "941d76ae7b25c25527637192f7244999f376720fada43f5c6677d22eac5b17e2",
+      "frontMatterSha256": "1fb6f78f1f490bfc0a66ac3ec3ea4a3309394f5b485fd0cc218bfd2986c3add1",
+      "bodySha256": "1ac578be62e938d5ee838d144814198c6675bb41a7a260dce40a13fc136b5850",
+      "effectiveId": "getting-started/step-5-health-checks",
+      "route": "/getting-started/step-5-health-checks",
+      "images": [
+        {
+          "path": "assets/images/releem-dashboard-health-checks.png",
+          "sha256": "a20e26b5cae21517d02e8ec92d49458228c9a4537f8a63323a74964425aeebc7"
+        }
+      ]
+    },
+    {
+      "sourcePath": "docs/getting-started/step-7-weekly-reports.md",
+      "renamedPath": "docs/getting-started/reports.md",
+      "sha256": "b841e766b1a31bd6d5b4422b71b1dd34d93fc9f7ce2402eb903ad9ce319bb3f9",
+      "frontMatterSha256": "1c8f81b3a73ec632368f8309e23a61ebdfb84c179d1d7077a143fafea580a8f0",
+      "bodySha256": "c50221c23b56dca577686d283f01a61ffc00a48688de5498a2b25259df613e01",
+      "effectiveId": "getting-started/step-7-weekly-reports",
+      "route": "/getting-started/step-7-weekly-reports",
+      "images": [
+        {
+          "path": "assets/images/releem-weekly-report.png",
+          "sha256": "f6758f1691a27c50ad4b0fa1d4541be3d7565becc846359a3ebaabf331c8f30f"
+        }
+      ]
+    },
+    {
+      "sourcePath": "docs/query-optimization/automatic-schema-changes.md",
+      "renamedPath": null,
+      "sha256": "b992cb93c485cc8d0f4343c12a448b90f1baa6fdab9ac0f48f90807274eed49f",
+      "frontMatterSha256": "8400c2bcf656fccaa1b5d1c2443808321ff9cdce2b07ce30f7bbd024c2d078e3",
+      "bodySha256": "dfc80494a0b1c41de97fee3d19fd47a9cb10108c24149dbc89b4b3441cfede8d",
+      "effectiveId": "query-optimization/automatic-schema-changes",
+      "route": "/query-optimization/automatic-schema-changes",
+      "images": []
+    },
+    {
+      "sourcePath": "docs/query-optimization/disable-sql-query-optimization.md",
+      "renamedPath": null,
+      "sha256": "11083c4f2fed2d1a39e4958e97a24edae3c362ad7c5248402ced946fb53015b9",
+      "frontMatterSha256": "76d4f07ef480ae8227697e3286c4afca0ce2d17b17bfbb1d9d81cf583623de7e",
+      "bodySha256": "d99d52b6c4f3a7aab4135156c4a39bcda61ceb7ed036f20b77dc299caa78f833",
+      "effectiveId": "query-optimization/disable-sql-query-optimization",
+      "route": "/query-optimization/disable-sql-query-optimization",
+      "images": []
+    },
+    {
+      "sourcePath": "docs/query-optimization/enable-sql-query-optimization.md",
+      "renamedPath": null,
+      "sha256": "d2c49ef6bc5dfca47b3ae587bbed545f36bb00f0b4b712becf5ff25a7bc4662e",
+      "frontMatterSha256": "c9a196c7a2873c833448918a4433b8f2845a32b8f7e8046d229a263c08b5e326",
+      "bodySha256": "f76a32ac97e0c74b24a677c78bd852780d39028cd17f51c9c4a0108c5fb4a3aa",
+      "effectiveId": "query-optimization/enable-sql-query-optimization",
+      "route": "/query-optimization/enable-sql-query-optimization",
+      "images": []
+    },
+    {
+      "sourcePath": "docs/query-optimization/prepared-statements.md",
+      "renamedPath": null,
+      "sha256": "8b16f67ad9c3535c6cf9f726f046a9e8f86e08a8d2e4d7e9f27945f26248ca3a",
+      "frontMatterSha256": "66c6638afc96157dc3d4622c19eaab1deb12499077f3873d2bce526949405636",
+      "bodySha256": "d490d70dec7142e703893b75b50e8a5cc09c568da158e9073a9e30bc040c5af7",
+      "effectiveId": "query-optimization/prepared-statements-issue",
+      "route": "/query-optimization/prepared-statements-issue",
+      "images": []
+    },
+    {
+      "sourcePath": "docs/query-optimization/schema-change-troubleshooting.md",
+      "renamedPath": null,
+      "sha256": "06358550566aa195ed5cd9a574212497bcaa2cc8d43c0a88abad9d598a5fb32d",
+      "frontMatterSha256": "2ff3639512abde3d00111319bc66f1864417cef1fcadf1a299c7c05e428382eb",
+      "bodySha256": "07a3d16f9f62e1387baba06312986e6cc4befe98b6c8c850dab53f49cdd05b30",
+      "effectiveId": "query-optimization/schema-change-troubleshooting",
+      "route": "/query-optimization/schema-change-troubleshooting",
+      "images": []
+    },
+    {
+      "sourcePath": "docs/releem-agent/configuration-settings.md",
+      "renamedPath": null,
+      "sha256": "33bf961a338cb8b04d5f802a0a83b969caf17424743baa66a6706c0d36d763bc",
+      "frontMatterSha256": "a421059c66a35c77c92bf6c6e966d66d650982d0a275af4cf45b23b62a1a7a55",
+      "bodySha256": "e915a8e5462aac02103663d67420bce310dc96aed74aeda5167957d761e77b19",
+      "effectiveId": "releem-agent/configuration",
+      "route": "/releem-agent/configuration",
+      "images": []
+    },
+    {
+      "sourcePath": "docs/releem-agent/how-to-check-logs.md",
+      "renamedPath": null,
+      "sha256": "a7e63d9d08866f01fe5f7c4f2c5f346d35d7aa9984dc4d662b70ad3b97af6db2",
+      "frontMatterSha256": "479489b9ca0dea238ba83a39fdba7781b30f8e91be97ca00b8195402c6911fea",
+      "bodySha256": "d39ebbfba3f7f1b0fee088606f7ade1570a564a48bc6f43ce4d402348e306e71",
+      "effectiveId": "releem-agent/how-to-check-logs",
+      "route": "/releem-agent/how-to-check-logs",
+      "images": []
+    },
+    {
+      "sourcePath": "docs/releem-agent/installation-guides/cloud-managed-aws-rds-automatic-installation.md",
+      "renamedPath": null,
+      "sha256": "4a9c107b2c8a87f9cb4e0e1dc90947147ba93a7342404634325791752cde407b",
+      "frontMatterSha256": "944d36c26fbe11ac0aa56c33013dcd92ae25c95ebffa9cc4c08b723c880b618e",
+      "bodySha256": "0bc3e1c8ffc810a309e07c6551c7aa1b29057f3916353c8b72705d1b1472f9cf",
+      "effectiveId": "releem-agent/installation-guides/cloud-managed-aws-rds-automatic-installation",
+      "route": "/releem-agent/installation-guides/cloud-managed-aws-rds-automatic-installation",
+      "images": []
+    },
+    {
+      "sourcePath": "docs/releem-agent/installation-guides/cloud-managed-azure-mysql-automatic-installation.md",
+      "renamedPath": null,
+      "sha256": "6ebe3d9ebf2ce3c4634a91c377dc8a87bf4afc67980c793cb3454bc002e679b7",
+      "frontMatterSha256": "21d0784cd52f7bb16afa66fb51374626bb8ab14f2b537f2ea973617021c12367",
+      "bodySha256": "ab3deff9fa7478d06e8ec4ba1c654e00b1e7b1ba1d0e05931becce4f6ddb1e35",
+      "effectiveId": "releem-agent/installation-guides/cloud-managed-azure-mysql-automatic-installation",
+      "route": "/releem-agent/installation-guides/cloud-managed-azure-mysql-automatic-installation",
+      "images": []
+    },
+    {
+      "sourcePath": "docs/releem-agent/installation-guides/cloud-managed-gcp-cloud-sql-automatic-installation.md",
+      "renamedPath": null,
+      "sha256": "92aa49e80d1921d102967ebac8a2d9ba9bbd866c3eb3805d4c4ce82f4d5fc880",
+      "frontMatterSha256": "71222edaaf4ee0b9c6798390008419b37367d4e89d78a5d0ae7190d464165c14",
+      "bodySha256": "d4a55a841891516e27c3b0ca573e98c34b360eb08e8eda0d0cdca2c94290f955",
+      "effectiveId": "releem-agent/installation-guides/cloud-managed-gcp-cloud-sql-automatic-installation",
+      "route": "/releem-agent/installation-guides/cloud-managed-gcp-cloud-sql-automatic-installation",
+      "images": []
+    },
+    {
+      "sourcePath": "docs/releem-agent/installation-guides/clusters.md",
+      "renamedPath": null,
+      "sha256": "15da19f0538abe57de41bf3ddd66f35b7559c94a58d21ba0499e9bf21cd06bc2",
+      "frontMatterSha256": "22ba714f76a8b13831f88dd2d89dd9f1b4f5c2bd26eeb08c33c84a9e372a31e4",
+      "bodySha256": "2db744c008f392cd2ed0a2c9220b3f293d7176bd1d7de263828c31448433d81f",
+      "effectiveId": "releem-agent/installation-guides/clusters",
+      "route": "/releem-agent/installation-guides/clusters",
+      "images": []
+    },
+    {
+      "sourcePath": "docs/releem-agent/installation-guides/installation-in-kubernetes.md",
+      "renamedPath": null,
+      "sha256": "5dbb3138d551805f5b62ef4b513cc52712867b49c398b1919cee0f550dae18dd",
+      "frontMatterSha256": "40ae9377ff1f57fa02f7d19bbee6e0c1382bb49156d9d73f2ed2a34515a93db4",
+      "bodySha256": "a406ab21529b5ca9bc476c2e9075ebc56fd4356937250b0aafe29374dfa26cff",
+      "effectiveId": "releem-agent/installation-guides/installation-in-kubernetes",
+      "route": "/releem-agent/installation-guides/installation-in-kubernetes",
+      "images": []
+    },
+    {
+      "sourcePath": "docs/releem-agent/installation-guides/postgresql-manual-installation-linux.md",
+      "renamedPath": null,
+      "sha256": "2edcce165b2fa9635b8175eca24cf20fb34763676eee46ac45e68d116ade11eb",
+      "frontMatterSha256": "10f32c3cdde59c65d9f9a0331df4d6cb02a70b23b9eb49d0f18d90ad8e9772be",
+      "bodySha256": "962ef1bb70a3dcd4d0e4263e6a9c5883276a005c8e02b9b306eac20f29befe29",
+      "effectiveId": "releem-agent/installation-guides/postgresql-manual-linux",
+      "route": "/releem-agent/installation-guides/postgresql-manual-linux",
+      "images": []
+    },
+    {
+      "sourcePath": "docs/releem-agent/installation-guides/self-managed-servers-automatic-installation.md",
+      "renamedPath": null,
+      "sha256": "462ae9499bbaa6818ef3932933ef1515858d5beb771a0412638b9ddc9d15df5c",
+      "frontMatterSha256": "e18af9f4a5d01f6478031c9d2983e9d834c274b484322d0646b307d81b5f0481",
+      "bodySha256": "f7aca2c1480da38b14e6db2dfc97c50b724b48cba8ced6eb0e499254d0fec32d",
+      "effectiveId": "releem-agent/installation-guides/self-managed-servers-automatic-installation",
+      "route": "/releem-agent/installation-guides/self-managed-servers-automatic-installation",
+      "images": [
+        {
+          "path": "static/img/releem-dashboard-agent-automatic-installation.png",
+          "sha256": "807fefdd2c7ac7a486826b4e3f21c75caef2be0ee4dc67bce40803d3425450d3"
+        }
+      ]
+    },
+    {
+      "sourcePath": "docs/releem-agent/installation-guides/self-managed-servers-docker-installation.md",
+      "renamedPath": null,
+      "sha256": "1f34a63493d95793f24877113084f40b93eaad570d8e16eb706367b2ccdfd4d8",
+      "frontMatterSha256": "af9e73e8d597d30dc23b0eb59abd94cfd241a1b1dc82a0f2dfe8e4a3092fedfd",
+      "bodySha256": "7906e2ab735b02b3ae53375eb412de2c84a83a9021db865419b6aca6f365f63d",
+      "effectiveId": "releem-agent/installation-guides/self-managed-servers-docker-installation",
+      "route": "/releem-agent/installation-guides/self-managed-servers-docker-installation",
+      "images": []
+    },
+    {
+      "sourcePath": "docs/releem-agent/installation-guides/self-managed-servers-manual-installation-linux.md",
+      "renamedPath": null,
+      "sha256": "16ba8bfbc0c000ca68bd776e543d6e49d03b3154f805a583385e84d9dd555dc3",
+      "frontMatterSha256": "ffcdfbd5b1c59dd88b3263856bb89df5352ef7ec001f9030c1b84c6f0cca3def",
+      "bodySha256": "24a6076b6acda765bed399dda26c10d90bbc4a2031ee2a03c198e2fcf6b530a6",
+      "effectiveId": "releem-agent/installation-guides/self-managed-servers-manual-installation-linux",
+      "route": "/releem-agent/installation-guides/self-managed-servers-manual-installation-linux",
+      "images": []
+    },
+    {
+      "sourcePath": "docs/releem-agent/installation-guides/self-managed-servers-manual-installation-windows.md",
+      "renamedPath": null,
+      "sha256": "8b25852b06d8f7e1796d1e7831e1ea46c4f0bd39fed515449de51e083e9d8800",
+      "frontMatterSha256": "fc7c91152271d185ebcc9cce9db7b87ce15def5c6ea97117a39649cb62c13df9",
+      "bodySha256": "ed3863b80aba3c52bc01689c6e10314c1fa6327947e904ff2a38b719a3fee768",
+      "effectiveId": "releem-agent/installation-guides/self-managed-servers-manual-installation-windows",
+      "route": "/releem-agent/installation-guides/self-managed-servers-manual-installation-windows",
+      "images": []
+    },
+    {
+      "sourcePath": "docs/releem-agent/installation-guides/whm-cpanel.md",
+      "renamedPath": null,
+      "sha256": "0dcb6cfd57b125eb7af3b86aecb6c6cbe94f1c17291c6896faacb0d28d7e57c1",
+      "frontMatterSha256": "0fe20f63917d7aa722a24f83469e163553a218d34948e610d108901667087992",
+      "bodySha256": "cb8dca55f8d92317d977074aed061727950834a013786a0de10128e6a9a42e6f",
+      "effectiveId": "releem-agent/installation-guides/whm-cpanel",
+      "route": "/releem-agent/installation-guides/whm-cpanel",
+      "images": []
+    },
+    {
+      "sourcePath": "docs/releem-agent/migration.md",
+      "renamedPath": null,
+      "sha256": "a48e51a9389cb990f1f997d4577c213657b847564555459f66dc2581fb1e15d9",
+      "frontMatterSha256": "8fc913f22a4ce9612845856366e8ccde7622619deeca373ea2976d37d63ebace",
+      "bodySha256": "c0ddff703fd2237f1ff9f87433ef9a40f4e09baffc4a1b57b57f2c5b7fc0d8e0",
+      "effectiveId": "releem-agent/migration",
+      "route": "/releem-agent/migration",
+      "images": []
+    },
+    {
+      "sourcePath": "docs/releem-agent/mysql-permissions.md",
+      "renamedPath": null,
+      "sha256": "50a233d239d5f0bb49195a7e791a0bc1668b65c7516f63b3c0951712338456fd",
+      "frontMatterSha256": "8af81217c9d1b31125fe336f742eb031d765cec1853f709424f34f90a8930aac",
+      "bodySha256": "69a54d9de3710c62613038b9be66f6533bf9186d8d2ef0ee2fcfe9183b2fee2a",
+      "effectiveId": "releem-agent/mysql-permissions",
+      "route": "/releem-agent/mysql-permissions",
+      "images": []
+    },
+    {
+      "sourcePath": "docs/releem-agent/uninstallation.md",
+      "renamedPath": null,
+      "sha256": "eae1d490d1c746193475ce3e908d78e8d09926afe547c30f782d441ffec09a3c",
+      "frontMatterSha256": "fc9f89c69d20812582e9e8b5205f1e35f4641058ff8dc90a56591012d4b0dc93",
+      "bodySha256": "7ebacf05602169c182dd952fda52ff46a460ce260d9572648cec3346229ac56e",
+      "effectiveId": "releem-agent/uninstallation",
+      "route": "/releem-agent/uninstallation",
+      "images": []
+    },
+    {
+      "sourcePath": "docs/releem-agent/update.md",
+      "renamedPath": null,
+      "sha256": "7369c1f3b1f96e59f3b6307e5a3f64af2c6bd8363cd2e21e09209738e2363761",
+      "frontMatterSha256": "661059c1251260fe94fb2ac681f2d56fde4734a54830f74281658a0c2855582e",
+      "bodySha256": "edd2f13dedac66e60db207a2b008703570fbfe5fdff521d7e8d5aa7051a79bac",
+      "effectiveId": "releem-agent/update",
+      "route": "/releem-agent/update",
+      "images": []
+    },
+    {
+      "sourcePath": "docs/server-settings/invite-users-and-assign-roles.md",
+      "renamedPath": null,
+      "sha256": "7022e3b0622525d293382f3d3aa4b4a9fad0b405501246494a80320b91227b00",
+      "frontMatterSha256": "9a38d7ff80d9cdc0be4de3c2c7cef244b1af81373322c1a77062887c70e18ae9",
+      "bodySha256": "f24dba8b38979da856bca71decefc4d427e716280cb38474c66054c8d02593e1",
+      "effectiveId": "server-settings/invite-users-and-assign-roles",
+      "route": "/server-settings/invite-users-and-assign-roles",
+      "images": [
+        {
+          "path": "assets/images/dashboard-settings-invitation-popup.png",
+          "sha256": "7fb37f33e9e2ce28d88a450fce6d8af5015b82c124d3b599eb97a7a456b30e4a"
+        },
+        {
+          "path": "assets/images/dashboard-settings-invitation.png",
+          "sha256": "ae6809c6edf64afb80c2e4f3c0a17423eb05b14bdc20eb70f4b91d9d5f3defab"
+        }
+      ]
+    },
+    {
+      "sourcePath": "docs/server-settings/your-server-settings.md",
+      "renamedPath": null,
+      "sha256": "761f1bc1ff4eab4d05d00efd65b1a60a89d7d5cb4f3f4f499e8fa5caf6248342",
+      "frontMatterSha256": "8c21bf5dea9695567396a08f4a7c5284e2f83b1a582a82a982e364b5705122dd",
+      "bodySha256": "3d6d9eea9e9a27c19e5be2c5fddac1e5d885dcea4ae76335c207b734c230169f",
+      "effectiveId": "server-settings/your-server-settings",
+      "route": "/server-settings/your-server-settings",
+      "images": [
+        {
+          "path": "assets/images/dashboard-settings.png",
+          "sha256": "4cf7af1035ecf29085e9ef856853dca210c08b491bbcbfba21ae6722285a6e19"
+        }
+      ]
+    },
+    {
+      "sourcePath": "docs/welcome.md",
+      "renamedPath": "docs/releem-overview.md",
+      "sha256": "8f7de3e5abc16fd351df7bc89ee00907b9ad981942f3b64d1df464e5688e553c",
+      "frontMatterSha256": "0e11941e555e7850ac6366d11ca72e478918cb45704b986052611abfd2bcd9a3",
+      "bodySha256": "9415285e9a811860b18e4ea60812731b7241eb9fe307357ad11c028b7da856a2",
+      "effectiveId": "welcome",
+      "route": "/",
+      "images": [
+        {
+          "path": "assets/images/releem_dashboard.png",
+          "sha256": "7f612f68133b0f517735cb87d3a17237fc1b3e6a13f1ef5e4befd478db235628"
+        }
+      ]
+    }
+  ],
+  "routes": [
+    "/",
+    "/billing/cancellation",
+    "/billing/update-payment-information",
+    "/configuration-tuning/example-of-configuration",
+    "/configuration-tuning/how-to-apply-configuration-manually/aws-rds",
+    "/configuration-tuning/how-to-apply-configuration-manually/docker",
+    "/configuration-tuning/how-to-apply-configuration-manually/gcp-cloud-sql",
+    "/configuration-tuning/how-to-apply-configuration-manually/linux",
+    "/configuration-tuning/how-to-apply-configuration-manually/windows",
+    "/configuration-tuning/how-to-apply-configuration-using-agent",
+    "/configuration-tuning/how-to-apply-configuration-using-cron",
+    "/configuration-tuning/how-to-apply-configuration-using-portal",
+    "/configuration-tuning/how-to-rollback-to-previous-configuration",
+    "/configuration-tuning/initial-mysql-configuration",
+    "/configuration-tuning/limit-memory-for-mysql",
+    "/configuration-tuning/mysql-tuning-process",
+    "/frequently-asked-questions",
+    "/getting-started/deadlock-monitoring",
+    "/getting-started/how-to-check-if-releem-agent-is-working",
+    "/getting-started/process-list",
+    "/getting-started/query-analytics",
+    "/getting-started/query-optimization",
+    "/getting-started/schema-optimization",
+    "/getting-started/security-checks",
+    "/getting-started/step-1-register-for-an-account",
+    "/getting-started/step-2-add-server",
+    "/getting-started/step-3-getting-and-applying-recommendations",
+    "/getting-started/step-4-dashboard",
+    "/getting-started/step-5-health-checks",
+    "/getting-started/step-7-weekly-reports",
+    "/query-optimization/automatic-schema-changes",
+    "/query-optimization/disable-sql-query-optimization",
+    "/query-optimization/enable-sql-query-optimization",
+    "/query-optimization/prepared-statements-issue",
+    "/query-optimization/schema-change-troubleshooting",
+    "/releem-agent/configuration",
+    "/releem-agent/how-to-check-logs",
+    "/releem-agent/installation-guides/cloud-managed-aws-rds-automatic-installation",
+    "/releem-agent/installation-guides/cloud-managed-azure-mysql-automatic-installation",
+    "/releem-agent/installation-guides/cloud-managed-gcp-cloud-sql-automatic-installation",
+    "/releem-agent/installation-guides/clusters",
+    "/releem-agent/installation-guides/installation-in-kubernetes",
+    "/releem-agent/installation-guides/postgresql-manual-linux",
+    "/releem-agent/installation-guides/self-managed-servers-automatic-installation",
+    "/releem-agent/installation-guides/self-managed-servers-docker-installation",
+    "/releem-agent/installation-guides/self-managed-servers-manual-installation-linux",
+    "/releem-agent/installation-guides/self-managed-servers-manual-installation-windows",
+    "/releem-agent/installation-guides/whm-cpanel",
+    "/releem-agent/migration",
+    "/releem-agent/mysql-permissions",
+    "/releem-agent/uninstallation",
+    "/releem-agent/update",
+    "/server-settings/invite-users-and-assign-roles",
+    "/server-settings/your-server-settings"
+  ],
+  "assets": [
+    {
+      "path": "assets/images/dashboard-add-server.png",
+      "sha256": "7730e8df48d331df009df52f78e93556d719b5e53c58b9abc6c2d198d586550a"
+    },
+    {
+      "path": "assets/images/dashboard-settings-invitation-popup.png",
+      "sha256": "7fb37f33e9e2ce28d88a450fce6d8af5015b82c124d3b599eb97a7a456b30e4a"
+    },
+    {
+      "path": "assets/images/dashboard-settings-invitation.png",
+      "sha256": "ae6809c6edf64afb80c2e4f3c0a17423eb05b14bdc20eb70f4b91d9d5f3defab"
+    },
+    {
+      "path": "assets/images/dashboard-settings.png",
+      "sha256": "4cf7af1035ecf29085e9ef856853dca210c08b491bbcbfba21ae6722285a6e19"
+    },
+    {
+      "path": "assets/images/releem-applying-click.gif",
+      "sha256": "f52545690cf7606ae4d6c88205d22212145065e7746ace9304672c0fc05b165e"
+    },
+    {
+      "path": "assets/images/releem-applying.gif",
+      "sha256": "53935f48e1aba707482aa5cecb03a4f7aac16c41ba3b48ea0581fefc4000f4e1"
+    },
+    {
+      "path": "assets/images/releem-dashboard-apply.png",
+      "sha256": "071ee319506f8662ff0885e0bdd82b89da1853e8a1741de2f2413c12dbcc2d6a"
+    },
+    {
+      "path": "assets/images/releem-dashboard-conf-tuning.png",
+      "sha256": "79c7256b8b3fb85293850dfb563c77aac318f013bb759ab963b76bc8d8e7f5ef"
+    },
+    {
+      "path": "assets/images/releem-dashboard-health-checks.png",
+      "sha256": "a20e26b5cae21517d02e8ec92d49458228c9a4537f8a63323a74964425aeebc7"
+    },
+    {
+      "path": "assets/images/releem-dashboard-query-analytics-inspection.png",
+      "sha256": "6ee431f7c65c857494d6fc22e343d1cd80a5299768b5566b09e21bee8506b3e4"
+    },
+    {
+      "path": "assets/images/releem-dashboard-query-analytics.gif",
+      "sha256": "d0a980817c3d65f57da97cade30824d7b141b8a543168b021aac400a69935eda"
+    },
+    {
+      "path": "assets/images/releem-dashboard-query-analytics.png",
+      "sha256": "8003d90f0a4b251da26469e396a94bc9c23767d0d20e2d1910a39268cedc3772"
+    },
+    {
+      "path": "assets/images/releem-dashboard-recommended-configuration.png",
+      "sha256": "7010c6664bdd8636621ac4f05cc571da79727d193458b49b79b94ddcf7b8f221"
+    },
+    {
+      "path": "assets/images/releem-deadlock-monitoring-details.png",
+      "sha256": "1d9176176cb3adc038ff4543be7a111deee7317bd1ca236f4645b41b9b133dfb"
+    },
+    {
+      "path": "assets/images/releem-deadlock-monitoring.png",
+      "sha256": "c534f0ceb24b2dcd548240a3911c6df703c14c0d21b35ce80f556fcc9f34934e"
+    },
+    {
+      "path": "assets/images/releem-icon-top.png",
+      "sha256": "0a0f42450e276a2d9441b91ec4ce7682c5b47ed849f638cfb765415c1592e9e3"
+    },
+    {
+      "path": "assets/images/releem-process-list.png",
+      "sha256": "ecbff5c982e77512f7a38d0de5ff22935c0a6686869d4877ebd9692819ba660e"
+    },
+    {
+      "path": "assets/images/releem-query-optimization-details.png",
+      "sha256": "dff7e815b9e943de9fc5a9ee5ec20fa3c9d7dba0d539908da2d9bf6a033fc0b6"
+    },
+    {
+      "path": "assets/images/releem-query-optimization.png",
+      "sha256": "61e378a7de5198c5e32861f240b55ce05123aee82af79b7f74306ac846b66064"
+    },
+    {
+      "path": "assets/images/releem-schema-optimization.png",
+      "sha256": "810ef06f1c9c2aa4c53c638aef6a406b71ff6c104294a4b16f36a7646118990b"
+    },
+    {
+      "path": "assets/images/releem-security-checks.png",
+      "sha256": "ac5672987903b5f128cbc406884612649448d1f58735274c3c85a1c41f6c7c47"
+    },
+    {
+      "path": "assets/images/releem-weekly-report.png",
+      "sha256": "f6758f1691a27c50ad4b0fa1d4541be3d7565becc846359a3ebaabf331c8f30f"
+    },
+    {
+      "path": "assets/images/releem_dashboard.png",
+      "sha256": "7f612f68133b0f517735cb87d3a17237fc1b3e6a13f1ef5e4befd478db235628"
+    },
+    {
+      "path": "static/img/dashboard-releem-score.png",
+      "sha256": "0ef79814da55cdd011ad8fe2da1a3db26d8e15218f0ffbcad7f55a45b6f9bef1"
+    },
+    {
+      "path": "static/img/dashboard-settings.png",
+      "sha256": "8e17642cab07d2a7238d85efe63adebaf25d86d2aa6e3589cc08305afd499254"
+    },
+    {
+      "path": "static/img/favicon.ico",
+      "sha256": "b499e6bf95c524321f22221a199272ffaccecbfbb6f87c66282d1e7001f259be"
+    },
+    {
+      "path": "static/img/releem-applying-click.gif",
+      "sha256": "f52545690cf7606ae4d6c88205d22212145065e7746ace9304672c0fc05b165e"
+    },
+    {
+      "path": "static/img/releem-applying.gif",
+      "sha256": "53935f48e1aba707482aa5cecb03a4f7aac16c41ba3b48ea0581fefc4000f4e1"
+    },
+    {
+      "path": "static/img/releem-dashboard-agent-automatic-installation.png",
+      "sha256": "807fefdd2c7ac7a486826b4e3f21c75caef2be0ee4dc67bce40803d3425450d3"
+    },
+    {
+      "path": "static/img/releem-icon-top.png",
+      "sha256": "0a0f42450e276a2d9441b91ec4ce7682c5b47ed849f638cfb765415c1592e9e3"
+    },
+    {
+      "path": "static/img/releem_dashboard.png",
+      "sha256": "9fd1d430421ce83a883fe8388af6e9859a4372fd89dc7196f62600e0c410a600"
+    }
+  ]
+}

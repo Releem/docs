@@ -7,6 +7,8 @@ dist/
 .cache-loader
 .astro/
 
+.agent/
+
 # dependencies
 node_modules/
 
@@ -30,3 +32,4 @@ pnpm-debug.log*
 .worktrees/
 CLAUDE.md
 AGENTS.md
+.gstack/
