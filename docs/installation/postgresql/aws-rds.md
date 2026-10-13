@@ -10,7 +10,7 @@ Connect the Releem Agent to Amazon RDS for PostgreSQL or Amazon Aurora PostgreSQ
 
 ## Prerequisites
 
-Review [PostgreSQL managed-service permissions](/supported-databases/postgresql/required-permissions#aws-rds-and-aurora-postgresql): create the monitoring account with `pg_monitor` and `pg_read_all_data`. Do not run self-managed `pg_hba_file_rules` grants on RDS or Aurora; the internal `rdsadmin` role owns that view. Enable **Enhanced Monitoring** on the instance; it supplies system metrics. Confirm that the effective `shared_preload_libraries` list on the running instance contains `pg_stat_statements` so Releem can collect query data:
+Review [PostgreSQL managed-service permissions](/supported-databases/postgresql/required-permissions#aws-rds-and-aurora-postgresql): create the monitoring account with `pg_monitor` and `pg_read_all_data` (on PostgreSQL 12 and 13, use the [12/13 query grants](/supported-databases/postgresql/required-permissions#legacy-postgresql-query-grants) instead of `pg_read_all_data`). Do not run self-managed `pg_hba_file_rules` grants on RDS or Aurora; the internal `rdsadmin` role owns that view. Enable **Enhanced Monitoring** on the instance; it supplies system metrics. Confirm that the effective `shared_preload_libraries` list on the running instance contains `pg_stat_statements` so Releem can collect query data:
 
 ```sql
 SHOW shared_preload_libraries;

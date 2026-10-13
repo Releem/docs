@@ -181,6 +181,29 @@ function hasUnavailableRouteLabel(source, route) {
   });
 }
 
+
+// Supported versions are published once, in the Supported Databases table.
+// Other pages must not repeat a fixed range that can drift from that table.
+const staleVersionRange = /Supported versions are|Releem supports (?:MySQL|MariaDB|PostgreSQL) \d|MySQL 5\.5\s*[–-]\s*8\.0|MariaDB 10\.1\s*[–-]\s*11\.0|PostgreSQL 15\s*[–-]\s*18|PostgreSQL 15\+/u;
+
+test('Supported Databases is the single source of supported versions', async () => {
+  const source = await readFile(path.join(projectRoot, 'docs/supported-databases/index.md'), 'utf8');
+  assert.match(source, /^\| Database \| Supported versions \|/mu);
+  for (const [database, versions] of [
+    ['MySQL', ['5.5', '5.7', '8.0']],
+    ['MariaDB', ['10', '11']],
+    ['PostgreSQL', ['12', '13', '14', '15', '18']],
+    ['Percona Server for MySQL', ['5.7', '8.0']],
+  ]) {
+    const row = source.split('\n').find((line) => line.startsWith(`| ${database} |`));
+    assert.ok(row, `Supported Databases must list ${database}`);
+    const supported = row.split('|')[2];
+    for (const version of versions) {
+      assert.match(supported, new RegExp(`\\b${version.replace('.', '\\.')}\\b`, 'u'), `${database} row must list ${version}`);
+    }
+  }
+});
+
 test('engine-first installation pages, links, permissions, anchors, and Linux compatibility match the manifest', async () => {
   assert.equal(
     existsSync(engineFirstManifestPath),
@@ -480,14 +503,7 @@ test('engine-first installation pages, links, permissions, anchors, and Linux co
   for (const database of ['mysql', 'mariadb', 'postgresql']) {
     const linux = await readFile(path.join(projectRoot, `docs/installation/${database}/linux.md`), 'utf8');
     assert.doesNotMatch(linux, /1\.25\.2|01e1f6e|September 1, 2026/u);
-    assert.match(
-      linux,
-      database === 'mysql'
-        ? /MySQL 5\.5[^\n]+8\.0/u
-        : database === 'mariadb'
-          ? /MariaDB 10\.1[^\n]+11\.0/u
-          : /PostgreSQL 15[^\n]+18/u,
-    );
+    assert.doesNotMatch(linux, staleVersionRange, `${database} Linux guide must defer versions to /supported-databases`);
     assert.match(linux, /\{#automatic-installation\}/u);
     assert.match(linux, /\{#manual-installation\}/u);
     assert.equal((linux.match(/sudo bash -c '/gu) ?? []).length, 2);
@@ -690,7 +706,7 @@ test('MySQL permissions are canonical, exact-source, and MySQL-only', async () =
     title: 'MySQL Permissions for Releem Agent',
   });
   assert.match(source, /^# MySQL Permissions for Releem Agent$/mu);
-  assert.match(source, /MySQL 5\.5[^\n]+8\.0/u);
+  assert.doesNotMatch(source, staleVersionRange);
   assert.doesNotMatch(source, /read-only/iu);
   assert.doesNotMatch(source, /MariaDB/iu);
   assert.doesNotMatch(source, /@\s*['"`]%(?:['"`]|\b)/u);
@@ -722,7 +738,7 @@ test('MariaDB permissions are canonical, exact-source, and exclude MySQL-only gr
     title: 'MariaDB Permissions for Releem Agent',
   });
   assert.match(source, /^# MariaDB Permissions for Releem Agent$/mu);
-  assert.match(source, /MariaDB 10\.1[^\n]+11\.0/u);
+  assert.doesNotMatch(source, staleVersionRange);
   assert.doesNotMatch(source, /read-only/iu);
   assert.doesNotMatch(source, /@\s*['"`]%(?:['"`]|\b)/u);
   assert.match(source, /['"`]AGENT_SOURCE_HOST['"`]/u);
@@ -801,7 +817,7 @@ test('split cluster and mixed-engine workflows use contextual permission referen
 test('PostgreSQL permissions separate baseline, extension, and optional DBA-reviewed capabilities', async () => {
   assert.equal(existsSync(postgresPermissionsPath), true, 'Create PostgreSQL permissions guide');
   const source = await readFile(postgresPermissionsPath, 'utf8');
-  assert.match(source, /PostgreSQL 15[^\n]+18/u);
+  assert.doesNotMatch(source, staleVersionRange);
   assert.match(source, /GRANT pg_monitor TO releem;/u);
   assert.doesNotMatch(source, /GRANT EXECUTE ON FUNCTION pg_hba_file_rules|function grant/iu);
   assert.match(source, /pg_stat_statements/u);

@@ -10,7 +10,7 @@ Run the applicable installation command as `root`. Replace bracketed placeholder
 
 Use this guide for a self-managed MySQL server on Linux.
 
-Supported versions are MySQL 5.5–8.0. Install the Agent on the database host when possible. For a remote database, restrict the database listener and firewall to the exact Agent source address.
+Install the Agent on the database host when possible. For a remote database, restrict the database listener and firewall to the exact Agent source address.
 
 :::note CloudLinux
 After installation, complete the [CloudLinux-specific CageFS and MySQLGovernor steps](/get-started/troubleshoot-releem-agent#cloudlinux).

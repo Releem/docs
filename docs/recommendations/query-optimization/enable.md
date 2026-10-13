@@ -56,13 +56,11 @@ To enable the SQL Query Optimization feature, please select your installation ty
 
   #### PostgreSQL Servers
 
-  This procedure covers the documented PostgreSQL 15–18 range. The previous PostgreSQL 12/13 grants are kept as a [historical reference](/supported-databases/postgresql/required-permissions#legacy-postgresql-query-grants), not as a current installation path.
-
-  1. Grant additional permissions to the `releem` user as a PostgreSQL superuser:
+  1. Grant additional permissions to the `releem` user as a PostgreSQL superuser. On PostgreSQL 14 and later:
      ```sql
-     -- PostgreSQL 15–18
      GRANT pg_read_all_data TO releem;
      ```
+     On PostgreSQL 12 and 13, use the [PostgreSQL 12/13 query grants](/supported-databases/postgresql/required-permissions#legacy-postgresql-query-grants) for each monitored database and schema.
   2. Add `query_optimization=true` setting to the `/opt/releem/releem.conf`.
   3. Restart Releem Agent using the following command:
      ```bash
@@ -209,11 +207,13 @@ performance-schema-consumer-events-statements-current = ON
 
 For MySQL or Percona, review the [MySQL additional permissions](/supported-databases/mysql/required-permissions#additional-database-permissions-required). For MariaDB, review the [MariaDB additional permissions](/supported-databases/mariadb/required-permissions#additional-database-permissions-required).
 
-For PostgreSQL, grant optimization read access to the Releem Agent user:
+For PostgreSQL 14 and later, grant optimization read access to the Releem Agent user:
 
 ```sql
 GRANT pg_read_all_data TO releem;
 ```
+
+For PostgreSQL 12 and 13, use the [PostgreSQL 12/13 query grants](/supported-databases/postgresql/required-permissions#legacy-postgresql-query-grants).
 
 ## Data Collection and Analysis
 

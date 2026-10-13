@@ -9,7 +9,7 @@ import TabItem from '@theme/TabItem';
 
 # Apply configuration manually for PostgreSQL
 
-Choose the environment that hosts PostgreSQL 15–18. On Linux, the Agent saves the recommendation to `/opt/releem/conf/z_aiops_postgresql.conf`; in Docker, the same path is inside the Agent container. On AWS RDS and Aurora, apply the settings through parameter groups.
+On Linux, the Agent saves the recommendation to `/opt/releem/conf/z_aiops_postgresql.conf`; in Docker, the same path is inside the Agent container. On AWS RDS and Aurora, apply the settings through parameter groups.
 
 <Tabs groupId="configuration-platform" queryString="platform" defaultValue="linux">
   <TabItem value="linux" label="Linux">

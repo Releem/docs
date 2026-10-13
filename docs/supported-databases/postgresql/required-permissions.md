@@ -6,7 +6,7 @@ title: PostgreSQL Permissions for Releem Agent
 
 # PostgreSQL Permissions for Releem Agent
 
-Use this page with the [PostgreSQL installation guides](/installation/postgresql). Releem supports PostgreSQL 15–18. For self-managed PostgreSQL, install the `postgresql-contrib` package that matches the server version before enabling `pg_stat_statements`.
+Use this page with the [PostgreSQL installation guides](/installation/postgresql) to create and review the database account that the Releem Agent uses with PostgreSQL.
 
 These grants are not universally least-privilege. Object ownership, managed-service restrictions, extensions, and Releem features vary. A DBA must validate every grant and connection rule for the target database and enabled features.
 
@@ -50,6 +50,8 @@ WHERE rolname = 'releem';
 
 ## Query metrics with pg_stat_statements
 
+For self-managed PostgreSQL, install the `postgresql-contrib` package that matches the server version before enabling `pg_stat_statements`.
+
 Query performance metrics require `pg_stat_statements`. First inspect the existing `shared_preload_libraries` setting:
 
 ```sql
@@ -72,21 +74,23 @@ Confirm that the monitoring role can read the required statistics views without 
 
 ## Query and schema capabilities
 
-The standard PostgreSQL Linux command enables query data collection with `RELEEM_QUERY_OPTIMIZATION=true`. Complete the `pg_stat_statements` setup above. When you create the monitoring role manually, run the following command as a PostgreSQL superuser before installing the Agent:
+The standard PostgreSQL Linux command enables query data collection with `RELEEM_QUERY_OPTIMIZATION=true`. Complete the `pg_stat_statements` setup above. When you create the monitoring role manually, grant query read access as a PostgreSQL superuser before installing the Agent. On PostgreSQL 14 and later, run:
 
 ```sql
 GRANT pg_read_all_data TO releem;
 ```
 
-This role grants read access to data across all schemas. Have a DBA approve that scope for the monitored server. The installer grants query read access when it creates the monitoring role automatically, but it does not grant this access when you supply an existing monitoring login and password. If the grant cannot be approved, remove `RELEEM_QUERY_OPTIMIZATION=true` from the manual installation command until the required access is configured. Collecting query data does not authorize Releem to apply query or schema changes.
+On PostgreSQL 12 and 13, `pg_read_all_data` does not exist; use the [PostgreSQL 12/13 query grants](#legacy-postgresql-query-grants) instead.
+
+The `pg_read_all_data` role grants read access to data across all schemas. Have a DBA approve that scope for the monitored server. The installer grants query read access when it creates the monitoring role automatically, but it does not grant this access when you supply an existing monitoring login and password. If the grant cannot be approved, remove `RELEEM_QUERY_OPTIMIZATION=true` from the manual installation command until the required access is configured. Collecting query data does not authorize Releem to apply query or schema changes.
 
 Applying query or schema changes can require permissions beyond baseline monitoring. Those permissions depend on the selected databases, schemas, extensions, and operational policy. Do not grant broad schema, DDL, or write privileges from a generic template. Have a DBA review the exact change and required access before enabling an application workflow.
 
 ## PostgreSQL 12/13 query grants {#legacy-postgresql-query-grants}
 
-Releem's documented PostgreSQL support is 15–18. These grants from the earlier guide are retained for reference; PostgreSQL 12 and 13 are [end-of-life](https://www.postgresql.org/support/versioning/) and this is not a supported Releem installation path.
+PostgreSQL 12 and 13 do not have the `pg_read_all_data` role. For query collection on these versions, grant read access to each monitored database and schema instead. PostgreSQL 12 and 13 are [end-of-life](https://www.postgresql.org/support/versioning/) upstream; plan an upgrade according to your vendor's lifecycle requirements.
 
-For a legacy migration, have a database administrator approve read access to the named database and schema. Replace the placeholders and connect to that database before running the schema grants:
+Have a database administrator approve read access to each named database and schema. Replace the placeholders and connect to that database before running the schema grants:
 
 ```sql
 GRANT CONNECT ON DATABASE "[DATABASE_NAME]" TO releem;
@@ -95,7 +99,7 @@ GRANT SELECT ON ALL TABLES IN SCHEMA "[SCHEMA_NAME]" TO releem;
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA "[SCHEMA_NAME]" TO releem;
 ```
 
-These grants cover existing objects in the selected schema, not objects created later. See the [PostgreSQL 13 GRANT reference](https://www.postgresql.org/docs/13/sql-grant.html) for their scope.
+Repeat the grants for every monitored database and schema. They cover existing objects in the selected schema, not objects created later. See the [PostgreSQL 13 GRANT reference](https://www.postgresql.org/docs/13/sql-grant.html) for their scope.
 
 ## Restrict pg_hba.conf
 
@@ -130,7 +134,7 @@ GRANT pg_monitor TO releem;
 GRANT pg_read_all_data TO releem;
 ```
 
-`pg_read_all_data` grants read access across all schemas. Review that scope for the monitored server. These grants enable data collection; they do not authorize applying query or schema changes. Do not run the self-managed HBA grants: on RDS and Aurora, `pg_hba_file_rules` is owned by the internal `rdsadmin` role and cannot be granted to the customer monitoring role.
+On RDS and Aurora PostgreSQL 12 and 13, omit `GRANT pg_read_all_data` and use the [PostgreSQL 12/13 query grants](#legacy-postgresql-query-grants). `pg_read_all_data` grants read access across all schemas. Review that scope for the monitored server. These grants enable data collection; they do not authorize applying query or schema changes. Do not run the self-managed HBA grants: on RDS and Aurora, `pg_hba_file_rules` is owned by the internal `rdsadmin` role and cannot be granted to the customer monitoring role.
 
 Inspect `SHOW shared_preload_libraries;`, then merge `pg_stat_statements` into the existing list in the attached custom instance or cluster parameter group. Preserve every existing library, as in the [query-metrics example](#query-metrics-with-pg_stat_statements). Reboot the affected instance when AWS requires it, verify the effective preload list, and create the extension in `postgres`, which the Agent uses for its statistics connection:
 

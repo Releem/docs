@@ -6,7 +6,7 @@ title: "MariaDB Permissions for Releem Agent"
 
 # MariaDB Permissions for Releem Agent
 
-Use this page to create and review the database account that the Releem Agent uses with MariaDB 10.1–11.0. The examples separate the grant families used by the current installer according to what they allow; they are not a universal least-privilege policy. Have a DBA select and review only the enabled capabilities for the target MariaDB version and hosting environment.
+Use this page to create and review the database account that the Releem Agent uses with MariaDB. The examples separate the grant families used by the current installer according to what they allow; they are not a universal least-privilege policy. Have a DBA select and review only the enabled capabilities for the target MariaDB version and hosting environment.
 
 Replace `AGENT_SOURCE_HOST` with the exact host from which the Agent connects, such as `127.0.0.1` when the Agent uses a local TCP connection. Replace `<PASSWORD>` through your approved credential-management process. Do not use a wildcard host as the default.
 
@@ -41,7 +41,7 @@ Global `SELECT` exposes data across every database. A DBA must decide whether th
 
 ## Configuration application
 
-Applying database configuration is state-changing and must not be bundled into a monitoring-only account by default. For MariaDB 10.1–11.0, the current installer uses `SUPER`. This broad privilege grants state-changing administrative powers unrelated to metrics collection:
+Applying database configuration is state-changing and must not be bundled into a monitoring-only account by default. The current installer uses `SUPER`. This broad privilege grants state-changing administrative powers unrelated to metrics collection:
 
 ```sql
 GRANT SUPER ON *.* TO 'releem'@'AGENT_SOURCE_HOST';

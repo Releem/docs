@@ -6,7 +6,7 @@ title: "MySQL Permissions for Releem Agent"
 
 # MySQL Permissions for Releem Agent
 
-Use this page to create and review the database account that the Releem Agent uses with MySQL 5.5–8.0. The examples separate the grant families used by the current installer according to what they allow; they are not a universal least-privilege policy. Have a DBA select and review only the enabled capabilities for the target MySQL version and hosting environment.
+Use this page to create and review the database account that the Releem Agent uses with MySQL. The examples separate the grant families used by the current installer according to what they allow; they are not a universal least-privilege policy. Have a DBA select and review only the enabled capabilities for the target MySQL version and hosting environment.
 
 Replace `AGENT_SOURCE_HOST` with the exact host from which the Agent connects, such as `127.0.0.1` when the Agent uses a local TCP connection. Replace `<PASSWORD>` through your approved credential-management process. Do not use a wildcard host as the default.
 
@@ -60,7 +60,7 @@ Review the procedure owner, definition, and managed-service support before using
 
 Applying database configuration is state-changing and must not be bundled into a monitoring-only account by default.
 
-For MySQL 8.0, `SYSTEM_VARIABLES_ADMIN` allows the account to change global system variables. This is a state-changing capability:
+From MySQL 8.0, `SYSTEM_VARIABLES_ADMIN` allows the account to change global system variables. This is a state-changing capability:
 
 ```sql
 GRANT SYSTEM_VARIABLES_ADMIN ON *.* TO 'releem'@'AGENT_SOURCE_HOST';
