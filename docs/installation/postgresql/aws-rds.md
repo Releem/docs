@@ -42,6 +42,41 @@ Use each Aurora **instance identifier** in `DBID` or `AWS_RDS_DB`, not the clust
 
 Attach an EC2 IAM role with `logs:Get*`, `rds:Describe*`, `ec2:Describe*`, and `cloudwatch:Get*` for monitoring. To make Releem's **Apply** action available, grant [`rds:ModifyDBParameterGroup`](https://docs.aws.amazon.com/service-authorization/latest/reference/list_rds.html) on the assigned custom group ARN (`arn:aws:rds:[REGION]:[ACCOUNT_ID]:pg:[ASSIGNED_INSTANCE_PARAMETER_GROUP]`). For the Aurora writer Agent, also grant `rds:ModifyDBClusterParameterGroup` on the assigned cluster group ARN (`arn:aws:rds:[REGION]:[ACCOUNT_ID]:cluster-pg:[ASSIGNED_CLUSTER_PARAMETER_GROUP]`). Granting these permissions does not apply a recommendation; you still choose and approve the change in Releem. Omit the write actions only when you intend to use a monitoring-only Agent and apply changes manually.
 
+## PostgreSQL settings for query data {#postgresql-settings}
+
+The Agent reads query data from `pg_stat_statements` and `pg_stat_activity`. The following PostgreSQL parameters control what reaches the Dashboard. Set these parameters in the custom parameter group attached to the instance. For Aurora PostgreSQL, set each parameter in the group where AWS lists it; `shared_preload_libraries` is in the DB cluster parameter group. Reboot the affected instances when AWS reports **pending-reboot**. The Agent does not change these parameters during installation.
+
+| Parameter | PostgreSQL default | Recommended | What it controls | Apply |
+|---|---|---|---|---|
+| `shared_preload_libraries` | empty | includes `pg_stat_statements` | Required for Query Analytics, the **Latency** graph, and Query Optimization. Keep the existing entries in the list. | Reboot the instance |
+| `track_activity_query_size` | `1024` bytes | `1024`, or more for long queries | Maximum query text length kept in `pg_stat_activity` and shown in the **Activity** view. Each server process reserves this amount of shared memory. | Reboot the instance |
+| `pg_stat_statements.max` | `5000` | `10000` | Number of distinct normalized statements tracked. When the limit is reached, PostgreSQL discards the least-executed statements. | Reboot the instance |
+| `pg_stat_statements.track` | `top` | `all` | `top` tracks statements sent by clients. `all` also tracks statements run inside functions and procedures. `none` disables tracking. | Applied without reboot |
+| `pg_stat_statements.track_utility` | `on` | `on` | Tracks utility commands, meaning everything except `SELECT`, `INSERT`, `UPDATE`, `DELETE`, and `MERGE`. Set `off` to keep commands such as `SET`, `BEGIN`, and `VACUUM` out of Query Analytics. | Applied without reboot |
+
+Check the current values and whether a restart is pending:
+
+```sql
+SELECT name, setting, unit, pending_restart
+FROM pg_settings
+WHERE name IN ('shared_preload_libraries', 'track_activity_query_size', 'compute_query_id',
+               'pg_stat_statements.max', 'pg_stat_statements.track', 'pg_stat_statements.track_utility');
+```
+
+The `pg_stat_statements.*` rows appear only after the library is loaded. On PostgreSQL 14 and later, `compute_query_id` must be `auto` (the default) or `on`.
+
+### Activity view {#activity-query-text}
+
+The **Activity** view displays active sessions from `pg_stat_activity` with the text of each running query. PostgreSQL keeps up to `track_activity_query_size` bytes of query text per session; the default is `1024`. To display longer queries in full, set `track_activity_query_size` to `4096` or more. The new value applies to queries that start after the restart.
+
+### Query Analytics {#query-analytics-data}
+
+Query Analytics displays statistics from `pg_stat_statements` for each tracked statement, grouped by database and query ID: call count, total execution time, and mean execution time. Statements are shown in normalized form, with constants replaced by placeholders such as `$1`.
+
+- `pg_stat_statements.max`, `pg_stat_statements.track`, and `pg_stat_statements.track_utility` define which statements are tracked.
+- Statistics are cumulative since the last `pg_stat_statements_reset()` or since the statement was first tracked.
+- With Query Optimization enabled, Releem collects `EXPLAIN` plans for `SELECT` and `WITH` statements: the top 100 by total execution time and the top 100 by mean execution time. When `databases_query_optimization` lists databases, plans are collected for those databases.
+
 <span id="cloudformation"></span>
 
 ## Automatic installation {#automatic-installation}
@@ -224,5 +259,54 @@ Create and attach a custom DB cluster parameter group. Set `DBClusterParameterGr
 ### Cluster parameters are not applied on a reader
 
 Only the Agent targeting the writer modifies cluster parameters. Keep an Agent on the writer instance and verify its configured instance identifier and attached groups.
+
+### Queries in the Activity view are truncated
+
+PostgreSQL keeps only `track_activity_query_size` bytes of each running query; the default is `1024`. Check the limit:
+
+```sql
+SHOW track_activity_query_size;
+```
+
+Raise it, for example to `4096`, and reboot the instance. See [PostgreSQL settings for query data](#postgresql-settings).
+
+### Query Analytics has no data
+
+Confirm that `pg_stat_statements` is loaded, that the extension exists in `postgres`, and that query IDs are computed:
+
+```sql
+SHOW shared_preload_libraries;
+SELECT extversion FROM pg_extension WHERE extname = 'pg_stat_statements';
+```
+
+On PostgreSQL 14 and later, also check query ID computation. Skip this command on PostgreSQL 12 and 13, where the parameter does not exist:
+
+```sql
+SHOW compute_query_id;
+```
+
+Run the second query while connected to `postgres`. If the library is missing, add it to `shared_preload_libraries` and reboot the instance. If the extension is missing, create it. On PostgreSQL 14 and later, set `compute_query_id` to `auto` or `on`. Data appears after new queries run.
+
+### Some queries are missing from Query Analytics
+
+- **The statement limit is reached.** On PostgreSQL 14 and later, a growing `dealloc` value means statements were discarded:
+
+  ```sql
+  SELECT dealloc, stats_reset FROM pg_stat_statements_info;
+  ```
+
+  Raise `pg_stat_statements.max` and reboot the instance. 
+  PostgreSQL 12 and 13 do not have `pg_stat_statements_info`; compare `SELECT count(*) FROM pg_stat_statements;` with `pg_stat_statements.max`.
+- **The query runs inside a function or procedure.** Set `pg_stat_statements.track` to `all`.
+- **The query is a utility command.** Commands other than `SELECT`, `INSERT`, `UPDATE`, `DELETE`, and `MERGE` are tracked only when `pg_stat_statements.track_utility` is `on`.
+- **Queries that differ only in constants are grouped.** `pg_stat_statements` normalizes them into one statement with placeholders. Queries with a different structure, such as `IN` lists of different lengths on PostgreSQL 17 and earlier, are tracked separately and use more of the limit.
+
+### Query Analytics counters dropped or history restarted
+
+`pg_stat_statements_reset()`, a PostgreSQL restart, or eviction of a statement resets its counters. On PostgreSQL 14 and later, `stats_reset` in `pg_stat_statements_info` shows the last full reset. Avoid scheduled resets while Releem is collecting data.
+
+### A query has no EXPLAIN plan
+
+Plans are collected only when Query Optimization is enabled, and only for `SELECT` and `WITH` statements in the top 100 by total or mean execution time. If `databases_query_optimization` lists databases, check that the query's database is included, and check that the monitoring role has query read access from [PostgreSQL permissions](/supported-databases/postgresql/required-permissions#query-and-schema-capabilities).
 
 For other failures, use [Troubleshoot the Releem Agent](/get-started/troubleshoot-releem-agent). Correct the reported permission, network, or configuration issue before retrying the installation.
