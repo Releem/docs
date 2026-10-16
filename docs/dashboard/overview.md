@@ -33,7 +33,7 @@ The Database Metrics consists of several charts, including:
 
 ## 5. Processes & Locks
 - [Deadlock Monitoring](/dashboard/deadlocks) continuously monitors your MySQL database for deadlocks, providing instant notifications with complete transaction details to help you quickly identify and resolve locking conflicts.
-- [Process List](/dashboard/process-list) offers real-time visibility into all active database connections and running queries, allowing you to identify long-running queries, detect stuck processes, and troubleshoot bottlenecks directly from your dashboard.
+- [Process List](/dashboard/process-list) (**Activity** for PostgreSQL) offers real-time visibility into all active database connections and running queries, allowing you to identify long-running queries, detect stuck processes, and troubleshoot bottlenecks directly from your dashboard.
 
 ## 6. [Health Checks](/dashboard/health-checks)
 Health Checks are diagnostic tests that evaluate a server's health, performance, and stability. Regular Health Checks are essential for ensuring optimal database server operation and meeting business requirements. Releem performs health checks twice a day, providing users with up-to-date insights into their database's current state.
