@@ -51,7 +51,7 @@ To enable the SQL Query Optimization feature, please select your installation ty
      ```
   4. Run the following command:
      ```bash
-     /opt/releem/mysqlconfigurer.sh -p
+     /opt/releem/releem.sh -p
      ```
 
   #### PostgreSQL Servers
@@ -68,9 +68,11 @@ To enable the SQL Query Optimization feature, please select your installation ty
      ```
   4. Run the following command to enable `pg_stat_statements` settings:
      ```bash
-     /opt/releem/mysqlconfigurer.sh -p
+     /opt/releem/releem.sh -p
      ```
 
+  On Agent versions before 1.26.0, use `/opt/releem/mysqlconfigurer.sh` (`mysqlconfigurer.ps1` on Windows), or update the Agent first.
+  
 ## New Linux Installation
 
 Add this environment variable to the installation command:

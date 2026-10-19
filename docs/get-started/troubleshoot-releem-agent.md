@@ -93,7 +93,10 @@ You can specify “dummy” in the DBParameterGroup parameter if you do not plan
 ### Latency is not calculated
 **The root cause:** The Performance Schema is not enabled for manual installation or restart is not performed for automatic installation.
 
-**How to fix:** Run /opt/releem/mysqlconfigurer.sh -p command and agree to the database service restart.
+**How to fix:** 
+
+Run /opt/releem/releem.sh -p command and agree to the database service restart.
+On Agent versions before 1.26.0, use `/opt/releem/mysqlconfigurer.sh` (`mysqlconfigurer.ps1` on Windows), or update the Agent first.
 
 **How to fix for AWS RDS:** Check CloudWatch Database Insights (formerly Performance Insights) and verify that Performance Schema is active for your RDS instance. Use the [MySQL](/installation/mysql/aws-rds#the-dashboard-has-no-latency-data) or [MariaDB](/installation/mariadb/aws-rds#the-dashboard-has-no-latency-data) RDS guide for the parameter-group and reboot checks.
 

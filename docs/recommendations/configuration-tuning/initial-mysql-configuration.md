@@ -23,8 +23,10 @@ The command evaluates the server's hardware resources, generates `initial_config
 Run the command on the database host:
 
 ```bash
-bash /opt/releem/mysqlconfigurer.sh -s initial
+bash /opt/releem/releem.sh -s initial
 ```
+
+On Agent versions before 1.26.0, use `/opt/releem/mysqlconfigurer.sh` (`mysqlconfigurer.ps1` on Windows), or update the Agent first.
 
 The generated file is stored at:
 
@@ -37,8 +39,10 @@ The generated file is stored at:
 Only use the restart option during an approved maintenance window:
 
 ```bash
-RELEEM_RESTART_SERVICE=1 bash /opt/releem/mysqlconfigurer.sh -s initial
+RELEEM_RESTART_SERVICE=1 bash /opt/releem/releem.sh -s initial
 ```
+
+On Agent versions before 1.26.0, use `/opt/releem/mysqlconfigurer.sh` (`mysqlconfigurer.ps1` on Windows), or update the Agent first.
 
 If you omit `RELEEM_RESTART_SERVICE=1`, check whether a restart is required and complete it through your normal service-management procedure. Do not treat a successful command exit as confirmation that restart-pending settings are active.
 

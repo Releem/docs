@@ -19,8 +19,10 @@ Choose how the Agent was installed. The Linux shell-installer commands in these 
   To update manually, run one command:
 
   ```bash
-  /opt/releem/mysqlconfigurer.sh -u
+  /opt/releem/releem.sh -u
   ```
+
+  On Agent versions before 1.26.0, use `/opt/releem/mysqlconfigurer.sh` (`mysqlconfigurer.ps1` on Windows), or update the Agent first.
 
   After the command completes, confirm that the Agent service is running, the Dashboard shows the intended Agent version, and current metrics continue to arrive. If any check fails, review [Agent logs](/installation/manage-the-releem-agent/logs) before another attempt. Keep the previous configuration and package details until you complete these checks.
 
@@ -71,8 +73,10 @@ Choose how the Agent was installed. The Linux shell-installer commands in these 
   Run PowerShell as Administrator, then update the installed Agent with one command:
 
   ```powershell
-  & 'C:\Program Files\ReleemAgent\mysqlconfigurer.ps1' -Update
+  & 'C:\Program Files\ReleemAgent\releem.ps1' -Update
   ```
+
+  On Agent versions before 1.26.0, use `/opt/releem/mysqlconfigurer.sh` (`mysqlconfigurer.ps1` on Windows), or update the Agent first.
 
   After the command completes, confirm that the service is running, the intended version is shown, and current metrics continue to arrive.
 

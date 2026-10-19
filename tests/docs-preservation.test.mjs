@@ -2950,8 +2950,8 @@ test('Agent configuration application retains commands with shared support and b
   const prose = source.replace(/^\s*(`{3,}|~{3,})[^\n]*\n[\s\S]*?^\s*\1\s*$/gmu, '');
   assert.match(prose, /self-managed database server/iu);
   assert.doesNotMatch(prose, /\b(?:MySQL|MariaDB|PostgreSQL|Percona)\b/u);
-  assert.match(source, /bash \/opt\/releem\/mysqlconfigurer\.sh -s auto/u);
-  assert.match(source, /mysqlconfigurer\.ps1' -a/u);
+  assert.match(source, /bash \/opt\/releem\/releem\.sh -s auto/u);
+  assert.match(source, /releem\.ps1' -a/u);
   assert.match(source, /successful exit means the request was submitted/iu);
   assert.match(source, /restart-pending/iu);
   assert.match(source, /effective database settings/iu);
@@ -3032,7 +3032,7 @@ test('configuration rollback keeps the qualified command and complete recovery v
   assert.equal(currentPage.h1.text, 'Roll back a configuration');
   assert.match(source, /self-managed MySQL or MariaDB server on Linux/iu);
   assert.match(source, /Do not use this procedure for PostgreSQL or a managed database/iu);
-  assert.equal(source.split('/bin/bash /opt/releem/mysqlconfigurer.sh -r').length - 1, 1);
+  assert.equal(source.split('/bin/bash /opt/releem/releem.sh -r').length - 1, 1);
   assert.match(source, /Command success does not confirm/iu);
   assert.match(source, /restart-pending/iu);
   assert.match(source, /effective database settings/iu);
@@ -3880,7 +3880,7 @@ test('Agent uninstall and update pages remove unverified remote execution and ex
   ]);
   const executableText = codeFenceBodies(`${uninstall}\n${update}`).join('\n');
   assert.doesNotMatch(executableText, /bash\s+-c\s+["']\$\(curl|\biwr\b[^\n]*\b(?:iex|Invoke-Expression)\b/iu);
-  assert.doesNotMatch(executableText, /\/opt\/releem\/mysqlconfigurer\.sh\s+-u\b/iu);
+  assert.doesNotMatch(executableText, /\/opt\/releem\/(?:mysqlconfigurer|releem)\.sh\s+-u\b/iu);
   assert.doesNotMatch(executableText, /update_releem_docker\.sh|\bcrontab\b/iu);
   assert.match(uninstall, /(?:uninstall|removal)[^\n]*(?:currently unavailable|not documented)/iu);
   assert.match(uninstall, /contact Releem Support/iu);

@@ -29,7 +29,7 @@ Run the command for the operating system on the database host:
     Confirm that the Agent is running and that your account can execute the script under `/opt/releem/`. The command submits an application request to the Agent:
 
     ```bash
-    bash /opt/releem/mysqlconfigurer.sh -s auto
+    bash /opt/releem/releem.sh -s auto
     ```
 
     A successful exit means the request was submitted. It does not mean that the database configuration has been applied or that its values are effective. Continue with the shared verification steps after the Agent processes the job.
@@ -38,9 +38,10 @@ Run the command for the operating system on the database host:
     Open PowerShell as Administrator. This command applies the configuration locally and prompts for confirmation by default. Review the prompt before you approve the change:
 
     ```powershell
-    & 'C:\Program Files\ReleemAgent\mysqlconfigurer.ps1' -a
+    & 'C:\Program Files\ReleemAgent\releem.ps1' -a
     ```
 
+    On Agent versions before 1.26.0, use `/opt/releem/mysqlconfigurer.sh` (`mysqlconfigurer.ps1` on Windows), or update the Agent first.
     After the command finishes, continue with the shared verification steps. A successful exit does not establish that restart-required values are effective.
   </TabItem>
 </Tabs>

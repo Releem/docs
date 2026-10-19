@@ -21,8 +21,10 @@ Use cron to ask the Releem Agent to apply the latest recommended configuration a
 Run:
 
 ```bash
-bash /opt/releem/mysqlconfigurer.sh -s auto
+bash /opt/releem/releem.sh -s auto
 ```
+
+On Agent versions before 1.26.0, use `/opt/releem/mysqlconfigurer.sh` (`mysqlconfigurer.ps1` on Windows), or update the Agent first.
 
 A successful exit means the request was submitted. It does not prove that every recommended value was applied or became effective. Complete the verification steps below before you create the schedule.
 
@@ -37,7 +39,7 @@ A successful exit means the request was submitted. It does not prove that every 
 2. Add the schedule. This example runs the command every day at 3:00 AM:
 
    ```bash
-   0 3 * * * bash /opt/releem/mysqlconfigurer.sh -s auto
+   0 3 * * * bash /opt/releem/releem.sh -s auto
    ```
 
 3. Save the crontab.

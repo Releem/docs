@@ -68,7 +68,9 @@ The Agent stopped or could not report the final task state. Review the [Releem A
 
 ### `Unexpected Releem Agent error`
 
-Confirm that `/opt/releem/mysqlconfigurer.sh` exists and is executable by the account used for the application task. Review the [Releem Agent logs](/installation/manage-the-releem-agent/logs) for the first error. Do not replace the script or reinstall the Agent until the failure is understood.
+Confirm that `/opt/releem/releem.sh` exists and is executable by the account used for the application task. Review the [Releem Agent logs](/installation/manage-the-releem-agent/logs) for the first error. Do not replace the script or reinstall the Agent until the failure is understood.
+
+On Agent versions before 1.26.0, use `/opt/releem/mysqlconfigurer.sh` (`mysqlconfigurer.ps1` on Windows), or update the Agent first.
 
 ### `The DB configuration file does not include the directory that contains Releem's option files`
 

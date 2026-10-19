@@ -22,8 +22,10 @@ Do not use this procedure for PostgreSQL or a managed database. Use the manual o
 Run:
 
 ```bash
-/bin/bash /opt/releem/mysqlconfigurer.sh -r
+/bin/bash /opt/releem/releem.sh -r
 ```
+
+On Agent versions before 1.26.0, use `/opt/releem/mysqlconfigurer.sh` (`mysqlconfigurer.ps1` on Windows), or update the Agent first.
 
 Command success does not confirm that the intended configuration was restored or that every restored value is effective.
 

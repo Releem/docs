@@ -585,7 +585,7 @@ for (const database of ['mariadb', 'postgresql']) {
     assert.doesNotMatch(source, /\?platform=/u);
     assert.doesNotMatch(
       source,
-      /mysqlconfigurer|\/opt\/|\/etc\/|[A-Z]:\\|\bmy\.(?:cnf|ini)\b|postgresql\.conf|ALTER SYSTEM|pg_ctl|pg_reload_conf|\bpsql\b|docker restart|(?:service|systemctl)[^\n]*(?:restart|reload)|Parameter Groups|Database Flags|apply immediately|maintenance window|GRANT (?:SUPER|SYSTEM_VARIABLES_ADMIN)|\/supported-databases\/mysql\/required-permissions/iu,
+      /mysqlconfigurer|releem\.sh|\/opt\/|\/etc\/|[A-Z]:\\|\bmy\.(?:cnf|ini)\b|postgresql\.conf|ALTER SYSTEM|pg_ctl|pg_reload_conf|\bpsql\b|docker restart|(?:service|systemctl)[^\n]*(?:restart|reload)|Parameter Groups|Database Flags|apply immediately|maintenance window|GRANT (?:SUPER|SYSTEM_VARIABLES_ADMIN)|\/supported-databases\/mysql\/required-permissions/iu,
     );
     assert.doesNotMatch(source, /^##[^\n]*(?:command|configure|restart|apply (?:the )?changes)/imu);
     assert.doesNotMatch(
@@ -746,8 +746,8 @@ test('scheduled application restores setup, verification, and removal without en
   );
   const prose = source.replace(/^\s*(`{3,}|~{3,})[^\n]*\n[\s\S]*?^\s*\1\s*$/gmu, '');
   assert.match(source, /^## Set up a cron job$/imu);
-  assert.match(source, /bash \/opt\/releem\/mysqlconfigurer\.sh -s auto/u);
-  assert.match(source, /0 3 \* \* \* bash \/opt\/releem\/mysqlconfigurer\.sh -s auto/u);
+  assert.match(source, /bash \/opt\/releem\/releem\.sh -s auto/u);
+  assert.match(source, /0 3 \* \* \* bash \/opt\/releem\/releem\.sh -s auto/u);
   assert.match(source, /^## Verify a scheduled application$/imu);
   assert.match(source, /^## (?:Disable|Remove|Disable or remove) the (?:cron )?(?:job|schedule)/imu);
   assert.match(source, /crontab -e/u);
