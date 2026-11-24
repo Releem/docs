@@ -49,6 +49,18 @@ GRANT SUPER ON *.* TO 'releem'@'AGENT_SOURCE_HOST';
 
 Grant `SUPER` only if the Agent is explicitly authorized to apply configuration. Some managed database services do not permit this grant and require provider-specific parameter-management workflows.
 
+### MariaDB 11.0 and later {#mariadb-11-privileges}
+
+From MariaDB 11.0, `SUPER` no longer includes the privileges that were split from it. `SUPER` still allows changing most global system variables, but connection settings such as `max_connections`, `max_connect_errors`, `connect_timeout`, `init_connect`, and the `thread_pool_*` variables require `CONNECTION ADMIN`. 
+
+If the Agent is authorized to apply configuration on MariaDB 11.0 or later, grant `CONNECTION ADMIN` in addition to `SUPER`:
+
+```sql
+GRANT CONNECTION ADMIN ON *.* TO 'releem'@'AGENT_SOURCE_HOST';
+```
+
+`CONNECTION ADMIN` also lets the account exceed connection limits by one connection, bypass `init_connect`, and kill other users' connections. Recommendations for binary log variables, such as `sync_binlog` or `max_binlog_size`, require `BINLOG ADMIN` on MariaDB 11.0 and later. Grant it only if the Agent is approved to change those settings.
+
 ## Query and schema application {#additional-database-permissions-required}
 
 Collecting query text and applying query or schema changes are different capabilities. The global `SELECT` grant above supports query visibility but does not authorize schema changes.
